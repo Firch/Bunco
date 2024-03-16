@@ -239,7 +239,7 @@ function SMODS.INIT.Bunco()
      local joker_oonga = SMODS.Joker:new(
          "Prehistoric Joker", -- Name
          "oonga", -- Slug
-         {mult = 10, card_list = {}}, -- Config
+         { mult = 10, extra = { card_list = { } } }, -- Config
          {x = 0, y = 1}, -- Sprite position
          loc_oonga, -- Localization
          2, 4) -- Rarity & Cost. 1 - Common, 2 - Uncommon, 3 - Rare, 4 - Legendary
@@ -249,7 +249,7 @@ function SMODS.INIT.Bunco()
      SMODS.Jokers.j_oonga.calculate = function(self, context)
         if context.individual and context.cardarea == G.play then
 
-            for k, v in pairs(self.ability.card_list) do
+            for k, v in pairs(self.ability.extra.card_list) do
                 if v == context.other_card.base.id .. context.other_card.base.suit then
                     return {
                         message = localize {
@@ -263,12 +263,12 @@ function SMODS.INIT.Bunco()
                 end
             end
 
-            table.insert(self.ability.card_list, context.other_card.base.id .. context.other_card.base.suit) -- Add card to the list
+            table.insert(self.ability.extra.card_list, context.other_card.base.id .. context.other_card.base.suit) -- Add card to the list
 
             end
 
             if context.end_of_round then -- Clear the list if end of round
-                self.ability.card_list = {};
+                self.ability.extra.card_list = {};
 
         end
     end
