@@ -228,7 +228,7 @@ function SMODS.INIT.Bunco()
      local loc_oonga = {
          ["name"] = "Prehistoric Joker",
          ["text"] = {
-             [1] = "{C:red}+20{} Mult for each",
+             [1] = "{C:red}+16{} Mult for each",
              [2] = "card of the same rank and suit",
              [3] = "that was already",
              [4] = "played this round"
@@ -239,7 +239,7 @@ function SMODS.INIT.Bunco()
      local joker_oonga = SMODS.Joker:new(
          "Prehistoric Joker", -- Name
          "oonga", -- Slug
-         { mult = 10, extra = { card_list = { } } }, -- Config
+         {mult = 16, extra = {card_list = { }}}, -- Config
          {x = 0, y = 1}, -- Sprite position
          loc_oonga, -- Localization
          2, 4) -- Rarity & Cost. 1 - Common, 2 - Uncommon, 3 - Rare, 4 - Legendary
