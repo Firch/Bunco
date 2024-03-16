@@ -231,7 +231,7 @@ function SMODS.INIT.Bunco()
              [1] = "{C:red}+16{} Mult for each",
              [2] = "card of the same rank and suit",
              [3] = "that was already",
-             [4] = "played this round"
+             [4] = "played during this round"
          }
      }
  
@@ -247,6 +247,8 @@ function SMODS.INIT.Bunco()
      joker_oonga:register()
  
      SMODS.Jokers.j_oonga.calculate = function(self, context)
+        self.ability.mult = 16 -- This is a stinky fix to mult being equal to ten for some reason
+
         if context.individual and context.cardarea == G.play then
 
             for k, v in pairs(self.ability.extra.card_list) do
