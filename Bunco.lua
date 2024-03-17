@@ -9,7 +9,7 @@
 
 function SMODS.INIT.Bunco()
 
-    -- Jokers' sprite:
+    -- Joker sprites:
         local bunco_mod = SMODS.findModByID("Bunco")
 
     -- Dread joker:
@@ -254,8 +254,8 @@ function SMODS.INIT.Bunco()
                 if v == context.other_card.base.id .. context.other_card.base.suit then
                     return {
                         message = localize {
-                            type = 'variable',
-                            key = 'a_mult',
+                            type = "variable",
+                            key = "a_mult",
                             vars = {self.ability.mult}
                         },
                         mult = self.ability.mult,
@@ -273,42 +273,65 @@ function SMODS.INIT.Bunco()
         end
     end
 
-    -- Jokers' descriptions:
-    local card_uiref = Card.generate_UIBox_ability_table
+    -- Joker descriptions (LushMod):
 
- 
-    function Card:generate_UIBox_ability_table()
+    local generate_UIBox_ability_tableref = Card.generate_UIBox_ability_table
+    function Card.generate_UIBox_ability_table(self)
+        local card_type, hide_desc = self.ability.set or "None", nil
+        local loc_vars = nil
+        local main_start, main_end = nil, nil
+        local no_badge = nil
 
-        if self.ability.name == "Dread" then
-            return generate_card_ui(self.config.center, nil, nil, self.ability.set, {}, false, nil, nil)
+        if self.config.center.unlocked == false and not self.bypass_lock then    -- For everyting that is locked
+        elseif card_type == "Undiscovered" and not self.bypass_discovery_ui then -- Any Joker or tarot/planet/voucher that is not yet discovered
+        elseif self.debuff then
+        elseif card_type == "Default" or card_type == "Enhanced" then
+        elseif self.ability.set == "Joker" then
+            local customJoker = true
+
+            if self.ability.name == "Prehistoric Joker" then
+                loc_vars = {self.ability.mult}
+            else
+                customJoker = false
+            end
+
+            if customJoker then
+                local badges = {}
+                if (card_type ~= "Locked" and card_type ~= "Undiscovered" and card_type ~= "Default") or self.debuff then
+                    badges.card_type = card_type
+                end
+                if self.ability.set == "Joker" and self.bypass_discovery_ui and (not no_badge) then
+                    badges.force_rarity = true
+                end
+                if self.edition then
+                    if self.edition.type == "negative" and self.ability.consumeable then
+                        badges[#badges + 1] = "negative_consumable"
+                    else
+                        badges[#badges + 1] = (self.edition.type == "holo" and "holographic" or self.edition.type)
+                    end
+                end
+                if self.seal then
+                    badges[#badges + 1] = string.lower(self.seal) .. "_seal"
+                end
+                if self.ability.eternal then
+                    badges[#badges + 1] = "eternal"
+                end
+                if self.pinned then
+                    badges[#badges + 1] = "pinned_left"
+                end
+
+                if self.sticker then
+                    loc_vars = loc_vars or {};
+                    loc_vars.sticker = self.sticker
+                end
+
+                return generate_card_ui(self.config.center, nil, loc_vars, card_type, badges, hide_desc, main_start,
+                    main_end)
+            end
         end
-
-        if self.ability.name == "Cassette" then
-            return generate_card_ui(self.config.center, nil, nil, self.ability.set, {}, false, nil, nil)
-        end
-
-        if self.ability.name == "Mosaic Joker" then
-            return generate_card_ui(self.config.center, nil, nil, self.ability.set, {}, false, nil, nil)
-        end
-
-        if self.ability.name == "Voxel Joker" then
-            return generate_card_ui(self.config.center, nil, nil, self.ability.set, {}, false, nil, nil)
-        end
-
-        if self.ability.name == "Crop Circles" then
-            return generate_card_ui(self.config.center, nil, nil, self.ability.set, {}, false, nil, nil)
-        end
-
-        if self.ability.name == "X-Ray" then
-            return generate_card_ui(self.config.center, nil, nil, self.ability.set, {}, false, nil, nil)
-        end
-
-        if self.ability.name == "Prehistoric Joker" then
-            return generate_card_ui(self.config.center, nil, {self.ability.mult}, self.ability.set, {}, false, nil, nil)
-        end
-        
-        return card_uiref(self)
     end
+
+    return generate_UIBox_ability_tableref(self)
 end
 
 ----------------------------------------------
