@@ -272,67 +272,65 @@ function SMODS.INIT.Bunco()
             self.ability.extra.card_list = {}
         end
     end
+end
 
-    -- Joker descriptions (LushMod):
+-- Copied and modifed from LushMod
+local generate_UIBox_ability_tableref = Card.generate_UIBox_ability_table
+function Card.generate_UIBox_ability_table(self)
+    local card_type, hide_desc = self.ability.set or "None", nil
+    local loc_vars = nil
+    local main_start, main_end = nil, nil
+    local no_badge = nil
 
-    local generate_UIBox_ability_tableref = Card.generate_UIBox_ability_table
-    function Card.generate_UIBox_ability_table(self)
-        local card_type, hide_desc = self.ability.set or "None", nil
-        local loc_vars = nil
-        local main_start, main_end = nil, nil
-        local no_badge = nil
+    if self.config.center.unlocked == false and not self.bypass_lock then    -- For everyting that is locked
+    elseif card_type == "Undiscovered" and not self.bypass_discovery_ui then -- Any Joker or tarot/planet/voucher that is not yet discovered
+    elseif self.debuff then
+    elseif card_type == "Default" or card_type == "Enhanced" then
+    elseif self.ability.set == "Joker" then
+        local customJoker = true
 
-        if self.config.center.unlocked == false and not self.bypass_lock then    -- For everyting that is locked
-        elseif card_type == "Undiscovered" and not self.bypass_discovery_ui then -- Any Joker or tarot/planet/voucher that is not yet discovered
-        elseif self.debuff then
-        elseif card_type == "Default" or card_type == "Enhanced" then
-        elseif self.ability.set == "Joker" then
-            local customJoker = true
+        if self.ability.name == "Prehistoric Joker" then
+            loc_vars = {self.ability.mult}
+        else
+            customJoker = false
+        end
 
-            if self.ability.name == "Prehistoric Joker" then
-                loc_vars = {self.ability.mult}
-            else
-                customJoker = false
+        if customJoker then
+            local badges = {}
+            if (card_type ~= "Locked" and card_type ~= "Undiscovered" and card_type ~= "Default") or self.debuff then
+                badges.card_type = card_type
+            end
+            if self.ability.set == "Joker" and self.bypass_discovery_ui and (not no_badge) then
+                badges.force_rarity = true
+            end
+            if self.edition then
+                if self.edition.type == "negative" and self.ability.consumeable then
+                    badges[#badges + 1] = "negative_consumable"
+                else
+                    badges[#badges + 1] = (self.edition.type == "holo" and "holographic" or self.edition.type)
+                end
+            end
+            if self.seal then
+                badges[#badges + 1] = string.lower(self.seal) .. "_seal"
+            end
+            if self.ability.eternal then
+                badges[#badges + 1] = "eternal"
+            end
+            if self.pinned then
+                badges[#badges + 1] = "pinned_left"
             end
 
-            if customJoker then
-                local badges = {}
-                if (card_type ~= "Locked" and card_type ~= "Undiscovered" and card_type ~= "Default") or self.debuff then
-                    badges.card_type = card_type
-                end
-                if self.ability.set == "Joker" and self.bypass_discovery_ui and (not no_badge) then
-                    badges.force_rarity = true
-                end
-                if self.edition then
-                    if self.edition.type == "negative" and self.ability.consumeable then
-                        badges[#badges + 1] = "negative_consumable"
-                    else
-                        badges[#badges + 1] = (self.edition.type == "holo" and "holographic" or self.edition.type)
-                    end
-                end
-                if self.seal then
-                    badges[#badges + 1] = string.lower(self.seal) .. "_seal"
-                end
-                if self.ability.eternal then
-                    badges[#badges + 1] = "eternal"
-                end
-                if self.pinned then
-                    badges[#badges + 1] = "pinned_left"
-                end
-
-                if self.sticker then
-                    loc_vars = loc_vars or {};
-                    loc_vars.sticker = self.sticker
-                end
-
-                return generate_card_ui(self.config.center, nil, loc_vars, card_type, badges, hide_desc, main_start,
-                    main_end)
+            if self.sticker then
+                loc_vars = loc_vars or {};
+                loc_vars.sticker = self.sticker
             end
+
+            return generate_card_ui(self.config.center, nil, loc_vars, card_type, badges, hide_desc, main_start,
+                main_end)
         end
     end
 
     return generate_UIBox_ability_tableref(self)
 end
-
 ----------------------------------------------
 ------------MOD CODE END----------------------
