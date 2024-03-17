@@ -9,6 +9,30 @@
 
 function SMODS.INIT.Bunco()
 
+    -- Custom contexts:
+
+    local original_draw_card = draw_card
+
+    function draw_card(from, to, percent, dir, sort, card, delay, mute, stay_flipped, vol, discarded_only)
+        original_draw_card(from, to, percent, dir, sort, card, delay, mute, stay_flipped, vol, discarded_only)
+        
+        for i = 1, #G.jokers.cards do
+            G.jokers.cards[i]:calculate_joker({draw = true, drawn_from = from, drawn_to = to})
+        end
+    end
+
+    local original_emplace = CardArea.emplace
+
+    function CardArea:emplace(card, location, stay_flipped)
+        original_emplace(self, card, location, stay_flipped)
+
+        if G.jokers ~= nil and self == G.hand then
+            for i = 1, #G.jokers.cards do
+                G.jokers.cards[i]:calculate_joker({emplace = true, emplaced_card = card})
+            end
+        end
+    end
+
     -- Joker sprites:
         local bunco_mod = SMODS.findModByID("Bunco")
 
@@ -193,9 +217,9 @@ function SMODS.INIT.Bunco()
     local loc_xray = {
         ["name"] = "X-Ray",
         ["text"] = {
-            [1] = "AHAHA",
-            [2] = "Jokes on",
-            [3] = "{C:attention}You{}!"
+            [1] = "Gains {X:mult,C:white}X0.2{} Mult",
+            [2] = "per card drawn face down",
+            [3] = "{C:inactive} (Currently {X:mult,C:white} X#1# {C:inactive} Mult)"
         }
     }
  
@@ -203,22 +227,31 @@ function SMODS.INIT.Bunco()
     local joker_xray = SMODS.Joker:new(
         "X-Ray", -- Name
         "xray", -- Slug
-        {}, -- Config
+        {extra = {xmult = 1}}, -- Config
         {x = 5, y = 0}, -- Sprite position
         loc_xray, -- Localization
         1, 4) -- Rarity & Cost. 1 - Common, 2 - Uncommon, 3 - Rare, 4 - Legendary
  
     joker_xray:register()
- 
+
     SMODS.Jokers.j_xray.calculate = function(self, context)
+
+        if context.emplace and context.emplaced_card.facing == "back" then
+            self.ability.extra.xmult = self.ability.extra.xmult + 0.2
+        end
+
         if SMODS.end_calculate_context(context) then
-            return {
-                mult_mod = 20,
-                card = self,
-                colour = G.C.RED,
-                message = "AHAHAHAH"
-            }
- 
+            if self.ability.extra.xmult ~= 1 then
+                return {
+                    message = localize {
+                        type = 'variable',
+                        key = 'a_xmult',
+                        vars = { self.ability.extra.xmult }
+                    },
+                    Xmult_mod = self.ability.extra.xmult,
+                    card = self
+                }
+            end
         end
     end
 
@@ -249,7 +282,6 @@ function SMODS.INIT.Bunco()
     SMODS.Jokers.j_oonga.calculate = function(self, context)
         
         if context.individual and context.cardarea == G.play then
-
             for k, v in pairs(self.ability.extra.card_list) do
                 if v == context.other_card.base.id .. context.other_card.base.suit then
                     return {
@@ -291,6 +323,8 @@ function Card.generate_UIBox_ability_table(self)
 
         if self.ability.name == "Prehistoric Joker" then
             loc_vars = {self.ability.mult}
+        elseif self.ability.name == "X-Ray" then
+            loc_vars = {self.ability.extra.xmult}
         else
             customJoker = false
         end

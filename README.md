@@ -4,5 +4,6 @@ A **Balatro** mod that adds jokers, editions, the usual stuff that you can expec
 HUGE THANKS TO:\
 [@Mikadoe](https://github.com/MikaSchoenmakers)\
 [@Lyman](https://github.com/spikeof2010)\
+[@jostro](https://github.com/JopStro)\
 `@kingbobson`\
 For helping me with programming this <3
