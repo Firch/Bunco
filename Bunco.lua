@@ -90,13 +90,19 @@ function SMODS.INIT.Bunco()
             end
 
             if context.after and G.GAME.current_round.hands_left == 0 and context.scoring_name ~= nil then
-                level_up_hand(self, context.scoring_name, false, 2)
+                
+                level_up_hand(self, context.scoring_name, true, 2)
                 
                 if self.ability.extra.level_up_list[context.scoring_name] then
                     self.ability.extra.level_up_list[context.scoring_name] = self.ability.extra.level_up_list[context.scoring_name] + 2
                 else
                     self.ability.extra.level_up_list[context.scoring_name] = 2
                 end
+
+                return {
+                    colour = G.C.RED,
+                    message = "Level up!"
+                }
             end
 
             if context.end_of_round and G.GAME.current_round.hands_left == 0 then
