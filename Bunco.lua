@@ -19,16 +19,6 @@ function SMODS.INIT.Bunco()
 
     -- Custom contexts:
 
-    local original_draw_card = draw_card
-
-    function draw_card(from, to, percent, dir, sort, card, delay, mute, stay_flipped, vol, discarded_only)
-        original_draw_card(from, to, percent, dir, sort, card, delay, mute, stay_flipped, vol, discarded_only)
-        
-        for i = 1, #G.jokers.cards do
-            G.jokers.cards[i]:calculate_joker({draw = true, drawn_from = from, drawn_to = to})
-        end
-    end
-
     local original_emplace = CardArea.emplace
 
     function CardArea:emplace(card, location, stay_flipped)
