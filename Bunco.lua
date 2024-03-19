@@ -19,6 +19,35 @@ function SMODS.INIT.Bunco()
 
     -- Custom contexts:
 
+    local original_update = Card.update
+
+    function Card:update(dt)
+        original_update(self, dt)
+
+        if self.ability.name == 'Cassette' then
+            if self.VT.w <= 0 then
+                if self.ability.extra.side == 'A' then
+                    self.config.center.pos.x = 0
+                else
+                    self.config.center.pos.x = 1
+                end
+            end
+        end
+
+        if self.ability.name == 'Voxel Joker' and G.playing_cards ~= nil then
+            self.ability.extra.voxel_tally = 0
+            for k, v in pairs(G.playing_cards) do
+                if v.config.center ~= G.P_CENTERS.c_base then self.ability.extra.voxel_tally = self.ability.extra.voxel_tally + 1 end
+            end
+            
+            if (self.ability.extra.base_xmult - self.ability.extra.voxel_tally * 0.1) >= 1 then
+                self.ability.extra.xmult = self.ability.extra.base_xmult - self.ability.extra.voxel_tally * 0.1
+            else
+                self.ability.extra.xmult = 1
+            end
+        end
+    end
+
     local original_emplace = CardArea.emplace
 
     function CardArea:emplace(card, location, stay_flipped)
@@ -52,7 +81,7 @@ function SMODS.INIT.Bunco()
             'Dread', -- Name
             'dread', -- Slug
             {extra = {trash_list = {}, level_up_list = {}}}, -- Config
-            {x = 0, y = 0}, -- Sprite position
+            {x = 0, y = 1}, -- Sprite position
             loc_dread, -- Localization
             3, 4) -- Rarity & Cost. 1 - Common, 2 - Uncommon, 3 - Rare, 4 - Legendary
 
@@ -109,9 +138,11 @@ function SMODS.INIT.Bunco()
     local loc_cassette = {
         ['name'] = 'Cassette',
         ['text'] = {
-            [1] = 'AHAHA',
-            [2] = 'Jokes on',
-            [3] = '{C:attention}You{}!'
+            [1] = 'On discard, flip Joker to the other side',
+            [2] = '{C:attention}A side:{} cards with light suit',
+            [3] = 'give {C:chips}+#1#{} Chips when scored',
+            [4] = '{C:attention}B side:{} cards with dark suit',
+            [5] = 'give {C:mult}+#2#{} Mult when scored',
         }
     }
 
@@ -119,22 +150,49 @@ function SMODS.INIT.Bunco()
     local joker_cassette = SMODS.Joker:new(
         'Cassette', -- Name
         'cassette', -- Slug
-        {}, -- Config
-        {x = 1, y = 0}, -- Sprite position
+        {extra = {chips = 45, mult = 6, side = 'A'}}, -- Config
+        {x = 0, y = 0}, -- Sprite position
         loc_cassette, -- Localization
         2, 4) -- Rarity & Cost. 1 - Common, 2 - Uncommon, 3 - Rare, 4 - Legendary
 
     joker_cassette:register()
 
-    SMODS.Jokers.j_cassette.calculate = function(self, context)
-        if SMODS.end_calculate_context(context) then
-            return {
-                mult_mod = 20,
-                card = self,
-                colour = G.C.RED,
-                message = 'AHAHAHAH'
-            }
+    -- Some code is in update (look up)
 
+    SMODS.Jokers.j_cassette.calculate = function(self, context)
+        if context.pre_discard then
+            if self.ability.extra.side == 'A' then
+                self.ability.extra.side = 'B'
+            else
+                self.ability.extra.side = 'A'
+            end
+
+            self:flip()
+            self:flip()
+        end
+
+        if context.individual and context.cardarea == G.play then
+            if context.other_card:is_suit('Hearts') or 
+            context.other_card:is_suit('Diamonds') or 
+            context.other_card:is_suit('Stars') then
+                if self.ability.extra.side == 'A' then
+                    return {
+                        chips = self.ability.extra.chips,
+                        card = self
+                    }
+                end
+            end
+
+            if context.other_card:is_suit('Spades') or 
+            context.other_card:is_suit('Clubs') or 
+            context.other_card:is_suit('Moons') then
+                if self.ability.extra.side == 'B' then
+                    return {
+                        mult = self.ability.extra.mult,
+                        card = self
+                    }
+                end
+            end
         end
     end
 
@@ -195,24 +253,8 @@ function SMODS.INIT.Bunco()
         1, 4) -- Rarity & Cost. 1 - Common, 2 - Uncommon, 3 - Rare, 4 - Legendary
  
     joker_voxel:register()
-    
-    local original_update = Card.update
 
-    function Card:update(dt)
-        original_update(self, dt)
-        if self.ability.name == 'Voxel Joker' and G.playing_cards ~= nil then
-            self.ability.extra.voxel_tally = 0
-            for k, v in pairs(G.playing_cards) do
-                if v.config.center ~= G.P_CENTERS.c_base then self.ability.extra.voxel_tally = self.ability.extra.voxel_tally + 1 end
-            end
-            
-            if (self.ability.extra.base_xmult - self.ability.extra.voxel_tally * 0.1) >= 1 then
-                self.ability.extra.xmult = self.ability.extra.base_xmult - self.ability.extra.voxel_tally * 0.1
-            else
-                self.ability.extra.xmult = 1
-            end
-        end
-    end
+    -- Update calculation moved up!
 
     SMODS.Jokers.j_voxel.calculate = function(self, context)
 
@@ -294,7 +336,7 @@ function SMODS.INIT.Bunco()
         ['text'] = {
             [1] = 'Gains {X:mult,C:white}X0.2{} Mult',
             [2] = 'per card drawn face down',
-            [3] = '{C:inactive} (Currently {X:mult,C:white} X#1# {C:inactive} Mult)'
+            [3] = '{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive} Mult)'
         }
     }
  
@@ -348,7 +390,7 @@ function SMODS.INIT.Bunco()
         'Prehistoric Joker', -- Name
         'prehistoric', -- Slug
         {mult = 16, extra = {card_list = { }}}, -- Config
-        {x = 0, y = 1}, -- Sprite position
+        {x = 1, y = 1}, -- Sprite position
         loc_prehistoric, -- Localization
         2, 6) -- Rarity & Cost. 1 - Common, 2 - Uncommon, 3 - Rare, 4 - Legendary
  
@@ -404,6 +446,8 @@ function Card.generate_UIBox_ability_table(self)
             loc_vars = {self.ability.extra.mult}
         elseif self.ability.name == 'Voxel Joker' then
             loc_vars = {self.ability.extra.base_xmult, self.ability.extra.xmult}
+        elseif self.ability.name == 'Cassette' then
+            loc_vars = {self.ability.extra.chips, self.ability.extra.mult}
         else
             customJoker = false
         end
