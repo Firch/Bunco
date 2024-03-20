@@ -134,7 +134,7 @@ function SMODS.INIT.Bunco()
         ['name'] = 'Mosaic Joker',
         ['text'] = {
             [1] = 'Played {C:attention}Stone Cards',
-            [2] = 'give {C:mult}#1# Mult',
+            [2] = 'give {C:mult}#1#{} Mult',
             [3] = 'when scored'
         }
     }
