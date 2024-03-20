@@ -62,75 +62,6 @@ function SMODS.INIT.Bunco()
 
     -- Joker sprites:
         local bunco_mod = SMODS.findModByID('Bunco')
-
-    -- Dread joker:
-        SMODS.Sprite:new('j_dread', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
-
-        local loc_dread = {
-            ['name'] = 'Dread',
-            ['text'] = {
-                [1] = 'After scoring your {C:attention}final hand{} of round,',
-                [2] = 'upgrade level of scored {C:attention}poker hand{}',
-                [3] = 'by {C:attention}2 levels{} and destroy cards from that hand,',
-                [4] = 'on Joker loss remove all gained levels'
-            }
-        }
-
-        -- SMODS.Joker:new(name, slug, config, spritePos, loc_txt, rarity, cost, unlocked, discovered, blueprint_compat, eternal_compat)
-        local joker_dread = SMODS.Joker:new(
-            'Dread', -- Name
-            'dread', -- Slug
-            {extra = {trash_list = {}, level_up_list = {}}}, -- Config
-            {x = 0, y = 1}, -- Sprite position
-            loc_dread, -- Localization
-            3, 4) -- Rarity & Cost. 1 - Common, 2 - Uncommon, 3 - Rare, 4 - Legendary
-
-        joker_dread:register()
-
-        local original_remove_from_deck = Card.remove_from_deck
-
-        function Card:remove_from_deck(from_debuff)
-            original_remove_from_deck(self, from_debuff)
-
-            if self.ability.name == 'Dread' then
-                for name, level in pairs(self.ability.extra.level_up_list) do
-                    level_up_hand(self, name, true, level * -1)
-                end
-            end
-        end
-
-        SMODS.Jokers.j_dread.calculate = function(self, context)
-            
-            if context.full_hand ~= nil then
-                self.ability.extra.trash_list = {}
-                for k, v in ipairs(context.full_hand) do
-                    table.insert(self.ability.extra.trash_list, v)
-                end
-            end
-
-            if context.after and G.GAME.current_round.hands_left == 0 and context.scoring_name ~= nil then
-                
-                level_up_hand(self, context.scoring_name, true, 2)
-                
-                if self.ability.extra.level_up_list[context.scoring_name] then
-                    self.ability.extra.level_up_list[context.scoring_name] = self.ability.extra.level_up_list[context.scoring_name] + 2
-                else
-                    self.ability.extra.level_up_list[context.scoring_name] = 2
-                end
-
-                return {
-                    colour = G.C.RED,
-                    message = "Level up!"
-                }
-            end
-
-            if context.end_of_round and G.GAME.current_round.hands_left == 0 then
-                for i = 1, #self.ability.extra.trash_list do
-                    self.ability.extra.trash_list[i]:start_dissolve()
-                end
-                self.ability.extra.trash_list = {}
-            end
-        end
     
     -- Cassette joker:
     SMODS.Sprite:new('j_cassette', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
@@ -157,7 +88,7 @@ function SMODS.INIT.Bunco()
 
     joker_cassette:register()
 
-    -- Some code is in update (look up)
+    -- Cassette uses Card:update for some things. Look at the start of the code
 
     SMODS.Jokers.j_cassette.calculate = function(self, context)
         if context.pre_discard then
@@ -202,9 +133,9 @@ function SMODS.INIT.Bunco()
     local loc_mosaic = {
         ['name'] = 'Mosaic Joker',
         ['text'] = {
-            [1] = 'AHAHA',
-            [2] = 'Jokes on',
-            [3] = '{C:attention}You{}!'
+            [1] = 'Played {C:attention}Stone Cards',
+            [2] = 'give {C:mult}#1# Mult',
+            [3] = 'when scored'
         }
     }
 
@@ -212,22 +143,21 @@ function SMODS.INIT.Bunco()
     local joker_mosaic = SMODS.Joker:new(
         'Mosaic Joker', -- Name
         'mosaic', -- Slug
-        {}, -- Config
+        {extra = {mult = 4}}, -- Config
         {x = 2, y = 0}, -- Sprite position
         loc_mosaic, -- Localization
-        2, 4) -- Rarity & Cost. 1 - Common, 2 - Uncommon, 3 - Rare, 4 - Legendary
+        1, 4) -- Rarity & Cost. 1 - Common, 2 - Uncommon, 3 - Rare, 4 - Legendary
 
     joker_mosaic:register()
 
     SMODS.Jokers.j_mosaic.calculate = function(self, context)
-        if SMODS.end_calculate_context(context) then
-            return {
-                mult_mod = 20,
-                card = self,
-                colour = G.C.RED,
-                message = 'AHAHAHAH'
-            }
-
+        if context.individual and context.cardarea == G.play then
+            if context.other_card.config.center == G.P_CENTERS.m_stone then
+                return {
+                    mult = self.ability.extra.mult,
+                    card = self
+                }
+            end
         end
     end
 
@@ -254,7 +184,7 @@ function SMODS.INIT.Bunco()
  
     joker_voxel:register()
 
-    -- Update calculation moved up!
+    -- Voxel Joker uses Card:update for some things. Look at the start of the code
 
     SMODS.Jokers.j_voxel.calculate = function(self, context)
 
@@ -372,6 +302,75 @@ function SMODS.INIT.Bunco()
         end
     end
 
+    -- Dread joker:
+    SMODS.Sprite:new('j_dread', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
+
+    local loc_dread = {
+        ['name'] = 'Dread',
+        ['text'] = {
+            [1] = 'After scoring your {C:attention}final hand{} of round,',
+            [2] = 'upgrade level of scored {C:attention}poker hand{}',
+            [3] = 'by {C:attention}2 levels{} and destroy cards from that hand,',
+            [4] = 'on Joker loss remove all gained levels'
+        }
+    }
+
+    -- SMODS.Joker:new(name, slug, config, spritePos, loc_txt, rarity, cost, unlocked, discovered, blueprint_compat, eternal_compat)
+    local joker_dread = SMODS.Joker:new(
+        'Dread', -- Name
+        'dread', -- Slug
+        {extra = {trash_list = {}, level_up_list = {}}}, -- Config
+        {x = 0, y = 1}, -- Sprite position
+        loc_dread, -- Localization
+        3, 4) -- Rarity & Cost. 1 - Common, 2 - Uncommon, 3 - Rare, 4 - Legendary
+
+    joker_dread:register()
+
+    local original_remove_from_deck = Card.remove_from_deck
+
+    function Card:remove_from_deck(from_debuff)
+        original_remove_from_deck(self, from_debuff)
+
+        if self.ability.name == 'Dread' then
+            for name, level in pairs(self.ability.extra.level_up_list) do
+                level_up_hand(self, name, true, level * -1)
+            end
+        end
+    end
+
+    SMODS.Jokers.j_dread.calculate = function(self, context)
+        
+        if context.full_hand ~= nil then
+            self.ability.extra.trash_list = {}
+            for k, v in ipairs(context.full_hand) do
+                table.insert(self.ability.extra.trash_list, v)
+            end
+        end
+
+        if context.after and G.GAME.current_round.hands_left == 0 and context.scoring_name ~= nil then
+            
+            level_up_hand(self, context.scoring_name, true, 2)
+            
+            if self.ability.extra.level_up_list[context.scoring_name] then
+                self.ability.extra.level_up_list[context.scoring_name] = self.ability.extra.level_up_list[context.scoring_name] + 2
+            else
+                self.ability.extra.level_up_list[context.scoring_name] = 2
+            end
+
+            return {
+                colour = G.C.RED,
+                message = "Level up!"
+            }
+        end
+
+        if context.end_of_round and G.GAME.current_round.hands_left == 0 then
+            for i = 1, #self.ability.extra.trash_list do
+                self.ability.extra.trash_list[i]:start_dissolve()
+            end
+            self.ability.extra.trash_list = {}
+        end
+    end
+
     -- Prehistoric joker:
     SMODS.Sprite:new('j_prehistoric', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
 
@@ -438,16 +437,20 @@ function Card.generate_UIBox_ability_table(self)
     elseif self.ability.set == 'Joker' then
         local customJoker = true
 
-        if self.ability.name == 'Prehistoric Joker' then
-            loc_vars = {self.ability.mult}
-        elseif self.ability.name == 'X-Ray' then
-            loc_vars = {self.ability.extra.xmult}
-        elseif self.ability.name == 'Crop Circles' then
+        if self.ability.name == 'Cassette' then
+            loc_vars = {self.ability.extra.chips, self.ability.extra.mult}
+        elseif self.ability.name == 'Mosaic Joker' then
             loc_vars = {self.ability.extra.mult}
         elseif self.ability.name == 'Voxel Joker' then
             loc_vars = {self.ability.extra.base_xmult, self.ability.extra.xmult}
-        elseif self.ability.name == 'Cassette' then
-            loc_vars = {self.ability.extra.chips, self.ability.extra.mult}
+        elseif self.ability.name == 'Crop Circles' then
+            loc_vars = {self.ability.extra.mult}
+        elseif self.ability.name == 'X-Ray' then
+            loc_vars = {self.ability.extra.xmult}
+        elseif self.ability.name == 'Dread' then
+            
+        elseif self.ability.name == 'Prehistoric Joker' then
+            loc_vars = {self.ability.mult}
         else
             customJoker = false
         end
