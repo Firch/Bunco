@@ -84,7 +84,7 @@ function SMODS.INIT.Bunco()
         {extra = {chips = 45, mult = 6, side = 'A'}}, -- Config
         {x = 0, y = 0}, -- Sprite position
         loc_cassette, -- Localization
-        2, 4) -- Rarity & Cost. 1 - Common, 2 - Uncommon, 3 - Rare, 4 - Legendary
+        2, 5) -- Rarity & Cost. 1 - Common, 2 - Uncommon, 3 - Rare, 4 - Legendary
 
     joker_cassette:register()
 
@@ -146,7 +146,7 @@ function SMODS.INIT.Bunco()
         {extra = {mult = 4}}, -- Config
         {x = 2, y = 0}, -- Sprite position
         loc_mosaic, -- Localization
-        1, 4) -- Rarity & Cost. 1 - Common, 2 - Uncommon, 3 - Rare, 4 - Legendary
+        2, 4) -- Rarity & Cost. 1 - Common, 2 - Uncommon, 3 - Rare, 4 - Legendary
 
     joker_mosaic:register()
 
@@ -180,7 +180,7 @@ function SMODS.INIT.Bunco()
         {extra = {base_xmult = 3, xmult = 3, voxel_tally = 0}}, -- Config
         {x = 3, y = 0}, -- Sprite position
         loc_voxel, -- Localization
-        1, 4) -- Rarity & Cost. 1 - Common, 2 - Uncommon, 3 - Rare, 4 - Legendary
+        2, 5) -- Rarity & Cost. 1 - Common, 2 - Uncommon, 3 - Rare, 4 - Legendary
  
     joker_voxel:register()
 
@@ -322,7 +322,7 @@ function SMODS.INIT.Bunco()
         {extra = {trash_list = {}, level_up_list = {}}}, -- Config
         {x = 0, y = 1}, -- Sprite position
         loc_dread, -- Localization
-        3, 4) -- Rarity & Cost. 1 - Common, 2 - Uncommon, 3 - Rare, 4 - Legendary
+        3, 8) -- Rarity & Cost. 1 - Common, 2 - Uncommon, 3 - Rare, 4 - Legendary
 
     joker_dread:register()
 
@@ -391,7 +391,7 @@ function SMODS.INIT.Bunco()
         {mult = 16, extra = {card_list = { }}}, -- Config
         {x = 1, y = 1}, -- Sprite position
         loc_prehistoric, -- Localization
-        2, 6) -- Rarity & Cost. 1 - Common, 2 - Uncommon, 3 - Rare, 4 - Legendary
+        2, 5) -- Rarity & Cost. 1 - Common, 2 - Uncommon, 3 - Rare, 4 - Legendary
  
     joker_prehistoric:register()
 
