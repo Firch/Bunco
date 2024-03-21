@@ -54,8 +54,10 @@ function SMODS.INIT.Bunco()
         original_emplace(self, card, location, stay_flipped)
 
         if G.jokers ~= nil and self == G.hand then
-            for i = 1, #G.jokers.cards do
-                G.jokers.cards[i]:calculate_joker({emplace = true, emplaced_card = card})
+            for _, v in ipairs(G.jokers.cards) do
+                if v.ability.name == "X-Ray" then
+                  v:calculate_joker({ emplace = true, emplaced_card = card })
+                end
             end
         end
     end
