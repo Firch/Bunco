@@ -14,10 +14,110 @@ function SMODS.INIT.Bunco()
     local original_set_edition = Card.set_edition
 
     function Card:set_edition(edition, immediate, silent)
+        if edition.fluorescent then
+            if not self.edition then self.edition = {} end
+            self.edition.chips = G.P_CENTERS.e_fluorescent.config.extra
+            self.edition.fluorescent = true
+            self.edition.fluorescent = 'fluorescent'
+        end
+
         original_set_edition(self, edition, immediate, silent)
     end
 
-    -- Custom contexts:
+    local NFS = NFS or love.filesystem
+    shader_fluorescent = NFS.read(SMODS.findModByID('Bunco').path.."polychrome_test.fs")
+
+    G.SHADERS["fluorescent"] = love.graphics.newShader(shader_fluorescent)
+
+    G.P_CENTERS["e_fluorescent"] =  {order = 6,  unlocked = true, discovered = false, name = "fluorescent", pos = {x=0,y=0}, atlas = 'Joker', set = "Edition", config = {extra = 17}}
+
+    local original_card_draw = Card.draw;
+
+    function Card:draw(layer)
+        if self.edition and self.edition.fluorescent  then
+        self.children.center:draw_shader('fluorescent', nil, self.ARGS.send_to_shader)
+            if self.children.front and self.ability.effect ~= 'Stone Card' then
+                self.children.front:draw_shader('fluorescent', nil, self.ARGS.send_to_shader)
+            end
+        end
+        original_card_draw(self, layer);
+    end
+
+    function Controller:key_press_update(key, dt)
+        if self.hovering.target and self.hovering.target:is(Card) then
+            local _card = self.hovering.target
+            if key == 'w' then
+                if (_card.ability.set == 'Joker' or _card.playing_card or _card.area) then
+                    local _edition = {
+                        foil = not _card.edition,
+                        holo = _card.edition and _card.edition.foil,
+                        polychrome = _card.edition and _card.edition.holo,
+                        negative = _card.edition and _card.edition.polychrome,
+                        fluorescent = _card.edition and _card.edition.negative,
+                    }
+                    _card:set_edition(_edition, true, true)
+                end
+            end
+        end
+    end
+
+    -- Custom contexts & other functions:
+
+    local original_add_to_deck = Card.add_to_deck
+
+    function Card:add_speech_bubble(text_key, align, loc_vars)
+        if self.children.speech_bubble then self.children.speech_bubble:remove() end
+        self.config.speech_bubble_align = {align=align or 'bm', offset = {x=0,y=0}, parent = self}
+        self.children.speech_bubble = 
+        UIBox{
+            definition = G.UIDEF.jimbo_speech_bubble(text_key, loc_vars),
+            config = self.config.speech_bubble_align
+        }
+        self.children.speech_bubble:set_role{
+            role_type = 'Minor',
+            xy_bond = 'Weak',
+            r_bond = 'Weak',
+            major = self,
+        }
+        self.children.speech_bubble.states.visible = false
+    end
+
+    function Card:remove_speech_bubble()
+        if self.children.speech_bubble then self.children.speech_bubble:remove(); self.children.speech_bubble = nil end
+    end
+
+    function Card:say_stuff(n, not_first)
+        self.talking = true
+        if not not_first then 
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.1,
+                func = function()
+                    if self.children.speech_bubble then self.children.speech_bubble.states.visible = true end
+                    self:say_stuff(n, true)
+                  return true
+                end
+            }))
+        else
+            if n <= 0 then self.talking = false; return end
+            local new_said = math.random(1, 11)
+            while new_said == self.last_said do 
+                new_said = math.random(1, 11)
+            end
+            self.last_said = new_said
+            play_sound('voice'..math.random(1, 11), G.SPEEDFACTOR*(math.random()*0.2+1), 0.5)
+            self:juice_up(0.1)
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                blockable = false, blocking = false,
+                delay = 0.13,
+                func = function()
+                    self:say_stuff(n-1, true)
+                return true
+                end
+            }), 'tutorial')
+        end
+    end
 
     local original_update = Card.update
 
@@ -422,6 +522,76 @@ function SMODS.INIT.Bunco()
             self.ability.extra.card_list = {}
         end
     end
+
+    -- Jimbo joker:
+    SMODS.Sprite:new('j_jimbo', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
+
+    local loc_jimbo = {
+        ['name'] = 'Jimbo',
+        ['text'] = {
+            [1] = '{C:inactive}Does nothing?'
+        }
+    }
+ 
+    -- SMODS.Joker:new(name, slug, config, spritePos, loc_txt, rarity, cost, unlocked, discovered, blueprint_compat, eternal_compat)
+    local joker_jimbo = SMODS.Joker:new(
+        'Jimbo', -- Name
+        'jimbo', -- Slug
+        {mult = 16, extra = {card_list = { }}}, -- Config
+        {x = 2, y = 1}, -- Sprite position
+        loc_jimbo, -- Localization
+        4, 0) -- Rarity & Cost. 1 - Common, 2 - Uncommon, 3 - Rare, 4 - Legendary
+ 
+    joker_jimbo:register()
+
+    function G.UIDEF.jimbo_speech_bubble(text_key, loc_vars) 
+        local text = {}
+        localize {type = 'quips', key = text_key, vars = loc_vars or {}, nodes = text}
+        local row = {}
+        for k, v in ipairs(text) do
+          row[#row+1] =  {n=G.UIT.R, config={align = "cl"}, nodes=v}
+        end
+        local t = {n=G.UIT.ROOT, config = {align = "cm", minh = 1,r = 0.3, padding = 0.07, minw = 1, colour = G.C.JOKER_GREY, shadow = true}, nodes={
+                      {n=G.UIT.C, config={align = "cm", minh = 1,r = 0.2, padding = 0.1, minw = 1, colour = G.C.WHITE}, nodes={
+                      {n=G.UIT.C, config={align = "cm", minh = 1,r = 0.2, padding = 0.03, minw = 1, colour = G.C.WHITE}, nodes=row}}
+                      }
+                    }}
+        return t
+    end
+
+    local additional_quips = { 
+
+        talk_hello_1 = {"Oh, Hello again!"},
+        talk_hello_2 = {"Well, let's see what you got!"} }
+
+        for k, v in pairs(additional_quips) do
+            G.localization.misc.quips[k] = v
+            G.localization.quips_parsed[k] = {multi_line = true}
+            for kk, vv in ipairs(v) do
+                G.localization.quips_parsed[k][kk] = loc_parse_string(vv)
+            end
+        end
+    
+    
+    function Card:add_to_deck(from_debuff)
+        original_add_to_deck(self, from_debuff)
+
+        if self.ability.name == 'Jimbo' then
+            self:add_speech_bubble("talk_hello_1", "bm")
+            self:say_stuff(3)
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = 2, func = function() 
+                self:add_speech_bubble("talk_hello_2", "bm")
+                self:say_stuff(3)
+                G.E_MANAGER:add_event(Event({trigger = 'after', delay = 2, func = function() 
+                    self:remove_speech_bubble()
+                            return true end }))
+                        return true end }))
+        end
+    end
+
+    SMODS.Jokers.j_jimbo.calculate = function(self, context)
+        
+    end
 end
 
 -- Copied and modifed from LushMod
@@ -494,5 +664,6 @@ function Card.generate_UIBox_ability_table(self)
 
     return generate_UIBox_ability_tableref(self)
 end
+
 ----------------------------------------------
 ------------MOD CODE END----------------------
