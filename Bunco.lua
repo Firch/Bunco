@@ -9,6 +9,419 @@
 
 function SMODS.INIT.Bunco()
 
+    local bunco_mod = SMODS.findModByID('Bunco')
+
+    local sprite_tarots = SMODS.Sprite:new('bunco_tarots', bunco_mod.path, 'Tarots.png', 71, 95, 'asset_atli') sprite_tarots:register()
+    local sprite_planets = SMODS.Sprite:new('bunco_planets', bunco_mod.path, 'Planets.png', 71, 95, 'asset_atli') sprite_planets:register()
+
+    -- Exotic cards:
+
+    local sprite_exotic_cards = SMODS.Sprite:new('exotic_cards', bunco_mod.path, '8BitDeck.png', 71, 95, 'asset_atli') sprite_exotic_cards:register()
+    local sprite_exotic_cards_ui = SMODS.Sprite:new('exotic_cards_ui', bunco_mod.path, 'ui_assets.png', 18, 18, 'asset_atli') sprite_exotic_cards_ui:register()
+
+    local sprite_exotic_cards_high_contrast = SMODS.Sprite:new('exotic_cards_high_contrast', bunco_mod.path, '8BitDeck.png', 71, 95, 'asset_atli') sprite_exotic_cards_high_contrast:register()
+    local sprite_exotic_cards_ui_high_contrast = SMODS.Sprite:new('exotic_cards_ui_high_contrast', bunco_mod.path, 'ui_assets.png', 18, 18, 'asset_atli') sprite_exotic_cards_ui_high_contrast:register()
+
+    G.localization.misc['poker_hands']['Spectrum'] = 'Spectrum' -- Copied from SixSuits mod
+    G.localization.misc['poker_hands']['Straight Spectrum'] = 'Straight Spectrum'
+    G.localization.misc['poker_hands']['Royal Spectrum'] = 'Royal Spectrum'
+    G.localization.misc['poker_hands']['Spectrum House'] = 'Spectrum House'
+    G.localization.misc['poker_hands']['Spectrum Five'] = 'Spectrum Five'
+    G.localization.misc['poker_hand_descriptions']['Spectrum'] = {
+        [1] = '5 cards, each with a different suit'
+    }
+    G.localization.misc['poker_hand_descriptions']['Straight Spectrum'] = {
+        [1] = '5 cards in a row (consecutive ranks) with',
+        [2] = 'each card having a different suit'
+    }
+    G.localization.misc['poker_hand_descriptions']['Royal Spectrum'] = {
+        [1] = '5 cards in a row (consecutive ranks) with',
+        [2] = 'each card having a different suit'
+    }
+    G.localization.misc['poker_hand_descriptions']['Spectrum House'] = {
+        [1] = 'A Three of a Kind and a Pair with',
+        [2] = 'each card having a different suit'
+    }
+    G.localization.misc['poker_hand_descriptions']['Spectrum Five'] = {
+        [1] = '5 cards with the same rank,',
+        [2] = 'each with a different suit'
+    }
+
+    local ii = {}
+    for i, v in ipairs(G.handlist) do
+        local hand_to_add = (v == 'Flush House') and 'Spectrum Five' or (v == 'Straight Flush') and 'Spectrum House' or
+            (v == 'Four of a Kind') and 'Straight Spectrum' or (v == 'Flush') and 'Spectrum' or nil
+        if hand_to_add then
+            ii[hand_to_add] = i
+        end
+    end
+    local j = 0
+    for hand, i in pairs(ii) do
+        table.insert(G.handlist, i + j, hand)
+        j = j + 1
+    end
+
+    local c_quaoar = SMODS.Planet:new('Quaoar', 'quaoar', { hand_type = 'Spectrum' }, { x = 0, y = 0 }, nil, 3, 1,
+        nil, 1, true, false, 'bunco_planets')
+    local c_haumea = SMODS.Planet:new('Haumea', 'haumea', { hand_type = 'Straight Spectrum' }, { x = 1, y = 0 },
+        nil, 3, 1, nil, 1, true, false, 'bunco_planets')
+    local c_sedna = SMODS.Planet:new('Sedna', 'sedna', { hand_type = 'Spectrum House', softlock = true },
+        { x = 2, y = 0 }, nil, 3, 1,
+        nil, 1, true, false, 'bunco_planets')
+    local c_makemake = SMODS.Planet:new('Makemake', 'makemake', { hand_type = 'Spectrum Five', softlock = true },
+        { x = 3, y = 0 }, nil, 3, 1, nil, 1, true, false, 'bunco_planets')
+    c_quaoar:register()
+    c_haumea:register()
+    c_sedna:register()
+    c_makemake:register()
+
+    function get_spectrum(hand)
+        local suits = {}
+        for _, v in ipairs(SMODS.Card.SUIT_LIST) do
+            suits[v] = 0
+        end
+    
+        if #hand ~= 5 then return {} end
+    
+        local num_wild_cards = 0
+        local num_non_wild_cards = 0
+        for i = 1, #hand do
+            if hand[i].ability.name == 'Wild Card' then
+                num_wild_cards = num_wild_cards + 1
+            else
+                num_non_wild_cards = num_non_wild_cards + 1
+                for k, v in pairs(suits) do
+                    if hand[i]:is_suit(k, nil, true) and v == 0 then
+                        suits[k] = v + 1
+                        break
+                    end
+                end
+            end
+        end
+    
+        local num_suits = 0
+        for _, v in pairs(suits) do
+            if v > 0 then num_suits = num_suits + 1 end
+        end
+    
+        if num_non_wild_cards == 1 then
+            return { hand }
+        elseif num_non_wild_cards == 0 and num_wild_cards == 5 then
+            return { hand }
+        else
+            return (num_suits + num_wild_cards >= 5) and { hand } or {}
+        end
+    end    
+    
+    local init_game_object_original = Game.init_game_object
+    function Game:init_game_object()
+        local t = init_game_object_original(self)
+
+        t.hands['Spectrum Five'] =     { visible = true, order = t.hands['Flush House'].order + 0.1,    mult = 14, chips = 120, s_mult = 14, s_chips = 120, level = 1, l_mult = 3, l_chips = 40, played = 0, played_this_round = 0, example = { { 'S_A', true }, { 'H_A', true }, { 'C_A', true }, { 'D_A', true }, { 'HALBERDS_A', true } } }
+        t.hands['Spectrum House'] =    { visible = true, order = t.hands['Straight Flush'].order + 0.1, mult = 7,  chips = 80,  s_mult = 7,  s_chips = 80,  level = 1, l_mult = 3, l_chips = 35, played = 0, played_this_round = 0, example = { { 'D_7', true }, { 'H_7', true }, { 'FLEURONS_7', true }, { 'HALBERDS_4', true }, { 'C_4', true } } }
+        t.hands['Straight Spectrum'] = { visible = true, order = t.hands['Four of a Kind'].order + 0.1, mult = 6,  chips = 60,  s_mult = 6,  s_chips = 60,  level = 1, l_mult = 2, l_chips = 35, played = 0, played_this_round = 0, example = { { 'S_Q', true }, { 'FLEURONS_J', true }, { 'C_T', true }, { 'HALBERDS_9', true }, { 'H_8', true } } }
+        t.hands['Spectrum'] =          { visible = true, order = t.hands['Flush'].order + 0.1,          mult = 4,  chips = 35,  s_mult = 4,  s_chips = 35,  level = 1, l_mult = 4, l_chips = 20, played = 0, played_this_round = 0, example = { { 'H_2', true }, { 'D_5', true }, { 'S_8', true }, { 'C_T', true }, { 'FLEURONS_A', true } } }
+        return t
+    end
+
+    local evaluate_poker_hand_six_suit_ref = evaluate_poker_hand
+    function evaluate_poker_hand(hand)
+        local results = evaluate_poker_hand_six_suit_ref(hand)
+        results['Spectrum'] = {}
+        results['Straight Spectrum'] = {}
+        results['Spectrum House'] = {}
+        results['Spectrum Five'] = {}
+        local s = get_spectrum(hand)
+        if next(s) then
+            results['Spectrum'] = s
+            results.top = s
+            if next(get_straight(hand)) then
+                results['Straight Spectrum'] = s
+            end
+            if next(get_X_same(3, hand)) and next(get_X_same(2, hand)) then
+                results['Spectrum House'] = s
+            end
+            if next(get_X_same(5, hand)) then
+                results['Spectrum Five'] = s
+            end
+        end
+        return results
+    end
+
+    --! DO NOT MODIFY | add hands to G.handlist and G.GAME.hands instead
+    --* I tried to turn this into a hook, but I would end up needing to re-evaluate the result anyways
+    function G.FUNCS.get_poker_hand_info(_cards)
+        local poker_hands = evaluate_poker_hand(_cards)
+        local scoring_hand = {}
+        local text, disp_text, loc_disp_text = 'NULL', 'NULL', 'NULL'
+        for _, v in ipairs(G.handlist) do
+            if next(poker_hands[v]) then
+                text = v
+                scoring_hand = poker_hands[v][1]
+                break
+            end
+        end
+        disp_text = text
+        if text == 'Straight Flush' then
+            local min = 10
+            for j = 1, #scoring_hand do
+                if scoring_hand[j]:get_id() < min then min = scoring_hand[j]:get_id() end
+            end
+            if min >= 10 then
+                disp_text = 'Royal Flush'
+            end
+        end
+        if text == 'Straight Spectrum' then
+            local min = 10
+            for j = 1, #scoring_hand do
+                if scoring_hand[j]:get_id() < min then min = scoring_hand[j]:get_id() end
+            end
+            if min >= 10 then
+                disp_text = 'Royal Spectrum'
+            end
+        end
+        loc_disp_text = localize(disp_text, 'poker_hands')
+        return text, loc_disp_text, poker_hands, scoring_hand, disp_text
+    end
+
+    --! DO NOT MODIFY | handles hands added to G.handlist
+    function create_UIBox_current_hands(simple)
+        local hands = {}
+        for _, v in ipairs(G.handlist) do
+            hands[#hands + 1] = create_UIBox_current_hand_row(v, simple)
+        end
+        local t = {
+            n = G.UIT.ROOT,
+            config = { align = "cm", minw = 3, padding = 0.1, r = 0.1, colour = G.C.CLEAR },
+            nodes = {
+                {
+                    n = G.UIT.R,
+                    config = { align = "cm", padding = 0.04 },
+                    nodes =
+                        hands
+                },
+            }
+        }
+        return t
+    end -- End of copy
+
+    
+
+    local function acknowledge(suit, inital)
+        if suit == 'Fleurons' then
+            SMODS.Card:new_suit('Fleurons', 'exotic_cards', 'exotic_cards_high_contrast', { y = 0 }, 'exotic_cards_ui', 'exotic_cards_ui_high_contrast',
+            { x = 0, y = 0 }, 'ec2616', 'ec2616')
+            if inital ~= true then
+                G.GAME.Fleurons = true
+            end
+        end
+        if suit == 'Halberds' then
+            SMODS.Card:new_suit('Halberds', 'exotic_cards', 'exotic_cards_high_contrast', { y = 1 }, 'exotic_cards_ui', 'exotic_cards_ui_high_contrast',
+            { x = 1, y = 0 }, '6e3c63', '6e3c63')
+            if inital ~= true then
+                G.GAME.Halberds = true
+            end
+        end
+    end
+
+    local function forget(suit, inital)
+        if suit == 'Fleurons' then
+            if G.GAME ~= nil and G.GAME.Fleurons == true then
+                SMODS.Card:delete_suit('Fleurons')
+            end
+            if inital ~= true then
+                G.GAME.Fleurons = false
+            else
+                SMODS.Card:delete_suit('Fleurons')
+            end
+        elseif suit == 'Halberds' then
+            if G.GAME ~= nil and G.GAME.Halberds == true then
+                SMODS.Card:delete_suit('Halberds')
+            end
+            if inital ~= true then
+                G.GAME.Halberds = false
+            else
+                SMODS.Card:delete_suit('Halberds')
+            end
+        end
+    end
+
+    acknowledge('Fleurons', true)
+    acknowledge('Halberds', true)
+    forget('Fleurons', true)
+    forget('Halberds', true)
+
+    local original_start_run = Game.start_run
+
+    function Game:start_run(args)
+        if args.savetext then
+            if not G.SAVED_GAME then
+                G.SAVED_GAME = get_compressed(G.SETTINGS.profile..'/'..'save.jkr')
+                if G.SAVED_GAME ~= nil then G.SAVED_GAME = STR_UNPACK(G.SAVED_GAME) end
+            end
+            if G.SAVED_GAME ~= nil then
+                saved_game = G.SAVED_GAME
+            end
+        else
+            saved_game = nil
+        end
+
+        sendDebugMessage('Bunco run info (PRELOAD):')
+        sendDebugMessage('Are fleurons known? - '..tostring(saved_game and saved_game.GAME.Fleurons or 'unknown'))
+        sendDebugMessage('Are halberds known? - '..tostring(saved_game and saved_game.GAME.Halberds or 'unknown'))
+
+        if saved_game ~= nil then
+            if saved_game.GAME.Fleurons == true then
+                acknowledge('Fleurons')
+                sendDebugMessage('Registered fleurons, because the current run already had them!')
+            else
+                forget('Fleurons')
+                sendDebugMessage('Removed fleurons; undiscovered in the current run!')
+            end
+            if saved_game.GAME.Halberds == true then
+                acknowledge('Halberds')
+                sendDebugMessage('Registered halberds, because the current run already had them!')
+            else
+                forget('Halberds')
+                sendDebugMessage('Removed halberds; undiscovered in the current run!')
+            end
+        end
+        
+        original_start_run(self, args)
+
+        sendDebugMessage('Bunco run info (POSTLOAD):')
+        sendDebugMessage('Are fleurons known? - '..tostring(saved_game and saved_game.GAME.Fleurons or 'unknown'))
+        sendDebugMessage('Are halberds known? - '..tostring(saved_game and saved_game.GAME.Fleurons or 'unknown'))
+    end
+
+    local original_card_remove = Card.remove
+
+    function Card:remove()
+        original_card_remove(self)
+        
+        if G.playing_cards ~= nil then
+
+            local fleurons = false
+            local halberds = false
+
+            for k, v in pairs(G.playing_cards) do
+                if v:is_suit('Fleurons') then fleurons = true end
+            end
+            for k, v in pairs(G.playing_cards) do
+                if v:is_suit('Halberds') then halberds = true end
+            end
+
+            if fleurons == false then
+                forget('Fleurons')
+            end
+            if halberds == false then
+                forget('Halberds')
+            end
+        end
+    end
+    
+    local text_tarot_sky = { -- Sky (Fleuron) tarot
+        [1] = 'Converts up to',
+        [2] = '{C:attention}3{} selected cards',
+        [3] = 'to {C:fleurons}Fleurons{}',
+    }
+
+    local tarot_sky = SMODS.Tarot:new('The Sky', 'sky', {max_highlighted = 3},
+    { x = 0, y = 0 },
+    { name = 'The Sky', text = text_tarot_sky }, 3, 1, '', true, false, 'bunco_tarots')
+
+    tarot_sky:register()
+    
+    function SMODS.Tarots.c_sky.set_badges(card, badges)
+        badges[1] = create_badge('Tarot?', HEX('a782d1'), HEX('FFFFFF'), 1.2)
+    end
+
+    function SMODS.Tarots.c_sky.use(card, area, copier)
+        acknowledge('Fleurons')
+        for i=1, #G.hand.highlighted do
+            local percent = 1.15 - (i-0.999)/(#G.hand.highlighted-0.998)*0.3
+            G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.15,func = function() G.hand.highlighted[i]:flip();play_sound('card1', percent);G.hand.highlighted[i]:juice_up(0.3, 0.3);return true end }))
+        end
+        delay(0.2)
+        for i=1, #G.hand.highlighted do
+            G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.1,func = function() G.hand.highlighted[i]:change_suit('Fleurons');return true end }))
+        end   
+        for i=1, #G.hand.highlighted do
+            local percent = 0.85 + (i-0.999)/(#G.hand.highlighted-0.998)*0.3
+            G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.15,func = function() G.hand.highlighted[i]:flip();play_sound('tarot2', percent, 0.6);G.hand.highlighted[i]:juice_up(0.3, 0.3);return true end }))
+        end
+        G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.2,func = function() G.hand:unhighlight_all(); return true end }))
+        delay(0.5)
+    end
+
+    local text_tarot_abyss = { -- Abyss (Halberd) tarot
+        [1] = 'Converts up to',
+        [2] = '{C:attention}3{} selected cards',
+        [3] = 'to {C:halberds}Halberds{}',
+    }
+
+    local tarot_abyss = SMODS.Tarot:new('The Abyss', 'abyss', {max_highlighted = 3},
+    { x = 1, y = 0 },
+    { name = 'The Abyss', text = text_tarot_abyss }, 3, 1, '', true, false, 'bunco_tarots')
+
+    tarot_abyss:register()
+    
+    function SMODS.Tarots.c_abyss.set_badges(card, badges)
+        if badges ~= nil then
+            badges[1] = create_badge('Tarot?', HEX('a782d1'), HEX('FFFFFF'), 1.2)
+        end
+    end
+
+    function SMODS.Tarots.c_abyss.use(card, area, copier)
+        acknowledge('Halberds')
+        for i=1, #G.hand.highlighted do
+            local percent = 1.15 - (i-0.999)/(#G.hand.highlighted-0.998)*0.3
+            G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.15,func = function() G.hand.highlighted[i]:flip();play_sound('card1', percent);G.hand.highlighted[i]:juice_up(0.3, 0.3);return true end }))
+        end
+        delay(0.2)
+        for i=1, #G.hand.highlighted do
+            G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.1,func = function() G.hand.highlighted[i]:change_suit('Halberds');return true end }))
+        end   
+        for i=1, #G.hand.highlighted do
+            local percent = 0.85 + (i-0.999)/(#G.hand.highlighted-0.998)*0.3
+            G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.15,func = function() G.hand.highlighted[i]:flip();play_sound('tarot2', percent, 0.6);G.hand.highlighted[i]:juice_up(0.3, 0.3);return true end }))
+        end
+        G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.2,func = function() G.hand:unhighlight_all(); return true end }))
+        delay(0.5)
+    end
+
+    local original_create_card = create_card
+
+    function create_card(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
+        local card = original_create_card(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
+
+        sendDebugMessage('Key: '..((card.ability.name) or 'none'))
+
+        if card.ability.name == 'The Sky' or card.ability.name == 'The Abyss' then
+            sendDebugMessage('Exotic tarot appeared!')
+            sendDebugMessage('Rerolling...')
+            card:remove()
+            return create_card(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
+        else
+            return card
+        end
+    end
+
+    local original_create_card_for_shop = create_card_for_shop
+
+    function create_card_for_shop(area)
+        local card = original_create_card_for_shop(area)
+
+        if card.ability.name == 'The Sky' or card.ability.name == 'The Abyss' then
+            sendDebugMessage('Exotic tarot appeared!')
+            sendDebugMessage('Rerolling...')
+            card:remove()
+            return create_card_for_shop(area)
+        else
+            return card
+        end
+    end
+
     -- Custom editions:
 
     local NFS = NFS or love.filesystem
@@ -18,10 +431,10 @@ function SMODS.INIT.Bunco()
 
     G.P_CENTERS['e_fluorescent'] =  {order = 6,  unlocked = true, discovered = false, name = 'fluorescent', pos = {x=0,y=0}, atlas = 'Joker', set = 'Edition', config = {extra = 99}}
 
-    local original_card_draw = Card.draw;
+    local original_card_draw = Card.draw
     
     function Card:draw(layer)
-        local returnable = original_card_draw(self, layer);
+        local returnable = original_card_draw(self, layer)
         if self.edition and self.edition.fluorescent then
             self.children.center:draw_shader('fluorescent', nil, self.ARGS.send_to_shader)
             if self.children.front and self.ability.effect ~= 'Stone Card' then
@@ -31,7 +444,7 @@ function SMODS.INIT.Bunco()
         return returnable
     end
 
-    local original_key_press_update = Controller.key_press_update;
+    local original_key_press_update = Controller.key_press_update
 
     function Controller:key_press_update(key, dt)
         if self.hovering.target and self.hovering.target:is(Card) then
@@ -49,10 +462,11 @@ function SMODS.INIT.Bunco()
                 end
             end
         end
+        
         original_key_press_update(self, key, dt)
     end
 
-    local original_set_edition = Card.set_edition;
+    local original_set_edition = Card.set_edition
 
     function Card:set_edition(edition, immediate, silent)
         local returnable = original_set_edition(self, edition, immediate, silent)
@@ -165,9 +579,6 @@ function SMODS.INIT.Bunco()
             end
         end
     end
-
-    -- Joker sprites:
-        local bunco_mod = SMODS.findModByID('Bunco')
     
     -- Cassette joker:
     SMODS.Sprite:new('j_cassette', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
@@ -528,7 +939,7 @@ function SMODS.INIT.Bunco()
     end
 
     -- Jimbo joker:
-    SMODS.Sprite:new('j_jimbo', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
+    SMODS.Sprite:new('j_jimbo', bunco_mod.path, 'Jimbo.png', 71, 95, 'asset_atli'):register()
 
     local loc_jimbo = {
         ['name'] = 'Jimbo',
@@ -542,7 +953,7 @@ function SMODS.INIT.Bunco()
         'Jimbo', -- Name
         'jimbo', -- Slug
         {}, -- Config
-        {x = 2, y = 1}, -- Sprite position
+        {x = 0, y = 0}, -- Sprite position
         loc_jimbo, -- Localization
         4, 0, -- Rarity & Cost. 1 - Common, 2 - Uncommon, 3 - Rare, 4 - Legendary
         nil,
@@ -551,7 +962,7 @@ function SMODS.INIT.Bunco()
         nil,
         '',
         '',
-        {x = 3, y = 1})
+        {x = 1, y = 0})
  
     joker_jimbo:register()
 
@@ -584,9 +995,33 @@ function SMODS.INIT.Bunco()
         talk_joker_2 = {"Kids really do grow up too fast!"},
 
         talk_clown_1 = {"Chaos the Clown... not a lot of", "chaos around him, huh?"},
-        talk_clown_2 = {"Maybe I'm a dumbo, but I don't think", "shop rerolls are chaotic!"}
+        talk_clown_2 = {"Maybe I'm a dumbo, but I don't think", "shop rerolls are chaotic!"},
 
+        talk_credit_1 = {"Have you been using my", "credit card this entire time?"},
+        talk_credit_2 = {"This explains so many charges I don't recognize."},
 
+        talk_loyalty_1 = {"This is actually for free hot dogs,", "but don't tell anybody."},
+
+        talk_gift_1 = {"Wait a minute..."},
+        talk_gift_2 = {"This expired years ago!"},
+
+        talk_caino_1 = {"Hey, how's the wife-"},
+        talk_caino_2 = {"Oh right, I forgot."},
+        talk_caino_3 = {"This is why you don't talk to me."},
+
+        talk_triboulet_1 = {"Whoof, I hit my head;", "I'm seeing triple!"},
+        talk_triboulet_2 = {"Get it, Tribby? Because...", "There's three of you..."},
+        talk_triboulet_3 = {"Please say something to me."},
+
+        talk_chicot_1 = {"You know that this guy", "actually knows how to use a sword?"},
+        talk_chicot_2 = {"Yet his sharp wit didn't save him", "from being stabbed, hahaha-"},
+        talk_chicot_3 = {"Gosh, sorry, sorry!"},
+
+        talk_perkeo_1 = {"I'm sorry, but I do not refill."},
+        talk_perkeo_2 = {"Why not? Because you're already", "drunk as a lord."},
+
+        talk_yorick_1 = {"Last I saw you, you were skin and bones."},
+        talk_yorick_2 = {"Or was it just a skull?"}
     
     }
 
@@ -606,14 +1041,30 @@ function SMODS.INIT.Bunco()
     function Card:add_to_deck(from_debuff)
         original_add_to_deck(self, from_debuff)
 
-        local function has_value (tab, val)
-            for index, value in ipairs(tab) do
-                if value == val then
-                    return true
+        local function emotion(value)
+            if true_jimbo ~= nil then
+                if value == 'normal' then
+                    true_jimbo.config.center.soul_pos.x = 1
+                elseif value == 'devious' then
+                    true_jimbo.config.center.soul_pos.x = 2
+                elseif value == 'winking' then
+                    true_jimbo.config.center.soul_pos.x = 3
+                elseif value == 'serious' then
+                    true_jimbo.config.center.soul_pos.x = 4
+                elseif value == 'judging' then
+                    true_jimbo.config.center.soul_pos.x = 5
+                elseif value == 'angry' then
+                    true_jimbo.config.center.soul_pos.x = 6
+                elseif value == 'afraid' then
+                    true_jimbo.config.center.soul_pos.x = 7
+                elseif value == 'startled' then
+                    true_jimbo.config.center.soul_pos.x = 8
+                elseif value == 'insane' then
+                    true_jimbo.config.center.soul_pos.x = 9
                 end
+
+                true_jimbo:set_sprites(self.config.center)
             end
-        
-            return false
         end
 
         if self.ability.name == 'Jimbo' and true_jimbo ~= nil then -- When other Jimbo appears
@@ -669,10 +1120,12 @@ function SMODS.INIT.Bunco()
             G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Hello' then
                 self:say_stuff(jimbo_talk_amount)
 
+                emotion('winking')
                 self:add_speech_bubble('talk_hello_2', 'bm')
 
             G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 2, func = function() if jimbo_current_dialogue == 'Hello' then
 
+                emotion('normal')
                 self:remove_speech_bubble()
                 
             end
@@ -726,6 +1179,204 @@ function SMODS.INIT.Bunco()
             return true end }))
         end
         
+        if self.ability.name == 'Credit Card' and true_jimbo ~= nil then -- Credit Card
+            jimbo_current_dialogue = 'Credit'
+            true_jimbo:say_stuff(jimbo_talk_amount)
+
+            true_jimbo:add_speech_bubble('talk_credit_1', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Credit' then
+                true_jimbo:say_stuff(jimbo_talk_amount)
+
+                true_jimbo:add_speech_bubble('talk_credit_2', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 2, func = function() if jimbo_current_dialogue == 'Credit' then
+
+                true_jimbo:remove_speech_bubble()
+
+            end
+            return true end }))
+
+            end
+            return true end }))
+        end
+
+        if self.ability.name == 'Loyalty Card' and true_jimbo ~= nil then -- Loyalty Card
+            jimbo_current_dialogue = 'Loyalty'
+            true_jimbo:say_stuff(jimbo_talk_amount)
+
+            true_jimbo:add_speech_bubble('talk_loyalty_1', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 2, func = function() if jimbo_current_dialogue == 'Loyalty' then
+
+                true_jimbo:remove_speech_bubble()
+
+            end
+            return true end }))
+        end
+
+        if self.ability.name == 'Gift Card' and true_jimbo ~= nil then -- Gift Card
+            jimbo_current_dialogue = 'Gift'
+            true_jimbo:say_stuff(jimbo_talk_amount)
+
+            true_jimbo:add_speech_bubble('talk_gift_1', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Gift' then
+                true_jimbo:say_stuff(jimbo_talk_amount)
+
+                true_jimbo:add_speech_bubble('talk_gift_2', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 2, func = function() if jimbo_current_dialogue == 'Gift' then
+
+                true_jimbo:remove_speech_bubble()
+
+            end
+            return true end }))
+
+            end
+            return true end }))
+        end
+
+        if self.ability.name == 'Caino' and true_jimbo ~= nil then -- Caino
+            jimbo_current_dialogue = 'Caino'
+            true_jimbo:say_stuff(jimbo_talk_amount)
+
+            true_jimbo:add_speech_bubble('talk_caino_1', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 0.6, func = function() if jimbo_current_dialogue == 'Caino' then
+                true_jimbo:say_stuff(jimbo_talk_amount)
+
+                true_jimbo:add_speech_bubble('talk_caino_2', 'bm')
+            
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Caino' then
+                true_jimbo:say_stuff(jimbo_talk_amount)
+
+                true_jimbo:add_speech_bubble('talk_caino_3', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 2, func = function() if jimbo_current_dialogue == 'Caino' then
+
+                true_jimbo:remove_speech_bubble()
+            
+            end
+            return true end }))
+
+            end
+            return true end }))
+
+            end
+            return true end }))
+        end
+
+        if self.ability.name == 'Triboulet' and true_jimbo ~= nil then -- Triboulet
+            jimbo_current_dialogue = 'Triboulet'
+            true_jimbo:say_stuff(jimbo_talk_amount)
+
+            true_jimbo:add_speech_bubble('talk_triboulet_1', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Triboulet' then
+                true_jimbo:say_stuff(jimbo_talk_amount)
+
+                true_jimbo:add_speech_bubble('talk_triboulet_2', 'bm')
+            
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Triboulet' then
+                true_jimbo:say_stuff(jimbo_talk_amount)
+
+                true_jimbo:add_speech_bubble('talk_triboulet_3', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 2, func = function() if jimbo_current_dialogue == 'Triboulet' then
+
+                true_jimbo:remove_speech_bubble()
+            
+            end
+            return true end }))
+
+            end
+            return true end }))
+
+            end
+            return true end }))
+        end
+
+        if self.ability.name == 'Chicot' and true_jimbo ~= nil then -- Chicot
+            jimbo_current_dialogue = 'Chicot'
+            true_jimbo:say_stuff(jimbo_talk_amount)
+
+            true_jimbo:add_speech_bubble('talk_chicot_1', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Chicot' then
+                true_jimbo:say_stuff(jimbo_talk_amount)
+
+                true_jimbo:add_speech_bubble('talk_chicot_2', 'bm')
+            
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 0.8, func = function() if jimbo_current_dialogue == 'Chicot' then
+                
+                self:juice_up(0.7, 0.3)
+            
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 0.2, func = function() if jimbo_current_dialogue == 'Chicot' then
+                true_jimbo:say_stuff(jimbo_talk_amount)
+
+                true_jimbo:add_speech_bubble('talk_chicot_3', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 2, func = function() if jimbo_current_dialogue == 'Chicot' then
+
+                true_jimbo:remove_speech_bubble()
+            
+            end
+            return true end }))
+
+            end
+            return true end }))
+
+            end
+            return true end }))
+
+            end
+            return true end }))
+        end
+
+        if self.ability.name == 'Perkeo' and true_jimbo ~= nil then -- Perkeo
+            jimbo_current_dialogue = 'Perkeo'
+            true_jimbo:say_stuff(jimbo_talk_amount)
+
+            true_jimbo:add_speech_bubble('talk_perkeo_1', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Perkeo' then
+                true_jimbo:say_stuff(jimbo_talk_amount)
+
+                true_jimbo:add_speech_bubble('talk_perkeo_2', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 2, func = function() if jimbo_current_dialogue == 'Perkeo' then
+
+                true_jimbo:remove_speech_bubble()
+
+            end
+            return true end }))
+
+            end
+            return true end }))
+        end
+
+        if self.ability.name == 'Yorick' and true_jimbo ~= nil then -- Yorick
+            jimbo_current_dialogue = 'Yorick'
+            true_jimbo:say_stuff(jimbo_talk_amount)
+
+            true_jimbo:add_speech_bubble('talk_yorick_1', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Yorick' then
+                true_jimbo:say_stuff(jimbo_talk_amount)
+
+                true_jimbo:add_speech_bubble('talk_yorick_2', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 2, func = function() if jimbo_current_dialogue == 'Yorick' then
+
+                true_jimbo:remove_speech_bubble()
+
+            end
+            return true end }))
+
+            end
+            return true end }))
+        end
     end
 
     SMODS.Jokers.j_jimbo.calculate = function(self, context)
@@ -746,6 +1397,7 @@ function Card.generate_UIBox_ability_table(self)
     elseif self.debuff then
     elseif card_type == 'Default' or card_type == 'Enhanced' then
     elseif self.ability.set == 'Joker' then
+
         local customJoker = true
 
         if self.ability.name == 'Cassette' then
@@ -800,7 +1452,6 @@ function Card.generate_UIBox_ability_table(self)
                 main_end)
         end
     end
-
     return generate_UIBox_ability_tableref(self)
 end
 
