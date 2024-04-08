@@ -266,7 +266,7 @@ function SMODS.INIT.Bunco()
             saved_game = nil
         end
 
-        sendDebugMessage('Bunco run info (PRELOAD):')
+        sendDebugMessage('Bunco run info:')
         sendDebugMessage('Are fleurons known? - '..tostring(saved_game and saved_game.GAME.Fleurons or 'unknown'))
         sendDebugMessage('Are halberds known? - '..tostring(saved_game and saved_game.GAME.Halberds or 'unknown'))
 
@@ -286,12 +286,12 @@ function SMODS.INIT.Bunco()
                 sendDebugMessage('Removed halberds; undiscovered in the current run!')
             end
         end
+
+        if saved_game == nil then
+            sendDebugMessage('Removed exotic suits; new run!')
+        end
         
         original_start_run(self, args)
-
-        sendDebugMessage('Bunco run info (POSTLOAD):')
-        sendDebugMessage('Are fleurons known? - '..tostring(saved_game and saved_game.GAME.Fleurons or 'unknown'))
-        sendDebugMessage('Are halberds known? - '..tostring(saved_game and saved_game.GAME.Fleurons or 'unknown'))
     end
 
     local original_card_remove = Card.remove
@@ -299,7 +299,7 @@ function SMODS.INIT.Bunco()
     function Card:remove()
         original_card_remove(self)
         
-        if G.playing_cards ~= nil then
+        if G.playing_cards ~= nil and G.GAME ~= nil then
 
             local fleurons = false
             local halberds = false
@@ -311,11 +311,13 @@ function SMODS.INIT.Bunco()
                 if v:is_suit('Halberds') then halberds = true end
             end
 
-            if fleurons == false then
+            if fleurons == false and G.GAME.Fleurons == true then
                 forget('Fleurons')
+                sendDebugMessage('No fleurons in the deck, removing them completely!')
             end
-            if halberds == false then
+            if halberds == false and G.GAME.Halberds == true then
                 forget('Halberds')
+                sendDebugMessage('No halberds in the deck, removing them completely!')
             end
         end
     end
