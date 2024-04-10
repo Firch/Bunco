@@ -50,7 +50,7 @@ function SMODS.INIT.Bunco()
     local ii = {}
     for i, v in ipairs(G.handlist) do
         local hand_to_add = (v == 'Flush House') and 'Spectrum Five' or (v == 'Straight Flush') and 'Spectrum House' or
-            (v == 'Four of a Kind') and 'Straight Spectrum' or (v == 'Flush') and 'Spectrum' or nil
+            (v == 'Four of a Kind') and 'Straight Spectrum' or (v == 'Full House') and 'Spectrum' or nil
         if hand_to_add then
             ii[hand_to_add] = i
         end
@@ -61,9 +61,9 @@ function SMODS.INIT.Bunco()
         j = j + 1
     end
 
-    local c_quaoar = SMODS.Planet:new('Quaoar', 'quaoar', { hand_type = 'Spectrum' }, { x = 0, y = 0 }, nil, 3, 1,
+    local c_quaoar = SMODS.Planet:new('Quaoar', 'quaoar', { hand_type = 'Spectrum', softlock = true }, { x = 0, y = 0 }, nil, 3, 1,
         nil, 1, true, false, 'bunco_planets')
-    local c_haumea = SMODS.Planet:new('Haumea', 'haumea', { hand_type = 'Straight Spectrum' }, { x = 1, y = 0 },
+    local c_haumea = SMODS.Planet:new('Haumea', 'haumea', { hand_type = 'Straight Spectrum', softlock = true }, { x = 1, y = 0 },
         nil, 3, 1, nil, 1, true, false, 'bunco_planets')
     local c_sedna = SMODS.Planet:new('Sedna', 'sedna', { hand_type = 'Spectrum House', softlock = true },
         { x = 2, y = 0 }, nil, 3, 1,
@@ -120,7 +120,7 @@ function SMODS.INIT.Bunco()
         t.hands['Spectrum Five'] =     { visible = true, order = t.hands['Flush House'].order + 0.1,    mult = 14, chips = 120, s_mult = 14, s_chips = 120, level = 1, l_mult = 3, l_chips = 40, played = 0, played_this_round = 0, example = { { 'S_A', true }, { 'H_A', true }, { 'C_A', true }, { 'D_A', true }, { 'HALBERDS_A', true } } }
         t.hands['Spectrum House'] =    { visible = true, order = t.hands['Straight Flush'].order + 0.1, mult = 7,  chips = 80,  s_mult = 7,  s_chips = 80,  level = 1, l_mult = 3, l_chips = 35, played = 0, played_this_round = 0, example = { { 'D_7', true }, { 'H_7', true }, { 'FLEURONS_7', true }, { 'HALBERDS_4', true }, { 'C_4', true } } }
         t.hands['Straight Spectrum'] = { visible = true, order = t.hands['Four of a Kind'].order + 0.1, mult = 6,  chips = 60,  s_mult = 6,  s_chips = 60,  level = 1, l_mult = 2, l_chips = 35, played = 0, played_this_round = 0, example = { { 'S_Q', true }, { 'FLEURONS_J', true }, { 'C_T', true }, { 'HALBERDS_9', true }, { 'H_8', true } } }
-        t.hands['Spectrum'] =          { visible = true, order = t.hands['Flush'].order + 0.1,          mult = 4,  chips = 35,  s_mult = 4,  s_chips = 35,  level = 1, l_mult = 4, l_chips = 20, played = 0, played_this_round = 0, example = { { 'H_2', true }, { 'D_5', true }, { 'S_8', true }, { 'C_T', true }, { 'FLEURONS_A', true } } }
+        t.hands['Spectrum'] =          { visible = true, order = t.hands['Full House'].order + 0.1,     mult = 6,  chips = 50,  s_mult = 6,  s_chips = 50,  level = 1, l_mult = 3, l_chips = 25, played = 0, played_this_round = 0, example = { { 'H_2', true }, { 'D_5', true }, { 'S_8', true }, { 'C_T', true }, { 'FLEURONS_A', true } } }
         return t
     end
 
@@ -207,42 +207,141 @@ function SMODS.INIT.Bunco()
 
     
 
-    local function acknowledge(suit, inital)
+    local function acknowledge(suit, initial)
+
         if suit == 'Fleurons' then
+
             SMODS.Card:new_suit('Fleurons', 'exotic_cards', 'exotic_cards_high_contrast', { y = 0 }, 'exotic_cards_ui', 'exotic_cards_ui_high_contrast',
-            { x = 0, y = 0 }, 'ec2616', 'ec2616')
-            if inital ~= true then
+                { x = 0, y = 0 }, 'ec2616', 'ec2616')
+
+            if G.GAME ~= nil and (G.GAME.Fleurons == false or G.GAME.Fleurons == nil) and initial == nil then
+
                 G.GAME.Fleurons = true
+
+                sendDebugMessage('Acknowledged '..suit..'! (Initial:'..tostring(initial or 'false')..')')
+
             end
-        end
-        if suit == 'Halberds' then
+
+            if initial ~= nil and initial == true then
+                
+                sendDebugMessage('Acknowledged '..suit..'! (Initial:'..tostring(initial or 'false')..')')
+
+            end
+
+        elseif suit == 'Halberds' then
+
             SMODS.Card:new_suit('Halberds', 'exotic_cards', 'exotic_cards_high_contrast', { y = 1 }, 'exotic_cards_ui', 'exotic_cards_ui_high_contrast',
-            { x = 1, y = 0 }, '6e3c63', '6e3c63')
-            if inital ~= true then
+                { x = 1, y = 0 }, '6e3c63', '6e3c63')
+
+            if G.GAME ~= nil and (G.GAME.Halberds == false or G.GAME.Halberds == nil) and initial == nil then
+                
+
                 G.GAME.Halberds = true
+
+                sendDebugMessage('Acknowledged '..suit..'! (Initial:'..tostring(initial or 'false')..')')
+
+            end
+
+            if initial ~= nil and initial == true then
+
+                sendDebugMessage('Acknowledged '..suit..'! (Initial:'..tostring(initial or 'false')..')')
+
             end
         end
     end
 
-    local function forget(suit, inital)
+    local function forget(suit, initial, deck, forced) -- G.GAME.Suit returns nil if the suit wasn't encountered, true if it is currently in the deck and false if it was encountered but not in the deck
+
         if suit == 'Fleurons' then
-            if G.GAME ~= nil and G.GAME.Fleurons == true then
+
+            if forced then
+
                 SMODS.Card:delete_suit('Fleurons')
-            end
-            if inital ~= true then
+                
                 G.GAME.Fleurons = false
-            else
+
+                sendDebugMessage('Forcibly forgot '..suit..'!')
+
+            end
+
+            if G.GAME ~= nil and G.GAME.Fleurons == true and initial == nil then
+
+                if deck == true then
+                    local fleurons = false
+
+                    for k, v in pairs(G.playing_cards) do
+                        if v:is_suit('Fleurons') then fleurons = true end
+                    end
+
+                    if fleurons == false then
+                        
+                        SMODS.Card:delete_suit('Fleurons')
+                    
+                        G.GAME.Fleurons = false
+
+                    end
+                else
+
+                    SMODS.Card:delete_suit('Fleurons')
+                    
+                    G.GAME.Fleurons = false
+
+                end
+
+                sendDebugMessage('Forgot '..suit..'! (Initial:'..tostring(initial or 'false')..')')
+            end
+
+            if initial ~= nil and initial == true then
                 SMODS.Card:delete_suit('Fleurons')
+
+                sendDebugMessage('Forgot '..suit..'! (Initial:'..tostring(initial or 'false')..')')
             end
+
         elseif suit == 'Halberds' then
-            if G.GAME ~= nil and G.GAME.Halberds == true then
+
+            if forced then
+
                 SMODS.Card:delete_suit('Halberds')
+                
+                G.GAME.Fleurons = false
+
+                sendDebugMessage('Forcibly forgot '..suit..'!')
+                
             end
-            if inital ~= true then
-                G.GAME.Halberds = false
-            else
+            
+            if G.GAME ~= nil and G.GAME.Halberds == true and initial == nil then
+
+                if deck == true then
+                    local halberds = false
+
+                    for k, v in pairs(G.playing_cards) do
+                        if v:is_suit('Halberds') then halberds = true end
+                    end
+
+                    if halberds == false then
+                        
+                        SMODS.Card:delete_suit('Halberds')
+                    
+                        G.GAME.Halberds = false
+
+                    end
+                else
+
+                    SMODS.Card:delete_suit('Halberds')
+                    
+                    G.GAME.Halberds = false
+
+                end
+
+                sendDebugMessage('Forgot '..suit..'! (Initial:'..tostring(initial or 'false')..')')
+            end
+
+            if initial ~= nil and initial == true then
                 SMODS.Card:delete_suit('Halberds')
+
+                sendDebugMessage('Forgot '..suit..'! (Initial:'..tostring(initial or 'false')..')')
             end
+
         end
     end
 
@@ -266,24 +365,32 @@ function SMODS.INIT.Bunco()
             saved_game = nil
         end
 
-        sendDebugMessage('Bunco run info:')
-        sendDebugMessage('Are fleurons known? - '..tostring(saved_game and saved_game.GAME.Fleurons or 'unknown'))
-        sendDebugMessage('Are halberds known? - '..tostring(saved_game and saved_game.GAME.Halberds or 'unknown'))
+        sendDebugMessage('Bunco run info: (PRELOAD)')
+        sendDebugMessage('Are fleurons known? - '..tostring(saved_game and saved_game.GAME.Fleurons))
+        sendDebugMessage('Are halberds known? - '..tostring(saved_game and saved_game.GAME.Halberds))
 
         if saved_game ~= nil then
-            if saved_game.GAME.Fleurons == true then
-                acknowledge('Fleurons')
+            if saved_game.GAME.Fleurons ~= nil then
+
                 sendDebugMessage('Registered fleurons, because the current run already had them!')
+                acknowledge('Fleurons')
+                
             else
-                forget('Fleurons')
+
                 sendDebugMessage('Removed fleurons; undiscovered in the current run!')
+                forget('Fleurons')
+                
             end
-            if saved_game.GAME.Halberds == true then
-                acknowledge('Halberds')
+            if saved_game.GAME.Halberds ~= nil then
+
                 sendDebugMessage('Registered halberds, because the current run already had them!')
+                acknowledge('Halberds')
+                
             else
-                forget('Halberds')
+
                 sendDebugMessage('Removed halberds; undiscovered in the current run!')
+                forget('Halberds')
+                
             end
         end
 
@@ -292,6 +399,25 @@ function SMODS.INIT.Bunco()
         end
         
         original_start_run(self, args)
+
+        if saved_game ~= nil then
+            if saved_game.GAME.Fleurons == false then
+
+                sendDebugMessage('Removing fleurons that were discovered but are not in the deck')
+                forget('Fleurons', nil, nil, true)
+                
+            end
+            if saved_game.GAME.Halberds == false then
+
+                sendDebugMessage('Removing halberds that were discovered but are not in the deck')
+                forget('Halberds', nil, nil, true)
+
+            end
+        end
+
+        sendDebugMessage('Bunco run info: (POSTLOAD)')
+        sendDebugMessage('Are fleurons known? - '..tostring(saved_game and saved_game.GAME.Fleurons))
+        sendDebugMessage('Are halberds known? - '..tostring(saved_game and saved_game.GAME.Halberds))
     end
 
     local original_card_remove = Card.remove
@@ -312,12 +438,16 @@ function SMODS.INIT.Bunco()
             end
 
             if fleurons == false and G.GAME.Fleurons == true then
-                forget('Fleurons')
+
                 sendDebugMessage('No fleurons in the deck, removing them completely!')
+                forget('Fleurons', nil, true)
+                
             end
             if halberds == false and G.GAME.Halberds == true then
-                forget('Halberds')
+
                 sendDebugMessage('No halberds in the deck, removing them completely!')
+                forget('Halberds', nil, true)
+                
             end
         end
     end
@@ -339,7 +469,9 @@ function SMODS.INIT.Bunco()
     end
 
     function SMODS.Tarots.c_sky.use(card, area, copier)
+
         acknowledge('Fleurons')
+
         for i=1, #G.hand.highlighted do
             local percent = 1.15 - (i-0.999)/(#G.hand.highlighted-0.998)*0.3
             G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.15,func = function() G.hand.highlighted[i]:flip();play_sound('card1', percent);G.hand.highlighted[i]:juice_up(0.3, 0.3);return true end }))
@@ -375,7 +507,9 @@ function SMODS.INIT.Bunco()
     end
 
     function SMODS.Tarots.c_abyss.use(card, area, copier)
+
         acknowledge('Halberds')
+
         for i=1, #G.hand.highlighted do
             local percent = 1.15 - (i-0.999)/(#G.hand.highlighted-0.998)*0.3
             G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.15,func = function() G.hand.highlighted[i]:flip();play_sound('card1', percent);G.hand.highlighted[i]:juice_up(0.3, 0.3);return true end }))
@@ -399,8 +533,8 @@ function SMODS.INIT.Bunco()
 
         sendDebugMessage('Key: '..((card.ability.name) or 'none'))
 
-        if card.ability.name == 'The Sky' or card.ability.name == 'The Abyss' then
-            sendDebugMessage('Exotic tarot appeared!')
+        if (G.GAME.Fleurons == nil and card.ability.name == 'The Sky') or (G.GAME.Halberds == nil and card.ability.name == 'The Abyss') then
+            sendDebugMessage('Exotic tarot appeared! But the exotic suit did not exist.')
             sendDebugMessage('Rerolling...')
             card:remove()
             return create_card(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
@@ -414,8 +548,8 @@ function SMODS.INIT.Bunco()
     function create_card_for_shop(area)
         local card = original_create_card_for_shop(area)
 
-        if card.ability.name == 'The Sky' or card.ability.name == 'The Abyss' then
-            sendDebugMessage('Exotic tarot appeared!')
+        if (G.GAME.Fleurons == nil and card.ability.name == 'The Sky') or (G.GAME.Halberds == nil and card.ability.name == 'The Abyss') then
+            sendDebugMessage('Exotic tarot appeared! But the exotic suit did not exist.')
             sendDebugMessage('Rerolling...')
             card:remove()
             return create_card_for_shop(area)
@@ -426,64 +560,7 @@ function SMODS.INIT.Bunco()
 
     -- Custom editions:
 
-    local NFS = NFS or love.filesystem
-    shader_fluorescent = NFS.read(SMODS.findModByID('Bunco').path..'resources/shaders/fluorescent.fs')
-
-    G.SHADERS['fluorescent'] = love.graphics.newShader(shader_fluorescent)
-
-    G.P_CENTERS['e_fluorescent'] =  {order = 6,  unlocked = true, discovered = false, name = 'fluorescent', pos = {x=0,y=0}, atlas = 'Joker', set = 'Edition', config = {extra = 99}}
-
-    local original_card_draw = Card.draw
-    
-    function Card:draw(layer)
-        local returnable = original_card_draw(self, layer)
-        if self.edition and self.edition.fluorescent then
-            self.children.center:draw_shader('fluorescent', nil, self.ARGS.send_to_shader)
-            if self.children.front and self.ability.effect ~= 'Stone Card' then
-                self.children.front:draw_shader('fluorescent', nil, self.ARGS.send_to_shader)
-            end
-        end
-        return returnable
-    end
-
-    local original_key_press_update = Controller.key_press_update
-
-    function Controller:key_press_update(key, dt)
-        if self.hovering.target and self.hovering.target:is(Card) then
-            local _card = self.hovering.target
-            if key == 'w' then
-                if (_card.ability.set == 'Joker' or _card.playing_card or _card.area) then
-                    local _edition = {
-                        foil = not _card.edition,
-                        holo = _card.edition and _card.edition.foil,
-                        polychrome = _card.edition and _card.edition.holo,
-                        negative = _card.edition and _card.edition.polychrome,
-                        fluorescent = _card.edition and _card.edition.negative,
-                    }
-                    _card:set_edition(_edition, true, true)
-                end
-            end
-        end
-        
-        original_key_press_update(self, key, dt)
-    end
-
-    local original_set_edition = Card.set_edition
-
-    function Card:set_edition(edition, immediate, silent)
-        local returnable = original_set_edition(self, edition, immediate, silent)
-        if edition ~= nil and edition.fluorescent then
-            if not self.edition then self.edition = {} end
-            self.edition.chips = G.P_CENTERS.e_fluorescent.config.extra
-            self.edition.fluorescent = true
-            self.edition.fluorescent = 'fluorescent'
-        end
-        return returnable
-    end
-
     -- Custom contexts & other functions:
-
-    local original_add_to_deck = Card.add_to_deck
 
     function Card:add_speech_bubble(text_key, align, loc_vars)
         if self.children.speech_bubble then self.children.speech_bubble:remove() end
@@ -579,6 +656,370 @@ function SMODS.INIT.Bunco()
                   v:calculate_joker({ emplace = true, emplaced_card = card })
                 end
             end
+        end
+    end
+
+    function forced_message(_message, _card, _colour, delay) -- Copied from Blizzow, tweaked slightly (added delay)
+        if delay then delay = 0.7 * 1.25
+        else delay = 0 end
+        G.E_MANAGER:add_event(Event({ trigger = 'before', delay = delay,     
+            func = function() card_eval_status_text(_card, 'extra', nil, nil, nil, {message = _message, colour = _colour, instant=true}); return true
+            end}))
+    end
+
+    local true_jimbo = nil
+    local jimbo_current_dialogue = nil -- Jimbo current dialogue
+    local jimbo_talk_delay = 2 -- Jimbo talk delay
+    local jimbo_talk_amount = 3 -- Jimbo talk amount
+
+    local original_add_to_deck = Card.add_to_deck
+
+    function Card:add_to_deck(from_debuff)
+        original_add_to_deck(self, from_debuff)
+        
+        if self.ability.name == 'Loan Shark' then
+            ease_dollars(50)
+            self.sell_cost = -100
+        end
+
+        -------- JIMBO ALERT --------
+        -------- JIMBO ALERT --------
+        -------- JIMBO ALERT --------
+        local function emotion(value)
+            if true_jimbo ~= nil then
+                if value == 'normal' then
+                    true_jimbo.config.center.soul_pos.x = 1
+                elseif value == 'devious' then
+                    true_jimbo.config.center.soul_pos.x = 2
+                elseif value == 'winking' then
+                    true_jimbo.config.center.soul_pos.x = 3
+                elseif value == 'serious' then
+                    true_jimbo.config.center.soul_pos.x = 4
+                elseif value == 'judging' then
+                    true_jimbo.config.center.soul_pos.x = 5
+                elseif value == 'angry' then
+                    true_jimbo.config.center.soul_pos.x = 6
+                elseif value == 'afraid' then
+                    true_jimbo.config.center.soul_pos.x = 7
+                elseif value == 'startled' then
+                    true_jimbo.config.center.soul_pos.x = 8
+                elseif value == 'insane' then
+                    true_jimbo.config.center.soul_pos.x = 9
+                end
+
+                true_jimbo:set_sprites(self.config.center)
+            end
+        end
+
+        if self.ability.name == 'Jimbo' and true_jimbo ~= nil then -- When other Jimbo appears
+            jimbo_current_dialogue = 'Clone'
+            true_jimbo:say_stuff(jimbo_talk_amount)
+
+            true_jimbo:add_speech_bubble('talk_clone_1', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Clone' then
+                
+                true_jimbo:say_stuff(jimbo_talk_amount)
+
+                true_jimbo:add_speech_bubble('talk_clone_2', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Clone' then
+                true_jimbo:say_stuff(jimbo_talk_amount)
+                self:say_stuff(jimbo_talk_amount)
+                
+                true_jimbo:add_speech_bubble('talk_clone_3', 'bm')
+                self:add_speech_bubble('talk_clone_3', 'bm')
+                
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Clone' then
+                true_jimbo:say_stuff(jimbo_talk_amount)
+
+                self:remove_speech_bubble()
+                self:start_dissolve()
+                true_jimbo:add_speech_bubble('talk_clone_4', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 2, func = function() if jimbo_current_dialogue == 'Clone' then
+
+                true_jimbo:remove_speech_bubble()
+            
+            end
+            return true end }))
+
+            end
+            return true end }))
+
+            end
+            return true end }))
+            
+            end
+            return true end }))
+        end
+        
+        if self.ability.name == 'Jimbo' and true_jimbo == nil then -- When Jimbo himself is appears in the deck
+            jimbo_current_dialogue = 'Hello'
+            true_jimbo = self
+            self:say_stuff(jimbo_talk_amount)
+
+            self:add_speech_bubble('talk_hello_1', 'bm')
+            
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Hello' then
+                self:say_stuff(jimbo_talk_amount)
+
+                emotion('winking')
+                self:add_speech_bubble('talk_hello_2', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 2, func = function() if jimbo_current_dialogue == 'Hello' then
+
+                emotion('normal')
+                self:remove_speech_bubble()
+                
+            end
+            return true end }))
+
+            end
+            return true end }))
+        end
+
+        if self.ability.name == 'Joker' and true_jimbo ~= nil then -- Regular Joker
+            jimbo_current_dialogue = 'Joker'
+            true_jimbo:say_stuff(jimbo_talk_amount)
+
+            true_jimbo:add_speech_bubble('talk_joker_1', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Joker' then
+                true_jimbo:say_stuff(jimbo_talk_amount)
+
+                true_jimbo:add_speech_bubble('talk_joker_2', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 2, func = function() if jimbo_current_dialogue == 'Joker' then
+
+                true_jimbo:remove_speech_bubble()
+
+            end
+            return true end }))
+
+            end
+            return true end }))
+        end
+
+        if self.ability.name == 'Chaos the Clown' and true_jimbo ~= nil then -- Chaos the Clown
+            jimbo_current_dialogue = 'Clown'
+            true_jimbo:say_stuff(jimbo_talk_amount)
+
+            true_jimbo:add_speech_bubble('talk_clown_1', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Clown' then
+                true_jimbo:say_stuff(jimbo_talk_amount)
+
+                true_jimbo:add_speech_bubble('talk_clown_2', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 2, func = function() if jimbo_current_dialogue == 'Clown' then
+
+                true_jimbo:remove_speech_bubble()
+
+            end
+            return true end }))
+
+            end
+            return true end }))
+        end
+        
+        if self.ability.name == 'Credit Card' and true_jimbo ~= nil then -- Credit Card
+            jimbo_current_dialogue = 'Credit'
+            true_jimbo:say_stuff(jimbo_talk_amount)
+
+            true_jimbo:add_speech_bubble('talk_credit_1', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Credit' then
+                true_jimbo:say_stuff(jimbo_talk_amount)
+
+                true_jimbo:add_speech_bubble('talk_credit_2', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 2, func = function() if jimbo_current_dialogue == 'Credit' then
+
+                true_jimbo:remove_speech_bubble()
+
+            end
+            return true end }))
+
+            end
+            return true end }))
+        end
+
+        if self.ability.name == 'Loyalty Card' and true_jimbo ~= nil then -- Loyalty Card
+            jimbo_current_dialogue = 'Loyalty'
+            true_jimbo:say_stuff(jimbo_talk_amount)
+
+            true_jimbo:add_speech_bubble('talk_loyalty_1', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 2, func = function() if jimbo_current_dialogue == 'Loyalty' then
+
+                true_jimbo:remove_speech_bubble()
+
+            end
+            return true end }))
+        end
+
+        if self.ability.name == 'Gift Card' and true_jimbo ~= nil then -- Gift Card
+            jimbo_current_dialogue = 'Gift'
+            true_jimbo:say_stuff(jimbo_talk_amount)
+
+            true_jimbo:add_speech_bubble('talk_gift_1', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Gift' then
+                true_jimbo:say_stuff(jimbo_talk_amount)
+
+                true_jimbo:add_speech_bubble('talk_gift_2', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 2, func = function() if jimbo_current_dialogue == 'Gift' then
+
+                true_jimbo:remove_speech_bubble()
+
+            end
+            return true end }))
+
+            end
+            return true end }))
+        end
+
+        if self.ability.name == 'Caino' and true_jimbo ~= nil then -- Caino
+            jimbo_current_dialogue = 'Caino'
+            true_jimbo:say_stuff(jimbo_talk_amount)
+
+            true_jimbo:add_speech_bubble('talk_caino_1', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 0.6, func = function() if jimbo_current_dialogue == 'Caino' then
+                true_jimbo:say_stuff(jimbo_talk_amount)
+
+                true_jimbo:add_speech_bubble('talk_caino_2', 'bm')
+            
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Caino' then
+                true_jimbo:say_stuff(jimbo_talk_amount)
+
+                true_jimbo:add_speech_bubble('talk_caino_3', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 2, func = function() if jimbo_current_dialogue == 'Caino' then
+
+                true_jimbo:remove_speech_bubble()
+            
+            end
+            return true end }))
+
+            end
+            return true end }))
+
+            end
+            return true end }))
+        end
+
+        if self.ability.name == 'Triboulet' and true_jimbo ~= nil then -- Triboulet
+            jimbo_current_dialogue = 'Triboulet'
+            true_jimbo:say_stuff(jimbo_talk_amount)
+
+            true_jimbo:add_speech_bubble('talk_triboulet_1', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Triboulet' then
+                true_jimbo:say_stuff(jimbo_talk_amount)
+
+                true_jimbo:add_speech_bubble('talk_triboulet_2', 'bm')
+            
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Triboulet' then
+                true_jimbo:say_stuff(jimbo_talk_amount)
+
+                true_jimbo:add_speech_bubble('talk_triboulet_3', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 2, func = function() if jimbo_current_dialogue == 'Triboulet' then
+
+                true_jimbo:remove_speech_bubble()
+            
+            end
+            return true end }))
+
+            end
+            return true end }))
+
+            end
+            return true end }))
+        end
+
+        if self.ability.name == 'Chicot' and true_jimbo ~= nil then -- Chicot
+            jimbo_current_dialogue = 'Chicot'
+            true_jimbo:say_stuff(jimbo_talk_amount)
+
+            true_jimbo:add_speech_bubble('talk_chicot_1', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Chicot' then
+                true_jimbo:say_stuff(jimbo_talk_amount)
+
+                true_jimbo:add_speech_bubble('talk_chicot_2', 'bm')
+            
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 0.8, func = function() if jimbo_current_dialogue == 'Chicot' then
+                
+                self:juice_up(0.7, 0.3)
+            
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 0.2, func = function() if jimbo_current_dialogue == 'Chicot' then
+                true_jimbo:say_stuff(jimbo_talk_amount)
+
+                true_jimbo:add_speech_bubble('talk_chicot_3', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 2, func = function() if jimbo_current_dialogue == 'Chicot' then
+
+                true_jimbo:remove_speech_bubble()
+            
+            end
+            return true end }))
+
+            end
+            return true end }))
+
+            end
+            return true end }))
+
+            end
+            return true end }))
+        end
+
+        if self.ability.name == 'Perkeo' and true_jimbo ~= nil then -- Perkeo
+            jimbo_current_dialogue = 'Perkeo'
+            true_jimbo:say_stuff(jimbo_talk_amount)
+
+            true_jimbo:add_speech_bubble('talk_perkeo_1', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Perkeo' then
+                true_jimbo:say_stuff(jimbo_talk_amount)
+
+                true_jimbo:add_speech_bubble('talk_perkeo_2', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 2, func = function() if jimbo_current_dialogue == 'Perkeo' then
+
+                true_jimbo:remove_speech_bubble()
+
+            end
+            return true end }))
+
+            end
+            return true end }))
+        end
+
+        if self.ability.name == 'Yorick' and true_jimbo ~= nil then -- Yorick
+            jimbo_current_dialogue = 'Yorick'
+            true_jimbo:say_stuff(jimbo_talk_amount)
+
+            true_jimbo:add_speech_bubble('talk_yorick_1', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Yorick' then
+                true_jimbo:say_stuff(jimbo_talk_amount)
+
+                true_jimbo:add_speech_bubble('talk_yorick_2', 'bm')
+
+            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 2, func = function() if jimbo_current_dialogue == 'Yorick' then
+
+                true_jimbo:remove_speech_bubble()
+
+            end
+            return true end }))
+
+            end
+            return true end }))
         end
     end
     
@@ -1034,355 +1475,113 @@ function SMODS.INIT.Bunco()
             G.localization.quips_parsed[k][kk] = loc_parse_string(vv)
         end
     end
-        
-    local true_jimbo = nil
-    local jimbo_current_dialogue = nil -- Jimbo current dialogue
-    local jimbo_talk_delay = 2 -- Jimbo talk delay
-    local jimbo_talk_amount = 3 -- Jimbo talk amount
-    
-    function Card:add_to_deck(from_debuff)
-        original_add_to_deck(self, from_debuff)
-
-        local function emotion(value)
-            if true_jimbo ~= nil then
-                if value == 'normal' then
-                    true_jimbo.config.center.soul_pos.x = 1
-                elseif value == 'devious' then
-                    true_jimbo.config.center.soul_pos.x = 2
-                elseif value == 'winking' then
-                    true_jimbo.config.center.soul_pos.x = 3
-                elseif value == 'serious' then
-                    true_jimbo.config.center.soul_pos.x = 4
-                elseif value == 'judging' then
-                    true_jimbo.config.center.soul_pos.x = 5
-                elseif value == 'angry' then
-                    true_jimbo.config.center.soul_pos.x = 6
-                elseif value == 'afraid' then
-                    true_jimbo.config.center.soul_pos.x = 7
-                elseif value == 'startled' then
-                    true_jimbo.config.center.soul_pos.x = 8
-                elseif value == 'insane' then
-                    true_jimbo.config.center.soul_pos.x = 9
-                end
-
-                true_jimbo:set_sprites(self.config.center)
-            end
-        end
-
-        if self.ability.name == 'Jimbo' and true_jimbo ~= nil then -- When other Jimbo appears
-            jimbo_current_dialogue = 'Clone'
-            true_jimbo:say_stuff(jimbo_talk_amount)
-
-            true_jimbo:add_speech_bubble('talk_clone_1', 'bm')
-
-            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Clone' then
-                
-                true_jimbo:say_stuff(jimbo_talk_amount)
-
-                true_jimbo:add_speech_bubble('talk_clone_2', 'bm')
-
-            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Clone' then
-                true_jimbo:say_stuff(jimbo_talk_amount)
-                self:say_stuff(jimbo_talk_amount)
-                
-                true_jimbo:add_speech_bubble('talk_clone_3', 'bm')
-                self:add_speech_bubble('talk_clone_3', 'bm')
-                
-            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Clone' then
-                true_jimbo:say_stuff(jimbo_talk_amount)
-
-                self:remove_speech_bubble()
-                self:start_dissolve()
-                true_jimbo:add_speech_bubble('talk_clone_4', 'bm')
-
-            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 2, func = function() if jimbo_current_dialogue == 'Clone' then
-
-                true_jimbo:remove_speech_bubble()
-            
-            end
-            return true end }))
-
-            end
-            return true end }))
-
-            end
-            return true end }))
-            
-            end
-            return true end }))
-        end
-        
-        if self.ability.name == 'Jimbo' and true_jimbo == nil then -- When Jimbo himself is appears in the deck
-            jimbo_current_dialogue = 'Hello'
-            true_jimbo = self
-            self:say_stuff(jimbo_talk_amount)
-
-            self:add_speech_bubble('talk_hello_1', 'bm')
-            
-            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Hello' then
-                self:say_stuff(jimbo_talk_amount)
-
-                emotion('winking')
-                self:add_speech_bubble('talk_hello_2', 'bm')
-
-            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 2, func = function() if jimbo_current_dialogue == 'Hello' then
-
-                emotion('normal')
-                self:remove_speech_bubble()
-                
-            end
-            return true end }))
-
-            end
-            return true end }))
-        end
-
-        if self.ability.name == 'Joker' and true_jimbo ~= nil then -- Regular Joker
-            jimbo_current_dialogue = 'Joker'
-            true_jimbo:say_stuff(jimbo_talk_amount)
-
-            true_jimbo:add_speech_bubble('talk_joker_1', 'bm')
-
-            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Joker' then
-                true_jimbo:say_stuff(jimbo_talk_amount)
-
-                true_jimbo:add_speech_bubble('talk_joker_2', 'bm')
-
-            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 2, func = function() if jimbo_current_dialogue == 'Joker' then
-
-                true_jimbo:remove_speech_bubble()
-
-            end
-            return true end }))
-
-            end
-            return true end }))
-        end
-
-        if self.ability.name == 'Chaos the Clown' and true_jimbo ~= nil then -- Chaos the Clown
-            jimbo_current_dialogue = 'Clown'
-            true_jimbo:say_stuff(jimbo_talk_amount)
-
-            true_jimbo:add_speech_bubble('talk_clown_1', 'bm')
-
-            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Clown' then
-                true_jimbo:say_stuff(jimbo_talk_amount)
-
-                true_jimbo:add_speech_bubble('talk_clown_2', 'bm')
-
-            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 2, func = function() if jimbo_current_dialogue == 'Clown' then
-
-                true_jimbo:remove_speech_bubble()
-
-            end
-            return true end }))
-
-            end
-            return true end }))
-        end
-        
-        if self.ability.name == 'Credit Card' and true_jimbo ~= nil then -- Credit Card
-            jimbo_current_dialogue = 'Credit'
-            true_jimbo:say_stuff(jimbo_talk_amount)
-
-            true_jimbo:add_speech_bubble('talk_credit_1', 'bm')
-
-            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Credit' then
-                true_jimbo:say_stuff(jimbo_talk_amount)
-
-                true_jimbo:add_speech_bubble('talk_credit_2', 'bm')
-
-            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 2, func = function() if jimbo_current_dialogue == 'Credit' then
-
-                true_jimbo:remove_speech_bubble()
-
-            end
-            return true end }))
-
-            end
-            return true end }))
-        end
-
-        if self.ability.name == 'Loyalty Card' and true_jimbo ~= nil then -- Loyalty Card
-            jimbo_current_dialogue = 'Loyalty'
-            true_jimbo:say_stuff(jimbo_talk_amount)
-
-            true_jimbo:add_speech_bubble('talk_loyalty_1', 'bm')
-
-            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 2, func = function() if jimbo_current_dialogue == 'Loyalty' then
-
-                true_jimbo:remove_speech_bubble()
-
-            end
-            return true end }))
-        end
-
-        if self.ability.name == 'Gift Card' and true_jimbo ~= nil then -- Gift Card
-            jimbo_current_dialogue = 'Gift'
-            true_jimbo:say_stuff(jimbo_talk_amount)
-
-            true_jimbo:add_speech_bubble('talk_gift_1', 'bm')
-
-            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Gift' then
-                true_jimbo:say_stuff(jimbo_talk_amount)
-
-                true_jimbo:add_speech_bubble('talk_gift_2', 'bm')
-
-            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 2, func = function() if jimbo_current_dialogue == 'Gift' then
-
-                true_jimbo:remove_speech_bubble()
-
-            end
-            return true end }))
-
-            end
-            return true end }))
-        end
-
-        if self.ability.name == 'Caino' and true_jimbo ~= nil then -- Caino
-            jimbo_current_dialogue = 'Caino'
-            true_jimbo:say_stuff(jimbo_talk_amount)
-
-            true_jimbo:add_speech_bubble('talk_caino_1', 'bm')
-
-            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 0.6, func = function() if jimbo_current_dialogue == 'Caino' then
-                true_jimbo:say_stuff(jimbo_talk_amount)
-
-                true_jimbo:add_speech_bubble('talk_caino_2', 'bm')
-            
-            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Caino' then
-                true_jimbo:say_stuff(jimbo_talk_amount)
-
-                true_jimbo:add_speech_bubble('talk_caino_3', 'bm')
-
-            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 2, func = function() if jimbo_current_dialogue == 'Caino' then
-
-                true_jimbo:remove_speech_bubble()
-            
-            end
-            return true end }))
-
-            end
-            return true end }))
-
-            end
-            return true end }))
-        end
-
-        if self.ability.name == 'Triboulet' and true_jimbo ~= nil then -- Triboulet
-            jimbo_current_dialogue = 'Triboulet'
-            true_jimbo:say_stuff(jimbo_talk_amount)
-
-            true_jimbo:add_speech_bubble('talk_triboulet_1', 'bm')
-
-            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Triboulet' then
-                true_jimbo:say_stuff(jimbo_talk_amount)
-
-                true_jimbo:add_speech_bubble('talk_triboulet_2', 'bm')
-            
-            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Triboulet' then
-                true_jimbo:say_stuff(jimbo_talk_amount)
-
-                true_jimbo:add_speech_bubble('talk_triboulet_3', 'bm')
-
-            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 2, func = function() if jimbo_current_dialogue == 'Triboulet' then
-
-                true_jimbo:remove_speech_bubble()
-            
-            end
-            return true end }))
-
-            end
-            return true end }))
-
-            end
-            return true end }))
-        end
-
-        if self.ability.name == 'Chicot' and true_jimbo ~= nil then -- Chicot
-            jimbo_current_dialogue = 'Chicot'
-            true_jimbo:say_stuff(jimbo_talk_amount)
-
-            true_jimbo:add_speech_bubble('talk_chicot_1', 'bm')
-
-            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Chicot' then
-                true_jimbo:say_stuff(jimbo_talk_amount)
-
-                true_jimbo:add_speech_bubble('talk_chicot_2', 'bm')
-            
-            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 0.8, func = function() if jimbo_current_dialogue == 'Chicot' then
-                
-                self:juice_up(0.7, 0.3)
-            
-            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 0.2, func = function() if jimbo_current_dialogue == 'Chicot' then
-                true_jimbo:say_stuff(jimbo_talk_amount)
-
-                true_jimbo:add_speech_bubble('talk_chicot_3', 'bm')
-
-            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 2, func = function() if jimbo_current_dialogue == 'Chicot' then
-
-                true_jimbo:remove_speech_bubble()
-            
-            end
-            return true end }))
-
-            end
-            return true end }))
-
-            end
-            return true end }))
-
-            end
-            return true end }))
-        end
-
-        if self.ability.name == 'Perkeo' and true_jimbo ~= nil then -- Perkeo
-            jimbo_current_dialogue = 'Perkeo'
-            true_jimbo:say_stuff(jimbo_talk_amount)
-
-            true_jimbo:add_speech_bubble('talk_perkeo_1', 'bm')
-
-            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Perkeo' then
-                true_jimbo:say_stuff(jimbo_talk_amount)
-
-                true_jimbo:add_speech_bubble('talk_perkeo_2', 'bm')
-
-            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 2, func = function() if jimbo_current_dialogue == 'Perkeo' then
-
-                true_jimbo:remove_speech_bubble()
-
-            end
-            return true end }))
-
-            end
-            return true end }))
-        end
-
-        if self.ability.name == 'Yorick' and true_jimbo ~= nil then -- Yorick
-            jimbo_current_dialogue = 'Yorick'
-            true_jimbo:say_stuff(jimbo_talk_amount)
-
-            true_jimbo:add_speech_bubble('talk_yorick_1', 'bm')
-
-            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay, func = function() if jimbo_current_dialogue == 'Yorick' then
-                true_jimbo:say_stuff(jimbo_talk_amount)
-
-                true_jimbo:add_speech_bubble('talk_yorick_2', 'bm')
-
-            G.E_MANAGER:add_event(Event({trigger = 'after', delay = jimbo_talk_delay * 2, func = function() if jimbo_current_dialogue == 'Yorick' then
-
-                true_jimbo:remove_speech_bubble()
-
-            end
-            return true end }))
-
-            end
-            return true end }))
-        end
-    end
 
     SMODS.Jokers.j_jimbo.calculate = function(self, context)
         
+    end
+
+    -- Linocut Joker:
+    SMODS.Sprite:new('j_linocut', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
+
+    local loc_linocut = {
+        ['name'] = 'Linocut Joker',
+        ['text'] = {
+            [1] = 'When playing a {C:attention}Pair,',
+            [2] = 'turns the suit of the {C:attention}left{} card',
+            [3] = 'into the suit of the {C:attention}right{} card',
+            [4] = '{C:inactive}(Drag to rearrange)'
+        }
+    }
+ 
+    -- SMODS.Joker:new(name, slug, config, spritePos, loc_txt, rarity, cost, unlocked, discovered, blueprint_compat, eternal_compat)
+    local joker_linocut = SMODS.Joker:new(
+        'Linocut Joker', -- Name
+        'linocut', -- Slug
+        {}, -- Config
+        {x = 2, y = 1}, -- Sprite position
+        loc_linocut, -- Localization
+        2, 5) -- Rarity & Cost. 1 - Common, 2 - Uncommon, 3 - Rare, 4 - Legendary
+ 
+    joker_linocut:register()
+
+    SMODS.Jokers.j_linocut.calculate = function(self, context)
+        
+        if context.individual and context.cardarea == G.play and context.poker_hands and next(context.poker_hands['Pair']) then
+
+            if context.scoring_hand[1] == context.other_card then
+                G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.15,func = function() context.scoring_hand[1]:flip();play_sound('card1', 1);context.scoring_hand[1]:juice_up(0.3, 0.3);return true end }))
+                G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.1,func = function()  context.scoring_hand[1]:change_suit(context.scoring_hand[2].config.card.suit);return true end }))
+                G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.15,func = function() context.scoring_hand[1]:flip();play_sound('tarot2', 1, 0.6);context.scoring_hand[1]:juice_up(0.3, 0.3);return true end }))
+
+                forced_message('Copied!', self, G.C.RED)
+                
+                delay(0.5)
+            end
+        end
+    end
+
+    -- Ghost Print Joker:
+    SMODS.Sprite:new('j_ghostprint', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
+
+    local loc_ghostprint = {
+        ['name'] = 'Ghost Print',
+        ['text'] = {
+            [1] = 'Grants Chips and Mult',
+            [2] = 'from last hand type played',
+            [3] = '{C:inactive}(Last poker hand: #1#)'
+        }
+    }
+ 
+    -- SMODS.Joker:new(name, slug, config, spritePos, loc_txt, rarity, cost, unlocked, discovered, blueprint_compat, eternal_compat)
+    local joker_ghostprint = SMODS.Joker:new(
+        'Ghost Print', -- Name
+        'ghostprint', -- Slug
+        {extra = {last_hand = nil or 'Nothing'}}, -- Config
+        {x = 3, y = 1}, -- Sprite position
+        loc_ghostprint, -- Localization
+        2, 5) -- Rarity & Cost. 1 - Common, 2 - Uncommon, 3 - Rare, 4 - Legendary
+ 
+    joker_ghostprint:register()
+
+    SMODS.Jokers.j_ghostprint.calculate = function(self, context)
+        
+        if SMODS.end_calculate_context(context) then
+
+            if self.ability.extra.last_hand ~= nil and self.ability.extra.last_hand ~= 'Nothing' then
+                mult = mult + G.GAME.hands[self.ability.extra.last_hand].mult
+                chips = hand_chips + G.GAME.hands[self.ability.extra.last_hand].chips
+                update_hand_text({delay = 0, sound = 'multhit1', modded = true}, {chips = chips, mult = mult})
+                forced_message(tostring(self.ability.extra.last_hand)..'!', self, G.C.HAND_LEVELS[G.GAME.hands[self.ability.extra.last_hand].level])
+            end 
+
+            self.ability.extra.last_hand = G.GAME.last_hand_played
+        end
+    end
+
+    -- Loan Shark:
+    SMODS.Sprite:new('j_loanshark', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
+
+    local loc_loanshark = {
+        ['name'] = 'Loan Shark',
+        ['text'] = {
+            [1] = 'Grants {C:money}$50',
+            [2] = 'when acquired.'
+        }
+    }
+ 
+    -- SMODS.Joker:new(name, slug, config, spritePos, loc_txt, rarity, cost, unlocked, discovered, blueprint_compat, eternal_compat)
+    local joker_loanshark = SMODS.Joker:new(
+        'Loan Shark', -- Name
+        'loanshark', -- Slug
+        {}, -- Config
+        {x = 4, y = 1}, -- Sprite position
+        loc_loanshark, -- Localization
+        2, -20) -- Rarity & Cost. 1 - Common, 2 - Uncommon, 3 - Rare, 4 - Legendary
+ 
+    joker_loanshark:register()
+
+    SMODS.Jokers.j_loanshark.calculate = function(self, context)
+
     end
 end
 
@@ -1413,9 +1612,15 @@ function Card.generate_UIBox_ability_table(self)
         elseif self.ability.name == 'X-Ray' then
             loc_vars = {self.ability.extra.xmult}
         elseif self.ability.name == 'Dread' then
-            
+            -- Nice nachos!
         elseif self.ability.name == 'Prehistoric Joker' then
             loc_vars = {self.ability.mult}
+        elseif self.ability.name == 'Jimbo' then
+            -- Primo burg!
+        elseif self.ability.name == 'Linocut Joker' then
+            -- Hot Dog!
+        elseif self.ability.name == 'Ghost Print' then
+            loc_vars = {self.ability.extra.last_hand}
         else
             customJoker = false
         end
