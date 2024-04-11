@@ -47,19 +47,25 @@ function SMODS.INIT.Bunco()
         [2] = 'each with a different suit'
     }
 
-    local ii = {}
-    for i, v in ipairs(G.handlist) do
-        local hand_to_add = (v == 'Flush House') and 'Spectrum Five' or (v == 'Straight Flush') and 'Spectrum House' or
-            (v == 'Four of a Kind') and 'Straight Spectrum' or (v == 'Full House') and 'Spectrum' or nil
-        if hand_to_add then
-            ii[hand_to_add] = i
+    function add_to_handlist(previous, next)
+        local ii = {}
+        for i, v in ipairs(G.handlist) do
+            local hand_to_add = (v == previous) and next or nil
+            if hand_to_add then
+                ii[hand_to_add] = i
+            end
+        end
+        local j = 0
+        for hand, i in pairs(ii) do
+            table.insert(G.handlist, i + j, hand)
+            j = j + 1
         end
     end
-    local j = 0
-    for hand, i in pairs(ii) do
-        table.insert(G.handlist, i + j, hand)
-        j = j + 1
-    end
+
+    add_to_handlist('Full House', 'Spectrum')
+    add_to_handlist('Flush Five', 'Spectrum Five')
+    add_to_handlist('Flush House', 'Spectrum House')
+    add_to_handlist('Flush House', 'Straight Spectrum')
 
     local c_quaoar = SMODS.Planet:new('Quaoar', 'quaoar', { hand_type = 'Spectrum', softlock = true }, { x = 0, y = 0 }, nil, 3, 1,
         nil, 1, true, false, 'bunco_planets')
@@ -117,9 +123,9 @@ function SMODS.INIT.Bunco()
     function Game:init_game_object()
         local t = init_game_object_original(self)
 
-        t.hands['Spectrum Five'] =     { visible = true, order = t.hands['Flush House'].order + 0.1,    mult = 14, chips = 120, s_mult = 14, s_chips = 120, level = 1, l_mult = 3, l_chips = 40, played = 0, played_this_round = 0, example = { { 'S_A', true }, { 'H_A', true }, { 'C_A', true }, { 'D_A', true }, { 'HALBERDS_A', true } } }
-        t.hands['Spectrum House'] =    { visible = true, order = t.hands['Straight Flush'].order + 0.1, mult = 7,  chips = 80,  s_mult = 7,  s_chips = 80,  level = 1, l_mult = 3, l_chips = 35, played = 0, played_this_round = 0, example = { { 'D_7', true }, { 'H_7', true }, { 'FLEURONS_7', true }, { 'HALBERDS_4', true }, { 'C_4', true } } }
-        t.hands['Straight Spectrum'] = { visible = true, order = t.hands['Four of a Kind'].order + 0.1, mult = 6,  chips = 60,  s_mult = 6,  s_chips = 60,  level = 1, l_mult = 2, l_chips = 35, played = 0, played_this_round = 0, example = { { 'S_Q', true }, { 'FLEURONS_J', true }, { 'C_T', true }, { 'HALBERDS_9', true }, { 'H_8', true } } }
+        t.hands['Spectrum Five'] =     { visible = true, order = t.hands['Flush Five'].order + 0.1,     mult = 18, chips = 180, s_mult = 18, s_chips = 180, level = 1, l_mult = 5, l_chips = 60, played = 0, played_this_round = 0, example = { { 'S_A', true }, { 'H_A', true }, { 'C_A', true }, { 'D_A', true }, { 'HALBERDS_A', true } } }
+        t.hands['Spectrum House'] =    { visible = true, order = t.hands['Flush Five'].order - 0.1, mult = 15,  chips = 150,  s_mult = 15,  s_chips = 150,  level = 1, l_mult = 5, l_chips = 50, played = 0, played_this_round = 0, example = { { 'D_7', true }, { 'H_7', true }, { 'FLEURONS_7', true }, { 'HALBERDS_4', true }, { 'C_4', true } } }
+        t.hands['Straight Spectrum'] = { visible = true, order = t.hands['Flush Five'].order - 0.1, mult = 10,  chips = 130,  s_mult = 13,  s_chips = 120,  level = 1, l_mult = 5, l_chips = 35, played = 0, played_this_round = 0, example = { { 'S_Q', true }, { 'FLEURONS_J', true }, { 'C_T', true }, { 'HALBERDS_9', true }, { 'H_8', true } } }
         t.hands['Spectrum'] =          { visible = true, order = t.hands['Full House'].order + 0.1,     mult = 6,  chips = 50,  s_mult = 6,  s_chips = 50,  level = 1, l_mult = 3, l_chips = 25, played = 0, played_this_round = 0, example = { { 'H_2', true }, { 'D_5', true }, { 'S_8', true }, { 'C_T', true }, { 'FLEURONS_A', true } } }
         return t
     end
@@ -1245,6 +1251,8 @@ function SMODS.INIT.Bunco()
 
         if context.emplace and context.emplaced_card.facing == 'back' then
             self.ability.extra.xmult = self.ability.extra.xmult + 0.2
+
+            forced_message('X'..tostring(self.ability.extra.xmult)..' Mult', self, G.C.RED)
         end
 
         if SMODS.end_calculate_context(context) then
@@ -1550,7 +1558,7 @@ function SMODS.INIT.Bunco()
             if self.ability.extra.last_hand ~= nil and self.ability.extra.last_hand ~= 'Nothing' then
                 mult = mult + G.GAME.hands[self.ability.extra.last_hand].mult
                 chips = hand_chips + G.GAME.hands[self.ability.extra.last_hand].chips
-                update_hand_text({delay = 0, sound = 'multhit1', modded = true}, {chips = chips, mult = mult})
+                update_hand_text({delay = 0, sound = '', modded = true}, {chips = chips, mult = mult})
                 forced_message(tostring(self.ability.extra.last_hand)..'!', self, G.C.HAND_LEVELS[G.GAME.hands[self.ability.extra.last_hand].level])
             end 
 
@@ -1583,7 +1591,217 @@ function SMODS.INIT.Bunco()
     SMODS.Jokers.j_loanshark.calculate = function(self, context)
 
     end
+
+    -- Basement Joker:
+    SMODS.Sprite:new('j_basement', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
+
+    local loc_basement = {
+        ['name'] = 'Basement Joker',
+        ['text'] = {
+            [1] = ' '
+        }
+    }
+ 
+    -- SMODS.Joker:new(name, slug, config, spritePos, loc_txt, rarity, cost, unlocked, discovered, blueprint_compat, eternal_compat)
+    local joker_basement = SMODS.Joker:new(
+        'Basement Joker', -- Name
+        'basement', -- Slug
+        {}, -- Config
+        {x = 5, y = 1}, -- Sprite position
+        loc_basement, -- Localization
+        1, 1) -- Rarity & Cost. 1 - Common, 2 - Uncommon, 3 - Rare, 4 - Legendary
+ 
+    joker_basement:register()
+
+    SMODS.Jokers.j_basement.calculate = function(self, context)
+
+    end
+
+    -- Shepherd Joker:
+    SMODS.Sprite:new('j_shepherd', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
+
+    local loc_shepherd = {
+        ['name'] = 'Shepherd Joker',
+        ['text'] = {
+            [1] = 'Gains {C:chips}+2{} Chips',
+            [2] = 'when played hand is a {C:attention}Pair',
+            [3] = '{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)'
+        }
+    }
+ 
+    -- SMODS.Joker:new(name, slug, config, spritePos, loc_txt, rarity, cost, unlocked, discovered, blueprint_compat, eternal_compat)
+    local joker_shepherd = SMODS.Joker:new(
+        'Shepherd Joker', -- Name
+        'shepherd', -- Slug
+        {extra = {chips = 0}}, -- Config
+        {x = 0, y = 2}, -- Sprite position
+        loc_shepherd, -- Localization
+        1, 1) -- Rarity & Cost. 1 - Common, 2 - Uncommon, 3 - Rare, 4 - Legendary
+ 
+    joker_shepherd:register()
+
+    SMODS.Jokers.j_shepherd.calculate = function(self, context)
+        if context.after and next(context.poker_hands['Pair']) then
+            self.ability.extra.chips = self.ability.extra.chips + 2
+
+            forced_message('+'..tostring(self.ability.extra.chips)..' Chips', self, G.C.BLUE)
+        end
+
+        if SMODS.end_calculate_context(context) then
+            if self.ability.extra.chips ~= 0 then
+                return {
+                    message = localize {
+                        type = 'variable',
+                        key = 'a_chips',
+                        vars = { self.ability.extra.chips }
+                    },
+                    chip_mod = self.ability.extra.chips,
+                    card = self
+                }
+            end
+        end        
+    end
+
+    -- Joker Knight:
+    SMODS.Sprite:new('j_knight', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
+
+    local loc_knight = {
+        ['name'] = 'Joker Knight',
+        ['text'] = {
+            [1] = 'When {C:attention}Blind{} is selected,',
+            [2] = 'shuffles all Jokers and gains {C:red}+6{} Mult,',
+            [3] = 'resets when any Joker is moved',
+            [4] = '{C:inactive}(Currently {C:red}+#1#{C:inactive} Mult)'
+        }
+    }
+ 
+    -- SMODS.Joker:new(name, slug, config, spritePos, loc_txt, rarity, cost, unlocked, discovered, blueprint_compat, eternal_compat)
+    local joker_knight = SMODS.Joker:new(
+        'Joker Knight', -- Name
+        'knight', -- Slug
+        {extra = {mult = 0}}, -- Config
+        {x = 1, y = 2}, -- Sprite position
+        loc_knight, -- Localization
+        1, 1) -- Rarity & Cost. 1 - Common, 2 - Uncommon, 3 - Rare, 4 - Legendary
+ 
+    joker_knight:register()
+
+    local joker_knight_table = nil
+    local joker_knight_table_comparison = nil
+
+    local original_drag = Node.drag
+
+    function Node:drag()
+        original_drag(self)
+
+        if G.jokers ~= nil then
+            for _, v in ipairs(G.jokers.cards) do
+                if v.ability.name == 'Joker Knight' then
+                    if joker_knight_table == nil then
+
+                        sendDebugMessage('Joker Knight: Started drag...')
+
+                        joker_knight_table = {}
+
+                        for _, v in ipairs(G.jokers.cards) do
+                            table.insert(joker_knight_table, v.ability.name)
+                        end
+
+                        joker_knight_table_comparison = joker_knight_table
+
+                    end                
+                end
+            end
+        end
+    end
+
+    local original_stop_drag = Node.stop_drag
+
+    function Node:stop_drag()
+        original_stop_drag(self)
+
+        if G.jokers ~= nil then
+            for _, v in ipairs(G.jokers.cards) do
+                if v.ability.name == 'Joker Knight' then
+
+                    function do_tables_match(a, b)
+                        return table.concat(a) == table.concat(b)
+                    end
+
+                    function result()
+                        sendDebugMessage('First: {'..table.concat(joker_knight_table, ', ')..'}, Second: {'..table.concat(joker_knight_table_comparison, ', ')..'}')
+                    end
+                    
+                    if joker_knight_table ~= nil then
+                        
+                        joker_knight_table = {}
+
+                        for _, v in ipairs(G.jokers.cards) do
+                            table.insert(joker_knight_table, v.ability.name)
+                        end
+                        
+                        sendDebugMessage('Joker Knight: Ended drag.')
+
+                        if do_tables_match(joker_knight_table, joker_knight_table_comparison) then
+                            sendDebugMessage('Result: No changes.')
+                            result()
+                        else
+                            v:calculate_joker({ break_positions = true })
+                            sendDebugMessage('Result: Positions changed.')
+                            result()
+                        end
+
+                        
+                        joker_knight_table = nil
+                        joker_knight_table_comparison = nil
+                    end
+
+                end
+            end
+        end
+    end
+
+    SMODS.Jokers.j_knight.calculate = function(self, context)
+
+        if context.setting_blind and not self.getting_sliced then
+            self.ability.extra.mult = self.ability.extra.mult + 6
+
+            G.E_MANAGER:add_event(Event({ trigger = 'after', delay = 0.2, func = function() 
+                G.E_MANAGER:add_event(Event({ func = function() G.jokers:shuffle('aajk'); play_sound('cardSlide1', 0.85);return true end })) 
+                delay(0.15)
+                G.E_MANAGER:add_event(Event({ func = function() G.jokers:shuffle('aajk'); play_sound('cardSlide1', 1.15);return true end })) 
+                delay(0.15)
+                G.E_MANAGER:add_event(Event({ func = function() G.jokers:shuffle('aajk'); play_sound('cardSlide1', 1);return true end })) 
+                delay(0.5)
+            return true end }))
+
+            forced_message('+'..tostring(self.ability.extra.mult)..' Mult', self, G.C.RED)
+        end
+
+        if context.break_positions then
+            if self.ability.extra.mult ~= 0 then
+                self.ability.extra.mult = 0
+
+                forced_message(localize('k_reset'), self, G.C.RED)
+            end
+        end
+
+        if SMODS.end_calculate_context(context) then
+            if self.ability.extra.mult ~= 1 then
+                return {
+                    message = localize {
+                        type = 'variable',
+                        key = 'a_mult',
+                        vars = { self.ability.extra.mult }
+                    },
+                    mult_mod = self.ability.extra.mult,
+                    card = self
+                }
+            end
+        end
+    end
 end
+
 
 -- Copied and modifed from LushMod
 local generate_UIBox_ability_tableref = Card.generate_UIBox_ability_table
@@ -1621,6 +1839,12 @@ function Card.generate_UIBox_ability_table(self)
             -- Hot Dog!
         elseif self.ability.name == 'Ghost Print' then
             loc_vars = {self.ability.extra.last_hand}
+        elseif self.ability.name == 'Basement Joker' then
+            -- Sick Fries!
+        elseif self.ability.name == 'Shepherd Joker' then
+            loc_vars = {self.ability.extra.chips}
+        elseif self.ability.name == 'Joker Knight' then
+            loc_vars = {self.ability.extra.mult}
         else
             customJoker = false
         end
