@@ -532,12 +532,28 @@ function SMODS.INIT.Bunco()
         delay(0.5)
     end
 
+    -- Custom editions:
+
+    -- Custom contexts & other functions:
+    
     local original_create_card = create_card
 
     function create_card(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
         local card = original_create_card(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
 
-        sendDebugMessage('Key: '..((card.ability.name) or 'none'))
+        sendDebugMessage('Key: '..((card.ability.name) or 'none')..', Type: '.._type)
+
+        -- Joker Man & Jester Boy Trading Card No. 54:
+
+        if card.ability.name == 'Joker Man & Jester Boy Trading Card No. 54' then
+            sendDebugMessage('Edition enforcement on JM&JB: '..(card:get_edition() or 'Nothing'))
+            if card:get_edition() == nil then
+                local edition = poll_edition('aura', nil, true, true)
+                card:set_edition(edition)
+            end
+        end
+
+        -- Exotic suit tarots:
 
         if (G.GAME.Fleurons == nil and card.ability.name == 'The Sky') or (G.GAME.Halberds == nil and card.ability.name == 'The Abyss') then
             sendDebugMessage('Exotic tarot appeared! But the exotic suit did not exist.')
@@ -554,6 +570,8 @@ function SMODS.INIT.Bunco()
     function create_card_for_shop(area)
         local card = original_create_card_for_shop(area)
 
+        -- Exotic suit tarots:
+
         if (G.GAME.Fleurons == nil and card.ability.name == 'The Sky') or (G.GAME.Halberds == nil and card.ability.name == 'The Abyss') then
             sendDebugMessage('Exotic tarot appeared! But the exotic suit did not exist.')
             sendDebugMessage('Rerolling...')
@@ -563,10 +581,6 @@ function SMODS.INIT.Bunco()
             return card
         end
     end
-
-    -- Custom editions:
-
-    -- Custom contexts & other functions:
 
     function Card:add_speech_bubble(text_key, align, loc_vars)
         if self.children.speech_bubble then self.children.speech_bubble:remove() end
@@ -1670,7 +1684,7 @@ function SMODS.INIT.Bunco()
         ['text'] = {
             [1] = 'When {C:attention}Blind{} is selected,',
             [2] = 'shuffles all Jokers and gains {C:red}+6{} Mult,',
-            [3] = 'resets when any Joker is moved',
+            [3] = 'resets when any Joker is rearranged',
             [4] = '{C:inactive}(Currently {C:red}+#1#{C:inactive} Mult)'
         }
     }
@@ -1787,7 +1801,7 @@ function SMODS.INIT.Bunco()
         end
 
         if SMODS.end_calculate_context(context) then
-            if self.ability.extra.mult ~= 1 then
+            if self.ability.extra.mult ~= 0 then
                 return {
                     message = localize {
                         type = 'variable',
@@ -1797,6 +1811,148 @@ function SMODS.INIT.Bunco()
                     mult_mod = self.ability.extra.mult,
                     card = self
                 }
+            end
+        end
+    end
+
+    -- Joker Man & Jester Boy Trading Card No. 54:
+    SMODS.Sprite:new('j_jokermanjesterboy', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
+
+    local loc_jokermanjesterboy = {
+        ['name'] = 'Joker Man & Jester Boy Trading Card No. 54',
+         ['text'] = {
+            [1] = 'Each {C:attention}Standard Pack{} will have', 
+            [2] = 'at least two {C:attention}Enhanced Cards{},',
+            [3] = 'each {C:attention}Buffoon pack{} will have',
+            [4] = 'at least one {C:green}Uncommon{} Joker'
+        }
+    }
+
+    -- SMODS.Joker:new(name, slug, config, spritePos, loc_txt, rarity, cost, unlocked, discovered, blueprint_compat, eternal_compat)
+    local joker_jokermanjesterboy = SMODS.Joker:new(
+        'Joker Man & Jester Boy Trading Card No. 54', -- Name
+        'jokermanjesterboy', -- Slug
+        {}, -- Config
+        {x = 2, y = 2}, -- Sprite position
+        loc_jokermanjesterboy, -- Localization
+        1, 1) -- Rarity & Cost. 1 - Common, 2 - Uncommon, 3 - Rare, 4 - Legendary
+  
+    joker_jokermanjesterboy:register()
+
+    local original_card_open = Card.open
+    function Card:open()
+        original_card_open(self)
+
+        if G.jokers ~= nil then
+            for _, v in ipairs(G.jokers.cards) do
+                if v.ability.name == 'Joker Man & Jester Boy Trading Card No. 54' then
+                    v:calculate_joker({ booster_type = self.ability.name })
+                end
+            end
+        end
+    end
+    
+    SMODS.Jokers.j_jokermanjesterboy.calculate = function(self, context)
+
+        if context.booster_type then
+
+            sendDebugMessage(context.booster_type)
+
+            if (context.booster_type == 'Standard Pack' or 
+            context.booster_type == 'Jumbo Standard Pack' or 
+            context.booster_type == 'Mega Standard Pack') then
+
+                sendDebugMessage('Opening Standard Pack...')
+
+                G.E_MANAGER:add_event(Event({
+                    trigger = "after",
+                    delay = 1.3 * math.sqrt(G.SETTINGS.GAMESPEED),
+                    blockable = false,
+                    blocking = false,
+                    func = function()
+
+                        local enhancement_amount = 0
+
+                        local enhancement_pool = {
+                            G.P_CENTERS.m_bonus,
+                            G.P_CENTERS.m_mult,
+                            G.P_CENTERS.m_wild,
+                            G.P_CENTERS.m_stone,
+                            G.P_CENTERS.m_steel,
+                            G.P_CENTERS.m_glass,
+                            G.P_CENTERS.m_gold,
+                            G.P_CENTERS.m_lucky
+                        }
+
+                        if G.pack_cards and G.pack_cards.cards[1] and G.pack_cards.VT.y < G.ROOM.T.h then
+
+                            for _, v in ipairs(G.pack_cards.cards) do
+                                if v.config.center ~= G.P_CENTERS.c_base then
+                                    enhancement_amount = enhancement_amount + 1
+                                end
+                            end
+
+                            sendDebugMessage('JM & JB: '..enhancement_amount..' cards with enhancements.')
+
+                            if enhancement_amount < 2 then
+                                for _, v in ipairs(G.pack_cards.cards) do
+                                    if v.config.center == G.P_CENTERS.c_base then
+                                        v:set_ability(enhancement_pool[math.random(#enhancement_pool)])
+                                        enhancement_amount = enhancement_amount + 1
+                                        if enhancement_amount == 2 then
+                                            break
+                                        end
+                                    end
+                                end
+                            end
+            
+                            return true
+                        end
+                    end
+                }))
+            elseif (context.booster_type == 'Buffoon Pack' or 
+            context.booster_type == 'Jumbo Buffoon Pack' or 
+            context.booster_type == 'Mega Buffon Pack') then
+
+                sendDebugMessage('Opening Buffoon Pack...')
+                
+                G.E_MANAGER:add_event(Event({
+                    trigger = "after",
+                    delay = 1.3 * math.sqrt(G.SETTINGS.GAMESPEED),
+                    blockable = false,
+                    blocking = false,
+                    func = function()
+                        if G.pack_cards and G.pack_cards.cards[1] and G.pack_cards.VT.y < G.ROOM.T.h then
+
+                            local uncommon = false
+
+                            for _, v in ipairs(G.pack_cards.cards) do
+                                if v.config.center.rarity == 2 then
+                                    uncommon = true
+                                    sendDebugMessage('Found at least one Uncommon Joker.')
+                                    break
+                                end
+                            end
+
+                            if uncommon == false then
+                                sendDebugMessage('JM & JB: Rerolling Joker..')
+                                while true do
+                                    local rerolled_joker = create_card('Joker', G.pack_cards, false, nil, nil, nil, nil, nil)
+
+                                    if rerolled_joker.config.center.rarity == 2 then
+                                        sendDebugMessage('JM & JB: Rerolled!')
+                                        G.pack_cards.cards[1] = rerolled_joker
+                                        break
+                                    end
+
+                                    rerolled_joker:remove()
+                                end
+                            end
+
+                            return true
+                        end
+                    end
+                }))
             end
         end
     end
