@@ -535,6 +535,116 @@ function SMODS.INIT.Bunco()
     -- Custom editions:
 
     -- Custom contexts & other functions:
+
+    local original_ease_dollars = ease_dollars
+    
+    function ease_dollars(mod, instant)
+
+        if G.jokers ~= nil then
+            for _, v in ipairs(G.jokers.cards) do
+                if v.ability.name == 'Fiendish Joker' then
+                    if mod > 0 then
+                        if pseudorandom('fiendish') < G.GAME.probabilities.normal / v.ability.extra.odds then
+                            mod = 1
+                        else
+                            mod = mod * 2
+                        end
+                    end
+                end
+            end
+        end
+        
+        original_ease_dollars(mod, instant)
+    end
+
+    local original_card_open = Card.open
+    
+    function Card:open()
+        original_card_open(self)
+
+        if G.jokers ~= nil then
+            for _, v in ipairs(G.jokers.cards) do
+                if v.ability.name == 'Joker Man & Jester Boy Trading Card No. 54' then
+                    v:calculate_joker({ booster_type = self.ability.name })
+                end
+            end
+        end
+    end
+
+    local joker_knight_table = nil
+    local joker_knight_table_comparison = nil
+
+    local original_drag = Node.drag
+
+    function Node:drag()
+        original_drag(self)
+
+        if G.jokers ~= nil then
+            for _, v in ipairs(G.jokers.cards) do
+                if v.ability.name == 'Joker Knight' then
+                    if joker_knight_table == nil then
+
+                        sendDebugMessage('Joker Knight: Started drag...')
+
+                        joker_knight_table = {}
+
+                        for _, v in ipairs(G.jokers.cards) do
+                            table.insert(joker_knight_table, v.ability.name)
+                        end
+
+                        joker_knight_table_comparison = joker_knight_table
+
+                    end                
+                end
+            end
+        end
+    end
+
+    local original_stop_drag = Node.stop_drag
+
+    function Node:stop_drag()
+        original_stop_drag(self)
+
+        if G.jokers ~= nil then
+            for _, v in ipairs(G.jokers.cards) do
+                if v.ability.name == 'Joker Knight' then
+
+                    function do_tables_match(a, b)
+                        return table.concat(a) == table.concat(b)
+                    end
+
+                    function result()
+                        sendDebugMessage('First: {'..table.concat(joker_knight_table, ', ')..'}, Second: {'..table.concat(joker_knight_table_comparison, ', ')..'}')
+                    end
+                    
+                    if joker_knight_table ~= nil then
+                        
+                        joker_knight_table = {}
+
+                        for _, v in ipairs(G.jokers.cards) do
+                            table.insert(joker_knight_table, v.ability.name)
+                        end
+                        
+                        sendDebugMessage('Joker Knight: Ended drag.')
+
+                        if do_tables_match(joker_knight_table, joker_knight_table_comparison) then
+                            sendDebugMessage('Result: No changes.')
+                            result()
+                        else
+                            v:calculate_joker({ break_positions = true })
+                            sendDebugMessage('Result: Positions changed.')
+                            result()
+                        end
+
+                        
+                        joker_knight_table = nil
+                        joker_knight_table_comparison = nil
+                    end
+
+                end
+            end
+        end
+    end
     
     local original_create_card = create_card
 
@@ -546,7 +656,7 @@ function SMODS.INIT.Bunco()
         -- Joker Man & Jester Boy Trading Card No. 54:
 
         if card.ability.name == 'Joker Man & Jester Boy Trading Card No. 54' then
-            sendDebugMessage('Edition enforcement on JM&JB: '..(card:get_edition() or 'Nothing'))
+            sendDebugMessage('Edition enforcement on JM & JB: '..(card:get_edition() or 'Nothing'))
             if card:get_edition() == nil then
                 local edition = poll_edition('aura', nil, true, true)
                 card:set_edition(edition)
@@ -1043,7 +1153,7 @@ function SMODS.INIT.Bunco()
         end
     end
     
-    -- Cassette joker:
+    -- Cassette Joker:
     SMODS.Sprite:new('j_cassette', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
 
     local loc_cassette = {
@@ -1107,7 +1217,7 @@ function SMODS.INIT.Bunco()
         end
     end
 
-    -- Mosaic joker:
+    -- Mosaic Joker:
     SMODS.Sprite:new('j_mosaic', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
 
     local loc_mosaic = {
@@ -1141,7 +1251,7 @@ function SMODS.INIT.Bunco()
         end
     end
 
-    -- Voxel joker:
+    -- Voxel Joker:
     SMODS.Sprite:new('j_voxel', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
 
     local loc_voxel = {
@@ -1181,7 +1291,7 @@ function SMODS.INIT.Bunco()
         end
     end
 
-    -- Crop circles joker:
+    -- Crop circles Joker:
     SMODS.Sprite:new('j_crop', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
 
     local loc_crop = {
@@ -1238,7 +1348,7 @@ function SMODS.INIT.Bunco()
         end
     end
 
-    -- X-Ray joker:
+    -- X-Ray Joker:
     SMODS.Sprite:new('j_xray', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
 
     local loc_xray = {
@@ -1284,7 +1394,7 @@ function SMODS.INIT.Bunco()
         end
     end
 
-    -- Dread joker:
+    -- Dread Joker:
     SMODS.Sprite:new('j_dread', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
 
     local loc_dread = {
@@ -1353,7 +1463,7 @@ function SMODS.INIT.Bunco()
         end
     end
 
-    -- Prehistoric joker:
+    -- Prehistoric Joker:
     SMODS.Sprite:new('j_prehistoric', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
 
     local loc_prehistoric = {
@@ -1403,7 +1513,7 @@ function SMODS.INIT.Bunco()
         end
     end
 
-    -- Jimbo joker:
+    -- Jimbo Joker:
     SMODS.Sprite:new('j_jimbo', bunco_mod.path, 'Jimbo.png', 71, 95, 'asset_atli'):register()
 
     local loc_jimbo = {
@@ -1429,7 +1539,7 @@ function SMODS.INIT.Bunco()
         '',
         {x = 1, y = 0})
  
-    joker_jimbo:register()
+    -- joker_jimbo:register()
 
     function G.UIDEF.jimbo_speech_bubble(text_key, loc_vars) 
         local text = {}
@@ -1498,9 +1608,9 @@ function SMODS.INIT.Bunco()
         end
     end
 
-    SMODS.Jokers.j_jimbo.calculate = function(self, context)
+    -- SMODS.Jokers.j_jimbo.calculate = function(self, context)
         
-    end
+    -- end
 
     -- Linocut Joker:
     SMODS.Sprite:new('j_linocut', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
@@ -1602,6 +1712,8 @@ function SMODS.INIT.Bunco()
  
     joker_loanshark:register()
 
+    -- Loan Sharks uses Card:add_to_deck for some things. Look at the start of the code
+
     SMODS.Jokers.j_loanshark.calculate = function(self, context)
 
     end
@@ -1700,80 +1812,7 @@ function SMODS.INIT.Bunco()
  
     joker_knight:register()
 
-    local joker_knight_table = nil
-    local joker_knight_table_comparison = nil
-
-    local original_drag = Node.drag
-
-    function Node:drag()
-        original_drag(self)
-
-        if G.jokers ~= nil then
-            for _, v in ipairs(G.jokers.cards) do
-                if v.ability.name == 'Joker Knight' then
-                    if joker_knight_table == nil then
-
-                        sendDebugMessage('Joker Knight: Started drag...')
-
-                        joker_knight_table = {}
-
-                        for _, v in ipairs(G.jokers.cards) do
-                            table.insert(joker_knight_table, v.ability.name)
-                        end
-
-                        joker_knight_table_comparison = joker_knight_table
-
-                    end                
-                end
-            end
-        end
-    end
-
-    local original_stop_drag = Node.stop_drag
-
-    function Node:stop_drag()
-        original_stop_drag(self)
-
-        if G.jokers ~= nil then
-            for _, v in ipairs(G.jokers.cards) do
-                if v.ability.name == 'Joker Knight' then
-
-                    function do_tables_match(a, b)
-                        return table.concat(a) == table.concat(b)
-                    end
-
-                    function result()
-                        sendDebugMessage('First: {'..table.concat(joker_knight_table, ', ')..'}, Second: {'..table.concat(joker_knight_table_comparison, ', ')..'}')
-                    end
-                    
-                    if joker_knight_table ~= nil then
-                        
-                        joker_knight_table = {}
-
-                        for _, v in ipairs(G.jokers.cards) do
-                            table.insert(joker_knight_table, v.ability.name)
-                        end
-                        
-                        sendDebugMessage('Joker Knight: Ended drag.')
-
-                        if do_tables_match(joker_knight_table, joker_knight_table_comparison) then
-                            sendDebugMessage('Result: No changes.')
-                            result()
-                        else
-                            v:calculate_joker({ break_positions = true })
-                            sendDebugMessage('Result: Positions changed.')
-                            result()
-                        end
-
-                        
-                        joker_knight_table = nil
-                        joker_knight_table_comparison = nil
-                    end
-
-                end
-            end
-        end
-    end
+    -- Joker Knight uses Node:drag and Node:stop_drag for some things. Look at the start of the code
 
     SMODS.Jokers.j_knight.calculate = function(self, context)
 
@@ -1839,18 +1878,7 @@ function SMODS.INIT.Bunco()
   
     joker_jokermanjesterboy:register()
 
-    local original_card_open = Card.open
-    function Card:open()
-        original_card_open(self)
-
-        if G.jokers ~= nil then
-            for _, v in ipairs(G.jokers.cards) do
-                if v.ability.name == 'Joker Man & Jester Boy Trading Card No. 54' then
-                    v:calculate_joker({ booster_type = self.ability.name })
-                end
-            end
-        end
-    end
+    -- JM & JB use Card:open for some things. Look at the start of the code
     
     SMODS.Jokers.j_jokermanjesterboy.calculate = function(self, context)
 
@@ -1942,6 +1970,7 @@ function SMODS.INIT.Bunco()
                                     if rerolled_joker.config.center.rarity == 2 then
                                         sendDebugMessage('JM & JB: Rerolled!')
                                         G.pack_cards.cards[1] = rerolled_joker
+                                        G.pack_cards.cards[1]:start_materialize({G.C.WHITE, G.C.WHITE}, nil, 1.5*G.SETTINGS.GAMESPEED)
                                         break
                                     end
 
@@ -1955,6 +1984,121 @@ function SMODS.INIT.Bunco()
                 }))
             end
         end
+    end
+
+    -- Dogs Playing Poker:
+    SMODS.Sprite:new('j_dogs', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
+
+    local loc_dogs = {
+        ['name'] = 'Dogs Playing Poker',
+        ['text'] = {
+            [1] = '{X:mult,C:white}X#1#{} Mult if all scored',
+            [2] = 'cards are lower than {C:attention}6'
+        }
+    }
+ 
+    -- SMODS.Joker:new(name, slug, config, spritePos, loc_txt, rarity, cost, unlocked, discovered, blueprint_compat, eternal_compat)
+    local joker_dogs = SMODS.Joker:new(
+        'Dogs Playing Poker', -- Name
+        'dogs', -- Slug
+        {extra = {xmult = 2.5}}, -- Config
+        {x = 3, y = 2}, -- Sprite position
+        loc_dogs, -- Localization
+        1, 1) -- Rarity & Cost. 1 - Common, 2 - Uncommon, 3 - Rare, 4 - Legendary
+ 
+    joker_dogs:register()
+
+    SMODS.Jokers.j_dogs.calculate = function(self, context)
+
+        if SMODS.end_calculate_context(context) then
+
+            local condition = true
+
+            for i = 1, #context.scoring_hand do
+                if context.scoring_hand[i]:get_id() >= 6 then
+                    condition = false
+                end 
+            end
+
+            if condition then
+                return {
+                    Xmult_mod = self.ability.extra.xmult,
+                    card = self,
+                    message = localize {
+                        type = 'variable',
+                        key = 'a_xmult',
+                        vars = { self.ability.extra.xmult }
+                    },
+                }
+            end
+        end
+    end
+    
+    -- Righthook Joker:
+    SMODS.Sprite:new('j_righthook', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
+
+    local loc_righthook = {
+        ['name'] = 'Righthook Joker',
+        ['text'] = {
+            [1] = 'Retrigger rightmost played card',
+            [2] = 'in {C:attention}first hand{} of round'
+        }
+    }
+ 
+    -- SMODS.Joker:new(name, slug, config, spritePos, loc_txt, rarity, cost, unlocked, discovered, blueprint_compat, eternal_compat)
+    local joker_righthook = SMODS.Joker:new(
+        'Righthook Joker', -- Name
+        'righthook', -- Slug
+        {}, -- Config
+        {x = 4, y = 2}, -- Sprite position
+        loc_righthook, -- Localization
+        1, 1) -- Rarity & Cost. 1 - Common, 2 - Uncommon, 3 - Rare, 4 - Legendary
+ 
+    joker_righthook:register()
+
+    SMODS.Jokers.j_righthook.calculate = function(self, context)
+
+        if context.repetition then
+            if context.cardarea == G.play then
+                if context.other_card == context.scoring_hand[#context.scoring_hand] then
+
+                return {
+                    message = localize('k_again_ex'),
+                    repetitions = 1,
+                    card = self
+                }
+                end
+            end
+        end
+    end
+
+    -- Fiendish Joker:
+    SMODS.Sprite:new('j_fiendish', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
+
+    local loc_fiendish = {
+        ['name'] = 'Fiendish Joker',
+        ['text'] = {
+            [1] = 'Doubles all sources of money,',
+            [2] = '{C:green}#1# in #2#{} chance to pay out',
+            [3] = 'with {C:money}$1{} instead'
+        }
+    }
+ 
+    -- SMODS.Joker:new(name, slug, config, spritePos, loc_txt, rarity, cost, unlocked, discovered, blueprint_compat, eternal_compat)
+    local joker_fiendish = SMODS.Joker:new(
+        'Fiendish Joker', -- Name
+        'fiendish', -- Slug
+        {extra = {odds = 2}}, -- Config
+        {x = 5, y = 2}, -- Sprite position
+        loc_fiendish, -- Localization
+        1, 1) -- Rarity & Cost. 1 - Common, 2 - Uncommon, 3 - Rare, 4 - Legendary
+ 
+    joker_fiendish:register()
+
+    -- Fiendish Joker uses ease_dollars for some things. Look at the start of the code
+
+    SMODS.Jokers.j_fiendish.calculate = function(self, context)
+
     end
 end
 
@@ -1995,12 +2139,20 @@ function Card.generate_UIBox_ability_table(self)
             -- Hot Dog!
         elseif self.ability.name == 'Ghost Print' then
             loc_vars = {self.ability.extra.last_hand}
+        elseif self.ability.name == 'Loan Shark' then
+            -- Scammed
         elseif self.ability.name == 'Basement Joker' then
             -- Sick Fries!
         elseif self.ability.name == 'Shepherd Joker' then
             loc_vars = {self.ability.extra.chips}
         elseif self.ability.name == 'Joker Knight' then
             loc_vars = {self.ability.extra.mult}
+        elseif self.ability.name == 'Joker Man & Jester Boy Trading Card No. 54' then
+            -- Invisible Boatmobile!
+        elseif self.ability.name == 'Dogs Playing Poker' then
+            loc_vars = {self.ability.extra.xmult}
+        elseif self.ability.name == 'Fiendish Joker' then
+            loc_vars = {G.GAME.probabilities.normal, self.ability.extra.odds}
         else
             customJoker = false
         end
