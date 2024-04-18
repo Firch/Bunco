@@ -17,6 +17,8 @@
 --
 -- Syntax: '\' + Prefix + Postfix
 --
+-- Config (CONF)
+--
 -- Global variables (GLOB)
 --
 -- Exotic cards (Prefix: EX)
@@ -31,13 +33,17 @@
 -- Generic Functions (FUNC)
 --
 -- Ver 1 Jokers: Cassette (CASS), Mosaic (MOSA), Voxel (VOXE), Crop Circles (CROP), X-Ray (XRAY), Dread (DREA), Prehistoric (PREH),
--- Ver 2: Linocut (LINO), Ghost Print (GHOS), Loan Shark (LOAN), Basement (BASE), Shepherd (SHEP), Knight (KNIG), JM & JB (JMJB), Dogs Playing Poker (DOGS), Righthook (RIGH), Fiendish (FIEN),
+-- Ver 2: Linocut (LINO), Ghost Print (GHOS), Loan Shark (LOAN), Basement (BASE), Shepherd (SHEP), Knight (KNIG), JM & JB (JMJB), Dogs Playing Poker (DOGS), Righthook (RIGH), Fiendish (FIEN), Carnival (CARN)
 -- Jimbo (JIMB)
 --  Base (BAS)
 --  Localization (LOC)
 --  Additional function(s) (FUN)
 
 function SMODS.INIT.Bunco()
+
+    ---- Config (\CONF):
+
+    local enable_jimbo = false
 
     ---- Global variables (\GLOB):
 
@@ -1756,11 +1762,11 @@ function SMODS.INIT.Bunco()
                     trigger = 'before',
                     delay = 0.0,
                     func = (function()
+                            forced_message(localize('k_plus_spectral'), self, G.C.SECONDARY_SET.Spectral)
                             local card = create_card('Spectral', G.consumeables, nil, nil, nil, nil, nil)
                             card:add_to_deck()
                             G.consumeables:emplace(card)
                             G.GAME.consumeable_buffer = 0
-                            forced_message(localize('k_plus_spectral'), self, G.C.SECONDARY_SET.Spectral)
                         return true
                 end)}))
             end
@@ -2139,109 +2145,161 @@ function SMODS.INIT.Bunco()
     joker_fiendish:register()
 
     -- Fiendish Joker uses ease_dollars for some things. Check FIEN_FUN
+
     SMODS.Jokers.j_fiendish.calculate = function(self, context)
 
     end
 
-    -- Jimbo Joker (\JIMB_BAS):
-    SMODS.Sprite:new('j_jimbo', bunco_mod.path, 'Jimbo.png', 71, 95, 'asset_atli'):register()
+    -- Carnival Joker (\CARN_BAS):
+    SMODS.Sprite:new('j_carnival', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
 
-    local loc_jimbo = {
-        ['name'] = 'Jimbo',
+    local loc_carnival = {
+        ['name'] = 'Carnival',
         ['text'] = {
-            [1] = '{C:inactive}Does nothing?'
+            [1] = 'Each Ante is played twice'
         }
     }
 
-    local joker_jimbo = SMODS.Joker:new(
-        'Jimbo', -- Name
-        'jimbo', -- Slug
-        {}, -- Config
-        {x = 0, y = 0}, -- Sprite position
-        loc_jimbo, -- Localization
-        4, -- Rarity
-        0, -- Cost
-        nil,
-        nil,
-        nil,
-        nil,
-        '',
-        '',
-        {x = 1, y = 0})
+    local joker_carnival = SMODS.Joker:new(
+        'Carnival', -- Name
+        'carnival', -- Slug
+        {extra = {ante_list = {}}}, -- Config
+        {x = 0, y = 3}, -- Sprite position
+        loc_carnival, -- Localization
+        3, -- Rarity
+        8, -- Cost
+        nil, -- Unlocked
+        nil, -- Discovered
+        false, -- Blueprint compat
+        true) -- Eternal compat
 
-    joker_jimbo:register()
+    joker_carnival:register()
 
-    -- Jimbo Joker uses Card:add_to_deck for some things. Check JIMB_FUN
+    SMODS.Jokers.j_carnival.calculate = function(self, context)
 
-    function G.UIDEF.jimbo_speech_bubble(text_key, loc_vars)
-        local text = {}
-        localize {type = 'quips', key = text_key, vars = loc_vars or {}, nodes = text}
-        local row = {}
-        for k, v in ipairs(text) do
-          row[#row+1] =  {n=G.UIT.R, config={align = 'cl'}, nodes=v}
-        end
-        local t = {n=G.UIT.ROOT, config = {align = 'cm', minh = 1,r = 0.3, padding = 0.07, minw = 1, colour = G.C.JOKER_GREY, shadow = true}, nodes={
-                      {n=G.UIT.C, config={align = 'cm', minh = 1,r = 0.2, padding = 0.1, minw = 1, colour = G.C.WHITE}, nodes={
-                      {n=G.UIT.C, config={align = 'cm', minh = 1,r = 0.2, padding = 0.03, minw = 1, colour = G.C.WHITE}, nodes=row}}
-                      }
-                    }}
-        return t
-    end
+        if context.end_of_round and G.GAME.blind.boss and not context.other_card then
 
-    local additional_quips = {
+            local function has_value(tab, val)
+                for index, value in ipairs(tab) do
+                    if value == val then
+                        return true
+                    end
+                end
+                return false
+            end
 
-        talk_hello_1 = {"..."},
-        talk_hello_2 = {"Well, let's see what you got!"},
+            if not has_value(self.ability.extra.ante_list, G.GAME.round_resets.ante) then
+                ease_ante(-1)
 
-        talk_clone_1 = {"Doppelganger?", "No way!"},
-        talk_clone_2 = {"Ah wait, that's actually me."},
-        talk_clone_3 = {"Hello, handsome!"},
-        talk_clone_4 = {"I don't think you can handle two Jimbos.", "{s:0.8}You're underqualified for this."},
+                forced_message('Loop!', self, G.C.BLACK)
+            end
 
-        talk_joker_1 = {"Oh, remember when I thaught you", "about this handsome guy?"},
-        talk_joker_2 = {"Kids really do grow up too fast!"},
-
-        talk_clown_1 = {"Chaos the Clown... not a lot of", "chaos around him, huh?"},
-        talk_clown_2 = {"Maybe I'm a dumbo, but I don't think", "shop rerolls are chaotic!"},
-
-        talk_credit_1 = {"Have you been using my", "credit card this entire time?"},
-        talk_credit_2 = {"This explains so many charges I don't recognize."},
-
-        talk_loyalty_1 = {"This is actually for free hot dogs,", "but don't tell anybody."},
-
-        talk_gift_1 = {"Wait a minute..."},
-        talk_gift_2 = {"This expired years ago!"},
-
-        talk_caino_1 = {"Hey, how's the wife-"},
-        talk_caino_2 = {"Oh right, I forgot."},
-        talk_caino_3 = {"This is why you don't talk to me."},
-
-        talk_triboulet_1 = {"Whoof, I hit my head;", "I'm seeing triple!"},
-        talk_triboulet_2 = {"Get it, Tribby? Because...", "There's three of you..."},
-        talk_triboulet_3 = {"Please say something to me."},
-
-        talk_chicot_1 = {"You know that this guy", "actually knows how to use a sword?"},
-        talk_chicot_2 = {"Yet his sharp wit didn't save him", "from being stabbed, hahaha-"},
-        talk_chicot_3 = {"Gosh, sorry, sorry!"},
-
-        talk_perkeo_1 = {"I'm sorry, but I do not refill."},
-        talk_perkeo_2 = {"Why not? Because you're already", "drunk as a lord."},
-
-        talk_yorick_1 = {"Last I saw you, you were skin and bones."},
-        talk_yorick_2 = {"Or was it just a skull?"}
-
-    }
-
-    for k, v in pairs(additional_quips) do
-        G.localization.misc.quips[k] = v
-        G.localization.quips_parsed[k] = {multi_line = true}
-        for kk, vv in ipairs(v) do
-            G.localization.quips_parsed[k][kk] = loc_parse_string(vv)
+            table.insert(self.ability.extra.ante_list, G.GAME.round_resets.ante)
         end
     end
 
-    SMODS.Jokers.j_jimbo.calculate = function(self, context)
+    -- Jimbo Joker (\JIMB_BAS):
 
+    if enable_jimbo then
+        SMODS.Sprite:new('j_jimbo', bunco_mod.path, 'Jimbo.png', 71, 95, 'asset_atli'):register()
+
+        local loc_jimbo = {
+            ['name'] = 'Jimbo',
+            ['text'] = {
+                [1] = '{C:inactive}Does nothing?'
+            }
+        }
+
+        local joker_jimbo = SMODS.Joker:new(
+            'Jimbo', -- Name
+            'jimbo', -- Slug
+            {}, -- Config
+            {x = 0, y = 0}, -- Sprite position
+            loc_jimbo, -- Localization
+            4, -- Rarity
+            0, -- Cost
+            nil,
+            nil,
+            nil,
+            nil,
+            '',
+            '',
+            {x = 1, y = 0})
+
+        joker_jimbo:register()
+
+        -- Jimbo Joker uses Card:add_to_deck for some things. Check JIMB_FUN
+
+        function G.UIDEF.jimbo_speech_bubble(text_key, loc_vars)
+            local text = {}
+            localize {type = 'quips', key = text_key, vars = loc_vars or {}, nodes = text}
+            local row = {}
+            for k, v in ipairs(text) do
+            row[#row+1] =  {n=G.UIT.R, config={align = 'cl'}, nodes=v}
+            end
+            local t = {n=G.UIT.ROOT, config = {align = 'cm', minh = 1,r = 0.3, padding = 0.07, minw = 1, colour = G.C.JOKER_GREY, shadow = true}, nodes={
+                        {n=G.UIT.C, config={align = 'cm', minh = 1,r = 0.2, padding = 0.1, minw = 1, colour = G.C.WHITE}, nodes={
+                        {n=G.UIT.C, config={align = 'cm', minh = 1,r = 0.2, padding = 0.03, minw = 1, colour = G.C.WHITE}, nodes=row}}
+                        }
+                        }}
+            return t
+        end
+
+        local additional_quips = {
+
+            talk_hello_1 = {"..."},
+            talk_hello_2 = {"Well, let's see what you got!"},
+
+            talk_clone_1 = {"Doppelganger?", "No way!"},
+            talk_clone_2 = {"Ah wait, that's actually me."},
+            talk_clone_3 = {"Hello, handsome!"},
+            talk_clone_4 = {"I don't think you can handle two Jimbos.", "{s:0.8}You're underqualified for this."},
+
+            talk_joker_1 = {"Oh, remember when I thaught you", "about this handsome guy?"},
+            talk_joker_2 = {"Kids really do grow up too fast!"},
+
+            talk_clown_1 = {"Chaos the Clown... not a lot of", "chaos around him, huh?"},
+            talk_clown_2 = {"Maybe I'm a dumbo, but I don't think", "shop rerolls are chaotic!"},
+
+            talk_credit_1 = {"Have you been using my", "credit card this entire time?"},
+            talk_credit_2 = {"This explains so many charges I don't recognize."},
+
+            talk_loyalty_1 = {"This is actually for free hot dogs,", "but don't tell anybody."},
+
+            talk_gift_1 = {"Wait a minute..."},
+            talk_gift_2 = {"This expired years ago!"},
+
+            talk_caino_1 = {"Hey, how's the wife-"},
+            talk_caino_2 = {"Oh right, I forgot."},
+            talk_caino_3 = {"This is why you don't talk to me."},
+
+            talk_triboulet_1 = {"Whoof, I hit my head;", "I'm seeing triple!"},
+            talk_triboulet_2 = {"Get it, Tribby? Because...", "There's three of you..."},
+            talk_triboulet_3 = {"Please say something to me."},
+
+            talk_chicot_1 = {"You know that this guy", "actually knows how to use a sword?"},
+            talk_chicot_2 = {"Yet his sharp wit didn't save him", "from being stabbed, hahaha-"},
+            talk_chicot_3 = {"Gosh, sorry, sorry!"},
+
+            talk_perkeo_1 = {"I'm sorry, but I do not refill."},
+            talk_perkeo_2 = {"Why not? Because you're already", "drunk as a lord."},
+
+            talk_yorick_1 = {"Last I saw you, you were skin and bones."},
+            talk_yorick_2 = {"Or was it just a skull?"}
+
+        }
+
+        for k, v in pairs(additional_quips) do
+            G.localization.misc.quips[k] = v
+            G.localization.quips_parsed[k] = {multi_line = true}
+            for kk, vv in ipairs(v) do
+                G.localization.quips_parsed[k][kk] = loc_parse_string(vv)
+            end
+        end
+
+        SMODS.Jokers.j_jimbo.calculate = function(self, context)
+
+        end
     end
 end
 
