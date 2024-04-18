@@ -581,7 +581,7 @@ function SMODS.INIT.Bunco()
 
         -- Cassette Joker additional function (\CASS_FUN)
 
-        if self.ability.name == 'Cassette' then
+        if self.ability.name == 'Cassette' and not self.debuff then
             if self.VT.w <= 0 then
                 if self.ability.extra.side == 'A' then
                     self.config.center.pos.x = 0
@@ -614,7 +614,7 @@ function SMODS.INIT.Bunco()
 
         -- X-Ray additional function (\XRAY_FUN)
 
-        if G.jokers ~= nil and self == G.hand then
+        if G.jokers ~= nil and self == G.hand and not self.debuff then
             for _, v in ipairs(G.jokers.cards) do
                 if v.ability.name == 'X-Ray' then
                   v:calculate_joker({ emplace = true, emplaced_card = card })
@@ -630,7 +630,7 @@ function SMODS.INIT.Bunco()
 
         -- Dread additional function (\DREA_FUN)
 
-        if self.ability.name == 'Dread' then
+        if self.ability.name == 'Dread' and not self.debuff then
             for name, level in pairs(self.ability.extra.level_up_list) do
                 level_up_hand(self, name, true, level * -1)
             end
@@ -1006,7 +1006,7 @@ function SMODS.INIT.Bunco()
 
         if G.jokers ~= nil then
             for _, v in ipairs(G.jokers.cards) do
-                if v.ability.name == 'Joker Knight' then
+                if v.ability.name == 'Joker Knight' and not self.debuff then
                     if joker_knight_table == nil then
 
                         sendDebugMessage('Joker Knight: Started drag...')
@@ -1034,7 +1034,7 @@ function SMODS.INIT.Bunco()
 
         if G.jokers ~= nil then
             for _, v in ipairs(G.jokers.cards) do
-                if v.ability.name == 'Joker Knight' then
+                if v.ability.name == 'Joker Knight' and not self.debuff then
 
                     function do_tables_match(a, b)
                         return table.concat(a) == table.concat(b)
@@ -1081,7 +1081,7 @@ function SMODS.INIT.Bunco()
 
         if G.jokers ~= nil then
             for _, v in ipairs(G.jokers.cards) do
-                if v.ability.name == 'Joker Man & Jester Boy Trading Card No. 54' then
+                if v.ability.name == 'Joker Man & Jester Boy Trading Card No. 54' and not self.debuff then
                     v:calculate_joker({ booster_type = self.ability.name })
                 end
             end
@@ -1142,7 +1142,7 @@ function SMODS.INIT.Bunco()
 
         if G.jokers ~= nil then
             for _, v in ipairs(G.jokers.cards) do
-                if v.ability.name == 'Fiendish Joker' then
+                if v.ability.name == 'Fiendish Joker' and not self.debuff then
                     if mod > 0 then
                         if pseudorandom('fiendish') < G.GAME.probabilities.normal / v.ability.extra.odds then
                             mod = 1
@@ -1241,7 +1241,11 @@ function SMODS.INIT.Bunco()
         {x = 0, y = 0}, -- Sprite position
         loc_cassette, -- Localization
         2, -- Rarity
-        5) -- Cost
+        5, -- Cost
+        nil, -- Unlocked
+        nil, -- Discovered
+        true, -- Blueprint compat
+        true) -- Eternal compat
 
     joker_cassette:register()
 
@@ -1304,7 +1308,11 @@ function SMODS.INIT.Bunco()
         {x = 2, y = 0}, -- Sprite position
         loc_mosaic, -- Localization
         2, -- Rarity
-        4) -- Cost
+        4, -- Cost
+        nil, -- Unlocked
+        nil, -- Discovered
+        true, -- Blueprint compat
+        true) -- Eternal compat
 
     joker_mosaic:register()
 
@@ -1338,7 +1346,11 @@ function SMODS.INIT.Bunco()
         {x = 3, y = 0}, -- Sprite position
         loc_voxel, -- Localization
         2, -- Rarity
-        5) -- Cost
+        5, -- Cost
+        nil, -- Unlocked
+        nil, -- Discovered
+        true, -- Blueprint compat
+        true) -- Eternal compat
 
     joker_voxel:register()
 
@@ -1378,7 +1390,11 @@ function SMODS.INIT.Bunco()
         {x = 4, y = 0}, -- Sprite position
         loc_crop, -- Localization
         1, -- Rarity
-        4) -- Cost
+        4, -- Cost
+        nil, -- Unlocked
+        nil, -- Discovered
+        true, -- Blueprint compat
+        true) -- Eternal compat
 
     joker_crop:register()
 
@@ -1435,7 +1451,11 @@ function SMODS.INIT.Bunco()
         {x = 5, y = 0}, -- Sprite position
         loc_xray, -- Localization
         1, -- Rarity
-        4) -- Cost
+        4, -- Cost
+        nil, -- Unlocked
+        nil, -- Discovered
+        true, -- Blueprint compat
+        true) -- Eternal compat
 
     joker_xray:register()
 
@@ -1485,7 +1505,11 @@ function SMODS.INIT.Bunco()
         {x = 0, y = 1}, -- Sprite position
         loc_dread, -- Localization
         3, -- Rarity
-        8) -- Cost
+        8, -- Cost
+        nil, -- Unlocked
+        nil, -- Discovered
+        false, -- Blueprint compat
+        true) -- Eternal compat
 
     joker_dread:register()
 
@@ -1544,7 +1568,11 @@ function SMODS.INIT.Bunco()
         {x = 1, y = 1}, -- Sprite position
         loc_prehistoric, -- Localization
         2, -- Rarity
-        5) -- Cost
+        5, -- Cost
+        nil, -- Unlocked
+        nil, -- Discovered
+        true, -- Blueprint compat
+        true) -- Eternal compat
 
     joker_prehistoric:register()
 
@@ -1594,7 +1622,11 @@ function SMODS.INIT.Bunco()
         {x = 2, y = 1}, -- Sprite position
         loc_linocut, -- Localization
         2, -- Rarity
-        5) -- Cost
+        5, -- Cost
+        nil, -- Unlocked
+        nil, -- Discovered
+        false, -- Blueprint compat
+        true) -- Eternal compat
 
     joker_linocut:register()
 
@@ -1633,7 +1665,11 @@ function SMODS.INIT.Bunco()
         {x = 3, y = 1}, -- Sprite position
         loc_ghostprint, -- Localization
         2, -- Rarity
-        5) -- Cost
+        5, -- Cost
+        nil, -- Unlocked
+        nil, -- Discovered
+        true, -- Blueprint compat
+        true) -- Eternal compat
 
     joker_ghostprint:register()
 
@@ -1670,7 +1706,11 @@ function SMODS.INIT.Bunco()
         {x = 4, y = 1}, -- Sprite position
         loc_loanshark, -- Localization
         2, -- Rarity
-        -20) -- Cost
+        -20, -- Cost
+        nil, -- Unlocked
+        nil, -- Discovered
+        false, -- Blueprint compat
+        true) -- Eternal compat
 
     joker_loanshark:register()
 
@@ -1698,7 +1738,11 @@ function SMODS.INIT.Bunco()
         {x = 5, y = 1}, -- Sprite position
         loc_basement, -- Localization
         1, -- Rarity
-        1) -- Cost
+        1, -- Cost
+        nil, -- Unlocked
+        nil, -- Discovered
+        true, -- Blueprint compat
+        true) -- Eternal compat
 
     joker_basement:register()
 
@@ -1742,7 +1786,11 @@ function SMODS.INIT.Bunco()
         {x = 0, y = 2}, -- Sprite position
         loc_shepherd, -- Localization
         1, -- Rarity
-        1) -- Cost
+        1, -- Cost
+        nil, -- Unlocked
+        nil, -- Discovered
+        true, -- Blueprint compat
+        true) -- Eternal compat
 
     joker_shepherd:register()
 
@@ -1788,7 +1836,11 @@ function SMODS.INIT.Bunco()
         {x = 1, y = 2}, -- Sprite position
         loc_knight, -- Localization
         1, -- Rarity
-        1) -- Cost
+        1, -- Cost
+        nil, -- Unlocked
+        nil, -- Discovered
+        true, -- Blueprint compat
+        true) -- Eternal compat
 
     joker_knight:register()
 
@@ -1854,7 +1906,11 @@ function SMODS.INIT.Bunco()
         {x = 2, y = 2}, -- Sprite position
         loc_jokermanjesterboy, -- Localization
         1, -- Rarity
-        1) -- Cost
+        1, -- Cost
+        nil, -- Unlocked
+        nil, -- Discovered
+        false, -- Blueprint compat
+        true) -- Eternal compat
 
     joker_jokermanjesterboy:register()
 
@@ -1984,7 +2040,11 @@ function SMODS.INIT.Bunco()
         {x = 3, y = 2}, -- Sprite position
         loc_dogs, -- Localization
         1, -- Rarity
-        1) -- Cost
+        1, -- Cost
+        nil, -- Unlocked
+        nil, -- Discovered
+        true, -- Blueprint compat
+        true) -- Eternal compat
 
     joker_dogs:register()
 
@@ -2070,7 +2130,11 @@ function SMODS.INIT.Bunco()
         {x = 5, y = 2}, -- Sprite position
         loc_fiendish, -- Localization
         1, -- Rarity
-        1) -- Cost
+        1, -- Cost
+        nil, -- Unlocked
+        nil, -- Discovered
+        false, -- Blueprint compat
+        true) -- Eternal compat
 
     joker_fiendish:register()
 
