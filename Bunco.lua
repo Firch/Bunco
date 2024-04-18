@@ -30,8 +30,9 @@
 --
 -- Generic Functions (FUNC)
 --
--- Jokers: Cassette (CASS), Mosaic (MOSA), Voxel (VOXE), Crop Circles (CROP), X-Ray (XRAY), Dread (DREA), Prehistoric (PREH),
--- Linocut (LINO), Ghost Print (GHOS), Loan Shark (LOAN), Basement (BASE), Shepherd (SHEP), Knight (KNIG), JM & JB (JMJB), Dogs Playing Poker (DOGS), Righthook (RIGH), Fiendish (FIEN)
+-- Ver 1 Jokers: Cassette (CASS), Mosaic (MOSA), Voxel (VOXE), Crop Circles (CROP), X-Ray (XRAY), Dread (DREA), Prehistoric (PREH),
+-- Ver 2: Linocut (LINO), Ghost Print (GHOS), Loan Shark (LOAN), Basement (BASE), Shepherd (SHEP), Knight (KNIG), JM & JB (JMJB), Dogs Playing Poker (DOGS), Righthook (RIGH), Fiendish (FIEN),
+-- Jimbo (JIMB)
 --  Base (BAS)
 --  Localization (LOC)
 --  Additional function(s) (FUN)
@@ -653,7 +654,7 @@ function SMODS.INIT.Bunco()
             self.sell_cost = -100
         end
 
-        -- Jimbo Joker additional function (\JIMB_FUN1)
+        -- Jimbo Joker additional function (\JIMB_FUN)
         local function emotion(value)
             if true_jimbo ~= nil then
                 if value == 'normal' then
@@ -1685,7 +1686,8 @@ function SMODS.INIT.Bunco()
     local loc_basement = {
         ['name'] = 'Basement Joker',
         ['text'] = {
-            [1] = ' '
+            [1] = 'When {C:attention}Boss Blind{} is',
+            [2] = 'defeated, create a {C:spectral}Spectral{} card'
         }
     }
 
@@ -1702,6 +1704,23 @@ function SMODS.INIT.Bunco()
 
     SMODS.Jokers.j_basement.calculate = function(self, context)
 
+        if context.end_of_round and G.GAME.blind.boss and not context.other_card then
+
+            if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+                G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'before',
+                    delay = 0.0,
+                    func = (function()
+                            local card = create_card('Spectral', G.consumeables, nil, nil, nil, nil, nil)
+                            card:add_to_deck()
+                            G.consumeables:emplace(card)
+                            G.GAME.consumeable_buffer = 0
+                            forced_message(localize('k_plus_spectral'), self, G.C.SECONDARY_SET.Spectral)
+                        return true
+                end)}))
+            end
+        end
     end
 
     -- Shepherd Joker (\SHEP_BAS):
@@ -1839,7 +1858,7 @@ function SMODS.INIT.Bunco()
 
     joker_jokermanjesterboy:register()
 
-    -- JM & JB use Card:open for some things. Check JMJB_FUN
+    -- JM & JB use Card:open and create_card for some things. Check JMJB_FUN
 
     SMODS.Jokers.j_jokermanjesterboy.calculate = function(self, context)
 
@@ -1978,7 +1997,7 @@ function SMODS.INIT.Bunco()
             for i = 1, #context.scoring_hand do
                 if context.scoring_hand[i]:get_id() >= 6 then
                     condition = false
-                end 
+                end
             end
 
             if condition then
@@ -2087,6 +2106,8 @@ function SMODS.INIT.Bunco()
         {x = 1, y = 0})
 
     joker_jimbo:register()
+
+    -- Jimbo Joker uses Card:add_to_deck for some things. Check JIMB_FUN
 
     function G.UIDEF.jimbo_speech_bubble(text_key, loc_vars)
         local text = {}
