@@ -2,7 +2,7 @@
 --- MOD_NAME: Bunco
 --- MOD_ID: Bunco
 --- MOD_AUTHOR: [Firch]
---- MOD_DESCRIPTION: New high-quality jokers, new enhancements and editions!
+--- MOD_DESCRIPTION: Vanilla-style mod that adds various things, such as Jokers!
 
 ----------------------------------------------
 ------------MOD CODE -------------------------
@@ -33,7 +33,8 @@
 -- Generic Functions (FUNC)
 --
 -- Ver 1 Jokers: Cassette (CASS), Mosaic (MOSA), Voxel (VOXE), Crop Circles (CROP), X-Ray (XRAY), Dread (DREA), Prehistoric (PREH),
--- Ver 2: Linocut (LINO), Ghost Print (GHOS), Loan Shark (LOAN), Basement (BASE), Shepherd (SHEP), Knight (KNIG), JM & JB (JMJB), Dogs Playing Poker (DOGS), Righthook (RIGH), Fiendish (FIEN), Carnival (CARN)
+-- Ver 2: Linocut (LINO), Ghost Print (GHOS), Loan Shark (LOAN), Basement (BASE), Shepherd (SHEP), Knight (KNIG), JM & JB (JMJB),
+-- Dogs Playing Poker (DOGS), Righthook (RIGH), Fiendish (FIEN), Carnival (CARN), Envious (ENVI), Proud (PROU)
 -- Jimbo (JIMB)
 --  Base (BAS)
 --  Localization (LOC)
@@ -247,7 +248,7 @@ function SMODS.INIT.Bunco()
         if suit == 'Fleurons' then
 
             SMODS.Card:new_suit('Fleurons', 'exotic_cards', 'exotic_cards_high_contrast', { y = 0 }, 'exotic_cards_ui', 'exotic_cards_ui_high_contrast',
-                { x = 0, y = 0 }, 'ec2616', 'ec2616')
+                { x = 0, y = 0 }, 'd6901a', 'd6901a')
 
             if G.GAME ~= nil and (G.GAME.Fleurons == false or G.GAME.Fleurons == nil) and initial == nil then
 
@@ -1270,9 +1271,9 @@ function SMODS.INIT.Bunco()
         end
 
         if context.individual and context.cardarea == G.play then
-            if context.other_card:is_suit('Hearts') or 
-            context.other_card:is_suit('Diamonds') or 
-            context.other_card:is_suit('Stars') then
+            if context.other_card:is_suit('Hearts') or
+            context.other_card:is_suit('Diamonds') or
+            context.other_card:is_suit('Fleurons') then
                 if self.ability.extra.side == 'A' then
                     return {
                         chips = self.ability.extra.chips,
@@ -1281,9 +1282,9 @@ function SMODS.INIT.Bunco()
                 end
             end
 
-            if context.other_card:is_suit('Spades') or 
-            context.other_card:is_suit('Clubs') or 
-            context.other_card:is_suit('Moons') then
+            if context.other_card:is_suit('Spades') or
+            context.other_card:is_suit('Clubs') or
+            context.other_card:is_suit('Halberds') then
                 if self.ability.extra.side == 'B' then
                     return {
                         mult = self.ability.extra.mult,
@@ -1469,7 +1470,7 @@ function SMODS.INIT.Bunco()
 
     SMODS.Jokers.j_xray.calculate = function(self, context)
 
-        if context.emplace and context.emplaced_card.facing == 'back' then
+        if context.emplace and context.emplaced_card.facing == 'back' and not context.blueprint then
             self.ability.extra.xmult = self.ability.extra.xmult + 0.2
 
             forced_message('X'..tostring(self.ability.extra.xmult)..' Mult', self, G.C.RED)
@@ -1687,7 +1688,9 @@ function SMODS.INIT.Bunco()
                 mult = mult + G.GAME.hands[self.ability.extra.last_hand].mult
                 chips = hand_chips + G.GAME.hands[self.ability.extra.last_hand].chips
                 update_hand_text({delay = 0, sound = '', modded = true}, {chips = chips, mult = mult})
-                forced_message(tostring(self.ability.extra.last_hand)..'!', self, G.C.HAND_LEVELS[G.GAME.hands[self.ability.extra.last_hand].level])
+                if not context.blueprint then
+                    forced_message(tostring(self.ability.extra.last_hand)..'!', self, G.C.HAND_LEVELS[G.GAME.hands[self.ability.extra.last_hand].level])
+                end
             end
 
             self.ability.extra.last_hand = G.GAME.last_hand_played
@@ -1762,7 +1765,9 @@ function SMODS.INIT.Bunco()
                     trigger = 'before',
                     delay = 0.0,
                     func = (function()
-                            forced_message(localize('k_plus_spectral'), self, G.C.SECONDARY_SET.Spectral)
+                            if not context.blueprint then
+                                forced_message(localize('k_plus_spectral'), self, G.C.SECONDARY_SET.Spectral)
+                            end
                             local card = create_card('Spectral', G.consumeables, nil, nil, nil, nil, nil)
                             card:add_to_deck()
                             G.consumeables:emplace(card)
@@ -1801,7 +1806,7 @@ function SMODS.INIT.Bunco()
     joker_shepherd:register()
 
     SMODS.Jokers.j_shepherd.calculate = function(self, context)
-        if #context.scoring_hand == 2 and context.after and next(context.poker_hands['Pair']) then
+        if #context.scoring_hand == 2 and context.after and next(context.poker_hands['Pair']) and not context.blueprint then
             self.ability.extra.chips = self.ability.extra.chips + 2
 
             forced_message('+'..tostring(self.ability.extra.chips)..' Chips', self, G.C.BLUE)
@@ -1854,7 +1859,7 @@ function SMODS.INIT.Bunco()
 
     SMODS.Jokers.j_knight.calculate = function(self, context)
 
-        if context.setting_blind and not self.getting_sliced then
+        if context.setting_blind and not self.getting_sliced and not context.blueprint then
             self.ability.extra.mult = self.ability.extra.mult + 6
 
             G.E_MANAGER:add_event(Event({ trigger = 'after', delay = 0.2, func = function()
@@ -1869,7 +1874,7 @@ function SMODS.INIT.Bunco()
             forced_message('+'..tostring(self.ability.extra.mult)..' Mult', self, G.C.RED)
         end
 
-        if context.break_positions then
+        if context.break_positions and not context.blueprint then
             if self.ability.extra.mult ~= 0 then
                 self.ability.extra.mult = 0
 
@@ -2156,7 +2161,10 @@ function SMODS.INIT.Bunco()
     local loc_carnival = {
         ['name'] = 'Carnival',
         ['text'] = {
-            [1] = 'Each Ante is played twice'
+            [1] = 'After beating Ante,',
+            [2] = 'go one Ante back,',
+            [3] = 'will not work on',
+            [4] = 'the same Ante twice'
         }
     }
 
@@ -2195,6 +2203,90 @@ function SMODS.INIT.Bunco()
             end
 
             table.insert(self.ability.extra.ante_list, G.GAME.round_resets.ante)
+        end
+    end
+
+    -- Envious Joker (\ENVI_BAS):
+    SMODS.Sprite:new('j_envious', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
+
+    local loc_envious = {
+        ['name'] = 'Envious Joker',
+        ['text'] = {
+            [1] = 'Played cards with',
+            [2] = '{C:fleurons}Fleuron{} suit give',
+            [3] = '{C:mult}+#1#{} Mult when scored'
+        }
+    }
+
+    local joker_envious = SMODS.Joker:new(
+        'Envious Joker', -- Name
+        'envious', -- Slug
+        {extra = {mult = 12}}, -- Config
+        {x = 1, y = 3}, -- Sprite position
+        loc_envious, -- Localization
+        1, -- Rarity
+        5, -- Cost
+        nil, -- Unlocked
+        nil, -- Discovered
+        true, -- Blueprint compat
+        true) -- Eternal compat
+
+    joker_envious:register()
+
+    SMODS.Jokers.j_envious.calculate = function(self, context)
+
+        if context.individual and context.cardarea == G.play and context.other_card:is_suit('Fleurons') then
+            return {
+                message = localize {
+                    type = 'variable',
+                    key = 'a_mult',
+                    vars = { self.ability.extra.mult }
+                },
+                mult = self.ability.extra.mult,
+                card = self,
+            }
+        end
+    end
+
+    -- Proud Joker (\PROU_BAS):
+    SMODS.Sprite:new('j_proud', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
+
+    local loc_proud = {
+        ['name'] = 'Proud Joker',
+        ['text'] = {
+            [1] = 'Played cards with',
+            [2] = '{C:halberds}Halberd{} suit give',
+            [3] = '{C:mult}+#1#{} Mult when scored'
+        }
+    }
+
+    local joker_proud = SMODS.Joker:new(
+        'Proud Joker', -- Name
+        'proud', -- Slug
+        {extra = {mult = 12}}, -- Config
+        {x = 2, y = 3}, -- Sprite position
+        loc_proud, -- Localization
+        1, -- Rarity
+        5, -- Cost
+        nil, -- Unlocked
+        nil, -- Discovered
+        true, -- Blueprint compat
+        true) -- Eternal compat
+
+    joker_proud:register()
+
+    SMODS.Jokers.j_proud.calculate = function(self, context)
+
+        if context.individual and context.cardarea == G.play and context.other_card:is_suit('Halberds') then
+            return {
+                message = localize {
+                    type = 'variable',
+                    key = 'a_mult',
+                    vars = { self.ability.extra.mult }
+                },
+                mult = self.ability.extra.mult,
+                card = self,
+            }
         end
     end
 
@@ -2341,19 +2433,23 @@ function Card.generate_UIBox_ability_table(self)
         elseif self.ability.name == 'Loan Shark' then -- Loan Shark Joker localization (\LOAN_LOC)
             -- Scammed
         elseif self.ability.name == 'Basement Joker' then -- Basement Joker localization (\BASE_LOC)
-            -- Sick Fries!
+            -- Explosive diarrhea
         elseif self.ability.name == 'Shepherd Joker' then -- Shepherd Joker localization (\SHEP_LOC)
             loc_vars = {self.ability.extra.chips}
         elseif self.ability.name == 'Joker Knight' then -- Joker Knight localization (\KNIG_LOC)
             loc_vars = {self.ability.extra.mult}
         elseif self.ability.name == 'Joker Man & Jester Boy Trading Card No. 54' then  -- JM & JB localization (\JMJB_LOC)
-            -- Invisible Boatmobile!
+            -- Invisible boatmobile!
         elseif self.ability.name == 'Dogs Playing Poker' then -- Dogs Playing Poker Joker localization (\DOGS_LOC)
             loc_vars = {self.ability.extra.xmult}
         elseif self.ability.name == 'Righthook Joker' then -- Righthook Joker localization (\RIGH_LOC)
             -- KNOCKOUT!
         elseif self.ability.name == 'Fiendish Joker' then -- Fiendish Joker localization (\FIEN_LOC)
             loc_vars = {G.GAME.probabilities.normal, self.ability.extra.odds}
+        elseif self.ability.name == 'Envious Joker' then -- Envious Joker localization (\ENVI_LOC)
+            loc_vars = {self.ability.extra.mult}
+        elseif self.ability.name == 'Proud Joker' then -- Proud Joker localization (\PROU_LOC)
+            loc_vars = {self.ability.extra.mult}
         else
             customJoker = false
         end
