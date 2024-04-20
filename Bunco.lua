@@ -1,8 +1,8 @@
 --- STEAMODDED HEADER
 --- MOD_NAME: Bunco
 --- MOD_ID: Bunco
---- MOD_AUTHOR: [Firch]
---- MOD_DESCRIPTION: Vanilla-style mod that adds various things, such as Jokers!
+--- MOD_AUTHOR: [Firch & RENREN]
+--- MOD_DESCRIPTION: Mod aiming for vanilla style, currently adding 20 new Jokers and some hidden things!
 
 ----------------------------------------------
 ------------MOD CODE -------------------------
@@ -29,13 +29,14 @@
 --  Initializing (INI) - manages the appearing and disappearing of suits in suit/card list
 --  Planets (PLA)
 --  Tarots (TAR)
+--  Deletion (DEL)
 --
 -- Generic Functions (FUNC)
 --
 -- Ver 1 Jokers: Cassette (CASS), Mosaic (MOSA), Voxel (VOXE), Crop Circles (CROP), X-Ray (XRAY), Dread (DREA), Prehistoric (PREH),
 -- Ver 2: Linocut (LINO), Ghost Print (GHOS), Loan Shark (LOAN), Basement (BASE), Shepherd (SHEP), Knight (KNIG), JM & JB (JMJB),
 -- Dogs Playing Poker (DOGS), Righthook (RIGH), Fiendish (FIEN), Carnival (CARN), Envious (ENVI), Proud (PROU)
--- Jimbo (JIMB)
+-- Disabled: Jimbo (JIMB)
 --  Base (BAS)
 --  Localization (LOC)
 --  Additional function(s) (FUN)
@@ -44,7 +45,7 @@ function SMODS.INIT.Bunco()
 
     ---- Config (\CONF):
 
-    local enable_jimbo = false
+    local enable_jimbo = false -- He is very broken right now! Use at your own risk.
 
     ---- Global variables (\GLOB):
 
@@ -116,10 +117,10 @@ function SMODS.INIT.Bunco()
     function Game:init_game_object()
         local t = init_game_object_original(self)
 
-        t.hands['Spectrum Five'] =     { visible = true, order = t.hands['Flush Five'].order + 0.1,     mult = 18, chips = 180, s_mult = 18, s_chips = 180, level = 1, l_mult = 5, l_chips = 60, played = 0, played_this_round = 0, example = { { 'S_A', true }, { 'H_A', true }, { 'C_A', true }, { 'D_A', true }, { 'HALBERDS_A', true } } }
-        t.hands['Spectrum House'] =    { visible = true, order = t.hands['Flush Five'].order - 0.1, mult = 15,  chips = 150,  s_mult = 15,  s_chips = 150,  level = 1, l_mult = 5, l_chips = 50, played = 0, played_this_round = 0, example = { { 'D_7', true }, { 'H_7', true }, { 'FLEURONS_7', true }, { 'HALBERDS_4', true }, { 'C_4', true } } }
-        t.hands['Straight Spectrum'] = { visible = true, order = t.hands['Flush Five'].order - 0.1, mult = 10,  chips = 130,  s_mult = 13,  s_chips = 120,  level = 1, l_mult = 5, l_chips = 35, played = 0, played_this_round = 0, example = { { 'S_Q', true }, { 'FLEURONS_J', true }, { 'C_T', true }, { 'HALBERDS_9', true }, { 'H_8', true } } }
-        t.hands['Spectrum'] =          { visible = true, order = t.hands['Full House'].order + 0.1,     mult = 6,  chips = 50,  s_mult = 6,  s_chips = 50,  level = 1, l_mult = 3, l_chips = 25, played = 0, played_this_round = 0, example = { { 'H_2', true }, { 'D_5', true }, { 'S_8', true }, { 'C_T', true }, { 'FLEURONS_A', true } } }
+        t.hands['Spectrum Five'] =     { visible = false, order = t.hands['Flush Five'].order + 0.1,     mult = 18, chips = 180, s_mult = 18, s_chips = 180, level = 1, l_mult = 5, l_chips = 60, played = 0, played_this_round = 0, example = { { 'S_A', true }, { 'H_A', true }, { 'C_A', true }, { 'D_A', true }, { 'HALBERDS_A', true } } }
+        t.hands['Spectrum House'] =    { visible = false, order = t.hands['Flush Five'].order - 0.1, mult = 15,  chips = 150,  s_mult = 15,  s_chips = 150,  level = 1, l_mult = 5, l_chips = 50, played = 0, played_this_round = 0, example = { { 'D_7', true }, { 'H_7', true }, { 'FLEURONS_7', true }, { 'HALBERDS_4', true }, { 'C_4', true } } }
+        t.hands['Straight Spectrum'] = { visible = false, order = t.hands['Flush Five'].order - 0.1, mult = 10,  chips = 130,  s_mult = 13,  s_chips = 120,  level = 1, l_mult = 5, l_chips = 35, played = 0, played_this_round = 0, example = { { 'S_Q', true }, { 'FLEURONS_J', true }, { 'C_T', true }, { 'HALBERDS_9', true }, { 'H_8', true } } }
+        t.hands['Spectrum'] =          { visible = false, order = t.hands['Full House'].order + 0.1,     mult = 6,  chips = 50,  s_mult = 6,  s_chips = 50,  level = 1, l_mult = 3, l_chips = 25, played = 0, played_this_round = 0, example = { { 'H_2', true }, { 'D_5', true }, { 'S_8', true }, { 'C_T', true }, { 'FLEURONS_A', true } } }
         return t
     end
 
@@ -455,6 +456,26 @@ function SMODS.INIT.Bunco()
         sendDebugMessage('Are halberds known? - '..tostring(saved_game and saved_game.GAME.Halberds))
     end
 
+    local original_evaluate_play = G.FUNCS.evaluate_play
+
+    G.FUNCS.evaluate_play = function(e) -- Unlocks exotic suits in the run
+        original_evaluate_play(e)
+        local text, disp_text, poker_hands, scoring_hand, non_loc_disp_text = G.FUNCS.get_poker_hand_info(G.play.cards)
+
+        if text == ('Spectrum' or 'Straight Spectrum' or 'Spectrum House' or 'Spectrum Five') and G.GAME.hands[text].played > 0 then
+
+            if G.GAME.Fleurons == nil then
+                acknowledge('Fleurons')
+                forget('Fleurons')
+            end
+
+            if G.GAME.Halberds == nil then
+                acknowledge('Halberds')
+                forget('Halberds')
+            end
+        end
+    end
+
     local original_card_remove = Card.remove
 
     function Card:remove()
@@ -503,7 +524,7 @@ function SMODS.INIT.Bunco()
     c_sedna:register()
     c_makemake:register()
 
-    -- Exotic cards Tarots (\EX_TAR1):
+    -- Exotic cards Tarots (\EX_TAR):
 
     local text_tarot_sky = { -- Sky (Fleuron) tarot
         [1] = 'Converts up to',
@@ -1112,10 +1133,11 @@ function SMODS.INIT.Bunco()
             end
         end
 
-        -- Exotic suit Tarots (\EX_TAR2):
+        -- Exotic suit deletion (\EX_DEL1):
 
-        if (G.GAME.Fleurons == nil and card.ability.name == 'The Sky') or (G.GAME.Halberds == nil and card.ability.name == 'The Abyss') then
-            sendDebugMessage('Exotic tarot appeared! But the exotic suit did not exist.')
+        if (G.GAME.Fleurons == nil and card.ability.name == 'The Sky') or (G.GAME.Halberds == nil and card.ability.name == 'The Abyss')
+        or (G.GAME.Fleurons == nil and card.ability.name == 'Envious Joker') or (G.GAME.Fleurons == nil and card.ability.name == 'Proud Joker') then
+            sendDebugMessage('Exotic card appeared! But the exotic suit did not exist.')
             sendDebugMessage('Rerolling...')
             card:remove()
             return create_card(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
@@ -1129,10 +1151,11 @@ function SMODS.INIT.Bunco()
     function create_card_for_shop(area)
         local card = original_create_card_for_shop(area)
 
-        -- Exotic suit Tarots (\EX_TAR3):
+        -- Exotic suit deletion (\EX_DEL2):
 
-        if (G.GAME.Fleurons == nil and card.ability.name == 'The Sky') or (G.GAME.Halberds == nil and card.ability.name == 'The Abyss') then
-            sendDebugMessage('Exotic tarot appeared! But the exotic suit did not exist.')
+        if (G.GAME.Fleurons == nil and card.ability.name == 'The Sky') or (G.GAME.Halberds == nil and card.ability.name == 'The Abyss')
+        or (G.GAME.Fleurons == nil and card.ability.name == 'Envious Joker') or (G.GAME.Fleurons == nil and card.ability.name == 'Proud Joker') then
+            sendDebugMessage('Exotic card appeared! But the exotic suit did not exist.')
             sendDebugMessage('Rerolling...')
             card:remove()
             return create_card_for_shop(area)
@@ -1149,7 +1172,7 @@ function SMODS.INIT.Bunco()
 
         if G.jokers ~= nil then
             for _, v in ipairs(G.jokers.cards) do
-                if v.ability.name == 'Fiendish Joker' and not self.debuff then
+                if v.ability.name == 'Fiendish Joker' and not v.debuff then
                     if mod > 0 then
                         if pseudorandom('fiendish') < G.GAME.probabilities.normal / v.ability.extra.odds then
                             mod = 1
@@ -1167,7 +1190,7 @@ function SMODS.INIT.Bunco()
     function Card:add_speech_bubble(text_key, align, loc_vars)
         if self.children.speech_bubble then self.children.speech_bubble:remove() end
         self.config.speech_bubble_align = {align=align or 'bm', offset = {x=0,y=0}, parent = self}
-        self.children.speech_bubble = 
+        self.children.speech_bubble =
         UIBox{
             definition = G.UIDEF.jimbo_speech_bubble(text_key, loc_vars),
             config = self.config.speech_bubble_align
@@ -1311,7 +1334,7 @@ function SMODS.INIT.Bunco()
     local joker_mosaic = SMODS.Joker:new(
         'Mosaic Joker', -- Name
         'mosaic', -- Slug
-        {extra = {mult = 4}}, -- Config
+        {extra = {mult = 6}}, -- Config
         {x = 2, y = 0}, -- Sprite position
         loc_mosaic, -- Localization
         2, -- Rarity
@@ -1384,9 +1407,9 @@ function SMODS.INIT.Bunco()
     local loc_crop = {
         ['name'] = 'Crop Circles',
         ['text'] = {
-            [1] = 'Each circle in suit and rank',
-            [2] = 'of played card gives',
-            [3] = '{C:mult}+#1#{} Mult when scored'
+            [1] = '{C:clubs}Clubs{} give {C:mult}+3{} Mult,',
+            [2] = '8 give {C:mult}+2{} Mult,',
+            [3] = 'Q, 10, 9, 6 give {C:mult}+1{} Mult'
         }
     }
 
@@ -1541,17 +1564,20 @@ function SMODS.INIT.Bunco()
                 self.ability.extra.level_up_list[context.scoring_name] = 2
             end
 
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.3,
+                func = function()
+                    for i = 1, #self.ability.extra.trash_list do
+                        self.ability.extra.trash_list[i]:start_dissolve(nil, nil, 3)
+                    end
+                    self.ability.extra.trash_list = {}
+            return true end }))
+
             return {
                 colour = G.C.RED,
                 message = 'Level up!'
             }
-        end
-
-        if context.end_of_round and G.GAME.current_round.hands_left == 0 then
-            for i = 1, #self.ability.extra.trash_list do
-                self.ability.extra.trash_list[i]:start_dissolve()
-            end
-            self.ability.extra.trash_list = {}
         end
     end
 
@@ -1629,7 +1655,7 @@ function SMODS.INIT.Bunco()
         {x = 2, y = 1}, -- Sprite position
         loc_linocut, -- Localization
         2, -- Rarity
-        5, -- Cost
+        4, -- Cost
         nil, -- Unlocked
         nil, -- Discovered
         false, -- Blueprint compat
@@ -1672,7 +1698,7 @@ function SMODS.INIT.Bunco()
         {x = 3, y = 1}, -- Sprite position
         loc_ghostprint, -- Localization
         2, -- Rarity
-        5, -- Cost
+        6, -- Cost
         nil, -- Unlocked
         nil, -- Discovered
         true, -- Blueprint compat
@@ -1704,7 +1730,7 @@ function SMODS.INIT.Bunco()
         ['name'] = 'Loan Shark',
         ['text'] = {
             [1] = 'Grants {C:money}$50',
-            [2] = 'when acquired.'
+            [2] = 'when acquired'
         }
     }
 
@@ -1715,7 +1741,7 @@ function SMODS.INIT.Bunco()
         {x = 4, y = 1}, -- Sprite position
         loc_loanshark, -- Localization
         2, -- Rarity
-        -20, -- Cost
+        3, -- Cost
         nil, -- Unlocked
         nil, -- Discovered
         false, -- Blueprint compat
@@ -1746,8 +1772,8 @@ function SMODS.INIT.Bunco()
         {}, -- Config
         {x = 5, y = 1}, -- Sprite position
         loc_basement, -- Localization
-        1, -- Rarity
-        1, -- Cost
+        3, -- Rarity
+        8, -- Cost
         nil, -- Unlocked
         nil, -- Discovered
         true, -- Blueprint compat
@@ -1784,8 +1810,8 @@ function SMODS.INIT.Bunco()
     local loc_shepherd = {
         ['name'] = 'Shepherd Joker',
         ['text'] = {
-            [1] = 'Gains {C:chips}+2{} Chips',
-            [2] = 'when played hand is a {C:attention}Pair',
+            [1] = 'Gains {C:chips}+8{} Chips',
+            [2] = 'when played hand contains {C:attention}Pair',
             [3] = '{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)'
         }
     }
@@ -1797,7 +1823,7 @@ function SMODS.INIT.Bunco()
         {x = 0, y = 2}, -- Sprite position
         loc_shepherd, -- Localization
         1, -- Rarity
-        1, -- Cost
+        5, -- Cost
         nil, -- Unlocked
         nil, -- Discovered
         true, -- Blueprint compat
@@ -1806,8 +1832,8 @@ function SMODS.INIT.Bunco()
     joker_shepherd:register()
 
     SMODS.Jokers.j_shepherd.calculate = function(self, context)
-        if #context.scoring_hand == 2 and context.after and next(context.poker_hands['Pair']) and not context.blueprint then
-            self.ability.extra.chips = self.ability.extra.chips + 2
+        if context.after and next(context.poker_hands['Pair']) and not context.blueprint then
+            self.ability.extra.chips = self.ability.extra.chips + 8
 
             forced_message('+'..tostring(self.ability.extra.chips)..' Chips', self, G.C.BLUE)
         end
@@ -1834,7 +1860,7 @@ function SMODS.INIT.Bunco()
         ['name'] = 'Joker Knight',
         ['text'] = {
             [1] = 'When {C:attention}Blind{} is selected,',
-            [2] = 'shuffles all Jokers and gains {C:red}+6{} Mult,',
+            [2] = 'shuffles all Jokers and gains {C:red}+4{} Mult,',
             [3] = 'resets when any Joker is rearranged',
             [4] = '{C:inactive}(Currently {C:red}+#1#{C:inactive} Mult)'
         }
@@ -1846,8 +1872,8 @@ function SMODS.INIT.Bunco()
         {extra = {mult = 0}}, -- Config
         {x = 1, y = 2}, -- Sprite position
         loc_knight, -- Localization
-        1, -- Rarity
-        1, -- Cost
+        2, -- Rarity
+        6, -- Cost
         nil, -- Unlocked
         nil, -- Discovered
         true, -- Blueprint compat
@@ -1860,7 +1886,7 @@ function SMODS.INIT.Bunco()
     SMODS.Jokers.j_knight.calculate = function(self, context)
 
         if context.setting_blind and not self.getting_sliced and not context.blueprint then
-            self.ability.extra.mult = self.ability.extra.mult + 6
+            self.ability.extra.mult = self.ability.extra.mult + 4
 
             G.E_MANAGER:add_event(Event({ trigger = 'after', delay = 0.2, func = function()
                 G.E_MANAGER:add_event(Event({ func = function() G.jokers:shuffle('aajk'); play_sound('cardSlide1', 0.85);return true end })) 
@@ -1916,8 +1942,8 @@ function SMODS.INIT.Bunco()
         {}, -- Config
         {x = 2, y = 2}, -- Sprite position
         loc_jokermanjesterboy, -- Localization
-        1, -- Rarity
-        1, -- Cost
+        2, -- Rarity
+        5, -- Cost
         nil, -- Unlocked
         nil, -- Discovered
         false, -- Blueprint compat
@@ -2051,7 +2077,7 @@ function SMODS.INIT.Bunco()
         {x = 3, y = 2}, -- Sprite position
         loc_dogs, -- Localization
         1, -- Rarity
-        1, -- Cost
+        5, -- Cost
         nil, -- Unlocked
         nil, -- Discovered
         true, -- Blueprint compat
@@ -2092,7 +2118,8 @@ function SMODS.INIT.Bunco()
         ['name'] = 'Righthook Joker',
         ['text'] = {
             [1] = 'Retrigger rightmost played card',
-            [2] = 'in {C:attention}first hand{} of round'
+            [2] = 'three times in',
+            [3] = '{C:attention}first hand{} of round'
         }
     }
 
@@ -2102,7 +2129,12 @@ function SMODS.INIT.Bunco()
         {}, -- Config
         {x = 4, y = 2}, -- Sprite position
         loc_righthook, -- Localization
-        1, 1) -- Rarity & Cost. 1 - Common, 2 - Uncommon, 3 - Rare, 4 - Legendary
+        3, -- Rarity
+        8, -- Cost
+        nil, -- Unlocked
+        nil, -- Discovered
+        true, -- Blueprint compat
+        true) -- Eternal compat
 
     joker_righthook:register()
 
@@ -2114,7 +2146,7 @@ function SMODS.INIT.Bunco()
 
                 return {
                     message = localize('k_again_ex'),
-                    repetitions = 1,
+                    repetitions = 3,
                     card = self
                 }
                 end
@@ -2140,8 +2172,8 @@ function SMODS.INIT.Bunco()
         {extra = {odds = 2}}, -- Config
         {x = 5, y = 2}, -- Sprite position
         loc_fiendish, -- Localization
-        1, -- Rarity
-        1, -- Cost
+        2, -- Rarity
+        5, -- Cost
         nil, -- Unlocked
         nil, -- Discovered
         false, -- Blueprint compat
@@ -2175,7 +2207,7 @@ function SMODS.INIT.Bunco()
         {x = 0, y = 3}, -- Sprite position
         loc_carnival, -- Localization
         3, -- Rarity
-        8, -- Cost
+        10, -- Cost
         nil, -- Unlocked
         nil, -- Discovered
         false, -- Blueprint compat
