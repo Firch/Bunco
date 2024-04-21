@@ -1587,10 +1587,10 @@ function SMODS.INIT.Bunco()
     local loc_prehistoric = {
         ['name'] = 'Prehistoric Joker',
         ['text'] = {
-            [1] = '{C:mult}+#1#{} Mult for each',
-            [2] = 'card of the same rank and suit',
-            [3] = 'that was already',
-            [4] = 'played during this round'
+            [1] = '{C:mult}+#1#{} Mult for each card',
+            [2] = 'of the same rank and suit',
+            [3] = 'that was already played',
+            [4] = 'during this round'
         }
     }
 
@@ -1762,8 +1762,8 @@ function SMODS.INIT.Bunco()
     local loc_basement = {
         ['name'] = 'Basement Joker',
         ['text'] = {
-            [1] = 'When {C:attention}Boss Blind{} is',
-            [2] = 'defeated, create a {C:spectral}Spectral{} card'
+            [1] = 'When {C:attention}Boss Blind{} is defeated',
+            [2] = 'create a {C:spectral}Spectral{} card'
         }
     }
 
