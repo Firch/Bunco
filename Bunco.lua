@@ -1273,7 +1273,7 @@ function SMODS.INIT.Bunco()
         2, -- Rarity
         5, -- Cost
         nil, -- Unlocked
-        nil, -- Discovered
+        false, -- Discovered
         true, -- Blueprint compat
         true) -- Eternal compat
 
@@ -1340,7 +1340,7 @@ function SMODS.INIT.Bunco()
         2, -- Rarity
         4, -- Cost
         nil, -- Unlocked
-        nil, -- Discovered
+        false, -- Discovered
         true, -- Blueprint compat
         true) -- Eternal compat
 
@@ -1378,7 +1378,7 @@ function SMODS.INIT.Bunco()
         2, -- Rarity
         5, -- Cost
         nil, -- Unlocked
-        nil, -- Discovered
+        false, -- Discovered
         true, -- Blueprint compat
         true) -- Eternal compat
 
@@ -1422,7 +1422,7 @@ function SMODS.INIT.Bunco()
         1, -- Rarity
         4, -- Cost
         nil, -- Unlocked
-        nil, -- Discovered
+        false, -- Discovered
         true, -- Blueprint compat
         true) -- Eternal compat
 
@@ -1483,7 +1483,7 @@ function SMODS.INIT.Bunco()
         1, -- Rarity
         4, -- Cost
         nil, -- Unlocked
-        nil, -- Discovered
+        false, -- Discovered
         true, -- Blueprint compat
         true) -- Eternal compat
 
@@ -1537,7 +1537,7 @@ function SMODS.INIT.Bunco()
         3, -- Rarity
         8, -- Cost
         nil, -- Unlocked
-        nil, -- Discovered
+        false, -- Discovered
         false, -- Blueprint compat
         true) -- Eternal compat
 
@@ -1603,7 +1603,7 @@ function SMODS.INIT.Bunco()
         2, -- Rarity
         5, -- Cost
         nil, -- Unlocked
-        nil, -- Discovered
+        false, -- Discovered
         true, -- Blueprint compat
         true) -- Eternal compat
 
@@ -1657,7 +1657,7 @@ function SMODS.INIT.Bunco()
         2, -- Rarity
         4, -- Cost
         nil, -- Unlocked
-        nil, -- Discovered
+        false, -- Discovered
         false, -- Blueprint compat
         true) -- Eternal compat
 
@@ -1672,9 +1672,8 @@ function SMODS.INIT.Bunco()
                 G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.1,func = function()  context.scoring_hand[1]:change_suit(context.scoring_hand[2].config.card.suit);return true end }))
                 G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.15,func = function() context.scoring_hand[1]:flip();play_sound('tarot2', 1, 0.6);context.scoring_hand[1]:juice_up(0.3, 0.3);return true end }))
 
-                forced_message('Copied!', self, G.C.RED)
+                forced_message('Copied!', self, G.C.RED, true)
 
-                delay(0.5)
             end
         end
     end
@@ -1700,7 +1699,7 @@ function SMODS.INIT.Bunco()
         2, -- Rarity
         6, -- Cost
         nil, -- Unlocked
-        nil, -- Discovered
+        false, -- Discovered
         true, -- Blueprint compat
         true) -- Eternal compat
 
@@ -1715,7 +1714,9 @@ function SMODS.INIT.Bunco()
                 chips = hand_chips + G.GAME.hands[self.ability.extra.last_hand].chips
                 update_hand_text({delay = 0, sound = '', modded = true}, {chips = chips, mult = mult})
                 if not context.blueprint then
-                    forced_message(tostring(self.ability.extra.last_hand)..'!', self, G.C.HAND_LEVELS[G.GAME.hands[self.ability.extra.last_hand].level])
+
+                    forced_message(tostring(self.ability.extra.last_hand)..'!', self, G.C.HAND_LEVELS[G.GAME.hands[self.ability.extra.last_hand].level], true)
+
                 end
             end
 
@@ -1743,7 +1744,7 @@ function SMODS.INIT.Bunco()
         2, -- Rarity
         3, -- Cost
         nil, -- Unlocked
-        nil, -- Discovered
+        false, -- Discovered
         false, -- Blueprint compat
         true) -- Eternal compat
 
@@ -1775,7 +1776,7 @@ function SMODS.INIT.Bunco()
         3, -- Rarity
         8, -- Cost
         nil, -- Unlocked
-        nil, -- Discovered
+        false, -- Discovered
         true, -- Blueprint compat
         true) -- Eternal compat
 
@@ -1811,7 +1812,7 @@ function SMODS.INIT.Bunco()
         ['name'] = 'Shepherd Joker',
         ['text'] = {
             [1] = 'Gains {C:chips}+8{} Chips',
-            [2] = 'when played hand contains {C:attention}Pair',
+            [2] = 'when played hand contains a {C:attention}Pair',
             [3] = '{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)'
         }
     }
@@ -1825,7 +1826,7 @@ function SMODS.INIT.Bunco()
         1, -- Rarity
         5, -- Cost
         nil, -- Unlocked
-        nil, -- Discovered
+        false, -- Discovered
         true, -- Blueprint compat
         true) -- Eternal compat
 
@@ -1836,6 +1837,8 @@ function SMODS.INIT.Bunco()
             self.ability.extra.chips = self.ability.extra.chips + 8
 
             forced_message('+'..tostring(self.ability.extra.chips)..' Chips', self, G.C.BLUE)
+
+            delay(0.5)
         end
 
         if SMODS.end_calculate_context(context) then
@@ -1875,7 +1878,7 @@ function SMODS.INIT.Bunco()
         2, -- Rarity
         6, -- Cost
         nil, -- Unlocked
-        nil, -- Discovered
+        false, -- Discovered
         true, -- Blueprint compat
         true) -- Eternal compat
 
@@ -1945,7 +1948,7 @@ function SMODS.INIT.Bunco()
         2, -- Rarity
         5, -- Cost
         nil, -- Unlocked
-        nil, -- Discovered
+        false, -- Discovered
         false, -- Blueprint compat
         true) -- Eternal compat
 
@@ -2079,7 +2082,7 @@ function SMODS.INIT.Bunco()
         1, -- Rarity
         5, -- Cost
         nil, -- Unlocked
-        nil, -- Discovered
+        false, -- Discovered
         true, -- Blueprint compat
         true) -- Eternal compat
 
@@ -2132,7 +2135,7 @@ function SMODS.INIT.Bunco()
         3, -- Rarity
         8, -- Cost
         nil, -- Unlocked
-        nil, -- Discovered
+        false, -- Discovered
         true, -- Blueprint compat
         true) -- Eternal compat
 
@@ -2175,7 +2178,7 @@ function SMODS.INIT.Bunco()
         2, -- Rarity
         5, -- Cost
         nil, -- Unlocked
-        nil, -- Discovered
+        false, -- Discovered
         false, -- Blueprint compat
         true) -- Eternal compat
 
@@ -2209,7 +2212,7 @@ function SMODS.INIT.Bunco()
         3, -- Rarity
         10, -- Cost
         nil, -- Unlocked
-        nil, -- Discovered
+        false, -- Discovered
         false, -- Blueprint compat
         true) -- Eternal compat
 
@@ -2259,7 +2262,7 @@ function SMODS.INIT.Bunco()
         1, -- Rarity
         5, -- Cost
         nil, -- Unlocked
-        nil, -- Discovered
+        false, -- Discovered
         true, -- Blueprint compat
         true) -- Eternal compat
 
@@ -2301,7 +2304,7 @@ function SMODS.INIT.Bunco()
         1, -- Rarity
         5, -- Cost
         nil, -- Unlocked
-        nil, -- Discovered
+        false, -- Discovered
         true, -- Blueprint compat
         true) -- Eternal compat
 
@@ -2514,6 +2517,15 @@ function Card.generate_UIBox_ability_table(self)
             if self.sticker then
                 loc_vars = loc_vars or {}
                 loc_vars.sticker = self.sticker
+            end
+
+            if not self.config.center.discovered then
+                card_type = 'Undiscovered'
+
+                if self.area.config.collection then
+                    hide_desc = true
+                    badges = {}
+                end
             end
 
             return generate_card_ui(self.config.center, nil, loc_vars, card_type, badges, hide_desc, main_start,
