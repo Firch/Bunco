@@ -23,6 +23,10 @@ Then you simply drop the Bunco folder into your mods folder.
 **Q:** I can't see any cards in my collection!\
 **A:** That's not a question. But I'll answer anyways, the Jokers are needed to be discovered first, just like in the base game.
 
+## Known bugs/weird things:
+- The preview for new Poker Hands is a bit broken visually in the handlist
+- Probably doesn't work as intended with other suit mods
+
 ### Huge, enormous thanks to people that helped and supported Bunco's development:
 [@Mikadoe](https://github.com/MikaSchoenmakers)\
 [@Lyman](https://github.com/spikeof2010)\
