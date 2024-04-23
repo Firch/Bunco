@@ -675,11 +675,12 @@ function SMODS.INIT.Bunco()
     function Card:add_to_deck(from_debuff)
         original_add_to_deck(self, from_debuff)
 
-        -- Dread Joker additional function (\LOAN_FUN)
+        -- Loan Shark Joker additional function (\LOAN_FUN)
 
         if self.ability.name == 'Loan Shark' then
             ease_dollars(50)
-            self.sell_cost = -100
+            self.ability.extra_value = -200 - self.sell_cost
+            self:set_cost()
         end
 
         -- Jimbo Joker additional function (\JIMB_FUN)
@@ -1665,9 +1666,9 @@ function SMODS.INIT.Bunco()
 
     SMODS.Jokers.j_linocut.calculate = function(self, context)
 
-        if context.individual and context.cardarea == G.play and context.poker_hands and next(context.poker_hands['Pair']) then
+        if context.individual and context.cardarea == G.play and context.poker_hands ~= nil and context.poker_hands and next(context.poker_hands['Pair']) then
 
-            if #context.scoring_hand == 2 and context.scoring_hand[1] == context.other_card then
+            if context.scoring_hand ~= nil and #context.scoring_hand == 2 and context.scoring_hand[1] == context.other_card then
                 G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.15,func = function() context.scoring_hand[1]:flip();play_sound('card1', 1);context.scoring_hand[1]:juice_up(0.3, 0.3);return true end }))
                 G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.1,func = function()  context.scoring_hand[1]:change_suit(context.scoring_hand[2].config.card.suit);return true end }))
                 G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.15,func = function() context.scoring_hand[1]:flip();play_sound('tarot2', 1, 0.6);context.scoring_hand[1]:juice_up(0.3, 0.3);return true end }))
@@ -1833,7 +1834,7 @@ function SMODS.INIT.Bunco()
     joker_shepherd:register()
 
     SMODS.Jokers.j_shepherd.calculate = function(self, context)
-        if context.after and next(context.poker_hands['Pair']) and not context.blueprint then
+        if context.after and context.poker_hands ~= nil and next(context.poker_hands['Pair']) and not context.blueprint then
             self.ability.extra.chips = self.ability.extra.chips + 8
 
             forced_message('+'..tostring(self.ability.extra.chips)..' Chips', self, G.C.BLUE)
@@ -2094,9 +2095,11 @@ function SMODS.INIT.Bunco()
 
             local condition = true
 
-            for i = 1, #context.scoring_hand do
-                if context.scoring_hand[i]:get_id() >= 6 then
-                    condition = false
+            if context.scoring_hand ~= nil then
+                for i = 1, #context.scoring_hand do
+                    if context.scoring_hand[i]:get_id() >= 6 then
+                        condition = false
+                    end
                 end
             end
 
@@ -2143,17 +2146,13 @@ function SMODS.INIT.Bunco()
 
     SMODS.Jokers.j_righthook.calculate = function(self, context)
 
-        if context.repetition then
-            if context.cardarea == G.play then
-                if context.other_card == context.scoring_hand[#context.scoring_hand] and G.GAME.current_round.hands_played == 0 then
+        if context.repetition and context.cardarea == G.play and context.scoring_hand ~= nil and context.other_card == context.scoring_hand[#context.scoring_hand] and G.GAME.current_round.hands_played == 0 then
 
-                return {
-                    message = localize('k_again_ex'),
-                    repetitions = 3,
-                    card = self
-                }
-                end
-            end
+            return {
+                message = localize('k_again_ex'),
+                repetitions = 3,
+                card = self
+            }
         end
     end
 
