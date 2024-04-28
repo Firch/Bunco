@@ -36,7 +36,7 @@
 -- Ver 1 Jokers: Cassette (CASS), Mosaic (MOSA), Voxel (VOXE), Crop Circles (CROP), X-Ray (XRAY), Dread (DREA), Prehistoric (PREH),
 -- Ver 2: Linocut (LINO), Ghost Print (GHOS), Loan Shark (LOAN), Basement (BASE), Shepherd (SHEP), Knight (KNIG), JM & JB (JMJB),
 -- Dogs Playing Poker (DOGS), Righthook (RIGH), Fiendish (FIEN), Carnival (CARN), Envious (ENVI), Proud (PROU)
--- Ver 3: Sledgehammer (SLED), Doorhanger (DOOR), Fingerprints (FING), Zealous (ZEAL), Lurid (LURI)
+-- Ver 3: Sledgehammer (SLED), Doorhanger (DOOR), Fingerprints (FING), Zealous (ZEAL), Lurid (LURI), The Dynasty (DYNA), Starfruit (STAR), Wishalloy (WISH), Unobtanium (UNOB), Fondue (FOND)
 -- Disabled: Jimbo (JIMB)
 --  Base (BAS)
 --  Localization (LOC)
@@ -1696,7 +1696,7 @@ function SMODS.INIT.Bunco()
         ['name'] = 'Linocut Joker',
         ['text'] = {
             [1] = 'When playing a {C:attention}Pair,',
-            [2] = 'turns the suit of the {C:attention}left{} card',
+            [2] = 'convert the suit of the {C:attention}left{} card',
             [3] = 'into the suit of the {C:attention}right{} card',
             [4] = '{C:inactive}(Drag to rearrange)'
         }
@@ -2468,7 +2468,7 @@ function SMODS.INIT.Bunco()
     joker_fingerprints:register()
 
     SMODS.Jokers.j_fingerprints.calculate = function(self, context)
-        if context.after and context.scoring_name ~= nil and context.scoring_hand ~= nil then
+        if context.after and context.scoring_name ~= nil and context.scoring_hand ~= nil and not context.blueprint then
             self.ability.extra.new_card_list = {}
 
             for i = 1, #context.scoring_hand do
@@ -2476,7 +2476,7 @@ function SMODS.INIT.Bunco()
             end
         end
 
-        if context.end_of_round and not context.other_card then
+        if context.end_of_round and not context.other_card and not context.blueprint then
             for _, v in ipairs(self.ability.extra.old_card_list) do
                 v.ability.perma_bonus = v.ability.perma_bonus or 0
                 v.ability.perma_bonus = v.ability.perma_bonus - self.ability.extra.bonus
@@ -2617,7 +2617,7 @@ function SMODS.INIT.Bunco()
 
     SMODS.Jokers.j_starfruit.calculate = function(self, context)
 
-        if context.after and context.poker_hands ~= nil and next(context.poker_hands['Spectrum']) and not context.blueprint then
+        if context.before and context.poker_hands ~= nil and next(context.poker_hands['Spectrum']) and not context.blueprint then
             if pseudorandom('starfruit'..G.SEED) < G.GAME.probabilities.normal / self.ability.extra.level_odds then
 
                 level_up_hand(self, context.scoring_name, true, 1)
@@ -2625,10 +2625,14 @@ function SMODS.INIT.Bunco()
                 forced_message(localize('k_level_up_ex'), self, G.C.RED)
 
             end
+
+            forced_message(localize('k_safe_ex'), self)
+
             self.ability.extra.condition = true
+
         end
 
-        if context.end_of_round and not context.other_card and self.ability.extra.condition == true then
+        if context.end_of_round and not context.other_card and self.ability.extra.condition == true and not context.blueprint then
             if pseudorandom('starfruit'..G.SEED) < G.GAME.probabilities.normal / self.ability.extra.destroy_odds then
 
                 forced_message(localize('k_eaten_ex'), self, G.C.FILTER)
@@ -2756,7 +2760,7 @@ function SMODS.INIT.Bunco()
     joker_fondue:register()
 
     SMODS.Jokers.j_fondue.calculate = function(self, context)
-        if G.GAME.current_round.hands_played == 0 and context.individual and context.cardarea == G.play and context.other_card then
+        if G.GAME.current_round.hands_played == 0 and context.individual and context.cardarea == G.play and context.other_card and not context.blueprint then
             acknowledge('Fleurons')
             G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.15,func = function() context.other_card:flip();play_sound('card1', 1);context.other_card:juice_up(0.3, 0.3);return true end }))
             G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.1,func = function()  context.other_card:change_suit('Fleurons');return true end }))
