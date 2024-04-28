@@ -37,7 +37,7 @@
 -- Ver 2: Linocut (LINO), Ghost Print (GHOS), Loan Shark (LOAN), Basement (BASE), Shepherd (SHEP), Knight (KNIG), JM & JB (JMJB),
 -- Dogs Playing Poker (DOGS), Righthook (RIGH), Fiendish (FIEN), Carnival (CARN), Envious (ENVI), Proud (PROU)
 -- Ver 3: Sledgehammer (SLED), Doorhanger (DOOR), Fingerprints (FING), Zealous (ZEAL), Lurid (LURI), The Dynasty (DYNA),
--- Starfruit (STAR), Wishalloy (WISH), Unobtanium (UNOB), Fondue (FOND)
+-- Starfruit (STAR), Wishalloy (WISH), Unobtanium (UNOB), Fondue (FOND), Myopia (MYOP), Astigmatism (ASTI), Magic Wand (MAGI), Rigoletto (RIGO)
 -- Disabled: Jimbo (JIMB)
 --  Base (BAS)
 --  Localization (LOC)
@@ -1258,6 +1258,54 @@ function SMODS.INIT.Bunco()
         original_ease_dollars(mod, instant)
     end
 
+    local original_card_is_suit = Card.is_suit
+
+    function Card:is_suit(suit, bypass_debuff, flush_calc)
+
+        local returnable = original_card_is_suit(self, suit, bypass_debuff, flush_calc)
+
+        -- Myopia Joker additional function (\MYOP_FUN)
+
+        if G.jokers ~= nil then
+            for _, v in ipairs(G.jokers.cards) do
+                if v.ability.name == 'Myopia' and not v.debuff then
+                    if self.base.suit == 'Spades' and (self.base.suit == 'Spades') == (suit == 'Spades' or suit == 'Halberds') then
+                        returnable = true
+                    end
+                    if self.base.suit == 'Clubs' and (self.base.suit == 'Clubs') == (suit == 'Clubs' or suit == 'Halberds') then
+                        returnable = true
+                    end
+                end
+            end
+        end
+
+        -- Astigmatism Joker additional function (\ASTI_FUN)
+
+        if G.jokers ~= nil then
+            for _, v in ipairs(G.jokers.cards) do
+                if v.ability.name == 'Astigmatism' and not v.debuff then
+                    if self.base.suit == 'Hearts' and (self.base.suit == 'Hearts') == (suit == 'Hearts' or suit == 'Fleurons') then
+                        returnable = true
+                    end
+                    if self.base.suit == 'Diamonds' and (self.base.suit == 'Diamonds') == (suit == 'Diamonds' or suit == 'Fleurons') then
+                        returnable = true
+                    end
+                end
+            end
+        end
+
+        return returnable
+    end
+
+    local original_get_chip_mult = Card.get_chip_mult
+
+    function Card:get_chip_mult()
+        if self.ability.perma_bonus_mult then
+            return self.ability.mult + self.ability.perma_bonus_mult
+        end
+        return original_get_chip_mult(self)
+    end
+
     function Card:add_speech_bubble(text_key, align, loc_vars)
         if self.children.speech_bubble then self.children.speech_bubble:remove() end
         self.config.speech_bubble_align = {align=align or 'bm', offset = {x=0,y=0}, parent = self}
@@ -1294,7 +1342,7 @@ function SMODS.INIT.Bunco()
         else
             if n <= 0 then self.talking = false; return end
             local new_said = math.random(1, 11)
-            while new_said == self.last_said do 
+            while new_said == self.last_said do
                 new_said = math.random(1, 11)
             end
             self.last_said = new_said
@@ -2787,6 +2835,166 @@ function SMODS.INIT.Bunco()
         end
     end
 
+    -- Myopia Joker (\MYOP_BAS):
+    SMODS.Sprite:new('j_myopia', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
+
+    local loc_myopia = {
+        ['name'] = 'Myopia',
+        ['text'] = {
+            [1] = '{C:spades}Spades{} and {C:clubs}Clubs{}',
+            [2] = 'count as {C:halberds}Halberds'
+        }
+    }
+
+    local joker_myopia = SMODS.Joker:new(
+        'Myopia', -- Name
+        'myopia', -- Slug
+        {}, -- Config
+        {x = 1, y = 5}, -- Sprite position
+        loc_myopia, -- Localization
+        2, -- Rarity
+        8, -- Cost
+        nil, -- Unlocked
+        false, -- Discovered
+        false, -- Blueprint compat
+        true) -- Eternal compat
+
+    joker_myopia:register()
+
+    -- Myopia Joker uses Card:is_suit for some things. Check MYOP_FUN
+
+    SMODS.Jokers.j_myopia.calculate = function(self, context)
+
+    end
+
+    -- Astigmatism Joker (\ASTI_BAS):
+    SMODS.Sprite:new('j_astigmatism', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
+
+    local loc_astigmatism = {
+        ['name'] = 'Astigmatism',
+        ['text'] = {
+            [1] = '{C:hearts}Hearts{} and {C:diamonds}Diamonds{}',
+            [2] = 'count as {C:fleurons}Fleurons'
+        }
+    }
+
+    local joker_astigmatism = SMODS.Joker:new(
+        'Astigmatism', -- Name
+        'astigmatism', -- Slug
+        {}, -- Config
+        {x = 2, y = 5}, -- Sprite position
+        loc_astigmatism, -- Localization
+        2, -- Rarity
+        8, -- Cost
+        nil, -- Unlocked
+        false, -- Discovered
+        false, -- Blueprint compat
+        true) -- Eternal compat
+
+    joker_astigmatism:register()
+
+    -- Astigmatism Joker uses Card:is_suit for some things. Check ASTI_FUN
+
+    SMODS.Jokers.j_astigmatism.calculate = function(self, context)
+
+    end
+
+    -- Magic Wand Joker (\MAGI_BAS):
+    SMODS.Sprite:new('j_magicwand', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
+
+    local loc_magicwand = {
+        ['name'] = 'Magic Wand',
+        ['text'] = {
+            [1] = 'Gains {X:mult,C:white}X0.3{} Mult for each',
+            [2] = 'played hand containing a {C:attention}Spectrum,',
+            [3] = 'resets when a non-Spectrum hand is played',
+            [4] = '{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive} Mult)'
+        }
+    }
+
+    local joker_magicwand = SMODS.Joker:new(
+        'Magic Wand', -- Name
+        'magicwand', -- Slug
+        {extra = {xmult = 1}}, -- Config
+        {x = 3, y = 5}, -- Sprite position
+        loc_magicwand, -- Localization
+        1, -- Rarity
+        5, -- Cost
+        nil, -- Unlocked
+        false, -- Discovered
+        true, -- Blueprint compat
+        true) -- Eternal compat
+
+    joker_magicwand:register()
+
+    SMODS.Jokers.j_magicwand.calculate = function(self, context)
+        if context.after and context.poker_hands ~= nil and next(context.poker_hands['Spectrum']) and not context.blueprint then
+            self.ability.extra.xmult = self.ability.extra.xmult + 0.3
+
+            forced_message('X'..tostring(self.ability.extra.xmult)..' Mult', self, G.C.RED)
+        elseif context.after and context.poker_hands ~= nil and not next(context.poker_hands['Spectrum']) and not context.blueprint then
+            self.ability.extra.xmult = 1
+
+            forced_message(localize('k_reset'), self, G.C.RED)
+        end
+
+        if SMODS.end_calculate_context(context) then
+            if self.ability.extra.xmult ~= 1 then
+                return {
+                    message = localize {
+                        type = 'variable',
+                        key = 'a_xmult',
+                        vars = { self.ability.extra.xmult }
+                    },
+                    Xmult_mod = self.ability.extra.xmult,
+                    card = self
+                }
+            end
+        end
+    end
+
+    -- Rigoletto Joker (\RIGO_BAS):
+    SMODS.Sprite:new('j_rigoletto', bunco_mod.path, 'Rigoletto.png', 71, 95, 'asset_atli'):register()
+
+    local loc_rigoletto = {
+        ['name'] = 'Rigoletto',
+        ['text'] = {
+            [1] = 'Each scored card permanently',
+            [2] = 'gains {C:red}+4{} Mult if played hand',
+            [3] = 'contains {C:halberds}Halberd{} or {C:fleurons}Fleuron'
+        }
+    }
+
+    local joker_rigoletto = SMODS.Joker:new(
+        'Rigoletto', -- Name
+        'rigoletto', -- Slug
+        {}, -- Config
+        {x = 0, y = 0}, -- Sprite position
+        loc_rigoletto, -- Localization
+        4, -- Rarity
+        0, -- Cost
+        nil, -- Unlocked
+        false, -- Discovered
+        true, -- Blueprint compat
+        true, -- Eternal compat
+        '',
+        '',
+        {x = 1, y = 0}) -- Soul position
+
+    joker_rigoletto:register()
+
+    SMODS.Jokers.j_rigoletto.calculate = function(self, context)
+        if context.individual and context.cardarea == G.play then
+            context.other_card.ability.perma_bonus_mult = context.other_card.ability.perma_bonus_mult or 0
+            context.other_card.ability.perma_bonus_mult = context.other_card.ability.perma_bonus_mult + 4
+
+            return {
+                extra = {focus = context.other_card, message = localize('k_upgrade_ex'), colour = G.C.MULT},
+                card = self
+            }
+        end
+    end
+
     -- Jimbo Joker (\JIMB_BAS):
 
     if enable_jimbo then
@@ -2807,13 +3015,13 @@ function SMODS.INIT.Bunco()
             loc_jimbo, -- Localization
             4, -- Rarity
             0, -- Cost
-            nil,
-            nil,
-            nil,
-            nil,
+            nil, -- Unlocked
+            nil, -- Discovered
+            nil, -- Blueprint compat
+            nil, -- Eternal compat
             '',
             '',
-            {x = 1, y = 0})
+            {x = 1, y = 0}) -- Soul position
 
         joker_jimbo:register()
 
@@ -2892,7 +3100,6 @@ function SMODS.INIT.Bunco()
     end
 end
 
-
 -- Copied and modifed from LushMod
 local generate_UIBox_ability_tableref = Card.generate_UIBox_ability_table
 function Card.generate_UIBox_ability_table(self)
@@ -2963,6 +3170,14 @@ function Card.generate_UIBox_ability_table(self)
             loc_vars = {G.GAME.probabilities.normal, self.ability.extra.level_odds, self.ability.extra.destroy_odds}
         elseif self.ability.name == 'Wishalloy' then -- Wishalloy Joker localization (\WISH_LOC)
             loc_vars = {G.GAME.probabilities.normal, self.ability.extra.odds}
+        elseif self.ability.name == 'Fondue' then -- Fondue Joker localization (\FOND_LOC)
+
+        elseif self.ability.name == 'Myopia' then -- Myopia Joker localization (\MYOP_LOC)
+            -- WOAH
+        elseif self.ability.name == 'Astigmatism' then -- Astigmatism Joker localization (\ASTI_LOC)
+            -- wwooaahh
+        elseif self.ability.name == 'Magic Wand' then -- Magic Wand Joker localization (\MAGI_LOC)
+            loc_vars = {self.ability.extra.xmult}
         else
             customJoker = false
         end
@@ -3006,10 +3221,53 @@ function Card.generate_UIBox_ability_table(self)
                 end
             end
 
-            return generate_card_ui(self.config.center, nil, loc_vars, card_type, badges, hide_desc, main_start,
-                main_end)
+            return generate_card_ui(self.config.center, nil, loc_vars, card_type, badges, hide_desc, main_start, main_end)
         end
     end
+
+    -- Code from AutumnMood & Victin
+    local generate_UIBox_ability_table_val = generate_UIBox_ability_tableref(self)
+
+    local key = self.config.center.key
+
+    if self then
+        local bonus_mult = "none"
+        if self.ability.perma_bonus_mult then bonus_mult = self.ability.perma_bonus_mult end
+        bonus_mult = tostring(bonus_mult)
+        local mult_row = {}
+        if bonus_mult ~= "none" and bonus_mult ~= "0" then
+            mult_row[#mult_row + 1] = {
+                                    n=G.UIT.T,
+                                    config={
+                                        text="+",
+                                        colour=G.C.MULT,
+                                        scale=0.32
+                                    }
+                                }
+            mult_row[#mult_row + 1] = {
+                                    n=G.UIT.T,
+                                    config={
+                                        text=bonus_mult,
+                                        colour=G.C.MULT,
+                                        scale=0.32
+                                    }
+                                }
+            mult_row[#mult_row + 1] =
+                                {
+                                    n=G.UIT.T,
+                                    config={
+                                        text=" extra mult",
+                                        colour=G.C.L_BLACK,
+                                        scale=0.32
+                                    }
+                                }
+        end
+        local main_text = generate_UIBox_ability_table_val.main
+        if #mult_row > 0 then main_text[#main_text + 1] = mult_row end
+
+        return generate_UIBox_ability_table_val
+    end
+
     return generate_UIBox_ability_tableref(self)
 end
 
