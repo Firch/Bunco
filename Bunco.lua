@@ -29,7 +29,7 @@
 --  Initializing (INI) - manages the appearing and disappearing of suits in suit/card list
 --  Planets (PLA)
 --  Tarots (TAR)
---  Deletion (DEL)
+--  Deletion (DEL) - manages the rerolling of exotic cards such as Jokers and Tarots when exotic suits didn't exist
 --
 -- Generic Functions (FUNC)
 --
@@ -245,48 +245,6 @@ function SMODS.INIT.Bunco()
 
     -- Exotic cards Initializing (\EX_INI):
 
-    local function acknowledge(suit, initial)
-
-        if suit == 'Fleurons' then
-
-            SMODS.Card:new_suit('Fleurons', 'exotic_cards', 'exotic_cards_high_contrast', { y = 0 }, 'exotic_cards_ui', 'exotic_cards_ui_high_contrast',
-                { x = 0, y = 0 }, 'd6901a', 'd6901a')
-
-            if G.GAME ~= nil and (G.GAME.Fleurons == false or G.GAME.Fleurons == nil) and initial == nil then
-
-                G.GAME.Fleurons = true
-
-                sendDebugMessage('Acknowledged '..suit..'! (Initial:'..tostring(initial or 'false')..')')
-
-            end
-
-            if initial ~= nil and initial == true then
-
-                sendDebugMessage('Acknowledged '..suit..'! (Initial:'..tostring(initial or 'false')..')')
-
-            end
-
-        elseif suit == 'Halberds' then
-
-            SMODS.Card:new_suit('Halberds', 'exotic_cards', 'exotic_cards_high_contrast', { y = 1 }, 'exotic_cards_ui', 'exotic_cards_ui_high_contrast',
-                { x = 1, y = 0 }, '6e3c63', '6e3c63')
-
-            if G.GAME ~= nil and (G.GAME.Halberds == false or G.GAME.Halberds == nil) and initial == nil then
-
-                G.GAME.Halberds = true
-
-                sendDebugMessage('Acknowledged '..suit..'! (Initial:'..tostring(initial or 'false')..')')
-
-            end
-
-            if initial ~= nil and initial == true then
-
-                sendDebugMessage('Acknowledged '..suit..'! (Initial:'..tostring(initial or 'false')..')')
-
-            end
-        end
-    end
-
     local function forget(suit, initial, deck, forced) -- G.GAME.Suit returns nil if the suit wasn't encountered, true if it is currently in the deck and false if it was encountered but not in the deck
 
         if suit == 'Fleurons' then
@@ -382,6 +340,53 @@ function SMODS.INIT.Bunco()
         end
     end
 
+    local function acknowledge(suit, initial)
+
+        if suit == 'Fleurons' then
+
+            SMODS.Card:new_suit('Fleurons', 'exotic_cards', 'exotic_cards_high_contrast', { y = 0 }, 'exotic_cards_ui', 'exotic_cards_ui_high_contrast',
+                { x = 0, y = 0 }, 'd6901a', 'd6901a')
+
+            if G.GAME ~= nil and (G.GAME.Fleurons == false or G.GAME.Fleurons == nil) and initial == nil then
+
+                G.GAME.Fleurons = true
+
+                sendDebugMessage('Acknowledged '..suit..'! (Initial:'..tostring(initial or 'false')..')')
+
+            end
+
+            if initial ~= nil and initial == true then
+
+                sendDebugMessage('Acknowledged '..suit..'! (Initial:'..tostring(initial or 'false')..')')
+
+            end
+
+        elseif suit == 'Halberds' then
+
+            if G.GAME ~= nil and initial == false and G.GAME.Fleurons == nil then -- Flash-registering of Fleurons for proper order
+                acknowledge('Fleurons')
+                forget('Fleurons', nil, nil, true)
+            end
+
+            SMODS.Card:new_suit('Halberds', 'exotic_cards', 'exotic_cards_high_contrast', { y = 1 }, 'exotic_cards_ui', 'exotic_cards_ui_high_contrast',
+                { x = 1, y = 0 }, '6e3c63', '6e3c63')
+
+            if G.GAME ~= nil and (G.GAME.Halberds == false or G.GAME.Halberds == nil) and initial == nil then
+
+                G.GAME.Halberds = true
+
+                sendDebugMessage('Acknowledged '..suit..'! (Initial:'..tostring(initial or 'false')..')')
+
+            end
+
+            if initial ~= nil and initial == true then
+
+                sendDebugMessage('Acknowledged '..suit..'! (Initial:'..tostring(initial or 'false')..')')
+
+            end
+        end
+    end
+
     acknowledge('Fleurons', true)
     acknowledge('Halberds', true)
     forget('Fleurons', true)
@@ -429,10 +434,12 @@ function SMODS.INIT.Bunco()
                 forget('Halberds')
 
             end
-        end
+        else
 
-        if saved_game == nil then
             sendDebugMessage('Removed exotic suits; new run!')
+            forget('Fleurons')
+            forget('Halberds')
+
         end
 
         original_start_run(self, args)
@@ -1146,6 +1153,8 @@ function SMODS.INIT.Bunco()
         end
     end
 
+    local allow_exotic = false
+
     local original_create_card = create_card
 
     function create_card(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
@@ -1189,30 +1198,26 @@ function SMODS.INIT.Bunco()
 
         -- Exotic suit deletion (\EX_DEL1):
 
-        if (G.GAME.Fleurons == nil and card.ability.name == 'The Sky') or (G.GAME.Halberds == nil and card.ability.name == 'The Abyss')
-        or (G.GAME.Fleurons == nil and card.ability.name == 'Envious Joker') or (G.GAME.Fleurons == nil and card.ability.name == 'Proud Joker') then
+        local function has_value(tab, val)
+            for index, value in ipairs(tab) do
+                if value == val then
+                    return true
+                end
+            end
+            return false
+        end
+
+        local exotic_table = {'The Sky', 'The Abyss', 'Envious Joker', 'Proud Joker'}
+
+        if G.GAME.Fleurons ~= nil or G.GAME.Halberds ~= nil then
+            allow_exotic = true
+        end
+
+        if not allow_exotic and has_value(exotic_table, card.ability.name) then
             sendDebugMessage('Exotic card appeared! But the exotic suit did not exist.')
             sendDebugMessage('Rerolling...')
             card:remove()
             return create_card(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
-        else
-            return card
-        end
-    end
-
-    local original_create_card_for_shop = create_card_for_shop
-
-    function create_card_for_shop(area)
-        local card = original_create_card_for_shop(area)
-
-        -- Exotic suit deletion (\EX_DEL2):
-
-        if (G.GAME.Fleurons == nil and card.ability.name == 'The Sky') or (G.GAME.Halberds == nil and card.ability.name == 'The Abyss')
-        or (G.GAME.Fleurons == nil and card.ability.name == 'Envious Joker') or (G.GAME.Fleurons == nil and card.ability.name == 'Proud Joker') then
-            sendDebugMessage('Exotic card appeared! But the exotic suit did not exist.')
-            sendDebugMessage('Rerolling...')
-            card:remove()
-            return create_card_for_shop(area)
         else
             return card
         end
@@ -2620,13 +2625,12 @@ function SMODS.INIT.Bunco()
         if context.before and context.poker_hands ~= nil and next(context.poker_hands['Spectrum']) and not context.blueprint then
             if pseudorandom('starfruit'..G.SEED) < G.GAME.probabilities.normal / self.ability.extra.level_odds then
 
-                level_up_hand(self, context.scoring_name, true, 1)
+                level_up_hand(self, context.scoring_name, false, 1)
+                --update_hand_text({delay = 0, sound = false})
 
-                forced_message(localize('k_level_up_ex'), self, G.C.RED)
+                forced_message(localize('k_level_up_ex'), self, G.C.RED, true)
 
             end
-
-            forced_message(localize('k_safe_ex'), self)
 
             self.ability.extra.condition = true
 
@@ -2639,7 +2643,10 @@ function SMODS.INIT.Bunco()
                 self:start_dissolve()
 
             else
+
+                forced_message(localize('k_safe_ex'), self)
                 self.ability.extra.condition = false
+
             end
         end
     end
