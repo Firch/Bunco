@@ -36,7 +36,8 @@
 -- Ver 1 Jokers: Cassette (CASS), Mosaic (MOSA), Voxel (VOXE), Crop Circles (CROP), X-Ray (XRAY), Dread (DREA), Prehistoric (PREH),
 -- Ver 2: Linocut (LINO), Ghost Print (GHOS), Loan Shark (LOAN), Basement (BASE), Shepherd (SHEP), Knight (KNIG), JM & JB (JMJB),
 -- Dogs Playing Poker (DOGS), Righthook (RIGH), Fiendish (FIEN), Carnival (CARN), Envious (ENVI), Proud (PROU)
--- Ver 3: Sledgehammer (SLED), Doorhanger (DOOR), Fingerprints (FING), Zealous (ZEAL), Lurid (LURI), The Dynasty (DYNA), Starfruit (STAR), Wishalloy (WISH), Unobtanium (UNOB), Fondue (FOND)
+-- Ver 3: Sledgehammer (SLED), Doorhanger (DOOR), Fingerprints (FING), Zealous (ZEAL), Lurid (LURI), The Dynasty (DYNA),
+-- Starfruit (STAR), Wishalloy (WISH), Unobtanium (UNOB), Fondue (FOND)
 -- Disabled: Jimbo (JIMB)
 --  Base (BAS)
 --  Localization (LOC)
@@ -1207,7 +1208,18 @@ function SMODS.INIT.Bunco()
             return false
         end
 
-        local exotic_table = {'The Sky', 'The Abyss', 'Envious Joker', 'Proud Joker'}
+        local exotic_table = {
+            'The Sky',
+            'The Abyss',
+            'Envious Joker',
+            'Proud Joker',
+            'Zealous Joker',
+            'Lurid Joker',
+            'The Dynasty',
+            'Starfruit',
+            'Wishalloy',
+            'Unobtanium',
+            'Fondue'}
 
         if G.GAME.Fleurons ~= nil or G.GAME.Halberds ~= nil then
             allow_exotic = true
