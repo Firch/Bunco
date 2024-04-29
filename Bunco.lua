@@ -42,6 +42,8 @@
 --  Base (BAS)
 --  Localization (LOC)
 --  Additional function(s) (FUN)
+--
+-- Blinds (BLIN)
 
 function SMODS.INIT.Bunco()
 
@@ -1360,13 +1362,98 @@ function SMODS.INIT.Bunco()
         end
     end
 
-    function forced_message(_message, _card, _colour, delay) -- Copied from Blizzow, tweaked slightly (added delay)
+    local function forced_message(_message, _card, _colour, delay) -- Copied from Blizzow, tweaked slightly (added delay)
         if delay then delay = 0.7 * 1.25
         else delay = 0 end
         G.E_MANAGER:add_event(Event({ trigger = 'before', delay = delay,
             func = function() card_eval_status_text(_card, 'extra', nil, nil, nil, {message = _message, colour = _colour, instant=true}); return true
             end}))
     end
+
+    local function invert_color(color, invert_red, invert_green, invert_blue)
+        local inverted_color = {
+          1 - (color[1] or 0),
+          1 - (color[2] or 0),
+          1 - (color[3] or 0),
+          color[4] or 1
+        }
+
+        if invert_red then
+          inverted_color[1] = color[1] or 0
+        end
+        if invert_green then
+          inverted_color[2] = color[2] or 0
+        end
+        if invert_blue then
+          inverted_color[3] = color[3] or 0
+        end
+
+        return inverted_color
+    end
+
+    local function increase_saturation(color, value)
+        -- Extract RGB components
+        local r = color[1] or 0
+        local g = color[2] or 0
+        local b = color[3] or 0
+
+        -- Convert RGB to HSL
+        local max_val = math.max(r, g, b)
+        local min_val = math.min(r, g, b)
+        local delta = max_val - min_val
+
+        local h, s, l = 0, 0, (max_val + min_val) / 2
+
+        if delta ~= 0 then
+          if l < 0.5 then
+            s = delta / (max_val + min_val)
+          else
+            s = delta / (2 - max_val - min_val)
+          end
+
+          if r == max_val then
+            h = (g - b) / delta
+          elseif g == max_val then
+            h = 2 + (b - r) / delta
+          else
+            h = 4 + (r - g) / delta
+          end
+
+          h = h * 60
+          if h < 0 then
+            h = h + 360
+          end
+        end
+
+        -- Increase saturation
+        s = math.min(s + value, 1)
+
+        -- Convert back to RGB
+        local c = (1 - math.abs(2 * l - 1)) * s
+        local x = c * (1 - math.abs((h / 60) % 2 - 1))
+        local m = l - c / 2
+
+        local r_new, g_new, b_new = 0, 0, 0
+
+        if h < 60 then
+          r_new, g_new, b_new = c, x, 0
+        elseif h < 120 then
+          r_new, g_new, b_new = x, c, 0
+        elseif h < 180 then
+          r_new, g_new, b_new = 0, c, x
+        elseif h < 240 then
+          r_new, g_new, b_new = 0, x, c
+        elseif h < 300 then
+          r_new, g_new, b_new = x, 0, c
+        else
+          r_new, g_new, b_new = c, 0, x
+        end
+
+        -- Adjust RGB values
+        r_new, g_new, b_new = (r_new + m), (g_new + m), (b_new + m)
+
+        return {r_new, g_new, b_new, color[4] or 1}
+      end
 
     -- Cassette Joker (\CASS_BAS):
 
@@ -3098,6 +3185,72 @@ function SMODS.INIT.Bunco()
 
         end
     end
+
+    -- Blinds (\BL)
+
+    -- Finisher blind color restoration (\BL_COL)
+
+    local original_ease_background_colour_blind = ease_background_colour_blind
+
+    function ease_background_colour_blind(state, blind_override)
+        local blindname = ((blind_override or (G.GAME.blind and G.GAME.blind.name ~= '' and G.GAME.blind.name)) or 'Small Blind')
+        local blindname = (blindname == '' and 'Small Blind' or blindname)
+
+        for k, v in pairs(G.P_BLINDS) do
+            if v.name == blindname then
+                local boss_col = v.boss_colour
+                if v.boss and v.boss.showdown then
+                    ease_background_colour{
+                        new_colour = increase_saturation(mix_colours(boss_col, invert_color(boss_col), 0.3), 1),
+                        special_colour = boss_col,
+                        tertiary_colour = darken(increase_saturation(mix_colours(boss_col, invert_color(boss_col, true, false, false), 0.3), 0.6), 0.4), contrast = 1.7}
+                    return
+                else
+                    original_ease_background_colour_blind(state, blind_override)
+                end
+            end
+        end
+    end
+
+    -- Blind debuffs (\BL_DEB)
+
+    local original_blind_debuff_card = Blind.debuff_card
+
+    function Blind:debuff_card(card, from_blind)
+
+        if self.debuff and not self.disabled and card.area ~= G.jokers then
+            if self.name == 'Chartreuse Crown' then
+                if card.ability.name ~= 'Stone Card' and card.ability.name ~= 'Wild Card' then
+                    if card.base.suit == ('Spades') or card.base.suit == ('Hearts') or card.base.suit == ('Clubs') or card.base.suit == ('Diamonds') then
+                        card:set_debuff(true)
+                        return
+                    end
+                end
+            end
+        end
+
+        original_blind_debuff_card(self, card, from_blind)
+    end
+
+    -- Blind Initializing (\BL_INI)
+
+    SMODS.Sprite:new('chartreusecrown', bunco_mod.path, 'ChartreuseCrown.png', 34, 34, 'animation_atli', 21):register()
+    local ChartreuseCrown = SMODS.Blind:new(
+        'Chartreuse Crown', -- Name
+        'chartreusecrown', -- Slug
+        {name = 'Chartreuse Crown',
+        text = {'All Spade, Heart, Club and Diamond', 'base suit cards are debuffed'}},
+        8, -- Reward
+        2, -- Multiplier
+        {}, -- Vars
+        {}, -- Debuff
+        {x = 0, y = 0}, -- Sprite position
+        {showdown = true, min = 10, max = 10}, -- Boss antes
+        HEX('96a756'), -- Color
+        false, -- Discovered
+        'chartreusecrown') -- Atlas
+    ChartreuseCrown:register()
+
 end
 
 -- Copied and modifed from LushMod
@@ -3171,13 +3324,15 @@ function Card.generate_UIBox_ability_table(self)
         elseif self.ability.name == 'Wishalloy' then -- Wishalloy Joker localization (\WISH_LOC)
             loc_vars = {G.GAME.probabilities.normal, self.ability.extra.odds}
         elseif self.ability.name == 'Fondue' then -- Fondue Joker localization (\FOND_LOC)
-
+            -- Cheesy
         elseif self.ability.name == 'Myopia' then -- Myopia Joker localization (\MYOP_LOC)
             -- WOAH
         elseif self.ability.name == 'Astigmatism' then -- Astigmatism Joker localization (\ASTI_LOC)
             -- wwooaahh
         elseif self.ability.name == 'Magic Wand' then -- Magic Wand Joker localization (\MAGI_LOC)
             loc_vars = {self.ability.extra.xmult}
+        elseif self.ability.name == 'Rigoletto' then -- Rigoletto Joker localization (\RIGO_LOC)
+
         else
             customJoker = false
         end
