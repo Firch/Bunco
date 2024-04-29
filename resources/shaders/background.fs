@@ -6,7 +6,7 @@ extern vec4 colour_3;
 extern number contrast;
 extern number spin_amount;
 
-#define PIXEL_SIZE_FAC 1920.
+#define PIXEL_SIZE_FAC 2560.
 #define SPIN_EASE 0.5
 
 vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords )

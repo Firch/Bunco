@@ -51,16 +51,17 @@
 
 function SMODS.INIT.Bunco()
 
-    ---- Config (\CONF):
-
-    local enable_jimbo = false -- He is very broken right now! Use at your own risk.
-
     ---- Global variables (\GLOB):
 
     local bunco_mod = SMODS.findModByID('Bunco')
+    local NFS = NFS or love.filesystem
 
     local sprite_tarots = SMODS.Sprite:new('bunco_tarots', bunco_mod.path, 'Tarots.png', 71, 95, 'asset_atli') sprite_tarots:register()
     local sprite_planets = SMODS.Sprite:new('bunco_planets', bunco_mod.path, 'Planets.png', 71, 95, 'asset_atli') sprite_planets:register()
+
+    ---- Config loading (\CONF):
+
+    local config = NFS.load(bunco_mod.path.."config.lua")()
 
     ---- Exotic cards (\EX):
 
@@ -71,6 +72,28 @@ function SMODS.INIT.Bunco()
 
     local sprite_exotic_cards_high_contrast = SMODS.Sprite:new('exotic_cards_high_contrast', bunco_mod.path, 'ExoticCardsHC.png', 71, 95, 'asset_atli') sprite_exotic_cards_high_contrast:register()
     local sprite_exotic_cards_ui_high_contrast = SMODS.Sprite:new('exotic_cards_ui_high_contrast', bunco_mod.path, 'ExoticSuitsHC.png', 18, 18, 'asset_atli') sprite_exotic_cards_ui_high_contrast:register()
+
+    -- LunaAstraCassiopeia's awesome high contrast card resprites
+    local card_contrast = SMODS.Sprite:new("cards_2", bunco_mod.path, "EnhancedContrast.png", 71, 95, "asset_atli") card_contrast:register()
+    local ui_contrast = SMODS.Sprite:new("ui_2", bunco_mod.path, "EnhancedUIContrast.png", 18, 18, "asset_atli") ui_contrast:register()
+
+    G.C["SO_2"] = {
+        Hearts = HEX('ee151b'),
+        Diamonds = HEX('e56b10'),
+        Spades = HEX("5d55a6"),
+        Clubs = HEX("197f77"),
+    }
+
+    local new_colour_proto = G.C["SO_"..(G.SETTINGS.colourblind_option and 2 or 1)]
+    G.C.SUITS.Hearts = new_colour_proto.Hearts
+    G.C.SUITS.Diamonds = new_colour_proto.Diamonds
+    G.C.SUITS.Spades = new_colour_proto.Spades
+    G.C.SUITS.Clubs = new_colour_proto.Clubs
+    for k, v in pairs(G.I.SPRITE) do
+        if v.atlas and string.find(v.atlas.name, 'cards_') then
+            v.atlas = G.ASSET_ATLAS["cards_"..(G.SETTINGS.colourblind_option and 2 or 1)]
+        end
+    end
 
     -- Exotic cards localization (\EX_LOC):
 
@@ -352,7 +375,7 @@ function SMODS.INIT.Bunco()
         if suit == 'Fleurons' then
 
             SMODS.Card:new_suit('Fleurons', 'exotic_cards', 'exotic_cards_high_contrast', { y = 0 }, 'exotic_cards_ui', 'exotic_cards_ui_high_contrast',
-                { x = 0, y = 0 }, 'd6901a', 'ffd03c')
+                { x = 0, y = 0 }, 'd6901a', 'dbb529')
 
             if G.GAME ~= nil and (G.GAME.Fleurons == false or G.GAME.Fleurons == nil) and initial == nil then
 
@@ -376,7 +399,7 @@ function SMODS.INIT.Bunco()
             end
 
             SMODS.Card:new_suit('Halberds', 'exotic_cards', 'exotic_cards_high_contrast', { y = 1 }, 'exotic_cards_ui', 'exotic_cards_ui_high_contrast',
-                { x = 1, y = 0 }, '6e3c63', 'a95296')
+                { x = 1, y = 0 }, '6e3c63', '993283')
 
             if G.GAME ~= nil and (G.GAME.Halberds == false or G.GAME.Halberds == nil) and initial == nil then
 
@@ -3104,7 +3127,7 @@ function SMODS.INIT.Bunco()
 
     -- Jimbo Joker (\JIMB_BAS):
 
-    if enable_jimbo then
+    if config.jimbo then
         SMODS.Sprite:new('j_jimbo', bunco_mod.path, 'Jimbo.png', 71, 95, 'asset_atli'):register()
 
         local loc_jimbo = {
@@ -3210,35 +3233,37 @@ function SMODS.INIT.Bunco()
 
     -- Finisher blind color restoration (\BL_COL)
 
-    local original_ease_background_colour_blind = ease_background_colour_blind
+    if config.colorful_finishers then
+        local original_ease_background_colour_blind = ease_background_colour_blind
 
-    function ease_background_colour_blind(state, blind_override)
-        local blindname = ((blind_override or (G.GAME.blind and G.GAME.blind.name ~= '' and G.GAME.blind.name)) or 'Small Blind')
-        local blindname = (blindname == '' and 'Small Blind' or blindname)
+        function ease_background_colour_blind(state, blind_override)
+            local blindname = ((blind_override or (G.GAME.blind and G.GAME.blind.name ~= '' and G.GAME.blind.name)) or 'Small Blind')
+            local blindname = (blindname == '' and 'Small Blind' or blindname)
 
-        for k, v in pairs(G.P_BLINDS) do
-            if v.name == blindname then
-                local boss_col = v.boss_colour
-                if v.boss and v.boss.showdown then
-                    ease_background_colour{
-                        new_colour = increase_saturation(mix_colours(boss_col, invert_color(boss_col), 0.3), 1),
-                        special_colour = boss_col,
-                        tertiary_colour = darken(increase_saturation(mix_colours(boss_col, invert_color(boss_col, true, false, false), 0.3), 0.6), 0.4), contrast = 1.7}
-                    return
-                else
-                    original_ease_background_colour_blind(state, blind_override)
+            for k, v in pairs(G.P_BLINDS) do
+                if v.name == blindname then
+                    local boss_col = v.boss_colour
+                    if v.boss and v.boss.showdown then
+                        ease_background_colour{
+                            new_colour = increase_saturation(mix_colours(boss_col, invert_color(boss_col), 0.3), 1),
+                            special_colour = boss_col,
+                            tertiary_colour = darken(increase_saturation(mix_colours(boss_col, invert_color(boss_col, true, false, false), 0.3), 0.6), 0.4), contrast = 1.7}
+                        return
+                    else
+                        original_ease_background_colour_blind(state, blind_override)
+                    end
                 end
             end
         end
     end
 
-    local NFS = NFS or love.filesystem
+    if config.high_quality_background then
+        local background_shader = NFS.read(bunco_mod.path..'resources/shaders/background.fs')
+        local splash_shader = NFS.read(bunco_mod.path..'resources/shaders/splash.fs')
 
-    local background_shader = NFS.read(bunco_mod.path..'resources/shaders/background.fs')
-    local splash_shader = NFS.read(bunco_mod.path..'resources/shaders/splash.fs')
-
-    G.SHADERS['background'] = love.graphics.newShader(background_shader)
-    G.SHADERS['splash'] = love.graphics.newShader(splash_shader)
+        G.SHADERS['background'] = love.graphics.newShader(background_shader)
+        G.SHADERS['splash'] = love.graphics.newShader(splash_shader)
+    end
 
     -- Blind debuffs (\BL_DEB)
 

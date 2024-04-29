@@ -5,7 +5,7 @@ extern vec4 colour_2;
 extern number mid_flash;
 extern number vort_offset;
 
-#define PIXEL_SIZE_FAC 1920.
+#define PIXEL_SIZE_FAC 2560.
 #define BLACK 0.6*vec4(79./255.,99./255., 103./255., 1./0.6)
 
 vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords )
