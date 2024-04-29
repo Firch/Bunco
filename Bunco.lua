@@ -3023,9 +3023,9 @@ function SMODS.INIT.Bunco()
     local loc_magicwand = {
         ['name'] = 'Magic Wand',
         ['text'] = {
-            [1] = 'Gains {X:mult,C:white}X0.3{} Mult for each',
-            [2] = 'played hand containing a {C:attention}Spectrum,',
-            [3] = 'resets when a non-Spectrum hand is played',
+            [1] = 'Gains {X:mult,C:white}X0.3{} Mult for each played',
+            [2] = 'hand containing a {C:attention}Spectrum{}, resets',
+            [3] = 'when a non-Spectrum hand is played',
             [4] = '{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive} Mult)'
         }
     }
