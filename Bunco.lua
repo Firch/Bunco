@@ -44,6 +44,10 @@
 --  Additional function(s) (FUN)
 --
 -- Blinds (BLIN)
+--  Color (COL) - restores colors on finisher boss blinds and slightly remixes them
+--  Debuffs (DEB) - manages the debuffs of custom blinds
+--  Appearance (APP) - manages the rerolling of blinds
+--  Initializing (INI)
 
 function SMODS.INIT.Bunco()
 
@@ -62,11 +66,11 @@ function SMODS.INIT.Bunco()
 
     -- Exotic cards sprites (\EX_SPR):
 
-    local sprite_exotic_cards = SMODS.Sprite:new('exotic_cards', bunco_mod.path, '8BitDeck.png', 71, 95, 'asset_atli') sprite_exotic_cards:register()
-    local sprite_exotic_cards_ui = SMODS.Sprite:new('exotic_cards_ui', bunco_mod.path, 'ui_assets.png', 18, 18, 'asset_atli') sprite_exotic_cards_ui:register()
+    local sprite_exotic_cards = SMODS.Sprite:new('exotic_cards', bunco_mod.path, 'ExoticCards.png', 71, 95, 'asset_atli') sprite_exotic_cards:register()
+    local sprite_exotic_cards_ui = SMODS.Sprite:new('exotic_cards_ui', bunco_mod.path, 'ExoticSuits.png', 18, 18, 'asset_atli') sprite_exotic_cards_ui:register()
 
-    local sprite_exotic_cards_high_contrast = SMODS.Sprite:new('exotic_cards_high_contrast', bunco_mod.path, '8BitDeck.png', 71, 95, 'asset_atli') sprite_exotic_cards_high_contrast:register()
-    local sprite_exotic_cards_ui_high_contrast = SMODS.Sprite:new('exotic_cards_ui_high_contrast', bunco_mod.path, 'ui_assets.png', 18, 18, 'asset_atli') sprite_exotic_cards_ui_high_contrast:register()
+    local sprite_exotic_cards_high_contrast = SMODS.Sprite:new('exotic_cards_high_contrast', bunco_mod.path, 'ExoticCardsHC.png', 71, 95, 'asset_atli') sprite_exotic_cards_high_contrast:register()
+    local sprite_exotic_cards_ui_high_contrast = SMODS.Sprite:new('exotic_cards_ui_high_contrast', bunco_mod.path, 'ExoticSuitsHC.png', 18, 18, 'asset_atli') sprite_exotic_cards_ui_high_contrast:register()
 
     -- Exotic cards localization (\EX_LOC):
 
@@ -348,7 +352,7 @@ function SMODS.INIT.Bunco()
         if suit == 'Fleurons' then
 
             SMODS.Card:new_suit('Fleurons', 'exotic_cards', 'exotic_cards_high_contrast', { y = 0 }, 'exotic_cards_ui', 'exotic_cards_ui_high_contrast',
-                { x = 0, y = 0 }, 'd6901a', 'd6901a')
+                { x = 0, y = 0 }, 'd6901a', 'ffd03c')
 
             if G.GAME ~= nil and (G.GAME.Fleurons == false or G.GAME.Fleurons == nil) and initial == nil then
 
@@ -372,7 +376,7 @@ function SMODS.INIT.Bunco()
             end
 
             SMODS.Card:new_suit('Halberds', 'exotic_cards', 'exotic_cards_high_contrast', { y = 1 }, 'exotic_cards_ui', 'exotic_cards_ui_high_contrast',
-                { x = 1, y = 0 }, '6e3c63', '6e3c63')
+                { x = 1, y = 0 }, '6e3c63', 'a95296')
 
             if G.GAME ~= nil and (G.GAME.Halberds == false or G.GAME.Halberds == nil) and initial == nil then
 
@@ -1221,7 +1225,11 @@ function SMODS.INIT.Bunco()
             'Starfruit',
             'Wishalloy',
             'Unobtanium',
-            'Fondue'}
+            'Fondue',
+            'Myopia',
+            'Astigmatism',
+            'Magic Wand',
+            'Rigoletto'}
 
         if G.GAME.Fleurons ~= nil or G.GAME.Halberds ~= nil then
             allow_exotic = true
@@ -3072,13 +3080,25 @@ function SMODS.INIT.Bunco()
 
     SMODS.Jokers.j_rigoletto.calculate = function(self, context)
         if context.individual and context.cardarea == G.play then
-            context.other_card.ability.perma_bonus_mult = context.other_card.ability.perma_bonus_mult or 0
-            context.other_card.ability.perma_bonus_mult = context.other_card.ability.perma_bonus_mult + 4
 
-            return {
-                extra = {focus = context.other_card, message = localize('k_upgrade_ex'), colour = G.C.MULT},
-                card = self
-            }
+            local condition = false
+
+            for i = 1, #context.scoring_hand do
+                if context.scoring_hand[i]:is_suit('Halberds') or context.scoring_hand[i]:is_suit('Fleurons') then
+                    condition = true
+                end
+            end
+
+            if condition then
+
+                context.other_card.ability.perma_bonus_mult = context.other_card.ability.perma_bonus_mult or 0
+                context.other_card.ability.perma_bonus_mult = context.other_card.ability.perma_bonus_mult + 4
+
+                return {
+                    extra = {focus = context.other_card, message = localize('k_upgrade_ex'), colour = G.C.MULT},
+                    card = self
+                }
+            end
         end
     end
 
@@ -3212,6 +3232,14 @@ function SMODS.INIT.Bunco()
         end
     end
 
+    local NFS = NFS or love.filesystem
+
+    local background_shader = NFS.read(bunco_mod.path..'resources/shaders/background.fs')
+    local splash_shader = NFS.read(bunco_mod.path..'resources/shaders/splash.fs')
+
+    G.SHADERS['background'] = love.graphics.newShader(background_shader)
+    G.SHADERS['splash'] = love.graphics.newShader(splash_shader)
+
     -- Blind debuffs (\BL_DEB)
 
     local original_blind_debuff_card = Blind.debuff_card
@@ -3232,12 +3260,35 @@ function SMODS.INIT.Bunco()
         original_blind_debuff_card(self, card, from_blind)
     end
 
+    -- Blind appearance (\BL_APP)
+
+    local original_get_new_boss = get_new_boss
+
+    function get_new_boss()
+        local boss = original_get_new_boss()
+
+        local function startsWith(str, start)
+            return str:sub(1, #start) == start
+        end
+
+        if startsWith(boss, 'bl_final') then
+            if allow_exotic then
+                sendDebugMessage('Chartreuse Crown is allowed.')
+            elseif boss == 'bl_final_crown' then
+                sendDebugMessage('Rerolled Chartreuse Crown!')
+                boss = get_new_boss()
+            end
+        end
+
+        return boss
+    end
+
     -- Blind Initializing (\BL_INI)
 
     SMODS.Sprite:new('chartreusecrown', bunco_mod.path, 'ChartreuseCrown.png', 34, 34, 'animation_atli', 21):register()
     local ChartreuseCrown = SMODS.Blind:new(
         'Chartreuse Crown', -- Name
-        'chartreusecrown', -- Slug
+        'final_crown', -- Slug
         {name = 'Chartreuse Crown',
         text = {'All Spade, Heart, Club and Diamond', 'base suit cards are debuffed'}},
         8, -- Reward
