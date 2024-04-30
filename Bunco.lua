@@ -1,8 +1,8 @@
 --- STEAMODDED HEADER
 --- MOD_NAME: Bunco
 --- MOD_ID: Bunco
---- MOD_AUTHOR: [Firch & RENREN]
---- MOD_DESCRIPTION: Mod aiming for vanilla style, currently adding 20 new Jokers and some hidden things!
+--- MOD_AUTHOR: [Firch, RENREN, Peas, minichibis, J.D., Guwahavel, Ciirulean]
+--- MOD_DESCRIPTION: Mod aiming for vanilla style, currently adding 34 new Jokers and Exotic Suits system!
 
 ----------------------------------------------
 ------------MOD CODE -------------------------
