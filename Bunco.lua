@@ -724,7 +724,7 @@ function SMODS.INIT.Bunco()
 
         -- Dread additional function (\DREA_FUN)
 
-        if self.ability.name == 'Dread' and not self.debuff then
+        if self.ability.name == 'Dread' then
             for name, level in pairs(self.ability.extra.level_up_list) do
                 level_up_hand(self, name, true, level * -1)
             end
@@ -1803,12 +1803,15 @@ function SMODS.INIT.Bunco()
 
             G.E_MANAGER:add_event(Event({
                 trigger = 'after',
-                delay = 0.3,
+                delay = 0,
                 func = function()
+
                     for i = 1, #self.ability.extra.trash_list do
+                        self.ability.extra.trash_list[i].destroyed = true
                         self.ability.extra.trash_list[i]:start_dissolve(nil, nil, 3)
                     end
                     self.ability.extra.trash_list = {}
+
             return true end }))
 
             return {
