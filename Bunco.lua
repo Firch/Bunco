@@ -679,9 +679,9 @@ function SMODS.INIT.Bunco()
             G.P_CENTERS.m_glass.config.Xmult = 2 -- Default values. This additional check is for when there's no Jokers at all
             G.P_CENTERS.m_glass.config.extra = 4
 
-            for _, v in ipairs(G.jokers.cards) do
+            local condition = false
 
-                local condition = false
+            for _, v in ipairs(G.jokers.cards) do
 
                 if v.ability.name == 'Sledgehammer' and not self.debuff then
                     condition = true
