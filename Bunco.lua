@@ -7,7 +7,7 @@
 ----------------------------------------------
 ------------MOD CODE -------------------------
 
----- Bunco 3.0
+---- Bunco 3.1
 --
 -- A mod that I'm trying so hard to make. Of course feel free to reference anything from here.
 --
