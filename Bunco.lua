@@ -2249,7 +2249,7 @@ function SMODS.INIT.Bunco()
         ['name'] = 'Dogs Playing Poker',
         ['text'] = {
             [1] = '{X:mult,C:white}X#1#{} Mult if all scored',
-            [2] = 'cards are lower than {C:attention}6'
+            [2] = 'cards are {C:attention}2{}, {C:attention}3{}, {C:attention}4{}, or {C:attention}5{}'
         }
     }
 
@@ -2276,7 +2276,8 @@ function SMODS.INIT.Bunco()
 
             if context.scoring_hand ~= nil then
                 for i = 1, #context.scoring_hand do
-                    if context.scoring_hand[i]:get_id() >= 6 then
+                    if context.scoring_hand[i]:get_id() >= 6 or
+                    context.scoring_hand[i]:get_id() < 2 then
                         condition = false
                     end
                 end
