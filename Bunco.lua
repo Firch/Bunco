@@ -2172,10 +2172,8 @@ function SMODS.INIT.Bunco()
     local loc_jokermanjesterboy = {
         ['name'] = 'Joker Man & Jester Boy Trading Card No. 54',
          ['text'] = {
-            [1] = 'Each {C:attention}Standard Pack{} will have',
-            [2] = 'at least two {C:attention}Enhanced Cards{},',
-            [3] = 'each {C:attention}Buffoon pack{} will have',
-            [4] = 'at least one {C:green}Uncommon{} Joker'
+            [1] = '{C:attention}Standard Packs{} will contain',
+            [2] = 'only {C:attention}Enhanced Cards{}'
         }
     }
 
@@ -2215,8 +2213,6 @@ function SMODS.INIT.Bunco()
                     blocking = false,
                     func = function()
 
-                        local enhancement_amount = 0
-
                         local enhancement_pool = {
                             G.P_CENTERS.m_bonus,
                             G.P_CENTERS.m_mult,
@@ -2228,69 +2224,11 @@ function SMODS.INIT.Bunco()
                             G.P_CENTERS.m_lucky
                         }
 
-                        if G.pack_cards and G.pack_cards.cards[1] and G.pack_cards.VT.y < G.ROOM.T.h then
+                        if G.pack_cards and G.pack_cards.cards ~= nil and G.pack_cards.cards[1] and G.pack_cards.VT.y < G.ROOM.T.h then
 
                             for _, v in ipairs(G.pack_cards.cards) do
-                                if v.config.center ~= G.P_CENTERS.c_base then
-                                    enhancement_amount = enhancement_amount + 1
-                                end
-                            end
-
-                            sendDebugMessage('JM & JB: '..enhancement_amount..' cards with enhancements.')
-
-                            if enhancement_amount < 2 then
-                                for _, v in ipairs(G.pack_cards.cards) do
-                                    if v.config.center == G.P_CENTERS.c_base then
-                                        v:set_ability(enhancement_pool[math.random(#enhancement_pool)])
-                                        enhancement_amount = enhancement_amount + 1
-                                        if enhancement_amount == 2 then
-                                            break
-                                        end
-                                    end
-                                end
-                            end
-
-                            return true
-                        end
-                    end
-                }))
-            elseif (context.booster_type == 'Buffoon Pack' or
-            context.booster_type == 'Jumbo Buffoon Pack' or
-            context.booster_type == 'Mega Buffon Pack') then
-
-                sendDebugMessage('Opening Buffoon Pack...')
-
-                G.E_MANAGER:add_event(Event({
-                    trigger = "after",
-                    delay = 1.3 * math.sqrt(G.SETTINGS.GAMESPEED),
-                    blockable = false,
-                    blocking = false,
-                    func = function()
-                        if G.pack_cards and G.pack_cards.cards[1] and G.pack_cards.VT.y < G.ROOM.T.h then
-
-                            local uncommon = false
-
-                            for _, v in ipairs(G.pack_cards.cards) do
-                                if v.config.center.rarity == 2 then
-                                    uncommon = true
-                                    sendDebugMessage('Found at least one Uncommon Joker.')
-                                    break
-                                end
-                            end
-
-                            if uncommon == false then
-                                sendDebugMessage('JM & JB: Rerolling Joker..')
-                                while true do
-                                    local rerolled_joker = create_card('Joker', G.pack_cards, false, nil, nil, nil, nil, nil)
-
-                                    if rerolled_joker.config.center.rarity == 2 then
-                                        sendDebugMessage('JM & JB: Rerolled!')
-                                        G.pack_cards.cards[1] = rerolled_joker
-                                        G.pack_cards.cards[1]:start_materialize({G.C.WHITE, G.C.WHITE}, nil, 1.5*G.SETTINGS.GAMESPEED)
-                                        break
-                                    end
-
-                                    rerolled_joker:remove()
+                                if v.config.center == G.P_CENTERS.c_base then
+                                    v:set_ability(enhancement_pool[math.random(#enhancement_pool)])
                                 end
                             end
 
