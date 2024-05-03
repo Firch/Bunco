@@ -6,7 +6,7 @@
 
 Ever wanted to use REAL NUKE on your cards? Or maybe you wanted to see cards from other popular videogames? Or you want some mod that doesn't look too out of place?
 
-![Randomcards](https://github.com/Firch/Bunco/assets/47253246/a2fe4549-7a3a-48ce-a5c5-5edccc84981e)
+![Randomcards](https://github.com/Firch/Bunco/assets/47253246/5b5220db-7327-4665-8d01-e52fe323816c)
 
 ### Bunco is a **Balatro** expansion mod that currently adds:
 ![Microcassette](https://github.com/Firch/Bunco/assets/47253246/c46656bc-c16a-4b77-9edd-ffa66f410a7b)
