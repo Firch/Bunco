@@ -74,8 +74,9 @@ function SMODS.INIT.Bunco()
     local sprite_exotic_cards_ui_high_contrast = SMODS.Sprite:new('exotic_cards_ui_high_contrast', bunco_mod.path, 'ExoticSuitsHC.png', 18, 18, 'asset_atli') sprite_exotic_cards_ui_high_contrast:register()
 
     -- LunaAstraCassiopeia's awesome high contrast card resprites
-    local card_contrast = SMODS.Sprite:new("cards_2", bunco_mod.path, "EnhancedContrast.png", 71, 95, "asset_atli") card_contrast:register()
-    local ui_contrast = SMODS.Sprite:new("ui_2", bunco_mod.path, "EnhancedUIContrast.png", 18, 18, "asset_atli") ui_contrast:register()
+    if config.high_contrast then
+        local card_contrast = SMODS.Sprite:new("cards_2", bunco_mod.path, "EnhancedContrast.png", 71, 95, "asset_atli") card_contrast:register()
+        local ui_contrast = SMODS.Sprite:new("ui_2", bunco_mod.path, "EnhancedUIContrast.png", 18, 18, "asset_atli") ui_contrast:register()
 
     G.C["SO_2"] = {
         Hearts = HEX('ee151b'),
@@ -83,6 +84,7 @@ function SMODS.INIT.Bunco()
         Spades = HEX("5d55a6"),
         Clubs = HEX("197f77"),
     }
+    end
 
     local new_colour_proto = G.C["SO_"..(G.SETTINGS.colourblind_option and 2 or 1)]
     G.C.SUITS.Hearts = new_colour_proto.Hearts
@@ -2302,7 +2304,7 @@ function SMODS.INIT.Bunco()
         ['text'] = {
             [1] = 'Retrigger rightmost played card',
             [2] = 'the same amount of times as',
-            [3] = 'your amount of hands'
+            [3] = 'your current amount of hands'
         }
     }
 
