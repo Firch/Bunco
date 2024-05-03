@@ -2301,8 +2301,8 @@ function SMODS.INIT.Bunco()
         ['name'] = 'Righthook Joker',
         ['text'] = {
             [1] = 'Retrigger rightmost played card',
-            [2] = 'three times in',
-            [3] = '{C:attention}first hand{} of round'
+            [2] = 'the same amount of times as',
+            [3] = 'your amount of hands'
         }
     }
 
@@ -2323,11 +2323,13 @@ function SMODS.INIT.Bunco()
 
     SMODS.Jokers.j_righthook.calculate = function(self, context)
 
-        if context.repetition and context.cardarea == G.play and context.scoring_hand ~= nil and context.other_card == context.scoring_hand[#context.scoring_hand] and G.GAME.current_round.hands_played == 0 then
+        if context.repetition and context.cardarea == G.play and context.scoring_hand ~= nil and context.other_card == context.scoring_hand[#context.scoring_hand] then
+
+            local repetitions = G.GAME.current_round.hands_left
 
             return {
                 message = localize('k_again_ex'),
-                repetitions = 3,
+                repetitions = repetitions,
                 card = self
             }
         end
