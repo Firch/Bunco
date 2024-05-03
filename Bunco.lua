@@ -2051,7 +2051,7 @@ function SMODS.INIT.Bunco()
     local loc_shepherd = {
         ['name'] = 'Shepherd Joker',
         ['text'] = {
-            [1] = 'Gains {C:chips}+8{} Chips',
+            [1] = 'Gains {C:chips}+6{} Chips',
             [2] = 'when played hand contains a {C:attention}Pair',
             [3] = '{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)'
         }
@@ -2074,7 +2074,7 @@ function SMODS.INIT.Bunco()
 
     SMODS.Jokers.j_shepherd.calculate = function(self, context)
         if context.after and context.poker_hands ~= nil and next(context.poker_hands['Pair']) and not context.blueprint then
-            self.ability.extra.chips = self.ability.extra.chips + 8
+            self.ability.extra.chips = self.ability.extra.chips + 6
 
             forced_message('+'..tostring(self.ability.extra.chips)..' Chips', self, G.C.BLUE)
 
