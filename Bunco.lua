@@ -1351,6 +1351,9 @@ function SMODS.INIT.Bunco()
                     if self.base.suit == 'Halberds' and (suit ~= 'Halberds') then
                         returnable = false
                     end
+                    if (self.base.suit ~= 'Fleurons' and self.base.suit ~= 'Halberds') and (suit == 'Fleurons' or suit == 'Halberds') then
+                        returnable = false
+                    end
                 end
             end
         end
