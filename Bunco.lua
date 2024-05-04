@@ -3291,6 +3291,16 @@ function SMODS.INIT.Bunco()
         return original_game_update_shop(self, dt)
     end
 
+    local original_card_highlight = Card.highlight
+
+    function Card:highlight(is_higlighted)
+        original_card_highlight(self, is_higlighted)
+
+        if G.GAME.blind and G.GAME.blind.name == 'The Gate' and is_higlighted then
+            self.ability.forced_selection = true
+        end
+    end
+
     -- Blind appearance (\BL_APP)
 
     local original_get_new_boss = get_new_boss
@@ -3329,6 +3339,23 @@ function SMODS.INIT.Bunco()
 
     -- Blind Initializing (\BL_INI)
 
+    SMODS.Sprite:new('thegate', bunco_mod.path, 'TheGate.png', 34, 34, 'animation_atli', 21):register()
+    local TheGate = SMODS.Blind:new(
+        'The Gate', -- Name
+        'gate', -- Slug
+        {name = 'The Gate',
+        text = {'Every selected card is', 'forced to be selected'}},
+        5, -- Reward
+        2, -- Multiplier
+        {}, -- Vars
+        {}, -- Debuff
+        {x = 0, y = 0}, -- Sprite position
+        {min = 1, max = 10}, -- Boss antes
+        HEX('c9a27a'), -- Color
+        false, -- Discovered
+        'thegate') -- Atlas
+    TheGate:register()
+
     SMODS.Sprite:new('chartreusecrown', bunco_mod.path, 'ChartreuseCrown.png', 34, 34, 'animation_atli', 21):register()
     local ChartreuseCrown = SMODS.Blind:new(
         'Chartreuse Crown', -- Name
@@ -3351,7 +3378,7 @@ function SMODS.INIT.Bunco()
         'Vermilion Trident', -- Name
         'final_trident', -- Slug
         {name = 'Vermilion Trident',
-        text = {'Shopping sequences', 'are disabled.'}},
+        text = {'Shops are disabled', 'this Ante'}},
         8, -- Reward
         2, -- Multiplier
         {}, -- Vars
