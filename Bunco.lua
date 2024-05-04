@@ -3292,7 +3292,14 @@ function SMODS.INIT.Bunco()
         end
 
         if startsWith(boss, 'bl_final') then
-            if G.GAME.allow_exotic then
+
+            local exotic_amount = 0
+
+            for k, v in pairs(G.playing_cards) do
+                if v:is_suit('Fleurons') or v:is_suit('Halberds') then exotic_amount = exotic_amount + 1 end
+            end
+
+            if G.GAME.allow_exotic and exotic_amount >= 5 then
                 sendDebugMessage('Chartreuse Crown is allowed.')
             elseif boss == 'bl_final_crown' then
                 sendDebugMessage('Rerolled Chartreuse Crown!')
