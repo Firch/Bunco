@@ -330,7 +330,7 @@ function SMODS.INIT.Bunco()
 
                 SMODS.Card:delete_suit('Halberds')
 
-                G.GAME.Fleurons = false
+                G.GAME.Halberds = false
 
                 sendDebugMessage('Forcibly forgot '..suit..'!')
 
@@ -383,6 +383,10 @@ function SMODS.INIT.Bunco()
 
                 G.GAME.Fleurons = true
 
+                if G.GAME.first_exotic_suit == nil then
+                    G.GAME.first_exotic_suit = 'Fleurons'
+                end
+
                 sendDebugMessage('Acknowledged '..suit..'! (Initial:'..tostring(initial or 'false')..')')
 
             end
@@ -395,17 +399,16 @@ function SMODS.INIT.Bunco()
 
         elseif suit == 'Halberds' then
 
-            if G.GAME ~= nil and initial == false and G.GAME.Fleurons == nil then -- Flash-registering of Fleurons for proper order
-                acknowledge('Fleurons')
-                forget('Fleurons', nil, nil, true)
-            end
-
             SMODS.Card:new_suit('Halberds', 'exotic_cards', 'exotic_cards_high_contrast', { y = 1 }, 'exotic_cards_ui', 'exotic_cards_ui_high_contrast',
                 { x = 1, y = 0 }, '6e3c63', '993283')
 
             if G.GAME ~= nil and (G.GAME.Halberds == false or G.GAME.Halberds == nil) and initial == nil then
 
                 G.GAME.Halberds = true
+
+                if G.GAME.first_exotic_suit == nil then
+                    G.GAME.first_exotic_suit = 'Halberds'
+                end
 
                 sendDebugMessage('Acknowledged '..suit..'! (Initial:'..tostring(initial or 'false')..')')
 
@@ -442,29 +445,39 @@ function SMODS.INIT.Bunco()
         sendDebugMessage('Bunco run info: (PRELOAD)')
         sendDebugMessage('Are fleurons known? - '..tostring(saved_game and saved_game.GAME.Fleurons))
         sendDebugMessage('Are halberds known? - '..tostring(saved_game and saved_game.GAME.Halberds))
+        sendDebugMessage('Which suit was registered first? - '..tostring(saved_game and saved_game.GAME.first_exotic_suit))
 
         if saved_game ~= nil then
-            if saved_game.GAME.Fleurons ~= nil then
-
-                sendDebugMessage('Registered fleurons, because the current run already had them!')
-                acknowledge('Fleurons')
-
-            else
-
-                sendDebugMessage('Removed fleurons; undiscovered in the current run!')
-                forget('Fleurons')
-
-            end
-            if saved_game.GAME.Halberds ~= nil then
-
-                sendDebugMessage('Registered halberds, because the current run already had them!')
-                acknowledge('Halberds')
-
-            else
-
-                sendDebugMessage('Removed halberds; undiscovered in the current run!')
-                forget('Halberds')
-
+            if saved_game.GAME.first_exotic_suit == 'Fleurons' then
+                if saved_game.GAME.Fleurons ~= nil then
+                    sendDebugMessage('Registered fleurons, because the current run already had them!')
+                    acknowledge('Fleurons')
+                else
+                    sendDebugMessage('Removed fleurons; undiscovered in the current run!')
+                    forget('Fleurons')
+                end
+                if saved_game.GAME.Halberds ~= nil then
+                    sendDebugMessage('Registered halberds, because the current run already had them!')
+                    acknowledge('Halberds')
+                else
+                    sendDebugMessage('Removed halberds; undiscovered in the current run!')
+                    forget('Halberds')
+                end
+            elseif saved_game.GAME.first_exotic_suit == 'Halberds' then
+                if saved_game.GAME.Halberds ~= nil then
+                    sendDebugMessage('Registered halberds, because the current run already had them!')
+                    acknowledge('Halberds')
+                else
+                    sendDebugMessage('Removed halberds; undiscovered in the current run!')
+                    forget('Halberds')
+                end
+                if saved_game.GAME.Fleurons ~= nil then
+                    sendDebugMessage('Registered fleurons, because the current run already had them!')
+                    acknowledge('Fleurons')
+                else
+                    sendDebugMessage('Removed fleurons; undiscovered in the current run!')
+                    forget('Fleurons')
+                end
             end
         else
 
@@ -1324,6 +1337,19 @@ function SMODS.INIT.Bunco()
                     end
                     if self.base.suit == 'Diamonds' and (self.base.suit == 'Diamonds') == (suit == 'Diamonds' or suit == 'Fleurons') then
                         returnable = true
+                    end
+                end
+            end
+        end
+
+        if G.jokers ~= nil then
+            for _, v in ipairs(G.jokers.cards) do
+                if v.ability.name == 'Smeared Joker' and not v.debuff then
+                    if self.base.suit == 'Fleurons' and (suit ~= 'Fleurons') then
+                        returnable = false
+                    end
+                    if self.base.suit == 'Halberds' and (suit ~= 'Halberds') then
+                        returnable = false
                     end
                 end
             end
