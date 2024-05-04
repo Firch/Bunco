@@ -59,6 +59,23 @@ function SMODS.INIT.Bunco()
     local sprite_tarots = SMODS.Sprite:new('bunco_tarots', bunco_mod.path, 'Tarots.png', 71, 95, 'asset_atli') sprite_tarots:register()
     local sprite_planets = SMODS.Sprite:new('bunco_planets', bunco_mod.path, 'Planets.png', 71, 95, 'asset_atli') sprite_planets:register()
 
+    exotic_table = {
+        'The Sky',
+        'The Abyss',
+        'Envious Joker',
+        'Proud Joker',
+        'Zealous Joker',
+        'Lurid Joker',
+        'The Dynasty',
+        'Starfruit',
+        'Wishalloy',
+        'Unobtanium',
+        'Fondue',
+        'Myopia',
+        'Astigmatism',
+        'Magic Wand',
+        'Rigoletto'}
+
     ---- Config loading (\CONF):
 
     local config = NFS.load(bunco_mod.path.."config.lua")()
@@ -277,7 +294,7 @@ function SMODS.INIT.Bunco()
 
     -- Exotic cards Initializing (\EX_INI):
 
-    local function forget(suit, initial, deck, forced) -- G.GAME.Suit returns nil if the suit wasn't encountered, true if it is currently in the deck and false if it was encountered but not in the deck
+    function forget(suit, initial, deck, forced) -- G.GAME.Suit returns nil if the suit wasn't encountered, true if it is currently in the deck and false if it was encountered but not in the deck
 
         if suit == 'Fleurons' then
 
@@ -372,7 +389,7 @@ function SMODS.INIT.Bunco()
         end
     end
 
-    local function acknowledge(suit, initial)
+    function acknowledge(suit, initial)
 
         if suit == 'Fleurons' then
 
@@ -380,6 +397,8 @@ function SMODS.INIT.Bunco()
                 { x = 0, y = 0 }, 'd6901a', 'dbb529')
 
             if G.GAME ~= nil and (G.GAME.Fleurons == false or G.GAME.Fleurons == nil) and initial == nil then
+
+                G.GAME.allow_exotic = true
 
                 G.GAME.Fleurons = true
 
@@ -403,6 +422,8 @@ function SMODS.INIT.Bunco()
                 { x = 1, y = 0 }, '6e3c63', '993283')
 
             if G.GAME ~= nil and (G.GAME.Halberds == false or G.GAME.Halberds == nil) and initial == nil then
+
+                G.GAME.allow_exotic = true
 
                 G.GAME.Halberds = true
 
@@ -1198,8 +1219,6 @@ function SMODS.INIT.Bunco()
         end
     end
 
-    local allow_exotic = false
-
     local original_create_card = create_card
 
     function create_card(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
@@ -1252,28 +1271,11 @@ function SMODS.INIT.Bunco()
             return false
         end
 
-        local exotic_table = {
-            'The Sky',
-            'The Abyss',
-            'Envious Joker',
-            'Proud Joker',
-            'Zealous Joker',
-            'Lurid Joker',
-            'The Dynasty',
-            'Starfruit',
-            'Wishalloy',
-            'Unobtanium',
-            'Fondue',
-            'Myopia',
-            'Astigmatism',
-            'Magic Wand',
-            'Rigoletto'}
-
         if G.GAME.Fleurons ~= nil or G.GAME.Halberds ~= nil then
-            allow_exotic = true
+            G.GAME.allow_exotic = true
         end
 
-        if not allow_exotic and has_value(exotic_table, card.ability.name) then
+        if not G.GAME.allow_exotic and has_value(exotic_table, card.ability.name) then
             sendDebugMessage('Exotic card appeared! But the exotic suit did not exist.')
             sendDebugMessage('Rerolling...')
             card:remove()
@@ -1675,16 +1677,17 @@ function SMODS.INIT.Bunco()
     local loc_crop = {
         ['name'] = 'Crop Circles',
         ['text'] = {
-            [1] = '{C:clubs}Clubs{} give {C:mult}+3{} Mult,',
-            [2] = '8 give {C:mult}+2{} Mult,',
-            [3] = 'Q, 10, 9, 6 give {C:mult}+1{} Mult'
+            [1] = '{C:fleurons}Fleurons{} give {C:mult}+4{} Mult,',
+            [2] = '{C:clubs}Clubs{} give {C:mult}+3{} Mult,',
+            [3] = '8 give {C:mult}+2{} Mult,',
+            [4] = 'Q, 10, 9, 6 give {C:mult}+1{} Mult'
         }
     }
 
     local joker_crop = SMODS.Joker:new(
         'Crop Circles', -- Name
         'crop', -- Slug
-        {extra = {mult = 1}}, -- Config
+        {}, -- Config
         {x = 4, y = 0}, -- Sprite position
         loc_crop, -- Localization
         2, -- Rarity
@@ -1698,32 +1701,49 @@ function SMODS.INIT.Bunco()
 
     SMODS.Jokers.j_crop.calculate = function(self, context)
 
-        if context.individual and context.cardarea == G.play then
-            if context.other_card.base.suit == ('Clubs') and context.other_card.ability.effect ~= 'Stone Card' then
+        if context.individual and context.cardarea == G.play and context.other_card.ability.effect ~= 'Stone Card' then
+            if context.other_card.base.suit == ('Fleurons') then
                 if context.other_card:get_id() == 8 then
                     return {
-                        mult = self.ability.extra.mult * 5,
+                        mult = 6,
                         card = self
                     }
                 elseif context.other_card:get_id() == 12 or context.other_card:get_id() == 10 or context.other_card:get_id() == 9 or context.other_card:get_id() == 6 then
                     return {
-                        mult = self.ability.extra.mult * 4,
+                        mult = 5,
                         card = self
                     }
                 else
                     return {
-                        mult = self.ability.extra.mult * 3,
+                        mult = 4,
+                        card = self
+                    }
+                end
+            elseif context.other_card.base.suit == ('Clubs') then
+                if context.other_card:get_id() == 8 then
+                    return {
+                        mult = 5,
+                        card = self
+                    }
+                elseif context.other_card:get_id() == 12 or context.other_card:get_id() == 10 or context.other_card:get_id() == 9 or context.other_card:get_id() == 6 then
+                    return {
+                        mult = 4,
+                        card = self
+                    }
+                else
+                    return {
+                        mult = 3,
                         card = self
                     }
                 end
             elseif context.other_card:get_id() == 8 then
                 return {
-                    mult = self.ability.extra.mult * 2,
+                    mult = 2,
                     card = self
                 }
             elseif context.other_card:get_id() == 12 or context.other_card:get_id() == 10 or context.other_card:get_id() == 9 or context.other_card:get_id() == 6 then
                 return {
-                    mult = self.ability.extra.mult,
+                    mult = 1,
                     card = self
                 }
             end
@@ -3272,7 +3292,7 @@ function SMODS.INIT.Bunco()
         end
 
         if startsWith(boss, 'bl_final') then
-            if allow_exotic then
+            if G.GAME.allow_exotic then
                 sendDebugMessage('Chartreuse Crown is allowed.')
             elseif boss == 'bl_final_crown' then
                 sendDebugMessage('Rerolled Chartreuse Crown!')
@@ -3304,6 +3324,17 @@ function SMODS.INIT.Bunco()
 
 end
 
+local generate_card_ui_ref = generate_card_ui
+function generate_card_ui(_c, full_UI_table, specific_vars, card_type, badges, hide_desc, main_start, main_end)
+    local returnable = generate_card_ui_ref(_c, full_UI_table, specific_vars, card_type, badges, hide_desc, main_start, main_end)
+
+    if _c.name == 'Crop Circles' and (_c.exotic == nil or _c.exotic == false or _c.cardarea.collection) then
+        table.remove(returnable.main, 1)
+    end
+
+    return returnable
+end
+
 -- Copied and modifed from LushMod
 local generate_UIBox_ability_tableref = Card.generate_UIBox_ability_table
 function Card.generate_UIBox_ability_table(self)
@@ -3327,7 +3358,7 @@ function Card.generate_UIBox_ability_table(self)
         elseif self.ability.name == 'Voxel Joker' then -- Voxel Joker localization (\VOXE_LOC)
             loc_vars = {self.ability.extra.base_xmult, self.ability.extra.xmult}
         elseif self.ability.name == 'Crop Circles' then -- Crop Circles Joker localization (\CROP_LOC)
-            loc_vars = {self.ability.extra.mult}
+
         elseif self.ability.name == 'X-Ray' then -- X-Ray Joker localization (\XRAY_LOC)
             loc_vars = {self.ability.extra.xmult}
         elseif self.ability.name == 'Dread' then -- Dread Joker localization (\DREA_LOC)
@@ -3427,14 +3458,15 @@ function Card.generate_UIBox_ability_table(self)
                 end
             end
 
+            self.config.center.cardarea = self.area.config
+            self.config.center.exotic = G.GAME.allow_exotic or nil
+
             return generate_card_ui(self.config.center, nil, loc_vars, card_type, badges, hide_desc, main_start, main_end)
         end
     end
 
     -- Code from AutumnMood & Victin
     local generate_UIBox_ability_table_val = generate_UIBox_ability_tableref(self)
-
-    local key = self.config.center.key
 
     if self then
         local bonus_mult = "none"
