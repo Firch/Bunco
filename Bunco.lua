@@ -2078,20 +2078,14 @@ function SMODS.INIT.Bunco()
         if context.end_of_round and G.GAME.blind.boss and not context.other_card then
 
             if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+                if not context.blueprint then
+                    forced_message(localize('k_plus_spectral'), self, G.C.SECONDARY_SET.Spectral)
+                end
                 G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
-                G.E_MANAGER:add_event(Event({
-                    trigger = 'before',
-                    delay = 0.0,
-                    func = (function()
-                            if not context.blueprint then
-                                forced_message(localize('k_plus_spectral'), self, G.C.SECONDARY_SET.Spectral)
-                            end
-                            local card = create_card('Spectral', G.consumeables, nil, nil, nil, nil, nil)
-                            card:add_to_deck()
-                            G.consumeables:emplace(card)
-                            G.GAME.consumeable_buffer = 0
-                        return true
-                end)}))
+                local card = create_card('Spectral', G.consumeables, nil, nil, nil, nil, nil)
+                card:add_to_deck()
+                G.consumeables:emplace(card)
+                G.GAME.consumeable_buffer = 0
             end
         end
     end
