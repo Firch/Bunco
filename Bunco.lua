@@ -3344,7 +3344,7 @@ function SMODS.INIT.Bunco()
         'The Gate', -- Name
         'gate', -- Slug
         {name = 'The Gate',
-        text = {'Every selected card is', 'forced to be selected'}},
+        text = {'Cards cannot', 'be unselected'}},
         5, -- Reward
         2, -- Multiplier
         {}, -- Vars
