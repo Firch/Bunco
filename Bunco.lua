@@ -3320,6 +3320,68 @@ function SMODS.INIT.Bunco()
         if self.name == 'The Miser' and not self.disabled then
             G.GAME.miser = true
         end
+
+        if self.name == 'The Swing' then
+            G.GAME.swing = false
+        end
+    end
+
+    local original_discard_cards_from_highlighted = G.FUNCS.discard_cards_from_highlighted
+
+    G.FUNCS.discard_cards_from_highlighted = function(e, hook)
+    original_discard_cards_from_highlighted(e, hook)
+
+        if G.GAME.blind and G.GAME.blind.name == 'The Swing' and not G.GAME.blind.disabled then
+            G.E_MANAGER:add_event(Event({ func = function()
+                for k, v in ipairs(G.hand.cards) do
+                    v:flip()
+                end
+
+                G.GAME.blind:wiggle()
+
+                if G.GAME.swing == true then
+                    G.GAME.swing = false
+                else
+                    G.GAME.swing = true
+                end
+            return true end }))
+        end
+    end
+
+    local original_play_cards_from_highlighted = G.FUNCS.play_cards_from_highlighted
+
+    G.FUNCS.play_cards_from_highlighted = function(e, hook)
+    original_play_cards_from_highlighted(e, hook)
+
+        if G.GAME.blind and G.GAME.blind.name == 'The Swing' and not G.GAME.blind.disabled then
+            G.E_MANAGER:add_event(Event({ func = function()
+                for k, v in ipairs(G.hand.cards) do
+                    v:flip()
+                end
+
+                G.GAME.blind:wiggle()
+
+                if G.GAME.swing == true then
+                    G.GAME.swing = false
+                else
+                    G.GAME.swing = true
+                end
+            return true end }))
+        end
+    end
+
+    local original_blind_stay_flipped = Blind.stay_flipped
+
+    function Blind:stay_flipped(area, card)
+        original_blind_stay_flipped(self, area, card)
+
+        if self.name == 'The Swing' and not self.disabled then
+            if G.GAME.swing == true then
+                return true
+            else
+                return false
+            end
+        end
     end
 
     -- Blind appearance (\BL_APP)
@@ -3406,6 +3468,23 @@ function SMODS.INIT.Bunco()
         false, -- Discovered
         'themiser') -- Atlas
     TheMiser:register()
+
+    SMODS.Sprite:new('theswing', bunco_mod.path, 'TheSwing.png', 34, 34, 'animation_atli', 21):register()
+    local TheSwing = SMODS.Blind:new(
+        'The Swing', -- Name
+        'swing', -- Slug
+        {name = 'The Swing',
+        text = {'After Play or Discard,', 'all cards are flipped'}},
+        5, -- Reward
+        2, -- Multiplier
+        {}, -- Vars
+        {}, -- Debuff
+        {x = 0, y = 0}, -- Sprite position
+        {min = 3, max = 10}, -- Boss antes
+        HEX('17f3d0'), -- Color
+        false, -- Discovered
+        'theswing') -- Atlas
+    TheSwing:register()
 
     SMODS.Sprite:new('chartreusecrown', bunco_mod.path, 'ChartreuseCrown.png', 34, 34, 'animation_atli', 21):register()
     local ChartreuseCrown = SMODS.Blind:new(
