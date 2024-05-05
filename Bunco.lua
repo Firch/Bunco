@@ -3301,6 +3301,17 @@ function SMODS.INIT.Bunco()
         end
     end
 
+    local original_cardarea_remove_from_highlighted = CardArea.remove_from_highlighted
+
+    function CardArea:remove_from_highlighted(card, force)
+        if G.GAME.blind and G.GAME.blind.name == 'The Gate' and G.GAME.blind.disabled and self == G.hand and not force then
+            card.ability.forced_selection = false
+        elseif G.GAME.blind and G.GAME.blind.name == 'The Gate' and not G.GAME.blind.disabled and card.ability.forced_selection == true and not force then
+            G.GAME.blind:wiggle()
+        end
+        original_cardarea_remove_from_highlighted(self, card, force)
+    end
+
     local original_blind_defeat = Blind.defeat
 
     function Blind:defeat(silent)
