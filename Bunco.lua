@@ -1233,7 +1233,7 @@ function SMODS.INIT.Bunco()
 
                         local new_rarity = 0.9
 
-                        if pseudorandom('doorhanger_'.._type..G.SEED) > 0.98 then
+                        if pseudorandom('doorhanger'.._type..G.SEED) > 0.98 then
                             new_rarity = 1
                             sendDebugMessage(new_rarity)
                         end
@@ -3368,6 +3368,20 @@ function SMODS.INIT.Bunco()
                 end
             return true end }))
         end
+
+        if G.GAME.blind and G.GAME.blind.name == 'The Umbrella' and not G.GAME.blind.disabled then
+            G.E_MANAGER:add_event(Event({ func = function()
+
+                for k, v in ipairs(G.hand.cards) do
+                    if v.facing == 'front' then
+                        v:flip()
+                    end
+                end
+
+                G.GAME.blind:wiggle()
+
+            return true end }))
+        end
     end
 
     local original_blind_stay_flipped = Blind.stay_flipped
@@ -3485,6 +3499,23 @@ function SMODS.INIT.Bunco()
         false, -- Discovered
         'theswing') -- Atlas
     TheSwing:register()
+
+    SMODS.Sprite:new('theumbrella', bunco_mod.path, 'TheUmbrella.png', 34, 34, 'animation_atli', 21):register()
+    local TheUmbrella = SMODS.Blind:new(
+        'The Umbrella', -- Name
+        'umbrella', -- Slug
+        {name = 'The Umbrella',
+        text = {'After Play, all non-flipped', 'cards get flipped'}},
+        5, -- Reward
+        2, -- Multiplier
+        {}, -- Vars
+        {}, -- Debuff
+        {x = 0, y = 0}, -- Sprite position
+        {min = 2, max = 10}, -- Boss antes
+        HEX('1e408e'), -- Color
+        false, -- Discovered
+        'theumbrella') -- Atlas
+    TheUmbrella:register()
 
     SMODS.Sprite:new('chartreusecrown', bunco_mod.path, 'ChartreuseCrown.png', 34, 34, 'animation_atli', 21):register()
     local ChartreuseCrown = SMODS.Blind:new(
