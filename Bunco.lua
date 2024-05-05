@@ -3277,12 +3277,18 @@ function SMODS.INIT.Bunco()
     local original_game_update_shop = Game.update_shop
 
     function Game:update_shop(dt)
-        if G.GAME.shop_skip == true then
+        if G.GAME.final_trident == true and not G.GAME.blind.disabled and not find_joker('Chicot') then
             G.STATE = G.STATES.BLIND_SELECT
             return false
         end
 
-        return original_game_update_shop(self, dt)
+        if G.GAME.miser == true then
+            G.STATE = G.STATES.BLIND_SELECT
+            G.GAME.miser = false
+            return false
+        end
+
+        original_game_update_shop(self, dt)
     end
 
     local original_card_highlight = Card.highlight
@@ -3290,8 +3296,18 @@ function SMODS.INIT.Bunco()
     function Card:highlight(is_higlighted)
         original_card_highlight(self, is_higlighted)
 
-        if G.GAME.blind and G.GAME.blind.name == 'The Gate' and is_higlighted then
+        if G.GAME.blind and G.GAME.blind.name == 'The Gate' and not G.GAME.blind.disabled and is_higlighted then
             self.ability.forced_selection = true
+        end
+    end
+
+    local original_blind_defeat = Blind.defeat
+
+    function Blind:defeat(silent)
+        original_blind_defeat(self, silent)
+
+        if self.name == 'The Miser' and not self.disabled then
+            G.GAME.miser = true
         end
     end
 
@@ -3304,6 +3320,14 @@ function SMODS.INIT.Bunco()
 
         local function startsWith(str, start)
             return str:sub(1, #start) == start
+        end
+
+        if boss == 'bl_miser' and
+        (G.GAME.round_resets.ante == 7 or
+        G.GAME.round_resets.ante == 15 or
+        G.GAME.round_resets.ante == 23) then
+            sendDebugMessage('Rerolled The Miser!')
+            boss = get_new_boss()
         end
 
         if startsWith(boss, 'bl_final') then
@@ -3323,9 +3347,14 @@ function SMODS.INIT.Bunco()
         end
 
         if boss == 'bl_final_trident' then
-            G.GAME.shop_skip = true
+            if G.STATE == G.STATES.SHOP then
+                sendDebugMessage('Rerolled Vermilion Trident!')
+                boss = get_new_boss()
+                return boss
+            end
+            G.GAME.final_trident = true
         else
-            G.GAME.shop_skip = false
+            G.GAME.final_trident = false
         end
 
         return boss
@@ -3349,6 +3378,23 @@ function SMODS.INIT.Bunco()
         false, -- Discovered
         'thegate') -- Atlas
     TheGate:register()
+
+    SMODS.Sprite:new('themiser', bunco_mod.path, 'TheMiser.png', 34, 34, 'animation_atli', 21):register()
+    local TheMiser = SMODS.Blind:new(
+        'The Miser', -- Name
+        'miser', -- Slug
+        {name = 'The Miser',
+        text = {'Shop is skipped after', 'defeating this blind'}},
+        5, -- Reward
+        2, -- Multiplier
+        {}, -- Vars
+        {}, -- Debuff
+        {x = 0, y = 0}, -- Sprite position
+        {min = 2, max = 10}, -- Boss antes
+        HEX('991a7f'), -- Color
+        false, -- Discovered
+        'themiser') -- Atlas
+    TheMiser:register()
 
     SMODS.Sprite:new('chartreusecrown', bunco_mod.path, 'ChartreuseCrown.png', 34, 34, 'animation_atli', 21):register()
     local ChartreuseCrown = SMODS.Blind:new(
