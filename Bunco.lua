@@ -3447,6 +3447,27 @@ function SMODS.INIT.Bunco()
         return boss
     end
 
+    local original_end_round = end_round
+
+    function end_round()
+        original_end_round()
+
+        if G.GAME.blind:get_type() == 'Boss' then
+            local _handname, _played, _order = 'High Card', math.huge, 100
+            for k, v in pairs(G.GAME.hands) do
+                if v.played < _played or (v.played == _played and v.order < _order) then
+                    _played = v.played
+                    _handname = k
+                    _order = v.order
+                    break
+                end
+            end
+            G.GAME.current_round.least_played_poker_hand = _handname
+
+            sendDebugMessage(G.GAME.current_round.least_played_poker_hand)
+        end
+    end
+
     -- Blind Initializing (\BL_INI)
 
     SMODS.Sprite:new('thegate', bunco_mod.path, 'TheGate.png', 34, 34, 'animation_atli', 21):register()
@@ -3517,6 +3538,23 @@ function SMODS.INIT.Bunco()
         'theumbrella') -- Atlas
     TheUmbrella:register()
 
+    SMODS.Sprite:new('themask', bunco_mod.path, 'TheMask.png', 34, 34, 'animation_atli', 21):register()
+    local TheMask = SMODS.Blind:new(
+        'The Mask', -- Name
+        'mask', -- Slug
+        {name = 'The Mask',
+        text = {'#2# has the base', 'Chips and Mult of #1#'}},
+        5, -- Reward
+        2, -- Multiplier
+        {}, -- Vars
+        {}, -- Debuff
+        {x = 0, y = 0}, -- Sprite position
+        {min = 2, max = 10}, -- Boss antes
+        HEX('efcca6'), -- Color
+        false, -- Discovered
+        'themask') -- Atlas
+    TheMask:register()
+
     SMODS.Sprite:new('chartreusecrown', bunco_mod.path, 'ChartreuseCrown.png', 34, 34, 'animation_atli', 21):register()
     local ChartreuseCrown = SMODS.Blind:new(
         'Chartreuse Crown', -- Name
@@ -3550,6 +3588,46 @@ function SMODS.INIT.Bunco()
         false, -- Discovered
         'vermiliontrident') -- Atlas
     VermilionTrident:register()
+
+    local original_game_init_object = Game.init_game_object
+
+    function Game:init_game_object()
+        local returnable = original_game_init_object(self)
+
+        returnable.current_round.least_played_poker_hand = 'High Card'
+
+        return returnable
+    end
+
+    local original_blind_set_text = Blind.set_text
+
+    function Blind:set_text()
+        original_blind_set_text(self)
+        if self.config.blind then
+            if not self.disabled then
+                local loc_vars = nil
+                if self.name == 'The Mask' then
+                    loc_vars = {localize(G.GAME.current_round.most_played_poker_hand, 'poker_hands'),
+                    localize(G.GAME.current_round.least_played_poker_hand, 'poker_hands')}
+
+                    local loc_target = localize{type = 'raw_descriptions', key = self.config.blind.key, set = 'Blind', vars = loc_vars or self.config.blind.vars}
+                    if loc_target then
+                        self.loc_name = self.name == '' and self.name or localize{type ='name_text', key = self.config.blind.key, set = 'Blind'}
+                        self.loc_debuff_text = ''
+                        for k, v in ipairs(loc_target) do
+                            self.loc_debuff_text = self.loc_debuff_text..v..(k <= #loc_target and ' ' or '')
+                        end
+                        self.loc_debuff_lines[1] = loc_target[1] or ''
+                        self.loc_debuff_lines[2] = loc_target[2] or ''
+                    else
+                        self.loc_name = ''; self.loc_debuff_text = ''
+                        self.loc_debuff_lines[1] = ''
+                        self.loc_debuff_lines[2] = ''
+                    end
+                end
+            end
+        end
+    end
 
 end
 
