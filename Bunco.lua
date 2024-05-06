@@ -471,30 +471,54 @@ function SMODS.INIT.Bunco()
         if saved_game ~= nil then
             if saved_game.GAME.first_exotic_suit == 'Fleurons' then
                 if saved_game.GAME.Fleurons ~= nil then
-                    sendDebugMessage('Registered fleurons, because the current run already had them!')
-                    acknowledge('Fleurons')
+                    if saved_game.GAME.Fleurons == true then
+                        sendDebugMessage('Registered fleurons, because the current run already had them!')
+                        acknowledge('Fleurons')
+                    else
+                        sendDebugMessage('Flash-registered fleurons, because the current run already had them!')
+                        acknowledge('Fleurons')
+                        forget('Fleurons')
+                    end
                 else
                     sendDebugMessage('Removed fleurons; undiscovered in the current run!')
                     forget('Fleurons')
                 end
                 if saved_game.GAME.Halberds ~= nil then
-                    sendDebugMessage('Registered halberds, because the current run already had them!')
-                    acknowledge('Halberds')
+                    if saved_game.GAME.Halberds == true then
+                        sendDebugMessage('Registered halberds, because the current run already had them!')
+                        acknowledge('Halberds')
+                    else
+                        sendDebugMessage('Flash-registered halberds, because the current run already had them!')
+                        acknowledge('Halberds')
+                        forget('Halberds')
+                    end
                 else
                     sendDebugMessage('Removed halberds; undiscovered in the current run!')
                     forget('Halberds')
                 end
             elseif saved_game.GAME.first_exotic_suit == 'Halberds' then
                 if saved_game.GAME.Halberds ~= nil then
-                    sendDebugMessage('Registered halberds, because the current run already had them!')
-                    acknowledge('Halberds')
+                    if saved_game.GAME.Halberds == true then
+                        sendDebugMessage('Registered halberds, because the current run already had them!')
+                        acknowledge('Halberds')
+                    else
+                        sendDebugMessage('Flash-registered halberds, because the current run already had them!')
+                        acknowledge('Halberds')
+                        forget('Halberds')
+                    end
                 else
                     sendDebugMessage('Removed halberds; undiscovered in the current run!')
                     forget('Halberds')
                 end
                 if saved_game.GAME.Fleurons ~= nil then
-                    sendDebugMessage('Registered fleurons, because the current run already had them!')
-                    acknowledge('Fleurons')
+                    if saved_game.GAME.Fleurons == true then
+                        sendDebugMessage('Registered fleurons, because the current run already had them!')
+                        acknowledge('Fleurons')
+                    else
+                        sendDebugMessage('Flash-registered fleurons, because the current run already had them!')
+                        acknowledge('Fleurons')
+                        forget('Fleurons')
+                    end
                 else
                     sendDebugMessage('Removed fleurons; undiscovered in the current run!')
                     forget('Fleurons')
