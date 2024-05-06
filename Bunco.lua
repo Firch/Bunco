@@ -1917,7 +1917,9 @@ function SMODS.INIT.Bunco()
                 end
             end
 
-            table.insert(self.ability.extra.card_list, context.other_card.base.id .. context.other_card.base.suit) -- Add card to the list
+            if not context.blueprint then
+                table.insert(self.ability.extra.card_list, context.other_card.base.id .. context.other_card.base.suit) -- Add card to the list
+            end
 
         end
 
