@@ -560,7 +560,7 @@ function SMODS.INIT.Bunco()
         original_evaluate_play(e)
         local text, disp_text, poker_hands, scoring_hand, non_loc_disp_text = G.FUNCS.get_poker_hand_info(G.play.cards)
 
-        if text == ('Spectrum' or 'Straight Spectrum' or 'Spectrum House' or 'Spectrum Five') and G.GAME.hands[text].played > 0 then
+        if text == ('Spectrum' or 'Straight Spectrum' or 'Spectrum House' or 'Spectrum Five' or 'Royal Spectrum') and G.GAME.hands[text].played > 0 then
 
             if G.GAME.Fleurons == nil then
                 acknowledge('Fleurons')
@@ -1257,14 +1257,14 @@ function SMODS.INIT.Bunco()
 
                         local new_rarity = 0.9
 
-                        if pseudorandom('doorhanger'.._type..G.SEED) > 0.98 then
+                        if pseudorandom('doorhanger'..G.SEED) > 0.98 then
                             new_rarity = 1
                             sendDebugMessage(new_rarity)
                         end
 
                         sendDebugMessage(new_rarity)
 
-                        return original_create_card(_type, area, legendary, new_rarity, skip_materialize, soulable, forced_key, key_append)
+                        return create_card(_type, area, legendary, new_rarity, skip_materialize, soulable, forced_key, key_append)
                     end
                 end
             end
