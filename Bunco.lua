@@ -1248,7 +1248,7 @@ function SMODS.INIT.Bunco()
     function create_card(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
 
          -- Doorhanger Joker additional function (\DOOR_FUN)
-         -- I do not create card immideately for this one because of the sound Jokers make when they have edition
+         -- I do not create card immedeately for this one because of the sound Jokers make when they have edition
 
         if G.jokers ~= nil then
             for _, v in ipairs(G.jokers.cards) do
@@ -3296,6 +3296,15 @@ function SMODS.INIT.Bunco()
             end
         end
 
+        if self.debuff and not self.disabled then
+            if self.name == 'The Flame' then
+                if card.config.center ~= G.P_CENTERS.c_base then
+                    card:set_debuff(true)
+                    return
+                end
+            end
+        end
+
         original_blind_debuff_card(self, card, from_blind)
     end
 
@@ -3440,6 +3449,32 @@ function SMODS.INIT.Bunco()
         end
 
         original_blind_debuff_hand(self, cards, hand, handname, check)
+    end
+
+    local original_blind_press_play = Blind.press_play
+
+    function Blind:press_play()
+        original_blind_press_play(self)
+
+        if self.name == 'The Bulwark' then
+            if G.FUNCS.get_poker_hand_info(G.hand.highlighted) == G.GAME.current_round.most_played_poker_hand then
+                G.E_MANAGER:add_event(Event({ func = function()
+                    G.hand.config.highlighted_limit = math.huge
+                    if G.hand.cards then
+                        for k, v in ipairs(G.hand.cards) do
+                            G.hand:add_to_highlighted(v, true)
+                            if k <= 3 then
+                                play_sound('card1', 1)
+                            end
+                        end
+                        G.hand.config.highlighted_limit = config.highlight_limit or 5
+                        G.FUNCS.discard_cards_from_highlighted(nil, true)
+                    end
+                return true end }))
+                self.triggered = true
+                delay(0.7)
+            end
+        end
     end
 
     -- Blind appearance (\BL_APP)
@@ -3601,6 +3636,40 @@ function SMODS.INIT.Bunco()
         'themask') -- Atlas
     TheMask:register()
 
+    SMODS.Sprite:new('theflame', bunco_mod.path, 'TheFlame.png', 34, 34, 'animation_atli', 21):register()
+    local TheFlame = SMODS.Blind:new(
+        'The Flame', -- Name
+        'flame', -- Slug
+        {name = 'The Flame',
+        text = {'All Enhanced cards', 'are debuffed'}},
+        5, -- Reward
+        2, -- Multiplier
+        {}, -- Vars
+        {}, -- Debuff
+        {x = 0, y = 0}, -- Sprite position
+        {min = 3, max = 10}, -- Boss antes
+        HEX('9b2d49'), -- Color
+        false, -- Discovered
+        'theflame') -- Atlas
+    TheFlame:register()
+
+    SMODS.Sprite:new('thebulwark', bunco_mod.path, 'TheBulwark.png', 34, 34, 'animation_atli', 21):register()
+    local TheBulwark = SMODS.Blind:new(
+        'The Bulwark', -- Name
+        'bulwark', -- Slug
+        {name = 'The Bulwark',
+        text = {'Playing a #1# discards', 'all cards held in hand'}},
+        5, -- Reward
+        2, -- Multiplier
+        {}, -- Vars
+        {}, -- Debuff
+        {x = 0, y = 0}, -- Sprite position
+        {min = 2, max = 10}, -- Boss antes
+        HEX('672f69'), -- Color
+        false, -- Discovered
+        'thebulwark') -- Atlas
+    TheBulwark:register()
+
     SMODS.Sprite:new('chartreusecrown', bunco_mod.path, 'ChartreuseCrown.png', 34, 34, 'animation_atli', 21):register()
     local ChartreuseCrown = SMODS.Blind:new(
         'Chartreuse Crown', -- Name
@@ -3651,11 +3720,31 @@ function SMODS.INIT.Bunco()
         original_blind_set_text(self)
         if self.config.blind then
             if not self.disabled then
-                local loc_vars = nil
                 if self.name == 'The Mask' then
+                    local loc_vars = nil
                     loc_vars = {
                     localize(G.GAME.current_round.most_played_poker_hand, 'poker_hands'),
                     localize(G.GAME.current_round.least_played_poker_hand, 'poker_hands')}
+
+                    local loc_target = localize{type = 'raw_descriptions', key = self.config.blind.key, set = 'Blind', vars = loc_vars or self.config.blind.vars}
+                    if loc_target then
+                        self.loc_name = self.name == '' and self.name or localize{type ='name_text', key = self.config.blind.key, set = 'Blind'}
+                        self.loc_debuff_text = ''
+                        for k, v in ipairs(loc_target) do
+                            self.loc_debuff_text = self.loc_debuff_text..v..(k <= #loc_target and ' ' or '')
+                        end
+                        self.loc_debuff_lines[1] = loc_target[1] or ''
+                        self.loc_debuff_lines[2] = loc_target[2] or ''
+                    else
+                        self.loc_name = ''; self.loc_debuff_text = ''
+                        self.loc_debuff_lines[1] = ''
+                        self.loc_debuff_lines[2] = ''
+                    end
+                end
+                if self.name == 'The Bulwark' then
+                    local loc_vars = nil
+                    loc_vars = {
+                    localize(G.GAME.current_round.most_played_poker_hand, 'poker_hands')}
 
                     local loc_target = localize{type = 'raw_descriptions', key = self.config.blind.key, set = 'Blind', vars = loc_vars or self.config.blind.vars}
                     if loc_target then
