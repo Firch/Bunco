@@ -3423,6 +3423,25 @@ function SMODS.INIT.Bunco()
         end
     end
 
+    local original_blind_debuff_hand = Blind.debuff_hand
+
+    function Blind:debuff_hand(cards, hand, handname, check)
+
+        if self.debuff and not self.disabled then
+            if self.name == 'The Mask' then
+                if handname == G.GAME.current_round.most_played_poker_hand then
+                    if not check then
+                        local mult = G.GAME.hands[G.GAME.current_round.least_played_poker_hand].s_mult
+                        local chips = G.GAME.hands[G.GAME.current_round.least_played_poker_hand].s_chips
+                        update_hand_text({sound = '', modded = true}, {chips = chips, mult = mult})
+                    end
+                end
+            end
+        end
+
+        original_blind_debuff_hand(self, cards, hand, handname, check)
+    end
+
     -- Blind appearance (\BL_APP)
 
     local original_get_new_boss = get_new_boss
