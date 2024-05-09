@@ -3097,6 +3097,104 @@ function SMODS.INIT.Bunco()
         end
     end
 
+    -- Zero Shapiro (\ZERO_BAS):
+    SMODS.Sprite:new('j_zero', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
+
+    local loc_zero = {
+        ['name'] = 'Zero Shapiro',
+        ['text'] = {
+            [1] = 'Played cards with',
+            [2] = '{C:attention}no{} or {C:attention}zero{} rank give',
+            [3] = '{C:green}+0.1{} to {C:green,E:1,S:1.1}probabilities{}',
+            [4] = 'for current round when scored'
+        }
+    }
+
+    local joker_zero = SMODS.Joker:new(
+        'Zero Shapiro', -- Name
+        'zero', -- Slug
+        {extra = {proc_amount = 0}}, -- Config
+        {x = 4, y = 5}, -- Sprite position
+        loc_zero, -- Localization
+        2, -- Rarity
+        4, -- Cost
+        nil, -- Unlocked
+        false, -- Discovered
+        true, -- Blueprint compat
+        true) -- Eternal compat
+
+    joker_zero:register()
+
+    SMODS.Jokers.j_zero.calculate = function(self, context)
+        if context.individual and context.cardarea == G.play then
+            if context.other_card.config.center == G.P_CENTERS.m_stone or context.other_card:get_id() == 0 then
+
+                self.ability.extra.proc_amount = self.ability.extra.proc_amount + 1
+
+                for k, v in pairs(G.GAME.probabilities) do
+                    G.GAME.probabilities[k] = v + 0.1
+                end
+
+                return {
+                    extra = {focus = context.other_card, message = '+0.1 Chance', colour = G.C.GREEN},
+                    card = self
+                }
+            end
+        end
+
+        if context.end_of_round and not context.other_card then
+            for k, v in pairs(G.GAME.probabilities) do
+                G.GAME.probabilities[k] = v - (self.ability.extra.proc_amount * 0.1)
+            end
+
+            self.ability.extra.proc_amount = 0
+
+            forced_message(localize('k_reset'), self, G.C.GREEN, true)
+        end
+    end
+
+    -- Nil Bill (\BILL_BAS):
+    SMODS.Sprite:new('j_bill', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
+
+    local loc_bill = {
+        ['name'] = 'Nil Bill',
+        ['text'] = {
+            [1] = 'Played cards with',
+            [2] = '{C:attention}debuff{} give',
+            [3] = '{C:money}$1{} when scored'
+        }
+    }
+
+    local joker_bill = SMODS.Joker:new(
+        'Nil Bill', -- Name
+        'bill', -- Slug
+        {}, -- Config
+        {x = 5, y = 5}, -- Sprite position
+        loc_bill, -- Localization
+        2, -- Rarity
+        4, -- Cost
+        nil, -- Unlocked
+        false, -- Discovered
+        true, -- Blueprint compat
+        true) -- Eternal compat
+
+    joker_bill:register()
+
+    SMODS.Jokers.j_bill.calculate = function(self, context)
+        if context.individual and context.cardarea == G.play then
+            if context.other_card.debuff then
+
+                G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + 1
+                G.E_MANAGER:add_event(Event({func = (function() G.GAME.dollar_buffer = 0; return true end)}))
+                return {
+                    extra = {focus = context.other_card, message = '$1', colour = G.C.MONEY},
+                    dollars = 1,
+                    card = self
+                }
+            end
+        end
+    end
+
     -- Rigoletto Joker (\RIGO_BAS):
     SMODS.Sprite:new('j_rigoletto', bunco_mod.path, 'Rigoletto.png', 71, 95, 'asset_atli'):register()
 
@@ -3306,14 +3404,16 @@ function SMODS.INIT.Bunco()
                     end
                 end
             end
-        end
 
-        if self.debuff and not self.disabled and card.area ~= G.jokers then
-            if self.name == 'The Flame' then
+            if self.name == 'The Flame' and not self.disabled then
                 if card.config.center ~= G.P_CENTERS.c_base then
                     card:set_debuff(true)
                     return
                 end
+            end
+
+            if self.name == 'The Knoll' and not self.disabled then
+                return
             end
         end
 
@@ -3369,6 +3469,10 @@ function SMODS.INIT.Bunco()
 
         if self.name == 'The Swing' then
             G.GAME.swing = false
+        end
+
+        if self.name == 'The Knoll' then
+            G.GAME.knoll = false
         end
     end
 
@@ -3439,6 +3543,16 @@ function SMODS.INIT.Bunco()
             if G.GAME.swing == true then
                 return true
             else
+                return false
+            end
+        end
+
+        if self.name == 'The Knoll' and not self.disabled then
+            if G.GAME.knoll ~= true and G.GAME.dollars > 10 and G.GAME.current_round.hands_played == 0 and G.GAME.current_round.discards_used == 0 then
+                G.GAME.knoll = true
+            end
+            if G.GAME.knoll and G.GAME.current_round.hands_played == 0 and G.GAME.current_round.discards_used == 0 then
+                card:set_debuff(true)
                 return false
             end
         end
@@ -3681,6 +3795,23 @@ function SMODS.INIT.Bunco()
         false, -- Discovered
         'thebulwark') -- Atlas
     TheBulwark:register()
+
+    SMODS.Sprite:new('theknoll', bunco_mod.path, 'TheKnoll.png', 34, 34, 'animation_atli', 21):register()
+    local TheKnoll = SMODS.Blind:new(
+        'The Knoll', -- Name
+        'knoll', -- Slug
+        {name = 'The Knoll',
+        text = {'Having more than $10', 'debuffs first hand drawn'}},
+        5, -- Reward
+        2, -- Multiplier
+        {}, -- Vars
+        {}, -- Debuff
+        {x = 0, y = 0}, -- Sprite position
+        {min = 4, max = 10}, -- Boss antes
+        HEX('6d8f2d'), -- Color
+        false, -- Discovered
+        'theknoll') -- Atlas
+    TheKnoll:register()
 
     SMODS.Sprite:new('chartreusecrown', bunco_mod.path, 'ChartreuseCrown.png', 34, 34, 'animation_atli', 21):register()
     local ChartreuseCrown = SMODS.Blind:new(
@@ -4089,6 +4220,9 @@ function Card.generate_UIBox_ability_table(self)
             -- wwooaahh
         elseif self.ability.name == 'Magic Wand' then -- Magic Wand Joker localization (\MAGI_LOC)
             loc_vars = {self.ability.extra.xmult}
+
+        elseif self.ability.name == 'Zero Shapiro' then -- Zero Shapiro Joker localization (\ZERO_LOC)
+
         elseif self.ability.name == 'Rigoletto' then -- Rigoletto Joker localization (\RIGO_LOC)
 
         else
