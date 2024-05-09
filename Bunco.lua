@@ -4059,6 +4059,8 @@ function Card.generate_UIBox_ability_table(self)
             -- KNOCKOUT!
         elseif self.ability.name == 'Fiendish Joker' then -- Fiendish Joker localization (\FIEN_LOC)
             loc_vars = {G.GAME.probabilities.normal, self.ability.extra.odds}
+        elseif self.ability.name == 'Carnival' then -- Carnival Joker localization (\FIEN_LOC)
+            -- Loop!
         elseif self.ability.name == 'Envious Joker' then -- Envious Joker localization (\ENVI_LOC)
             loc_vars = {self.ability.extra.mult}
         elseif self.ability.name == 'Proud Joker' then -- Proud Joker localization (\PROU_LOC)
