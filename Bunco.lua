@@ -1859,14 +1859,14 @@ function SMODS.INIT.Bunco()
 
     SMODS.Jokers.j_dread.calculate = function(self, context)
 
-        if context.full_hand ~= nil and context.full_hand then
+        if context.full_hand ~= nil and context.full_hand[1] and not context.other_card and not context.blueprint then
             self.ability.extra.trash_list = {}
             for k, v in ipairs(context.full_hand) do
                 table.insert(self.ability.extra.trash_list, v)
             end
         end
 
-        if context.after and G.GAME.current_round.hands_left == 0 and context.scoring_name ~= nil then
+        if context.after and G.GAME.current_round.hands_left == 0 and context.scoring_name ~= nil and not context.blueprint then
 
             level_up_hand(self, context.scoring_name, true, 2)
 
@@ -1883,6 +1883,7 @@ function SMODS.INIT.Bunco()
                     for i = 1, #self.ability.extra.trash_list do
                         self.ability.extra.trash_list[i].destroyed = true
                         self.ability.extra.trash_list[i]:start_dissolve(nil, nil, 3)
+                        self.ability.extra.trash_list[i].destroyed = true
                     end
                     self.ability.extra.trash_list = {}
 
