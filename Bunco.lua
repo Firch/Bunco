@@ -1714,7 +1714,7 @@ function SMODS.INIT.Bunco()
         {}, -- Config
         {x = 4, y = 0}, -- Sprite position
         loc_crop, -- Localization
-        2, -- Rarity
+        1, -- Rarity
         4, -- Cost
         nil, -- Unlocked
         false, -- Discovered
@@ -2048,7 +2048,7 @@ function SMODS.INIT.Bunco()
         ['name'] = 'Loan Shark',
         ['text'] = {
             [1] = 'Grants {C:money}$50',
-            [2] = 'when acquired'
+            [2] = 'when acquired...'
         }
     }
 
@@ -2174,7 +2174,7 @@ function SMODS.INIT.Bunco()
         ['name'] = 'Joker Knight',
         ['text'] = {
             [1] = 'When {C:attention}Blind{} is selected,',
-            [2] = 'shuffles all Jokers and gains {C:red}+4{} Mult,',
+            [2] = 'shuffles all Jokers and gains {C:red}+6{} Mult,',
             [3] = 'resets when any Joker is rearranged',
             [4] = '{C:inactive}(Currently {C:red}+#1#{C:inactive} Mult)'
         }
@@ -2200,7 +2200,7 @@ function SMODS.INIT.Bunco()
     SMODS.Jokers.j_knight.calculate = function(self, context)
 
         if context.setting_blind and not self.getting_sliced and not context.blueprint then
-            self.ability.extra.mult = self.ability.extra.mult + 4
+            self.ability.extra.mult = self.ability.extra.mult + 6
 
             G.E_MANAGER:add_event(Event({ trigger = 'after', delay = 0.2, func = function()
                 G.E_MANAGER:add_event(Event({ func = function() G.jokers:shuffle('aajk'); play_sound('cardSlide1', 0.85);return true end })) 
@@ -2328,7 +2328,7 @@ function SMODS.INIT.Bunco()
         {extra = {xmult = 2.5}}, -- Config
         {x = 3, y = 2}, -- Sprite position
         loc_dogs, -- Localization
-        1, -- Rarity
+        2, -- Rarity
         5, -- Cost
         nil, -- Unlocked
         false, -- Discovered
@@ -2446,10 +2446,10 @@ function SMODS.INIT.Bunco()
     local loc_carnival = {
         ['name'] = 'Carnival',
         ['text'] = {
-            [1] = 'After beating Ante,',
-            [2] = 'go one Ante back,',
-            [3] = 'will not work on',
-            [4] = 'the same Ante twice'
+            [1] = 'After beating Ante, destroy',
+            [2] = 'Joker to the right to',
+            [3] = 'go one Ante back',
+            [4] = '{s:0.8,C:attention}will not work on the same Ante twice'
         }
     }
 
@@ -2470,7 +2470,7 @@ function SMODS.INIT.Bunco()
 
     SMODS.Jokers.j_carnival.calculate = function(self, context)
 
-        if context.end_of_round and G.GAME.blind.boss and not context.other_card then
+        if context.end_of_round and G.GAME.blind.boss and not context.other_card and not context.blueprint then
 
             local function has_value(tab, val)
                 for index, value in ipairs(tab) do
@@ -2481,10 +2481,21 @@ function SMODS.INIT.Bunco()
                 return false
             end
 
-            if not has_value(self.ability.extra.ante_list, G.GAME.round_resets.ante) then
-                ease_ante(-1)
+            local my_pos = nil
+            for i = 1, #G.jokers.cards do
+                if G.jokers.cards[i] == self then my_pos = i; break end
+            end
 
-                forced_message('Loop!', self, G.C.BLACK)
+            if my_pos and G.jokers.cards[my_pos+1] and not self.getting_sliced and not G.jokers.cards[my_pos+1].ability.eternal and not G.jokers.cards[my_pos+1].getting_sliced then
+                if not has_value(self.ability.extra.ante_list, G.GAME.round_resets.ante) then
+                    local sliced_card = G.jokers.cards[my_pos+1]
+                    sliced_card.getting_sliced = true
+                    self:juice_up(0.8, 0.8)
+                    ease_ante(-1)
+                    forced_message('Loop!', self, G.C.BLACK)
+                    sliced_card:start_dissolve({HEX("57ecab")}, nil, 1.6)
+                    play_sound('slice1', 0.96+math.random()*0.08)
+                end
             end
 
             table.insert(self.ability.extra.ante_list, G.GAME.round_resets.ante)
@@ -2644,9 +2655,9 @@ function SMODS.INIT.Bunco()
     local loc_fingerprints = {
         ['name'] = 'Fingerprints',
         ['text'] = {
-            [1] = 'Cards played on the final hand of round',
-            [2] = 'gain {C:chips}+#1#{} Chips when scored,',
-            [3] = 'bonus resets each final hand of round'
+            [1] = 'Cards played on {C:attention}final hand{} of round',
+            [2] = 'gain temporary {C:chips}+#1#{} Chips when scored,',
+            [3] = 'bonus lasts for one round'
         }
     }
 
@@ -2656,7 +2667,7 @@ function SMODS.INIT.Bunco()
         {extra = {bonus = 50, new_card_list = {}, old_card_list = {}}}, -- Config
         {x = 5, y = 3}, -- Sprite position
         loc_fingerprints, -- Localization
-        3, -- Rarity
+        2, -- Rarity
         8, -- Cost
         nil, -- Unlocked
         false, -- Discovered
@@ -3297,7 +3308,7 @@ function SMODS.INIT.Bunco()
             end
         end
 
-        if self.debuff and not self.disabled then
+        if self.debuff and not self.disabled and card.area ~= G.jokers then
             if self.name == 'The Flame' then
                 if card.config.center ~= G.P_CENTERS.c_base then
                     card:set_debuff(true)
