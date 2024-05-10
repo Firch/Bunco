@@ -187,7 +187,7 @@ function SMODS.INIT.Bunco()
         local num_wild_cards = 0
         local num_non_wild_cards = 0
         for i = 1, #hand do
-            if hand[i].ability.name == 'Wild Card' then
+            if hand[i].ability.name == 'Wild Card' and not hand[i].debuff then
                 num_wild_cards = num_wild_cards + 1
             else
                 num_non_wild_cards = num_non_wild_cards + 1
