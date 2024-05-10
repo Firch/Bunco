@@ -3154,46 +3154,46 @@ function SMODS.INIT.Bunco()
     end
 
     -- Nil Bill (\BILL_BAS):
-    SMODS.Sprite:new('j_bill', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
+    -- SMODS.Sprite:new('j_bill', bunco_mod.path, 'Jokers.png', 71, 95, 'asset_atli'):register()
 
-    local loc_bill = {
-        ['name'] = 'Nil Bill',
-        ['text'] = {
-            [1] = 'Played cards with',
-            [2] = '{C:attention}debuff{} give',
-            [3] = '{C:money}$1{} when scored'
-        }
-    }
+    -- local loc_bill = {
+    --     ['name'] = 'Nil Bill',
+    --     ['text'] = {
+    --         [1] = 'Played cards with',
+    --         [2] = '{C:attention}debuff{} give',
+    --         [3] = '{C:money}$1{} when scored'
+    --     }
+    -- }
 
-    local joker_bill = SMODS.Joker:new(
-        'Nil Bill', -- Name
-        'bill', -- Slug
-        {}, -- Config
-        {x = 5, y = 5}, -- Sprite position
-        loc_bill, -- Localization
-        2, -- Rarity
-        4, -- Cost
-        nil, -- Unlocked
-        false, -- Discovered
-        true, -- Blueprint compat
-        true) -- Eternal compat
+    -- local joker_bill = SMODS.Joker:new(
+    --     'Nil Bill', -- Name
+    --     'bill', -- Slug
+    --     {}, -- Config
+    --     {x = 5, y = 5}, -- Sprite position
+    --     loc_bill, -- Localization
+    --     2, -- Rarity
+    --     4, -- Cost
+    --     nil, -- Unlocked
+    --     false, -- Discovered
+    --     true, -- Blueprint compat
+    --     true) -- Eternal compat
 
-    joker_bill:register()
+    -- joker_bill:register()
 
-    SMODS.Jokers.j_bill.calculate = function(self, context)
-        if context.individual and context.cardarea == G.play then
-            if context.other_card.debuff then
+    -- SMODS.Jokers.j_bill.calculate = function(self, context)
+    --     if context.individual and context.cardarea == G.play then
+    --         if context.other_card.debuff then
 
-                G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + 1
-                G.E_MANAGER:add_event(Event({func = (function() G.GAME.dollar_buffer = 0; return true end)}))
-                return {
-                    extra = {focus = context.other_card, message = '$1', colour = G.C.MONEY},
-                    dollars = 1,
-                    card = self
-                }
-            end
-        end
-    end
+    --             G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + 1
+    --             G.E_MANAGER:add_event(Event({func = (function() G.GAME.dollar_buffer = 0; return true end)}))
+    --             return {
+    --                 extra = {focus = context.other_card, message = '$1', colour = G.C.MONEY},
+    --                 dollars = 1,
+    --                 card = self
+    --             }
+    --         end
+    --     end
+    -- end
 
     -- Rigoletto Joker (\RIGO_BAS):
     SMODS.Sprite:new('j_rigoletto', bunco_mod.path, 'Rigoletto.png', 71, 95, 'asset_atli'):register()
@@ -4220,7 +4220,6 @@ function Card.generate_UIBox_ability_table(self)
             -- wwooaahh
         elseif self.ability.name == 'Magic Wand' then -- Magic Wand Joker localization (\MAGI_LOC)
             loc_vars = {self.ability.extra.xmult}
-
         elseif self.ability.name == 'Zero Shapiro' then -- Zero Shapiro Joker localization (\ZERO_LOC)
 
         elseif self.ability.name == 'Rigoletto' then -- Rigoletto Joker localization (\RIGO_LOC)
