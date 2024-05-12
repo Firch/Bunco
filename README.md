@@ -10,11 +10,13 @@ Ever wanted to use REAL NUKE on your cards? Or maybe you wanted to see cards fro
 
 ### Bunco is a **Balatro** expansion mod that currently adds:
 ![Microcassette](https://github.com/Firch/Bunco/assets/47253246/c46656bc-c16a-4b77-9edd-ffa66f410a7b)
-**34 new**, carefully crafted discoverable **Jokers**;\
+**35 new**, carefully crafted discoverable **Jokers**;\
 ![Microtarot](https://github.com/Firch/Bunco/assets/47253246/aa5f1a63-1158-486b-8c10-7e55a37c6ccf)
 **2 new** hidden **Tarots**;\
 ![Microplanet](https://github.com/Firch/Bunco/assets/47253246/4f1e09b6-676d-4b37-9430-b78b2d0d88cc)
 **4 new Poker Hands** and **Planets**;\
+![Microblind](https://github.com/Firch/Bunco/assets/47253246/9dbdd389-13bd-43ca-8146-c34d24e6f7f3)
+**11 new Blinds** with unique effects;\
 ![Microfleuron](https://github.com/Firch/Bunco/assets/47253246/7bb7d092-98af-4465-a8e6-8ad45604c63f)
 **Completely new Exotic Suits** system!\
 ![Microheart](https://github.com/Firch/Bunco/assets/47253246/44c00e7e-6d81-48fd-b0f5-214cd7f1b5e2)
@@ -64,6 +66,10 @@ Then you simply drop the Bunco folder into your mods folder.
 `@autumnmood`\
 `@arachneii`\
 [@mysthaps](https://github.com/Mysthaps)\
-[@iwas_nevergood](https://github.com/LunaAstraCassiopeia)
+[@iwas_nevergood](https://github.com/LunaAstraCassiopeia)\
+[@chromapie](https://github.com/ChromaPIE)\
+`@kaishi_`\
+[@Victin](https://github.com/VictinZero)\
+[@sdm_0](https://github.com/SDM0)
 
 ♡
