@@ -3496,6 +3496,11 @@ function SMODS.INIT.Bunco()
                 end
             return true end }))
         end
+
+        if G.GAME.blind and G.GAME.blind.name == 'The Paling' and not G.GAME.blind.disabled then
+            ease_hands_played(-1)
+            G.GAME.blind:wiggle()
+        end
     end
 
     local original_play_cards_from_highlighted = G.FUNCS.play_cards_from_highlighted
@@ -3532,12 +3537,17 @@ function SMODS.INIT.Bunco()
 
             return true end }))
         end
+
+        if G.GAME.blind and G.GAME.blind.name == 'The Paling' and not G.GAME.blind.disabled then
+            ease_discard(-1, true)
+            G.GAME.blind:wiggle()
+        end
     end
 
     local original_blind_stay_flipped = Blind.stay_flipped
 
     function Blind:stay_flipped(area, card)
-        original_blind_stay_flipped(self, area, card)
+        local returnable = original_blind_stay_flipped(self, area, card)
 
         if self.name == 'The Swing' and not self.disabled then
             if G.GAME.swing == true then
@@ -3556,6 +3566,8 @@ function SMODS.INIT.Bunco()
                 return false
             end
         end
+
+        return returnable
     end
 
     local original_blind_debuff_hand = Blind.debuff_hand
@@ -3582,7 +3594,7 @@ function SMODS.INIT.Bunco()
     function Blind:press_play()
         original_blind_press_play(self)
 
-        if self.name == 'The Bulwark' then
+        if self.name == 'The Bulwark' and not self.disabled then
             if G.FUNCS.get_poker_hand_info(G.hand.highlighted) == G.GAME.current_round.most_played_poker_hand then
                 G.E_MANAGER:add_event(Event({ func = function()
                     G.hand.config.highlighted_limit = math.huge
@@ -3812,6 +3824,23 @@ function SMODS.INIT.Bunco()
         false, -- Discovered
         'theknoll') -- Atlas
     TheKnoll:register()
+
+    SMODS.Sprite:new('thepaling', bunco_mod.path, 'ThePaling.png', 34, 34, 'animation_atli', 21):register()
+    local ThePaling = SMODS.Blind:new(
+        'The Paling', -- Name
+        'paling', -- Slug
+        {name = 'The Paling',
+        text = {'Playing or discarding costs', 'both play and discard'}},
+        5, -- Reward
+        2, -- Multiplier
+        {}, -- Vars
+        {}, -- Debuff
+        {x = 0, y = 0}, -- Sprite position
+        {min = 2, max = 10}, -- Boss antes
+        HEX('45d368'), -- Color
+        false, -- Discovered
+        'thepaling') -- Atlas
+    ThePaling:register()
 
     SMODS.Sprite:new('chartreusecrown', bunco_mod.path, 'ChartreuseCrown.png', 34, 34, 'animation_atli', 21):register()
     local ChartreuseCrown = SMODS.Blind:new(
