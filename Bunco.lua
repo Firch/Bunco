@@ -3129,7 +3129,7 @@ function SMODS.INIT.Bunco()
         if context.individual and context.cardarea == G.play then
             if context.other_card.config.center == G.P_CENTERS.m_stone or context.other_card:get_id() == 0 then
 
-                self.ability.extra.proc_amount = self.ability.extra.proc_amount + 1
+                self.ability.extra.proc_amount = self.ability.extra.proc_amount + 0.1
 
                 for k, v in pairs(G.GAME.probabilities) do
                     G.GAME.probabilities[k] = v + 0.1
@@ -3144,12 +3144,20 @@ function SMODS.INIT.Bunco()
 
         if context.end_of_round and not context.other_card then
             for k, v in pairs(G.GAME.probabilities) do
-                G.GAME.probabilities[k] = v - (self.ability.extra.proc_amount * 0.1)
+                G.GAME.probabilities[k] = v - (self.ability.extra.proc_amount)
             end
 
             self.ability.extra.proc_amount = 0
 
             forced_message(localize('k_reset'), self, G.C.GREEN, true)
+        end
+
+        if context.selling_self then
+            for k, v in pairs(G.GAME.probabilities) do
+                G.GAME.probabilities[k] = v - (self.ability.extra.proc_amount)
+            end
+
+            self.ability.extra.proc_amount = 0
         end
     end
 
@@ -3503,7 +3511,7 @@ function SMODS.INIT.Bunco()
             elseif G.GAME.current_round.hands_left == 1 or G.GAME.current_round.hands_left == 0 then
                 ease_hands_played(-1)
 
-                G.E_MANAGER:add_event(Event({ trigger = 'after', delay = 1.8, func = function()
+                G.E_MANAGER:add_event(Event({ trigger = 'after', delay = 1.2, func = function()
                     G.STATE = G.STATES.GAME_OVER
                     if not G.GAME.won and not G.GAME.seeded and not G.GAME.challenge then 
                         G.PROFILES[G.SETTINGS.profile].high_scores.current_streak.amt = 0
