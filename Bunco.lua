@@ -3498,7 +3498,21 @@ function SMODS.INIT.Bunco()
         end
 
         if G.GAME.blind and G.GAME.blind.name == 'The Paling' and not G.GAME.blind.disabled then
-            ease_hands_played(-1)
+            if G.GAME.current_round.hands_left > 1 then
+                ease_hands_played(-1)
+            elseif G.GAME.current_round.hands_left == 1 or G.GAME.current_round.hands_left == 0 then
+                ease_hands_played(-1)
+
+                G.E_MANAGER:add_event(Event({ trigger = 'after', delay = 1.8, func = function()
+                    G.STATE = G.STATES.GAME_OVER
+                    if not G.GAME.won and not G.GAME.seeded and not G.GAME.challenge then 
+                        G.PROFILES[G.SETTINGS.profile].high_scores.current_streak.amt = 0
+                    end
+                    G:save_settings()
+                    G.FILE_HANDLER.force = true
+                    G.STATE_COMPLETE = false
+                return true end }))
+            end
             G.GAME.blind:wiggle()
         end
     end
@@ -3539,8 +3553,10 @@ function SMODS.INIT.Bunco()
         end
 
         if G.GAME.blind and G.GAME.blind.name == 'The Paling' and not G.GAME.blind.disabled then
-            ease_discard(-1, true)
-            G.GAME.blind:wiggle()
+            if G.GAME.current_round.discards_left >= 1 then
+                ease_discard(-1, true)
+                G.GAME.blind:wiggle()
+            end
         end
     end
 
