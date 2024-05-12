@@ -3450,7 +3450,7 @@ function SMODS.INIT.Bunco()
     function Card:highlight(is_higlighted)
         original_card_highlight(self, is_higlighted)
 
-        if G.GAME.blind and G.GAME.blind.name == 'The Gate' and not G.GAME.blind.disabled and is_higlighted then
+        if G.GAME.blind and G.GAME.blind.name == 'The Gate' and not G.GAME.blind.disabled and is_higlighted and self.area == G.hand then
             self.ability.forced_selection = true
         end
     end
@@ -3458,9 +3458,9 @@ function SMODS.INIT.Bunco()
     local original_cardarea_remove_from_highlighted = CardArea.remove_from_highlighted
 
     function CardArea:remove_from_highlighted(card, force)
-        if G.GAME.blind and G.GAME.blind.name == 'The Gate' and G.GAME.blind.disabled and self == G.hand and not force then
+        if G.GAME.blind and G.GAME.blind.name == 'The Gate' and G.GAME.blind.disabled and card.area == G.hand and not force then
             card.ability.forced_selection = false
-        elseif G.GAME.blind and G.GAME.blind.name == 'The Gate' and not G.GAME.blind.disabled and card.ability.forced_selection == true and not force then
+        elseif G.GAME.blind and G.GAME.blind.name == 'The Gate' and not G.GAME.blind.disabled and card.ability.forced_selection == true and not force and card.area == G.hand then
             G.GAME.blind:wiggle()
         end
         original_cardarea_remove_from_highlighted(self, card, force)
