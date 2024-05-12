@@ -2003,7 +2003,7 @@ function SMODS.INIT.Bunco()
         ['text'] = {
             [1] = 'Grants Chips and Mult',
             [2] = 'from last hand type played',
-            [3] = '{C:inactive}(Last poker hand: {C:attention}#1#{})'
+            [3] = '{C:inactive}(Last poker hand: #1#)'
         }
     }
 
@@ -2032,8 +2032,7 @@ function SMODS.INIT.Bunco()
                 update_hand_text({delay = 0, sound = '', modded = true}, {chips = chips, mult = mult})
                 if not context.blueprint then
 
-                    forced_message(G.localization.misc['poker_hands'][self.ability.extra.last_hand]..' !', self, G.C.HAND_LEVELS[G.GAME.hands[self.ability.extra.last_hand].level], true)
-                    forced_message(G.localization.misc['poker_hands'][G.GAME.last_hand_played]..'...', self, G.C.HAND_LEVELS[G.GAME.hands[G.GAME.last_hand_played].level], true)
+                    forced_message(G.localization.misc['poker_hands'][self.ability.extra.last_hand]..'!', self, G.C.HAND_LEVELS[G.GAME.hands[self.ability.extra.last_hand].level], true)
 
                 end
             end
@@ -4203,7 +4202,7 @@ function Card.generate_UIBox_ability_table(self)
         elseif self.ability.name == 'Linocut Joker' then -- Linocut Joker localization (\LINO_LOC)
             -- Hot Dog!
         elseif self.ability.name == 'Ghost Print' then -- Ghost Print Joker localization (\GHOS_LOC)
-            local ph_last_played = G.localization.misc['poker_hands'][G.GAME.last_hand_played] or " Nothing"
+            local ph_last_played = G.localization.misc['poker_hands'][G.GAME.last_hand_played] or 'Nothing'
             loc_vars = {ph_last_played}
         elseif self.ability.name == 'Loan Shark' then -- Loan Shark Joker localization (\LOAN_LOC)
             -- Scammed!
