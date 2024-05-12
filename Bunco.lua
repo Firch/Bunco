@@ -3496,6 +3496,7 @@ function SMODS.INIT.Bunco()
                 end
 
                 G.GAME.blind:wiggle()
+                G.GAME.blind.triggered = true
 
                 if G.GAME.swing == true then
                     G.GAME.swing = false
@@ -3537,6 +3538,7 @@ function SMODS.INIT.Bunco()
                 end
 
                 G.GAME.blind:wiggle()
+                G.GAME.blind.triggered = true
 
                 if G.GAME.swing == true then
                     G.GAME.swing = false
@@ -3556,6 +3558,7 @@ function SMODS.INIT.Bunco()
                 end
 
                 G.GAME.blind:wiggle()
+                G.GAME.blind.triggered = true
 
             return true end }))
         end
@@ -3564,6 +3567,7 @@ function SMODS.INIT.Bunco()
             if G.GAME.current_round.discards_left >= 1 then
                 ease_discard(-1, true)
                 G.GAME.blind:wiggle()
+                G.GAME.blind.triggered = true
             end
         end
     end
@@ -3605,6 +3609,7 @@ function SMODS.INIT.Bunco()
                         local mult = G.GAME.hands[G.GAME.current_round.least_played_poker_hand].s_mult
                         local chips = G.GAME.hands[G.GAME.current_round.least_played_poker_hand].s_chips
                         update_hand_text({sound = '', modded = true}, {chips = chips, mult = mult})
+                        self.triggered = true
                     end
                 end
             end
