@@ -2010,7 +2010,7 @@ function SMODS.INIT.Bunco()
     local joker_ghostprint = SMODS.Joker:new(
         'Ghost Print', -- Name
         'ghostprint', -- Slug
-        {extra = {last_hand = nil or 'Nothing'}}, -- Config
+        {extra = {last_hand = nil}}, -- Config
         {x = 3, y = 1}, -- Sprite position
         loc_ghostprint, -- Localization
         2, -- Rarity
@@ -2026,13 +2026,13 @@ function SMODS.INIT.Bunco()
 
         if SMODS.end_calculate_context(context) then
 
-            if self.ability.extra.last_hand ~= nil and self.ability.extra.last_hand ~= 'Nothing' then
+            if self.ability.extra.last_hand ~= nil then
                 mult = mult + G.GAME.hands[self.ability.extra.last_hand].mult
                 chips = hand_chips + G.GAME.hands[self.ability.extra.last_hand].chips
                 update_hand_text({delay = 0, sound = '', modded = true}, {chips = chips, mult = mult})
                 if not context.blueprint then
 
-                    forced_message(tostring(G.localization.misc['poker_hands'][G.GAME.last_hand_played])..'!', self, G.C.HAND_LEVELS[G.GAME.hands[self.ability.extra.last_hand].level], true)
+                    forced_message(G.localization.misc['poker_hands'][G.GAME.last_hand_played]..'!', self, G.C.HAND_LEVELS[G.GAME.hands[self.ability.extra.last_hand].level], true)
 
                 end
             end
@@ -4173,7 +4173,8 @@ function Card.generate_UIBox_ability_table(self)
         elseif self.ability.name == 'Linocut Joker' then -- Linocut Joker localization (\LINO_LOC)
             -- Hot Dog!
         elseif self.ability.name == 'Ghost Print' then -- Ghost Print Joker localization (\GHOS_LOC)
-            loc_vars = {self.ability.extra.last_hand}
+            local ph_last_played = G.localization.misc['poker_hands'][G.GAME.last_hand_played] or " Nothing"
+            loc_vars = {ph_last_played}
         elseif self.ability.name == 'Loan Shark' then -- Loan Shark Joker localization (\LOAN_LOC)
             -- Scammed!
         elseif self.ability.name == 'Basement Joker' then -- Basement Joker localization (\BASE_LOC)
