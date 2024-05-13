@@ -3429,7 +3429,7 @@ function SMODS.INIT.Bunco()
     local original_game_update_shop = Game.update_shop
 
     function Game:update_shop(dt)
-        if G.GAME.final_trident == true and not G.GAME.blind.disabled and not find_joker('Chicot') then
+        if G.GAME.final_trident == true and not G.GAME.blind.disabled and not next(find_joker('Chicot')) then
             G.STATE = G.STATES.BLIND_SELECT
             return false
         end
