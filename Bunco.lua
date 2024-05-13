@@ -2027,17 +2027,15 @@ function SMODS.INIT.Bunco()
         if SMODS.end_calculate_context(context) then
 
             if self.ability.extra.last_hand ~= nil then
-                mult = mult + G.GAME.hands[self.ability.extra.last_hand].mult
-                chips = hand_chips + G.GAME.hands[self.ability.extra.last_hand].chips
-                update_hand_text({delay = 0, sound = '', modded = true}, {chips = chips, mult = mult})
-                if not context.blueprint then
-
-                    forced_message(G.localization.misc['poker_hands'][self.ability.extra.last_hand]..'!', self, G.C.HAND_LEVELS[G.GAME.hands[self.ability.extra.last_hand].level], true)
-
-                end
+                mult = mod_mult(mult + G.GAME.hands[self.ability.extra.last_hand].mult)
+                hand_chips = mod_chips(hand_chips + G.GAME.hands[self.ability.extra.last_hand].chips)
+                update_hand_text({delay = 0, sound = '', modded = true}, {chips = hand_chips, mult = mult})
+                forced_message(G.localization.misc['poker_hands'][self.ability.extra.last_hand]..'!', context.blueprint_card or self, G.C.HAND_LEVELS[G.GAME.hands[self.ability.extra.last_hand].level], true)
             end
 
-            self.ability.extra.last_hand = G.GAME.last_hand_played
+            if not context.blueprint then
+                self.ability.extra.last_hand = G.GAME.last_hand_played
+            end
         end
     end
 
@@ -3601,6 +3599,7 @@ function SMODS.INIT.Bunco()
     local original_blind_debuff_hand = Blind.debuff_hand
 
     function Blind:debuff_hand(cards, hand, handname, check)
+        local returnable = original_blind_debuff_hand(self, cards, hand, handname, check)
 
         if self.debuff and not self.disabled then
             if self.name == 'The Mask' then
@@ -3615,7 +3614,7 @@ function SMODS.INIT.Bunco()
             end
         end
 
-        original_blind_debuff_hand(self, cards, hand, handname, check)
+        return returnable
     end
 
     local original_blind_press_play = Blind.press_play
