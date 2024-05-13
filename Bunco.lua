@@ -3535,6 +3535,12 @@ function SMODS.INIT.Bunco()
                     v:flip()
                 end
 
+                for k, v in ipairs(G.play.cards) do
+                    if v.facing == 'back' then
+                        v:flip()
+                    end
+                end
+
                 G.GAME.blind:wiggle()
                 G.GAME.blind.triggered = true
 
