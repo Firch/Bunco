@@ -3608,9 +3608,7 @@ function SMODS.INIT.Bunco()
 
         if self.debuff and not self.disabled then
             if self.name == 'The Mask' then
-                sendDebugMessage('A')
                 if G.GAME.last_hand_played == G.GAME.current_round.most_played_poker_hand then
-                    sendDebugMessage('B')
                     self.triggered = true
                     return G.GAME.hands[G.GAME.current_round.least_played_poker_hand].s_mult, G.GAME.hands[G.GAME.current_round.least_played_poker_hand].s_chips, true
                 end
