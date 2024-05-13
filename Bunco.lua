@@ -2924,8 +2924,8 @@ function SMODS.INIT.Bunco()
     SMODS.Jokers.j_unobtanium.calculate = function(self, context)
         if context.individual and context.cardarea == G.play and context.other_card:is_suit('Halberds') then
 
-            chips = hand_chips + self.ability.extra.chips
-            update_hand_text({delay = 0, sound = 'chips1'}, {chips = chips, mult = mult})
+            hand_chips = mod_chips(hand_chips + self.ability.extra.chips)
+            update_hand_text({delay = 0, sound = 'chips1'}, {chips = hand_chips, mult = mult})
 
             forced_message('+'..tostring(self.ability.extra.chips), context.other_card, G.C.CHIPS, true)
 
@@ -3602,25 +3602,22 @@ function SMODS.INIT.Bunco()
         return returnable
     end
 
-    local original_blind_debuff_hand = Blind.debuff_hand
+    local original_blind_modify_hand = Blind.modify_hand
 
-    function Blind:debuff_hand(cards, hand, handname, check)
-        local returnable = original_blind_debuff_hand(self, cards, hand, handname, check)
+    function Blind:modify_hand(cards, poker_hands, text, mult, hand_chips)
 
         if self.debuff and not self.disabled then
             if self.name == 'The Mask' then
-                if handname == G.GAME.current_round.most_played_poker_hand then
-                    if not check then
-                        local mult = G.GAME.hands[G.GAME.current_round.least_played_poker_hand].s_mult
-                        local chips = G.GAME.hands[G.GAME.current_round.least_played_poker_hand].s_chips
-                        update_hand_text({sound = '', modded = true}, {chips = chips, mult = mult})
-                        self.triggered = true
-                    end
+                sendDebugMessage('A')
+                if G.GAME.last_hand_played == G.GAME.current_round.most_played_poker_hand then
+                    sendDebugMessage('B')
+                    self.triggered = true
+                    return G.GAME.hands[G.GAME.current_round.least_played_poker_hand].s_mult, G.GAME.hands[G.GAME.current_round.least_played_poker_hand].s_chips, true
                 end
             end
         end
 
-        return returnable
+        return original_blind_modify_hand(self, cards, poker_hands, text, mult, hand_chips)
     end
 
     local original_blind_press_play = Blind.press_play
