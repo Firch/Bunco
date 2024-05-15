@@ -2692,9 +2692,11 @@ function SMODS.INIT.Bunco()
             for _, v in ipairs(self.ability.extra.new_card_list) do
                 v.ability.perma_bonus = v.ability.perma_bonus or 0
                 v.ability.perma_bonus = v.ability.perma_bonus + self.ability.extra.bonus
-
-                table.insert(self.ability.extra.old_card_list, v)
             end
+
+            self.ability.extra.old_card_list = self.ability.extra.new_card_list
+            -- not needed, but good style to fail fast
+            self.ability.extra.new_card_list = nil
 
             forced_message(localize('k_upgrade_ex'), self, G.C.CHIPS)
 
