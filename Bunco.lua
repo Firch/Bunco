@@ -2701,6 +2701,13 @@ function SMODS.INIT.Bunco()
             forced_message(localize('k_upgrade_ex'), self, G.C.CHIPS)
 
         end
+
+        if context.selling_self and not context.blueprint then
+            for _, v in ipairs(self.ability.extra.old_card_list) do
+                v.ability.perma_bonus = v.ability.perma_bonus or 0
+                v.ability.perma_bonus = v.ability.perma_bonus - self.ability.extra.bonus
+            end
+        end
     end
 
     -- Zealous Joker (\ZEAL_BAS):
