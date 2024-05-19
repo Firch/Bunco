@@ -205,6 +205,10 @@ function SMODS.INIT.Bunco()
             if v > 0 then num_suits = num_suits + 1 end
         end
 
+        sendDebugMessage('Amount of wild cards: '..num_wild_cards or '')
+        sendDebugMessage('Amount of non-wild cards: '..num_non_wild_cards or '')
+        sendDebugMessage('Amount of suits in total: '..num_suits or '')
+
         if num_non_wild_cards == 1 then
             return { hand }
         elseif num_non_wild_cards == 0 and num_wild_cards == 5 then
