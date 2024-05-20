@@ -102,7 +102,9 @@ local function create_joker(joker)
             table.insert(vars, card.ability.extra[k])
         end
 
-        return { vars = vars } end
+        return { vars = vars } end,
+
+    calculate = joker.code
     }
 end
 
@@ -113,44 +115,43 @@ create_joker({
             vars = {{ chips = 45 }, { mult = 6 }, { size = 'A' }},
             rarity = 'Uncommon', cost = 5,
             blueprint = true, eternal = true,
-            unlocked = true
+            unlocked = true,
+            code = function (self, context)
+                if context.pre_discard then
+
+                    local side = self.ability.extra.side
+
+                    if side == 'A' then
+                        side = 'B'
+                    else
+                        side = 'A'
+                    end
+
+                    self:flip() self:flip() -- Double flip plays the animation but doesn't flip the card, awesome!
+                end
+
+                if context.individual and context.cardarea == G.play then
+
+                    local card = context.other_card
+                    local side = self.ability.extra.side
+
+                    if card:is_suit('Hearts') or card:is_suit('Diamonds') or card:is_suit('Fleurons') then
+                        if side == 'A' then
+                            return {
+                                chips = self.ability.extra.chips,
+                                card = self
+                            }
+                        end
+                    end
+
+                    if card:is_suit('Spades') or card:is_suit('Clubs') or card:is_suit('Halberds') then
+                        if side == 'B' then
+                            return {
+                                mult = self.ability.extra.mult,
+                                card = self
+                            }
+                        end
+                    end
+                end
+            end
 })
-
---[[ function SMODS.Jokers.j_cassette.calculate(card, context)
-    if context.pre_discard then
-
-        local side = self.ability.extra.side
-
-        if side == 'A' then
-            side = 'B'
-        else
-            side = 'A'
-        end
-
-        self:flip() self:flip() -- Double flip plays the animation but doesn't flip the card, awesome!
-    end
-
-    if context.individual and context.cardarea == G.play then
-
-        local card = context.other_card
-        local side = self.ability.extra.side
-
-        if card:is_suit('Hearts') or card:is_suit('Diamonds') or card:is_suit('Fleurons') then
-            if side == 'A' then
-                return {
-                    chips = self.ability.extra.chips,
-                    card = self
-                }
-            end
-        end
-
-        if card:is_suit('Spades') or card:is_suit('Clubs') or card:is_suit('Halberds') then
-            if side == 'B' then
-                return {
-                    mult = self.ability.extra.mult,
-                    card = self
-                }
-            end
-        end
-    end
-end ]]
