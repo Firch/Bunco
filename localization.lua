@@ -7,7 +7,7 @@ return {
                 [2] = '{C:attention}A side:{} cards with light suit',
                 [3] = 'give {C:chips}+#1#{} Chips when scored',
                 [4] = '{C:attention}B side:{} cards with dark suit',
-                [5] = 'give {C:mult}+#3#{} Mult when scored'
+                [5] = 'give {C:mult}+#2#{} Mult when scored'
             }
         }
     }

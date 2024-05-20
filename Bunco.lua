@@ -57,6 +57,16 @@ local function create_joker(joker)
         joker.rarity = 4
     end
 
+    -- Config values
+
+    joker.config = {extra = {}}
+
+    for _, kv_pair in ipairs(joker.vars) do
+        -- kv_pair is {a = 1}
+        local k, v = next(kv_pair)
+        joker.config.extra[k] = v
+    end
+
     -- Joker creation
 
     SMODS.Joker{
@@ -78,16 +88,19 @@ local function create_joker(joker)
 
     loc_txt = loc[key],
 
-    config = {extra = joker.vars},
+    config = joker.config,
     loc_vars = function(self, info_queue, card)
+
+        -- Localization values
 
         local vars = {}
 
-        for index, key in ipairs(joker.vars) do
-            table.insert(vars, card.ability.extra[key])
+        for _, kv_pair in ipairs(joker.vars) do
+            -- kv_pair is {a = 1}
+            local k, v = next(kv_pair)
+            -- k is `a`, v is `1`
+            table.insert(vars, card.ability.extra[k])
         end
-
-        table.sort(vars)
 
         return { vars = vars } end
     }
