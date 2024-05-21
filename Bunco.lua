@@ -10,6 +10,10 @@ local filesystem = NFS or love.filesystem
 
 local loc = filesystem.load(bunco.path..'localization.lua')()
 
+-- Exotic table
+
+exotic_table = {}
+
 -- Joker creation setup
 
 SMODS.Atlas({key = 'bunco_jokers', path = 'Jokers/Jokers.png', px = 71, py = 95})
@@ -66,6 +70,10 @@ local function create_joker(joker)
         local k, v = next(kv_pair)
         joker.config.extra[k] = v
     end
+
+    -- Exotic table insertion
+
+    table.insert(exotic_table, joker.name)
 
     -- Joker creation
 
