@@ -5,10 +5,49 @@
 --- MOD_DESCRIPTION: Mod aiming for vanilla style, a lot of new Jokers, Blinds, other stuff and Exotic Suits system!
 --- VERSION: 5.0
 
+-- ToDo:
+-- Fix Crop Circles always showing Fleurons
+
 local bunco = SMODS.current_mod
 local filesystem = NFS or love.filesystem
 
 local loc = filesystem.load(bunco.path..'localization.lua')()
+
+local function say(message)
+    sendDebugMessage(message)
+end
+
+-- Index-based coordinates generation
+
+local function get_coordinates(position, width)
+    if width == nil then width = 10 end -- 10 is default for Jokers
+    return {x = (position) % width, y = math.floor((position) / width)}
+end
+
+-- Forced messages for evaluation
+
+local function event(config)
+    G.E_MANAGER:add_event(Event({ trigger = config.trigger, delay = config.delay, func = config.func }))
+end
+
+local function forced_message(message, card, color, delay)
+    if delay == true then
+        delay = 0.7 * 1.25
+    else
+        delay = 0
+    end
+
+    event({trigger = 'before', delay = delay, func = function()
+        card_eval_status_text(
+            card,
+            'extra',
+            nil, nil, nil,
+            {message = message, colour = color, instant = true}
+        )
+
+        return true
+    end})
+end
 
 -- Exotic table
 
@@ -25,7 +64,14 @@ local function create_joker(joker)
     -- Sprite position
 
     local width = 10 -- Width of the spritesheet (in Jokers)
-    joker.position = {(joker.position - 1) % width, math.floor((joker.position - 1) / width)} -- Calculates coordinates based on the position variable
+
+        -- Soul sprite
+
+        if joker.rarity == 'Legendary' then
+            joker.soul = get_coordinates(joker.position) -- Calculates coordinates based on the position variable
+        end
+
+    joker.position = get_coordinates(joker.position - 1)
 
     -- Sprite atlas
 
@@ -37,12 +83,6 @@ local function create_joker(joker)
 
     if joker.rarity == 'Legendary' then
         joker.atlas = 'bunco_jokers_legendary'
-    end
-
-    -- Soul sprite
-
-    if joker.rarity == 'Legendary' then
-        joker.soul = {joker.position[1] + 1, joker.position[2]}
     end
 
     -- Key generation from name
@@ -63,6 +103,8 @@ local function create_joker(joker)
 
     -- Config values
 
+    if joker.vars == nil then joker.vars = {} end
+
     joker.config = {extra = {}}
 
     for _, kv_pair in ipairs(joker.vars) do
@@ -82,7 +124,7 @@ local function create_joker(joker)
     key = key,
 
     atlas = joker.atlas,
-    spritePos = joker.position,
+    pos = joker.position,
     soul_pos = joker.soul,
 
     rarity = joker.rarity,
@@ -112,27 +154,24 @@ local function create_joker(joker)
 
         return { vars = vars } end,
 
-    calculate = joker.code
+    calculate = joker.calculate,
+    update = joker.update
     }
 end
 
--- Cassette Joker
-
 create_joker({
             name = 'Cassette', position = 1,
-            vars = {{ chips = 45 }, { mult = 6 }, { size = 'A' }},
+            vars = {{ chips = 45 }, { mult = 6 }, { side = 'A' }},
             rarity = 'Uncommon', cost = 5,
             blueprint = true, eternal = true,
             unlocked = true,
-            code = function (self, context)
+            calculate = function(self, context)
                 if context.pre_discard then
 
-                    local side = self.ability.extra.side
-
-                    if side == 'A' then
-                        side = 'B'
+                    if self.ability.extra.side == 'A' then
+                        self.ability.extra.side = 'B'
                     else
-                        side = 'A'
+                        self.ability.extra.side = 'A'
                     end
 
                     self:flip() self:flip() -- Double flip plays the animation but doesn't flip the card, awesome!
@@ -161,5 +200,160 @@ create_joker({
                         end
                     end
                 end
+            end,
+            update = function(self)
+                if self.VT.w <= 0 then
+                    if self.ability.extra.side == 'A' then
+                        self.children.center:set_sprite_pos({x = 0, y = 0})
+                    else
+                        self.children.center:set_sprite_pos({x = 1, y = 0})
+                    end
+                end
             end
+})
+
+create_joker({
+    name = 'Mosaic', position = 3,
+    vars = {{ mult = 6 }},
+    rarity = 'Uncommon', cost = 4,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, context)
+        if context.individual and context.cardarea == G.play then
+            if context.other_card.config.center == G.P_CENTERS.m_stone then
+                return {
+                    mult = self.ability.extra.mult,
+                    card = self
+                }
+            end
+        end
+    end
+})
+
+create_joker({
+    name = 'Voxel', position = 4,
+    vars = {{base = 3}, {xmult = 3}, {tally = 0}},
+    rarity = 'Uncommon', cost = 5,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, context)
+        if SMODS.end_calculate_context(context) then
+            return {
+                Xmult_mod = self.ability.extra.xmult,
+                card = self,
+                message = localize {
+                    type = 'variable',
+                    key = 'a_xmult',
+                    vars = { self.ability.extra.xmult }
+                }
+            }
+        end
+    end,
+    update = function(self)
+        if G.playing_cards ~= nil then
+            self.ability.extra.tally = 0
+
+            for k, v in pairs(G.playing_cards) do
+                if v.config.center ~= G.P_CENTERS.c_base then self.ability.extra.tally = self.ability.extra.tally + 1 end
+            end
+
+            if (self.ability.extra.base - self.ability.extra.tally * 0.1) >= 1 then
+                self.ability.extra.xmult = self.ability.extra.base - self.ability.extra.tally * 0.1
+            else
+                self.ability.extra.xmult = 1
+            end
+        end
+    end
+})
+
+create_joker({
+    name = 'Crop Circles', position = 5,
+    rarity = 'Common', cost = 4,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, context)
+        if context.individual and context.cardarea == G.play then
+
+            local card = context.other_card
+
+            if card.ability.effect ~= 'Stone Card' then
+
+                if card.base.suit == ('Fleurons') then
+                    if card:get_id() == 8 then
+                        return {
+                            mult = 6,
+                            card = self
+                        }
+                    elseif card:get_id() == 12 or card:get_id() == 10 or card:get_id() == 9 or card:get_id() == 6 then
+                        return {
+                            mult = 5,
+                            card = self
+                        }
+                    else
+                        return {
+                            mult = 4,
+                            card = self
+                        }
+                    end
+                elseif card.base.suit == ('Clubs') then
+                    if card:get_id() == 8 then
+                        return {
+                            mult = 5,
+                            card = self
+                        }
+                    elseif card:get_id() == 12 or card:get_id() == 10 or card:get_id() == 9 or card:get_id() == 6 then
+                        return {
+                            mult = 4,
+                            card = self
+                        }
+                    else
+                        return {
+                            mult = 3,
+                            card = self
+                        }
+                    end
+                elseif card:get_id() == 8 then
+                    return {
+                        mult = 2,
+                        card = self
+                    }
+                elseif card:get_id() == 12 or card:get_id() == 10 or card:get_id() == 9 or card:get_id() == 6 then
+                    return {
+                        mult = 1,
+                        card = self
+                    }
+                end
+            end
+        end
+    end
+})
+
+create_joker({
+    name = 'Xray', position = 6,
+    vars = {{xmult = 1}},
+    rarity = 'Common', cost = 4,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, context)
+        if SMODS.end_calculate_context(context) then
+
+            if context.emplaced_card and context.emplaced_card.facing == 'back' and not context.blueprint then
+                self.ability.extra.xmult = self.ability.extra.xmult + 0.2
+
+                forced_message('X'..tostring(self.ability.extra.xmult)..' Mult', self, G.C.RED, true)
+            end
+
+            if self.ability.extra.xmult ~= 1 then
+                return {
+                    message = localize {
+                        type = 'variable',
+                        key = 'a_xmult',
+                        vars = { self.ability.extra.xmult }
+                    },
+                    Xmult_mod = self.ability.extra.xmult,
+                    card = self
+                }
+            end
+        end
+    end
 })

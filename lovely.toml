@@ -1,0 +1,24 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+# CardArea:emplace()
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+pattern = 'if #self.cards > self.config.card_limit then'
+position = 'before'
+match_indent = true
+payload = '''
+
+if G.jokers ~= nil and self == G.hand then
+
+    for _, v in ipairs(G.jokers.cards) do
+        if v.ability.name == 'Xray' then
+            v:calculate_joker({ emplaced_card = card })
+        end
+    end
+end
+
+'''
