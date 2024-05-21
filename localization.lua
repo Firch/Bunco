@@ -51,5 +51,58 @@ return {
                 [3] = '{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive} Mult)'
             }
         }
+    },
+    dread = {
+        ['en-us'] = {
+            ['name'] = 'Dread',
+            ['text'] = {
+                [1] = 'After scoring your {C:attention}final hand{} of round,',
+                [2] = 'upgrade level of scored {C:attention}poker hand{}',
+                [3] = 'by {C:attention}2 levels{} and destroy cards from that hand,',
+                [4] = 'on Joker loss remove all gained levels'
+            }
+        }
+    },
+    prehistoric = {
+        ['en-us'] = {
+            ['name'] = 'Prehistoric Joker',
+            ['text'] = {
+                [1] = '{C:mult}+#1#{} Mult for each card',
+                [2] = 'of the same rank and suit',
+                [3] = 'that was already played',
+                [4] = 'during this round'
+            }
+        }
+    },
+    linocut = {
+        ['en-us'] = {
+            ['name'] = 'Linocut Joker',
+            ['text'] = {
+                [1] = 'When playing a {C:attention}Pair{} of two cards,',
+                [2] = 'convert the suit of the {C:attention}left{} card',
+                [3] = 'into the suit of the {C:attention}right{} card',
+                [4] = '{C:inactive}(Drag to rearrange)'
+            }
+        }
+    },
+    ghost_print = {
+        ['en-us'] = {
+            ['name'] = 'Ghost Print',
+            ['text'] = {
+                [1] = 'Grants Chips and Mult',
+                [2] = 'from last hand type played',
+                [3] = '{C:inactive}(Last poker hand: #1#)'
+            }
+        }
+    },
+    shepherd = {
+        ['en-us'] = {
+            ['name'] = 'Shepherd Joker',
+            ['text'] = {
+                [1] = 'Gains {C:chips}+6{} Chips',
+                [2] = 'when played hand contains a {C:attention}Pair',
+                [3] = '{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)'
+            }
+        }
     }
 }

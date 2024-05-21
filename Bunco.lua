@@ -7,6 +7,7 @@
 
 -- ToDo:
 -- Fix Crop Circles always showing Fleurons
+-- Check how to add custom entries to the localization (for card messages like linocut's one)
 
 local bunco = SMODS.current_mod
 local filesystem = NFS or love.filesystem
@@ -155,7 +156,8 @@ local function create_joker(joker)
         return { vars = vars } end,
 
     calculate = joker.calculate,
-    update = joker.update
+    update = joker.update,
+    remove_from_deck = joker.remove
     }
 end
 
@@ -237,7 +239,7 @@ create_joker({
     blueprint = true, eternal = true,
     unlocked = true,
     calculate = function(self, context)
-        if SMODS.end_calculate_context(context) then
+        if context.joker_main then
             return {
                 Xmult_mod = self.ability.extra.xmult,
                 card = self,
@@ -335,7 +337,7 @@ create_joker({
     blueprint = true, eternal = true,
     unlocked = true,
     calculate = function(self, context)
-        if SMODS.end_calculate_context(context) then
+        if context.joker_main then
 
             if context.emplaced_card and context.emplaced_card.facing == 'back' and not context.blueprint then
                 self.ability.extra.xmult = self.ability.extra.xmult + 0.2
@@ -351,6 +353,166 @@ create_joker({
                         vars = { self.ability.extra.xmult }
                     },
                     Xmult_mod = self.ability.extra.xmult,
+                    card = self
+                }
+            end
+        end
+    end
+})
+
+create_joker({
+    name = 'Dread', position = 7,
+    vars = {{trash_list = {}}, {level_up_list = {}}},
+    rarity = 'Rare', cost = 8,
+    blueprint = false, eternal = true,
+    unlocked = true,
+    calculate = function(self, context)
+        if not context.blueprint then
+            if context.full_hand ~= nil and context.full_hand[1] and not context.other_card then
+                self.ability.extra.trash_list = {}
+                for k, v in ipairs(context.full_hand) do
+                    table.insert(self.ability.extra.trash_list, v)
+                end
+            end
+
+            if context.after and G.GAME.current_round.hands_left == 0 and context.scoring_name ~= nil then
+
+                level_up_hand(self, context.scoring_name, true, 2)
+
+                if self.ability.extra.level_up_list[context.scoring_name] then
+                    self.ability.extra.level_up_list[context.scoring_name] = self.ability.extra.level_up_list[context.scoring_name] + 2
+                else
+                    self.ability.extra.level_up_list[context.scoring_name] = 2
+                end
+
+                event({
+                    trigger = 'after',
+                    func = function()
+
+                        for i = 1, #self.ability.extra.trash_list do
+                            self.ability.extra.trash_list[i].destroyed = true
+                            self.ability.extra.trash_list[i]:start_dissolve(nil, nil, 3)
+                            self.ability.extra.trash_list[i].destroyed = true
+                        end
+                        self.ability.extra.trash_list = {}
+
+                return true end })
+
+                return {
+                    colour = G.C.RED,
+                    message = localize('k_level_up_ex')
+                }
+            end
+        end
+    end,
+    remove = function(self)
+        for name, level in pairs(self.ability.extra.level_up_list) do
+            level_up_hand(self, name, true, level * -1)
+        end
+    end
+})
+
+create_joker({
+    name = 'Prehistoric', position = 8,
+    vars = {{mult = 16}, {card_list = { }}},
+    rarity = 'Uncommon', cost = 5,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, context)
+        if context.individual and context.cardarea == G.play then
+            for k, v in pairs(self.ability.extra.card_list) do
+                if v == context.other_card.base.id .. context.other_card.base.suit then
+                    return {
+                        message = localize {
+                            type = 'variable',
+                            key = 'a_mult',
+                            vars = {self.ability.extra.mult}
+                        },
+                        mult = self.ability.extra.mult,
+                        card = self
+                    }
+                end
+            end
+
+            if not context.blueprint then
+                table.insert(self.ability.extra.card_list, context.other_card.base.id .. context.other_card.base.suit) -- Add the card to the list
+            end
+
+        end
+
+        if context.end_of_round and not context.other_card then -- Clear the list if end of round
+            self.ability.extra.card_list = {}
+        end
+    end
+})
+
+create_joker({
+    name = 'Linocut', position = 9,
+    rarity = 'Uncommon', cost = 4,
+    blueprint = false, eternal = true,
+    unlocked = true,
+    calculate = function(self, context)
+        if not context.blueprint then
+            if context.individual and context.cardarea == G.play and context.poker_hands and next(context.poker_hands['Pair']) then
+
+                if context.scoring_hand ~= nil and #context.scoring_hand == 2 and context.scoring_hand[1] == context.other_card then
+                    G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.15,func = function() context.scoring_hand[1]:flip();play_sound('card1', 1);context.scoring_hand[1]:juice_up(0.3, 0.3);return true end }))
+                    G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.1,func = function()  context.scoring_hand[1]:change_suit(context.scoring_hand[2].config.card.suit);return true end }))
+                    G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.15,func = function() context.scoring_hand[1]:flip();play_sound('tarot2', 1, 0.6);context.scoring_hand[1]:juice_up(0.3, 0.3);return true end }))
+
+                    forced_message('Copied!', self, G.C.RED, true)
+
+                end
+            end
+        end
+    end
+})
+
+create_joker({
+    name = 'Ghost Print', position = 10,
+    vars = {{last_hand = nil}},
+    rarity = 'Uncommon', cost = 6,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, context)
+        if context.joker_main then
+
+            if self.ability.extra.last_hand ~= nil then
+                mult = mod_mult(mult + G.GAME.hands[self.ability.extra.last_hand].mult)
+                hand_chips = mod_chips(hand_chips + G.GAME.hands[self.ability.extra.last_hand].chips)
+                update_hand_text({delay = 0, sound = '', modded = true}, {chips = hand_chips, mult = mult})
+                forced_message(G.localization.misc['poker_hands'][self.ability.extra.last_hand]..'!', context.blueprint_card or self, G.C.HAND_LEVELS[G.GAME.hands[self.ability.extra.last_hand].level], true)
+            end
+
+            if not context.blueprint then
+                self.ability.extra.last_hand = G.GAME.last_hand_played
+            end
+        end
+    end
+})
+
+create_joker({
+    name = 'Shepherd', position = 13,
+    vars = {{chips = 0}},
+    rarity = 'Common', cost = 5,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, context)
+        if context.after and context.poker_hands ~= nil and next(context.poker_hands['Pair']) and not context.blueprint then
+            self.ability.extra.chips = self.ability.extra.chips + 6
+
+            forced_message('+'..tostring(self.ability.extra.chips)..' Chips', self, G.C.BLUE, true)
+        end
+
+        if context.joker_main then
+            if self.ability.extra.chips ~= 0 then
+                return {
+                    message = localize {
+                        type = 'variable',
+                        key = 'a_chips',
+                        vars = { self.ability.extra.chips }
+                    },
+                    chip_mod = self.ability.extra.chips,
                     card = self
                 }
             end
