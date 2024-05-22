@@ -3,7 +3,7 @@ version = "1.0.0"
 dump_lua = true
 priority = 0
 
-# CardArea:emplace()
+# CardArea:emplace() (X-Ray)
 [[patches]]
 [patches.pattern]
 target = 'cardarea.lua'
@@ -17,6 +17,85 @@ if G.jokers ~= nil and self == G.hand then
     for _, v in ipairs(G.jokers.cards) do
         if v.ability.name == 'Xray' then
             v:calculate_joker({ emplaced_card = card })
+        end
+    end
+end
+
+'''
+
+# Joker Knight variables
+[[patches]]
+[patches.pattern]
+target = 'engine/node.lua'
+pattern = 'function Node:drag()'
+position = 'before'
+match_indent = true
+payload = '''
+
+local break_table = {before = nil, after = nil}
+
+'''
+
+# Node:drag() (Joker Knight)
+[[patches]]
+[patches.pattern]
+target = 'engine/node.lua'
+pattern = 'function Node:drag()'
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.jokers ~= nil then
+    for _, v in ipairs(G.jokers.cards) do
+        if v.ability.name == 'Knight' and not self.debuff then
+            if break_table.before == nil then
+
+                break_table.before = {}
+
+                for _, v in ipairs(G.jokers.cards) do
+                    table.insert(break_table.before, v.ability.name)
+                end
+
+                break_table.after = break_table.before
+
+            end
+        end
+    end
+end
+
+'''
+
+# Node:stop_drag() (Joker Knight)
+[[patches]]
+[patches.pattern]
+target = 'engine/node.lua'
+pattern = 'function Node:stop_drag()'
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.jokers ~= nil then
+    for _, v in ipairs(G.jokers.cards) do
+        if v.ability.name == 'Knight' and not self.debuff then
+            function do_tables_match(a, b)
+                return table.concat(a) == table.concat(b)
+            end
+
+            if break_table.before ~= nil then
+
+            break_table.before = {}
+
+            for _, v in ipairs(G.jokers.cards) do
+                table.insert(break_table.before, v.ability.name)
+            end
+
+            if not do_tables_match(break_table.before, break_table.after) then
+                v:calculate_joker({ break_positions = true })
+            end
+
+                break_table.before = nil
+                break_table.after = nil
+            end
         end
     end
 end

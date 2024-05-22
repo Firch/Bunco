@@ -95,6 +95,24 @@ return {
             }
         }
     },
+    loan_shark = {
+        ['en-us'] = {
+            ['name'] = 'Loan Shark',
+            ['text'] = {
+                [1] = 'Grants {C:money}$50',
+                [2] = 'when acquired...'
+            }
+        }
+    },
+    basement = {
+        ['en-us'] = {
+            ['name'] = 'Basement Joker',
+            ['text'] = {
+                [1] = 'When {C:attention}Boss Blind{} is defeated',
+                [2] = 'create a {C:spectral}Spectral{} card'
+            }
+        }
+    },
     shepherd = {
         ['en-us'] = {
             ['name'] = 'Shepherd Joker',
@@ -102,6 +120,26 @@ return {
                 [1] = 'Gains {C:chips}+6{} Chips',
                 [2] = 'when played hand contains a {C:attention}Pair',
                 [3] = '{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)'
+            }
+        }
+    },
+    knight = {
+        ['en-us'] = {
+            ['name'] = 'Joker Knight',
+            ['text'] = {
+                [1] = 'When {C:attention}Blind{} is selected,',
+                [2] = 'shuffles all Jokers and gains {C:red}+#1#{} Mult,',
+                [3] = 'resets when any Joker is rearranged',
+                [4] = '{C:inactive}(Currently {C:red}+#2#{C:inactive} Mult)'
+            }
+        }
+    },
+    jmjb = {
+        ['en-us'] = {
+            ['name'] = 'Joker Man & Jester Boy Trading Card No. 54',
+            ['text'] = {
+                [1] = '{C:attention}Standard Packs{} will contain',
+                [2] = 'only {C:attention}Enhanced Cards{}'
             }
         }
     }

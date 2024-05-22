@@ -8,6 +8,7 @@
 -- ToDo:
 -- Fix Crop Circles always showing Fleurons
 -- Check how to add custom entries to the localization (for card messages like linocut's one)
+-- Cassette proper coordinates
 
 local bunco = SMODS.current_mod
 local filesystem = NFS or love.filesystem
@@ -28,7 +29,13 @@ end
 -- Forced messages for evaluation
 
 local function event(config)
-    G.E_MANAGER:add_event(Event({ trigger = config.trigger, delay = config.delay, func = config.func }))
+    G.E_MANAGER:add_event(Event({
+        trigger = config.trigger,
+        delay = config.delay,
+        blockable = config.blockable,
+        blocking = config.blocking,
+        func = config.func
+    }))
 end
 
 local function forced_message(message, card, color, delay)
@@ -50,9 +57,20 @@ local function forced_message(message, card, color, delay)
     end})
 end
 
--- Exotic table
+-- Exotic table, enhancements pool
 
 exotic_table = {}
+
+local enhancement_pool = {
+    G.P_CENTERS.m_bonus,
+    G.P_CENTERS.m_mult,
+    G.P_CENTERS.m_wild,
+    G.P_CENTERS.m_stone,
+    G.P_CENTERS.m_steel,
+    G.P_CENTERS.m_glass,
+    G.P_CENTERS.m_gold,
+    G.P_CENTERS.m_lucky
+}
 
 -- Joker creation setup
 
@@ -157,11 +175,12 @@ local function create_joker(joker)
 
     calculate = joker.calculate,
     update = joker.update,
-    remove_from_deck = joker.remove
+    remove_from_deck = joker.remove,
+    add_to_deck = joker.add
     }
 end
 
-create_joker({
+create_joker({ -- Cassette
             name = 'Cassette', position = 1,
             vars = {{ chips = 45 }, { mult = 6 }, { side = 'A' }},
             rarity = 'Uncommon', cost = 5,
@@ -214,7 +233,7 @@ create_joker({
             end
 })
 
-create_joker({
+create_joker({ -- Mosaic
     name = 'Mosaic', position = 3,
     vars = {{ mult = 6 }},
     rarity = 'Uncommon', cost = 4,
@@ -232,7 +251,7 @@ create_joker({
     end
 })
 
-create_joker({
+create_joker({ -- Voxel
     name = 'Voxel', position = 4,
     vars = {{base = 3}, {xmult = 3}, {tally = 0}},
     rarity = 'Uncommon', cost = 5,
@@ -268,7 +287,7 @@ create_joker({
     end
 })
 
-create_joker({
+create_joker({ -- Crop Circles
     name = 'Crop Circles', position = 5,
     rarity = 'Common', cost = 4,
     blueprint = true, eternal = true,
@@ -330,7 +349,7 @@ create_joker({
     end
 })
 
-create_joker({
+create_joker({ -- Xray
     name = 'Xray', position = 6,
     vars = {{xmult = 1}},
     rarity = 'Common', cost = 4,
@@ -360,7 +379,7 @@ create_joker({
     end
 })
 
-create_joker({
+create_joker({ -- Dread
     name = 'Dread', position = 7,
     vars = {{trash_list = {}}, {level_up_list = {}}},
     rarity = 'Rare', cost = 8,
@@ -412,7 +431,7 @@ create_joker({
     end
 })
 
-create_joker({
+create_joker({ -- Prehistoric
     name = 'Prehistoric', position = 8,
     vars = {{mult = 16}, {card_list = { }}},
     rarity = 'Uncommon', cost = 5,
@@ -446,7 +465,7 @@ create_joker({
     end
 })
 
-create_joker({
+create_joker({ -- Linocut
     name = 'Linocut', position = 9,
     rarity = 'Uncommon', cost = 4,
     blueprint = false, eternal = true,
@@ -456,9 +475,9 @@ create_joker({
             if context.individual and context.cardarea == G.play and context.poker_hands and next(context.poker_hands['Pair']) then
 
                 if context.scoring_hand ~= nil and #context.scoring_hand == 2 and context.scoring_hand[1] == context.other_card then
-                    G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.15,func = function() context.scoring_hand[1]:flip();play_sound('card1', 1);context.scoring_hand[1]:juice_up(0.3, 0.3);return true end }))
-                    G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.1,func = function()  context.scoring_hand[1]:change_suit(context.scoring_hand[2].config.card.suit);return true end }))
-                    G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.15,func = function() context.scoring_hand[1]:flip();play_sound('tarot2', 1, 0.6);context.scoring_hand[1]:juice_up(0.3, 0.3);return true end }))
+                    G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.15, func = function() context.scoring_hand[1]:flip(); play_sound('card1', 1); context.scoring_hand[1]:juice_up(0.3, 0.3); return true end }))
+                    G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.1,  func = function() context.scoring_hand[1]:change_suit(context.scoring_hand[2].config.card.suit); return true end }))
+                    G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.15, func = function() context.scoring_hand[1]:flip(); play_sound('tarot2', 1, 0.6);context.scoring_hand[1]:juice_up(0.3, 0.3); return true end }))
 
                     forced_message('Copied!', self, G.C.RED, true)
 
@@ -468,16 +487,16 @@ create_joker({
     end
 })
 
-create_joker({
+create_joker({ -- Ghost Print
     name = 'Ghost Print', position = 10,
-    vars = {{last_hand = nil}},
+    vars = {{last_hand = 'Nothing'}},
     rarity = 'Uncommon', cost = 6,
     blueprint = true, eternal = true,
     unlocked = true,
     calculate = function(self, context)
         if context.joker_main then
 
-            if self.ability.extra.last_hand ~= nil then
+            if self.ability.extra.last_hand ~= 'Nothing' then
                 mult = mod_mult(mult + G.GAME.hands[self.ability.extra.last_hand].mult)
                 hand_chips = mod_chips(hand_chips + G.GAME.hands[self.ability.extra.last_hand].chips)
                 update_hand_text({delay = 0, sound = '', modded = true}, {chips = hand_chips, mult = mult})
@@ -491,7 +510,42 @@ create_joker({
     end
 })
 
-create_joker({
+create_joker({ -- Loan Shark
+    name = 'Loan Shark', position = 11,
+    rarity = 'Uncommon', cost = 3,
+    blueprint = false, eternal = true,
+    unlocked = true,
+    add = function(self)
+        ease_dollars(50)
+        self.ability.extra_value = -100 - self.sell_cost
+        self:set_cost()
+    end
+})
+
+create_joker({ -- Basement
+    name = 'Basement', position = 12,
+    rarity = 'Rare', cost = 8,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, context)
+        if context.end_of_round and G.GAME.blind.boss and not context.other_card then
+            if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+                if not context.blueprint then
+                    forced_message(localize('k_plus_spectral'), self, G.C.SECONDARY_SET.Spectral)
+                else
+                    forced_message(localize('k_plus_spectral'), context.blueprint_card, G.C.SECONDARY_SET.Spectral)
+                end
+                G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+                local card = create_card('Spectral', G.consumeables, nil, nil, nil, nil, nil)
+                card:add_to_deck()
+                G.consumeables:emplace(card)
+                G.GAME.consumeable_buffer = 0
+            end
+        end
+    end
+})
+
+create_joker({ -- Shepherd
     name = 'Shepherd', position = 13,
     vars = {{chips = 0}},
     rarity = 'Common', cost = 5,
@@ -515,6 +569,86 @@ create_joker({
                     chip_mod = self.ability.extra.chips,
                     card = self
                 }
+            end
+        end
+    end
+})
+
+create_joker({ -- Knight
+    name = 'Knight', position = 14,
+    vars = {{bonus = 6}, {mult = 0}},
+    rarity = 'Uncommon', cost = 6,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, context)
+        if context.setting_blind and not self.getting_sliced and not context.blueprint then
+            self.ability.extra.mult = self.ability.extra.mult + self.ability.extra.bonus
+
+            G.E_MANAGER:add_event(Event({ trigger = 'after', delay = 0.2, func = function()
+                G.E_MANAGER:add_event(Event({ func = function() G.jokers:shuffle('aajk'); play_sound('cardSlide1', 0.85);return true end })) 
+                delay(0.15)
+                G.E_MANAGER:add_event(Event({ func = function() G.jokers:shuffle('aajk'); play_sound('cardSlide1', 1.15);return true end })) 
+                delay(0.15)
+                G.E_MANAGER:add_event(Event({ func = function() G.jokers:shuffle('aajk'); play_sound('cardSlide1', 1);return true end })) 
+                delay(0.5)
+            return true end }))
+
+            forced_message('+'..tostring(self.ability.extra.mult)..' Mult', self, G.C.RED)
+        end
+
+        if context.break_positions and not context.blueprint then
+            if self.ability.extra.mult ~= 0 then
+                self.ability.extra.mult = 0
+
+                forced_message(localize('k_reset'), self, G.C.RED)
+            end
+        end
+
+        if context.joker_main then
+            if self.ability.extra.mult ~= 0 then
+                return {
+                    message = localize {
+                        type = 'variable',
+                        key = 'a_mult',
+                        vars = { self.ability.extra.mult }
+                    },
+                    mult_mod = self.ability.extra.mult,
+                    card = self
+                }
+            end
+        end
+    end
+})
+
+create_joker({ -- JMJB
+    name = 'JMJB', position = 15,
+    rarity = 'Rare', cost = 5,
+    blueprint = false, eternal = true,
+    unlocked = true,
+    calculate = function(self, context)
+        if context.open_booster and context.card.ability.name then
+            if (context.open_booster and context.card.ability.name == 'Standard Pack' or
+            context.open_booster and context.card.ability.name == 'Jumbo Standard Pack' or
+            context.open_booster and context.card.ability.name == 'Mega Standard Pack') then
+                event({
+                    trigger = 'after',
+                    delay = 1.3 * math.sqrt(G.SETTINGS.GAMESPEED),
+                    blockable = false,
+                    blocking = false,
+                    func = function()
+
+                        if G.pack_cards and G.pack_cards.cards ~= nil and G.pack_cards.cards[1] and G.pack_cards.VT.y < G.ROOM.T.h then
+
+                            for _, v in ipairs(G.pack_cards.cards) do
+                                if v.config.center == G.P_CENTERS.c_base then
+                                    v:set_ability(enhancement_pool[math.random(#enhancement_pool)])
+                                end
+                            end
+
+                            return true
+                        end
+                    end
+                })
             end
         end
     end
