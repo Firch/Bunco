@@ -142,5 +142,34 @@ return {
                 [2] = 'only {C:attention}Enhanced Cards{}'
             }
         }
+    },
+    dogs_playing_poker = {
+        ['en-us'] = {
+            ['name'] = 'Dogs Playing Poker',
+            ['text'] = {
+                [1] = '{X:mult,C:white}X#1#{} Mult if all scored',
+                [2] = 'cards are {C:attention}2{}, {C:attention}3{}, {C:attention}4{}, or {C:attention}5{}'
+            }
+        }
+    },
+    righthook = {
+        ['en-us'] = {
+            ['name'] = 'Righthook Joker',
+            ['text'] = {
+                [1] = 'Retrigger rightmost played card',
+                [2] = 'the same amount of times as',
+                [3] = 'your current amount of hands'
+            }
+        }
+    },
+    fiendish = {
+        ['en-us'] = {
+            ['name'] = 'Fiendish Joker',
+            ['text'] = {
+                [1] = 'Doubles all sources of money,',
+                [2] = '{C:green}#1# in #2#{} chance to pay out',
+                [3] = 'with {C:money}$1{} instead'
+            }
+        }
     }
 }

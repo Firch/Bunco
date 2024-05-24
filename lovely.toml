@@ -101,3 +101,55 @@ if G.jokers ~= nil then
 end
 
 '''
+
+# create_card() (JMJB)
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = 'card:set_edition(edition)'
+position = 'before'
+match_indent = true
+payload = '''
+
+if card.ability.name == 'JMJB' then
+    if card:get_edition() == nil then
+        edition = poll_edition('aura', nil, true, true)
+    end
+end
+
+'''
+
+# ease_dollars() (Fiendish)
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = 'function ease_dollars(mod, instant)'
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.jokers ~= nil then
+    for _, v in ipairs(G.jokers.cards) do
+        if v.ability.name == 'Fiendish' and not v.debuff then
+            if mod > 0 then
+                if pseudorandom('fiendish'..G.SEED) < G.GAME.probabilities.normal / v.ability.extra.odds then
+                    mod = 1
+                    card_eval_status_text(
+                    v,
+                    'extra',
+                    nil, nil, nil,
+                    {message = (mod or '1')..'!', colour = G.C.RED, instant = true})
+                else
+                    mod = mod * 2
+                    card_eval_status_text(
+                    v,
+                    'extra',
+                    nil, nil, nil,
+                    {message = mod..'!', colour = G.C.ORANGE, instant = true})
+                end
+            end
+        end
+    end
+end
+
+'''
