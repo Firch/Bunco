@@ -138,14 +138,14 @@ if G.jokers ~= nil then
                     v,
                     'extra',
                     nil, nil, nil,
-                    {message = (mod or '1')..'!', colour = G.C.RED, instant = true})
+                    {message = '$'..(mod or '1'), colour = G.C.RED, instant = true})
                 else
                     mod = mod * 2
                     card_eval_status_text(
                     v,
                     'extra',
                     nil, nil, nil,
-                    {message = mod..'!', colour = G.C.ORANGE, instant = true})
+                    {message = '$'..mod, colour = G.C.ORANGE, instant = true})
                 end
             end
         end

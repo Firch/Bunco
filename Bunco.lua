@@ -720,13 +720,15 @@ create_joker({ -- Righthook
 
 create_joker({ -- Fiendish
     name = 'Fiendish', position = 18,
-    vars = {{probability = 0}, {odds = 2}},
+    vars = {{probability = 1}, {odds = 3}},
     rarity = 'Uncommon', cost = 5,
     blueprint = false, eternal = true,
     unlocked = true,
     update = function(self, card)
-        if card.ability then
+        if card.ability and G.GAME then
             card.ability.extra.probability = G.GAME.probabilities.normal
+        else
+            card.ability.extra.probability = 1
         end
     end
 })
