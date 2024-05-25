@@ -732,3 +732,32 @@ create_joker({ -- Fiendish
         end
     end
 })
+
+create_joker({ -- Carnival
+    name = 'Carnival', position = 19,
+    vars = {{ante = -math.huge}},
+    rarity = 'Rare', cost = 10,
+    blueprint = false, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.end_of_round and G.GAME.blind.boss and not context.other_card and not context.blueprint then
+            if G.GAME.round_resets.ante > card.ability.extra.ante then
+                local destructable_jokers = {}
+                for i = 1, #G.jokers.cards do
+                    if G.jokers.cards[i] ~= card and not G.jokers.cards[i].ability.eternal and not G.jokers.cards[i].getting_sliced then destructable_jokers[#destructable_jokers+1] = G.jokers.cards[i] end
+                end
+                local joker_to_destroy = #destructable_jokers > 0 and pseudorandom_element(destructable_jokers, pseudoseed('carnival')) or nil
+
+                if joker_to_destroy and not card.getting_sliced then 
+                    joker_to_destroy.getting_sliced = true
+                    card:juice_up(0.8, 0.8)
+                    card.ability.extra.ante = G.GAME.round_resets.ante
+                    ease_ante(-1)
+                    forced_message('Loop!', card, G.C.BLACK)
+                    joker_to_destroy:start_dissolve({G.C.BLACK}, nil, 1.6)
+                    play_sound('slice1', 0.96+math.random()*0.08)
+                end
+            end
+        end
+    end
+})

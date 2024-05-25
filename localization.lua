@@ -171,5 +171,16 @@ return {
                 [3] = 'with {C:money}$1{} instead'
             }
         }
+    },
+    carnival = {
+        ['en-us'] = {
+            ['name'] = 'Carnival',
+            ['text'] = {
+                [1] = 'After beating {C:attention}Boss Blind{},',
+                [2] = '{C:attention}destroy{} a random Joker to',
+                [3] = 'go one Ante back, next time',
+                [4] = 'works only on a greater Ante'
+            }
+        }
     }
 }
