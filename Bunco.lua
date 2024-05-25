@@ -47,7 +47,7 @@ local function event(config)
     }))
 end
 
-local function forced_message(message, card, color, delay)
+local function forced_message(message, card, color, delay, juice)
     if delay == true then
         delay = 0.7 * 1.25
     else
@@ -55,13 +55,15 @@ local function forced_message(message, card, color, delay)
     end
 
     event({trigger = 'before', delay = delay, func = function()
+
+        if juice ~= nil then juice:juice_up() end
+
         card_eval_status_text(
             card,
             'extra',
             nil, nil, nil,
             {message = message, colour = color, instant = true}
         )
-
         return true
     end})
 end
@@ -167,7 +169,7 @@ local function create_joker(joker)
     loc_txt = loc[key],
 
     config = joker.config,
-    loc_vars = function(self, info_queue, card)
+    loc_vars = joker.custom_vars or function(self, info_queue, card)
 
         -- Localization values
 
@@ -720,17 +722,19 @@ create_joker({ -- Righthook
 
 create_joker({ -- Fiendish
     name = 'Fiendish', position = 18,
-    vars = {{probability = 1}, {odds = 3}},
+    vars = {{odds = 3}},
+    custom_vars = function(self, info_queue, card)
+        local vars
+        if G.GAME and G.GAME.probabilities.normal then
+            vars = {G.GAME.probabilities.normal, card.ability.extra.odds}
+        else
+            vars = {1, card.ability.extra.odds}
+        end
+        return { vars = vars }
+    end,
     rarity = 'Uncommon', cost = 5,
     blueprint = false, eternal = true,
-    unlocked = true,
-    update = function(self, card)
-        if card.ability and G.GAME then
-            card.ability.extra.probability = G.GAME.probabilities.normal
-        else
-            card.ability.extra.probability = 1
-        end
-    end
+    unlocked = true
 })
 
 create_joker({ -- Carnival
@@ -758,6 +762,131 @@ create_joker({ -- Carnival
                     play_sound('slice1', 0.96+math.random()*0.08)
                 end
             end
+        end
+    end
+})
+
+create_joker({ -- Sledgehammer
+    name = 'Sledgehammer', position = 20,
+    vars = {{new_xmult = 3}, {new_chance = 1}},
+    rarity = 'Uncommon', cost = 5,
+    blueprint = false, eternal = true,
+    unlocked = true,
+    update = function(self, card)
+        if card.area == G.jokers and not card.debuff then
+            G.P_CENTERS.m_glass.config.Xmult = card.ability.extra.new_xmult
+            G.P_CENTERS.m_glass.config.extra = card.ability.extra.new_chance
+        end
+    end,
+    remove = function(self, card)
+        G.P_CENTERS.m_glass.config.Xmult = 2
+        G.P_CENTERS.m_glass.config.extra = 4
+    end
+})
+
+create_joker({ -- Doorhanger
+    name = 'Doorhanger', position = 21,
+    rarity = 'Rare', cost = 10,
+    blueprint = false, eternal = true,
+    unlocked = true
+})
+
+create_joker({ -- Fingerprints
+    name = 'Fingerprints', position = 22,
+    vars = {{bonus = 50}, {new_card_list = {}}, {old_card_list = {}}},
+    rarity = 'Uncommon', cost = 8,
+    blueprint = false, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.after and context.scoring_name ~= nil and context.scoring_hand ~= nil and not context.blueprint then
+            card.ability.extra.new_card_list = {}
+
+            for i = 1, #context.scoring_hand do
+                table.insert(card.ability.extra.new_card_list, context.scoring_hand[i])
+            end
+        end
+
+        if context.end_of_round and not context.other_card and not context.blueprint then
+            for _, v in ipairs(card.ability.extra.old_card_list) do
+                v.ability.perma_bonus = v.ability.perma_bonus or 0
+                v.ability.perma_bonus = v.ability.perma_bonus - card.ability.extra.bonus
+            end
+
+            for _, v in ipairs(card.ability.extra.new_card_list) do
+                v.ability.perma_bonus = v.ability.perma_bonus or 0
+                v.ability.perma_bonus = v.ability.perma_bonus + card.ability.extra.bonus
+            end
+
+            card.ability.extra.old_card_list = card.ability.extra.new_card_list
+            -- not needed, but good style to fail fast
+            card.ability.extra.new_card_list = nil
+
+            forced_message(localize('k_upgrade_ex'), card, G.C.CHIPS)
+
+        end
+
+        if context.selling_self and not context.blueprint then
+            for _, v in ipairs(card.ability.extra.old_card_list) do
+                v.ability.perma_bonus = v.ability.perma_bonus or 0
+                v.ability.perma_bonus = v.ability.perma_bonus - card.ability.extra.bonus
+            end
+        end
+    end
+})
+
+create_joker({ -- Zero Shapiro
+    name = 'Zero Shapiro', position = 23,
+    vars = {{bonus = 0.3}, {amount = 0}},
+    rarity = 'Uncommon', cost = 4,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.individual and context.cardarea == G.play then
+            if context.other_card.config.center == G.P_CENTERS.m_stone or context.other_card:get_id() == 0 then
+
+                card.ability.extra.amount = card.ability.extra.amount + card.ability.extra.bonus
+
+                for k, v in pairs(G.GAME.probabilities) do
+                    G.GAME.probabilities[k] = v + card.ability.extra.bonus
+                end
+
+                return {
+                    extra = {focus = context.other_card, message = '+'..card.ability.extra.bonus..' Chance', colour = G.C.GREEN},
+                    card = card
+                }
+            end
+        end
+
+        if context.end_of_round and not context.other_card then
+            for k, v in pairs(G.GAME.probabilities) do
+                G.GAME.probabilities[k] = v - (card.ability.extra.amount)
+            end
+
+            card.ability.extra.amount = 0
+
+            forced_message(localize('k_reset'), card, G.C.GREEN, true)
+        end
+
+        if context.selling_self then
+            for k, v in pairs(G.GAME.probabilities) do
+                G.GAME.probabilities[k] = v - (card.ability.extra.amount)
+            end
+
+            card.ability.extra.amount = 0
+        end
+    end
+})
+
+create_joker({ -- Nil Bill
+    name = 'Nil Bill', position = 24,
+    vars = {{bonus = 1}},
+    rarity = 'Uncommon', cost = 4,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.debuffed_card then
+            ease_dollars(card.ability.extra.bonus)
+            forced_message('$'..card.ability.extra.bonus, context.debuffed_card, G.C.MONEY, true, card)
         end
     end
 })

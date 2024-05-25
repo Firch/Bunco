@@ -47,7 +47,7 @@ payload = '''
 
 if G.jokers ~= nil then
     for _, v in ipairs(G.jokers.cards) do
-        if v.ability.name == 'Knight' and not self.debuff then
+        if v.ability.name == 'Knight' and not v.debuff then
             if break_table.before == nil then
 
                 break_table.before = {}
@@ -76,7 +76,7 @@ payload = '''
 
 if G.jokers ~= nil then
     for _, v in ipairs(G.jokers.cards) do
-        if v.ability.name == 'Knight' and not self.debuff then
+        if v.ability.name == 'Knight' and not v.debuff then
             function do_tables_match(a, b)
                 return table.concat(a) == table.concat(b)
             end
@@ -148,6 +148,50 @@ if G.jokers ~= nil then
                     {message = '$'..mod, colour = G.C.ORANGE, instant = true})
                 end
             end
+        end
+    end
+end
+
+'''
+
+# create_card() (Doorhanger)
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = 'local _pool, _pool_key = get_current_pool(_type, _rarity, legendary, key_append)'
+position = 'before'
+match_indent = true
+payload = '''
+
+if G.jokers ~= nil then
+    for _, v in ipairs(G.jokers.cards) do
+        if v.ability.name == 'Doorhanger' and not v.debuff then
+            if _rarity == nil or _rarity < 0.9 then
+
+                _rarity = 0.9
+
+                if pseudorandom('doorhanger'..G.SEED) > 0.98 then
+                    _rarity = 1
+                end
+            end
+        end
+    end
+end
+
+'''
+
+# evaluate_play (Nil Bill)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "card_eval_status_text(scoring_hand[i], 'debuff')"
+position = 'after'
+match_indent = true
+payload = '''
+if G.jokers ~= nil then
+    for _, v in ipairs(G.jokers.cards) do
+        if v.ability.name == 'Nil Bill' and not v.debuff then
+            v:calculate_joker({debuffed_card = scoring_hand[i]})
         end
     end
 end

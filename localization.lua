@@ -182,5 +182,55 @@ return {
                 [4] = 'works only on a greater Ante'
             }
         }
+    },
+    sledgehammer = {
+        ['en-us'] = {
+            ['name'] = 'Sledgehammer',
+            ['text'] = {
+                [1] = '{C:attention}Glass Cards{} give {X:mult,C:white}X#1#{} Mult',
+                [2] = 'and guaranteed to break'
+            }
+        }
+    },
+    doorhanger = {
+        ['en-us'] = {
+            ['name'] = 'Doorhanger',
+            ['text'] = {
+                [1] = 'Disables {C:blue}Common{} Jokers',
+                [2] = 'from appearing',
+                [3] = '{s:0.8}different rarities appear instead'
+            }
+        }
+    },
+    fingerprints = {
+        ['en-us'] = {
+            ['name'] = 'Fingerprints',
+            ['text'] = {
+                [1] = 'Cards played on {C:attention}final hand{} of round',
+                [2] = 'gain temporary {C:chips}+#1#{} Chips when scored,',
+                [3] = 'bonus lasts for one round'
+            }
+        }
+    },
+    zero_shapiro = {
+        ['en-us'] = {
+            ['name'] = 'Zero Shapiro',
+            ['text'] = {
+                [1] = 'Played cards with',
+                [2] = '{C:attention}no{} or {C:attention}zero{} rank give',
+                [3] = '{C:green}+#1#{} to {C:green,E:1,S:1.1}probabilities{}',
+                [4] = 'for current round when scored'
+            }
+        }
+    },
+    nil_bill = {
+        ['en-us'] = {
+            ['name'] = 'Nil Bill',
+            ['text'] = {
+                [1] = 'Played cards with',
+                [2] = '{C:attention}debuff{} give',
+                [3] = '{C:money}$#1#{} when scored'
+            }
+        }
     }
 }
