@@ -13,7 +13,6 @@ match_indent = true
 payload = '''
 
 if G.jokers ~= nil and self == G.hand then
-
     for _, v in ipairs(G.jokers.cards) do
         if v.ability.name == 'Xray' then
             v:calculate_joker({ emplaced_card = card })

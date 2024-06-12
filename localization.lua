@@ -1,4 +1,35 @@
 return {
+    dictionary = { -- I have no idea how to hook this dictionary to the mod
+        ['en-us'] = {
+            copied = 'Copied!',
+            nothing = 'Nothing',
+            chips = 'Chips',
+            loop = 'Loop!',
+            chance = 'Chance'
+        }
+    },
+    fleurons = {
+        ['en-us'] = {
+            singular = 'Fleuron',
+            plural = 'Fleurons',
+        }
+    },
+    halberds = {
+        ['en-us'] = {
+            singular = 'Halberd',
+            plural = 'Halberds',
+        }
+    },
+    sky = {
+        ['en-us'] = {
+            ['name'] = 'The Sky',
+            ['text'] = {
+                [1] = 'Converts up to',
+                [2] = '{C:attention}#1#{} selected cards',
+                [3] = 'to {C:fleurons}Fleurons{}',
+            }
+        }
+    },
     cassette = {
         ['en-us'] = {
             ['name'] = 'Cassette',
@@ -230,6 +261,37 @@ return {
                 [1] = 'Played cards with',
                 [2] = '{C:attention}debuff{} give',
                 [3] = '{C:money}$#1#{} when scored'
+            }
+        }
+    },
+    bierdeckel = {
+        ['en-us'] = {
+            ['name'] = 'Bierdeckel',
+            ['text'] = {
+                [1] = 'Cards in hand',
+                [2] = 'gain temporary {C:chips}+#1#{} Chips',
+                [3] = 'after play or discard'
+            }
+        }
+    },
+    registration_plate = {
+        ['en-us'] = {
+            ['name'] = 'Registration Plate',
+            ['text'] = {
+                [1] = '{X:mult,C:white}X#1#{} Mult when played hand',
+                [2] = 'is a combination of',
+                [3] = '#2#',
+                [4] = '{s:0.8}Combination changes every round'
+            }
+        }
+    },
+    slothful = {
+        ['en-us'] = {
+            ['name'] = 'Slothful Joker',
+            ['text'] = {
+                [1] = 'Played {C:attention}Wild Cards',
+                [2] = 'give {C:mult}+#1#{} Mult',
+                [3] = 'when scored'
             }
         }
     }
