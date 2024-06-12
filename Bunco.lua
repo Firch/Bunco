@@ -945,7 +945,7 @@ create_joker({ -- Slothful (WIP)
     end
 })
 
--- Exotic system
+-- Exotic Jokers
 
 create_joker({ -- Zealous
     type = 'Exotic',
@@ -955,6 +955,8 @@ create_joker({ -- Zealous
     blueprint = true, eternal = true,
     unlocked = true
 })
+
+-- Exotic system
 
 SMODS.Atlas({key = 'bunco_cards', path = 'Exotic/ExoticCards.png', px = 71, py = 95})
 SMODS.Atlas({key = 'bunco_cards_hc', path = 'Exotic/ExoticCardsHC.png', px = 71, py = 95})
@@ -1091,6 +1093,163 @@ function Game:start_run(args)
     original_start_run(self, args)
 
 end
+
+-- Poker hands
+
+local spectrum_hand =
+SMODS.PokerHand { -- Spectrum (Referenced from SixSuits)
+    key = 'Spectrum',
+    above_hand = 'Full House',
+    visible = true,
+    chips = 50,
+    mult = 6,
+    l_chips = 25,
+    l_mult = 3,
+    example = {
+        { 'S_2',    true },
+        { 'D_7',    true },
+        { 'C_3', true },
+        { 'FLEURON_5', true },
+        { 'D_K',    true },
+    },
+    loc_txt = loc.spectrum,
+    atomic_part = function(hand)
+        local suits = {}
+        for _, v in ipairs(SMODS.Suit.obj_buffer) do
+            suits[v] = 0
+        end
+        if #hand < 5 then return {} end
+        for i = 1, #hand do
+            if hand[i].ability.name ~= 'Wild Card' then
+                for k, v in pairs(suits) do
+                    if hand[i]:is_suit(k, nil, true) and v == 0 then
+                        suits[k] = v + 1; break
+                    end
+                end
+            end
+        end
+        for i = 1, #hand do
+            if hand[i].ability.name == 'Wild Card' then
+                for k, v in pairs(suits) do
+                    if hand[i]:is_suit(k, nil, true) and v == 0 then
+                        suits[k] = v + 1; break
+                    end
+                end
+            end
+        end
+        local num_suits = 0
+        for _, v in pairs(suits) do
+            if v > 0 then num_suits = num_suits + 1 end
+        end
+        return (num_suits >= 5) and { hand } or {}
+    end
+}
+
+SMODS.PokerHand { -- Spectrum House (Referenced from SixSuits)
+    key = 'Spectrum House',
+    above_hand = 'Five of a Kind',
+    visible = true,
+    chips = 150,
+    mult = 15,
+    l_chips = 50,
+    l_mult = 5,
+    example = {
+        { 'S_Q',    true },
+        { 'FLEURON_Q', true },
+        { 'C_Q',    true },
+        { 'D_8',    true },
+        { 'H_8',    true }
+    },
+    loc_txt = loc.spectrum_house,
+    composite = function(parts)
+        local fh_hand = {}
+        if next(parts._3) and next(parts._2) and next(parts[spectrum_hand.key]) then
+            local fh_3 = parts._3[1]
+            local fh_2 = parts._2[1]
+            for i = 1, #fh_3 do
+                fh_hand[#fh_hand + 1] = fh_3[i]
+            end
+            for i = 1, #fh_2 do
+                fh_hand[#fh_hand + 1] = fh_2[i]
+            end
+        end
+        return fh_hand
+    end
+}
+
+SMODS.PokerHand { -- Straight Spectrum (Referenced from SixSuits)
+    key = 'Straight Spectrum',
+    above_hand = 'Five of a Kind',
+    visible = true,
+    chips = 120,
+    mult = 10,
+    l_chips = 35,
+    l_mult = 5,
+    example = {
+        { 'S_Q',    true },
+        { 'FLEURON_J', true },
+        { 'C_T',    true },
+        { 'D_9', true },
+        { 'H_8',    true }
+    },
+    loc_txt = loc.straight_spectrum,
+    process_loc_text = function(self)
+        SMODS.PokerHand.process_loc_text(self)
+        SMODS.process_loc_text(G.localization.misc.poker_hands, self.key..'_2', self.loc_txt, 'extra')
+    end,
+    composite = function(parts)
+        local str, spec = parts._straight, parts[spectrum_hand.key]
+        local ret = {}
+        if next(str) and next(spec) then
+            for _, v in ipairs(spec[1]) do
+                ret[#ret + 1] = v
+            end
+            for _, v in ipairs(str[1]) do
+                local in_straight = nil
+                for _, vv in ipairs(spec[1]) do
+                    if vv == v then in_straight = true end
+                end
+                if not in_straight then ret[#ret + 1] = v end
+            end
+        end
+        return ret
+    end,
+    modify_display_text = function(self, _cards, scoring_hand)
+        local royal = true
+		for j = 1, #scoring_hand do
+			local rank = SMODS.Ranks[scoring_hand[j].base.value]
+			royal = royal and (rank.key == 'Ace' or rank.key == '10' or rank.face)
+		end
+		if royal then
+			return self.key..'_2'
+		end
+    end
+}
+
+SMODS.PokerHand { -- Spectrum Five (Referenced from SixSuits)
+    key = 'Spectrum Five',
+    above_hand = 'Flush House',
+    visible = true,
+    chips = 180,
+    mult = 18,
+    l_chips = 60,
+    l_mult = 5,
+    example = {
+        { 'S_7',    true },
+        { 'D_7', true },
+        { 'FLEURON_7',    true },
+        { 'H_7',    true },
+        { 'C_7',    true }
+    },
+    loc_txt = loc.spectrum_five,
+    composite = function(parts)
+        local ret = {}
+        if next(parts._5) and next(parts[base_spectrum.key]) then
+            ret = parts._5
+        end
+        return ret
+    end
+}
 
 -- Tarots
 
