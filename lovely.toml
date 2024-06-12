@@ -3,7 +3,7 @@ version = "1.0.0"
 dump_lua = true
 priority = 0
 
-# UI Suit hiding, part 1
+# UI Suit hiding, part 1/4
 [[patches]]
 [patches.pattern]
 target = 'main.lua'
@@ -16,7 +16,7 @@ if suit_tallies[suit_map[i]] ~= 0 then
 
 '''
 
-# UI Suit hiding, part 2
+# UI Suit hiding, part 2/4
 [[patches]]
 [patches.regex]
 target = 'main.lua'
@@ -44,7 +44,7 @@ end
 
 '''
 
-# UI Suit hiding, part 3
+# UI Suit hiding, part 3/4
 [[patches]]
 [patches.pattern]
 target = 'main.lua'
@@ -53,7 +53,7 @@ position = 'at'
 match_indent = true
 payload = '''if (not SMODS.Suits[suit].disabled) and (suit_counts[suit] ~= 0) then'''
 
-# UI Suit hiding, part 4
+# UI Suit hiding, part 4/4
 [[patches]]
 [patches.pattern]
 target = 'main.lua'
@@ -61,6 +61,21 @@ pattern = "if not SMODS.Suits[v].disabled then"
 position = 'at'
 match_indent = true
 payload = '''if (not SMODS.Suits[v].disabled) and (suit_counts[v] ~= 0) then'''
+
+# Exotics toggle
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = 'G.GAME.hands[text].played = G.GAME.hands[text].played + 1'
+position = 'after'
+match_indent = true
+payload = '''
+
+if text == ('h_bunc_Spectrum' or 'h_bunc_Straight Spectrum' or 'h_bunc_Spectrum House' or 'h_bunc_Spectrum Five' or 'h_bunc_Royal Spectrum') then
+    enable_exotics()
+end
+
+'''
 
 # Joker Knight variables
 [[patches]]

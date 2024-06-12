@@ -28,15 +28,6 @@ return {
             }
         }
     },
-    spectrum_house = {
-        ['en-us'] = {
-            name = 'Spectrum House',
-            description = {
-                'A Three of a Kind and a Pair with',
-                'each card having a different suit'
-            }
-        }
-    },
     straight_spectrum = {
         ['en-us'] = {
             name = 'Straight Spectrum',
@@ -45,6 +36,15 @@ return {
                 'each card having a different suit'
             },
             extra = 'Royal Spectrum',
+        }
+    },
+    spectrum_house = {
+        ['en-us'] = {
+            name = 'Spectrum House',
+            description = {
+                'A Three of a Kind and a Pair with',
+                'each card having a different suit'
+            }
         }
     },
     spectrum_five = {

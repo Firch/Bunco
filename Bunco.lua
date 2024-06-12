@@ -1,7 +1,7 @@
 --- STEAMODDED HEADER
 --- MOD_NAME: Bunco
 --- MOD_ID: Bunco
---- MOD_AUTHOR: [Firch, RENREN, Peas, minichibis, J.D., Guwahavel, Ciirulean]
+--- MOD_AUTHOR: [Firch, RENREN, Peas, minichibis, J.D., Guwahavel, Ciirulean, ejwu]
 --- MOD_DESCRIPTION: Mod aiming for vanilla style, a lot of new Jokers, Blinds, other stuff and Exotic Suits system!
 --- VERSION: 5.0
 
@@ -1096,7 +1096,6 @@ end
 
 -- Poker hands
 
-local spectrum_hand =
 SMODS.PokerHand { -- Spectrum (Referenced from SixSuits)
     key = 'Spectrum',
     above_hand = 'Full House',
@@ -1145,38 +1144,6 @@ SMODS.PokerHand { -- Spectrum (Referenced from SixSuits)
     end
 }
 
-SMODS.PokerHand { -- Spectrum House (Referenced from SixSuits)
-    key = 'Spectrum House',
-    above_hand = 'Five of a Kind',
-    visible = true,
-    chips = 150,
-    mult = 15,
-    l_chips = 50,
-    l_mult = 5,
-    example = {
-        { 'S_Q',    true },
-        { 'FLEURON_Q', true },
-        { 'C_Q',    true },
-        { 'D_8',    true },
-        { 'H_8',    true }
-    },
-    loc_txt = loc.spectrum_house,
-    composite = function(parts)
-        local fh_hand = {}
-        if next(parts._3) and next(parts._2) and next(parts[spectrum_hand.key]) then
-            local fh_3 = parts._3[1]
-            local fh_2 = parts._2[1]
-            for i = 1, #fh_3 do
-                fh_hand[#fh_hand + 1] = fh_3[i]
-            end
-            for i = 1, #fh_2 do
-                fh_hand[#fh_hand + 1] = fh_2[i]
-            end
-        end
-        return fh_hand
-    end
-}
-
 SMODS.PokerHand { -- Straight Spectrum (Referenced from SixSuits)
     key = 'Straight Spectrum',
     above_hand = 'Five of a Kind',
@@ -1198,7 +1165,7 @@ SMODS.PokerHand { -- Straight Spectrum (Referenced from SixSuits)
         SMODS.process_loc_text(G.localization.misc.poker_hands, self.key..'_2', self.loc_txt, 'extra')
     end,
     composite = function(parts)
-        local str, spec = parts._straight, parts[spectrum_hand.key]
+        local str, spec = parts._straight, parts['h_bunc_Spectrum']
         local ret = {}
         if next(str) and next(spec) then
             for _, v in ipairs(spec[1]) do
@@ -1226,9 +1193,41 @@ SMODS.PokerHand { -- Straight Spectrum (Referenced from SixSuits)
     end
 }
 
+SMODS.PokerHand { -- Spectrum House (Referenced from SixSuits)
+    key = 'Spectrum House',
+    above_hand = 'Flush Five',
+    visible = true,
+    chips = 150,
+    mult = 15,
+    l_chips = 50,
+    l_mult = 5,
+    example = {
+        { 'S_Q',    true },
+        { 'FLEURON_Q', true },
+        { 'C_Q',    true },
+        { 'D_8',    true },
+        { 'H_8',    true }
+    },
+    loc_txt = loc.spectrum_house,
+    composite = function(parts)
+        local fh_hand = {}
+        if next(parts._3) and next(parts._2) and next(parts['h_bunc_Spectrum']) then
+            local fh_3 = parts._3[1]
+            local fh_2 = parts._2[1]
+            for i = 1, #fh_3 do
+                fh_hand[#fh_hand + 1] = fh_3[i]
+            end
+            for i = 1, #fh_2 do
+                fh_hand[#fh_hand + 1] = fh_2[i]
+            end
+        end
+        return fh_hand
+    end
+}
+
 SMODS.PokerHand { -- Spectrum Five (Referenced from SixSuits)
     key = 'Spectrum Five',
-    above_hand = 'Flush House',
+    above_hand = 'Flush Five',
     visible = true,
     chips = 180,
     mult = 18,
@@ -1244,7 +1243,7 @@ SMODS.PokerHand { -- Spectrum Five (Referenced from SixSuits)
     loc_txt = loc.spectrum_five,
     composite = function(parts)
         local ret = {}
-        if next(parts._5) and next(parts[base_spectrum.key]) then
+        if next(parts._5) and next(parts['h_bunc_Spectrum']) then
             ret = parts._5
         end
         return ret
