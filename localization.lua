@@ -294,5 +294,15 @@ return {
                 [3] = 'when scored'
             }
         }
+    },
+    zealous = {
+        ['en-us'] = {
+            ['name'] = 'Zealous Joker',
+            ['text'] = {
+                [1] = '{C:red}+#1#{} Mult if played',
+                [2] = 'hand contains',
+                [3] = 'a {C:attention}Spectrum'
+            }
+        }
     }
 }

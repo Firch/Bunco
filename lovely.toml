@@ -3,6 +3,28 @@ version = "1.0.0"
 dump_lua = true
 priority = 0
 
+# UI Suit hiding, part 1
+[[patches]]
+[patches.pattern]
+target = 'main.lua'
+pattern = "table.insert(n.nodes, tally_sprite("
+position = 'before'
+match_indent = true
+payload = '''
+
+if suit_tallies[suit_map[i]] ~= 0 then
+
+'''
+
+# UI Suit hiding, part 2
+[[patches]]
+[patches.regex]
+target = 'main.lua'
+pattern = "(?<indent>[\t ]*)suit_map\\[\\s*i\\s*\\]\\s*\\)\\s*\\)"
+position = 'after'
+line_prepend = '$indent'
+payload = '''end'''
+
 # CardArea:emplace() (X-Ray)
 [[patches]]
 [patches.pattern]
@@ -21,6 +43,24 @@ if G.jokers ~= nil and self == G.hand then
 end
 
 '''
+
+# UI Suit hiding, part 3
+[[patches]]
+[patches.pattern]
+target = 'main.lua'
+pattern = "if not SMODS.Suits[suit].disabled then"
+position = 'at'
+match_indent = true
+payload = '''if (not SMODS.Suits[suit].disabled) and (suit_counts[suit] ~= 0) then'''
+
+# UI Suit hiding, part 4
+[[patches]]
+[patches.pattern]
+target = 'main.lua'
+pattern = "if not SMODS.Suits[v].disabled then"
+position = 'at'
+match_indent = true
+payload = '''if (not SMODS.Suits[v].disabled) and (suit_counts[v] ~= 0) then'''
 
 # Joker Knight variables
 [[patches]]
@@ -187,6 +227,7 @@ pattern = "card_eval_status_text(scoring_hand[i], 'debuff')"
 position = 'after'
 match_indent = true
 payload = '''
+
 if G.jokers ~= nil then
     for _, v in ipairs(G.jokers.cards) do
         if v.ability.name == 'Nil Bill' and not v.debuff then

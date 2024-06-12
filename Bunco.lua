@@ -72,9 +72,7 @@ local function text(ref_table, ref_value, loc_txt, key)
     process_loc_text(ref_table, ref_value, loc_txt, key)
 end
 
--- Exotic table, enhancements pool
-
-exotic_table = {}
+-- Enhancements pool
 
 local enhancement_pool = {
     G.P_CENTERS.m_bonus,
@@ -86,6 +84,16 @@ local enhancement_pool = {
     G.P_CENTERS.m_gold,
     G.P_CENTERS.m_lucky
 }
+
+-- Exotic add_to_pool function
+
+add_exotic = function()
+    if G.GAME and G.GAME.Exotic then
+        return {add = true}
+    else
+        return {add = false}
+    end
+end
 
 -- Joker creation setup
 
@@ -147,9 +155,13 @@ local function create_joker(joker)
         joker.config.extra[k] = v
     end
 
-    -- Exotic table insertion
+    -- Exotic Joker pool isolation
 
-    table.insert(exotic_table, joker.name)
+    local pool
+
+    if joker.type == 'Exotic' then
+        pool = add_exotic
+    end
 
     -- Joker creation
 
@@ -191,7 +203,8 @@ local function create_joker(joker)
     calculate = joker.calculate,
     update = joker.update,
     remove_from_deck = joker.remove,
-    add_to_deck = joker.add
+    add_to_deck = joker.add,
+    add_to_pool = pool
     }
 end
 
@@ -934,6 +947,15 @@ create_joker({ -- Slothful (WIP)
 
 -- Exotic system
 
+create_joker({ -- Zealous
+    type = 'Exotic',
+    name = 'Zealous', position = 1,
+    vars = {{t_mult = 30}, {type = 'Spectrum'}},
+    rarity = 'Common', cost = 3,
+    blueprint = true, eternal = true,
+    unlocked = true
+})
+
 SMODS.Atlas({key = 'bunco_cards', path = 'Exotic/ExoticCards.png', px = 71, py = 95})
 SMODS.Atlas({key = 'bunco_cards_hc', path = 'Exotic/ExoticCardsHC.png', px = 71, py = 95})
 
@@ -1118,5 +1140,56 @@ SMODS.Consumable { -- The Sky
             G.hand:unhighlight_all();
         return true end })
         delay(0.5)
-    end
+    end,
+
+    add_to_pool = add_exotic
+}
+
+SMODS.Consumable { -- The Abyss
+    set = 'Tarot', atlas = 'bunco_tarots',
+
+    key = 'sky', loc_txt = loc.sky,
+
+    config = {max_highlighted = 3, suit_conv = 'Fleurons'},
+
+    pos = get_coordinates(0),
+
+    loc_vars = function(self)
+        return {
+            vars = {
+                self.config.max_highlighted,
+                localize(self.config.suit_conv, 'suits_plural'),
+                colours = { G.C.SUITS[self.config.suit_conv] },
+            },
+        }
+    end,
+
+    use = function(self)
+        enable_exotics()
+
+        for i=1, #G.hand.highlighted do
+            local percent = 1.15 - (i-0.999)/(#G.hand.highlighted-0.998)*0.3
+            event({trigger = 'after', delay = 0.15, func = function()
+                G.hand.highlighted[i]:flip();play_sound('card1', percent);G.hand.highlighted[i]:juice_up(0.3, 0.3);
+            return true end })
+        end
+        delay(0.2)
+        for i=1, #G.hand.highlighted do
+            event({trigger = 'after', delay = 0.1, func = function()
+                G.hand.highlighted[i]:change_suit(self.config.suit_conv);
+            return true end })
+        end
+        for i=1, #G.hand.highlighted do
+            local percent = 0.85 + ( i - 0.999 ) / ( #G.hand.highlighted - 0.998 ) * 0.3
+            event({trigger = 'after', delay = 0.15, func = function()
+                G.hand.highlighted[i]:flip(); play_sound('tarot2', percent, 0.6); G.hand.highlighted[i]:juice_up(0.3, 0.3);
+            return true end })
+        end
+        event({trigger = 'after', delay = 0.2, func = function()
+            G.hand:unhighlight_all();
+        return true end })
+        delay(0.5)
+    end,
+
+    add_to_pool = add_exotic
 }
