@@ -71,7 +71,10 @@ position = 'after'
 match_indent = true
 payload = '''
 
-if text == ('h_bunc_Spectrum' or 'h_bunc_Straight Spectrum' or 'h_bunc_Spectrum House' or 'h_bunc_Spectrum Five' or 'h_bunc_Royal Spectrum') then
+if text == 'h_bunc_Spectrum'
+or text == 'h_bunc_Straight Spectrum'
+or text == 'h_bunc_Spectrum House'
+or text == 'h_bunc_Spectrum Five' then
     enable_exotics()
 end
 
@@ -250,5 +253,58 @@ if G.jokers ~= nil then
         end
     end
 end
+
+'''
+
+# Card:is_suit (Myopia & Astigmatism)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "if next(find_joker('Smeared Joker')) and (self.base.suit == 'Hearts' or self.base.suit == 'Diamonds') == (suit == 'Hearts' or suit == 'Diamonds') then"
+position = 'before'
+match_indent = true
+payload = '''
+
+if G.jokers ~= nil then
+            for _, v in ipairs(G.jokers.cards) do
+                if v.ability.name == 'Myopia' and not v.debuff then
+                    if self.base.suit == 'Spades' and (self.base.suit == 'Spades') == (suit == 'Spades' or suit == 'Halberds') then
+                        return true
+                    end
+                    if self.base.suit == 'Clubs' and (self.base.suit == 'Clubs') == (suit == 'Clubs' or suit == 'Halberds') then
+                        return true
+                    end
+                end
+            end
+        end
+
+if G.jokers ~= nil then
+            for _, v in ipairs(G.jokers.cards) do
+                if v.ability.name == 'Astigmatism' and not v.debuff then
+                    if self.base.suit == 'Hearts' and (self.base.suit == 'Hearts') == (suit == 'Hearts' or suit == 'Fleurons') then
+                        return true
+                    end
+                    if self.base.suit == 'Diamonds' and (self.base.suit == 'Diamonds') == (suit == 'Diamonds' or suit == 'Fleurons') then
+                        return true
+                    end
+                end
+            end
+        end
+
+        if G.jokers ~= nil then
+            for _, v in ipairs(G.jokers.cards) do
+                if v.ability.name == 'Smeared Joker' and not v.debuff then
+                    if self.base.suit == 'Fleurons' and (suit ~= 'Fleurons') then
+                        return false
+                    end
+                    if self.base.suit == 'Halberds' and (suit ~= 'Halberds') then
+                        return false
+                    end
+                    if (self.base.suit ~= 'Fleurons' and self.base.suit ~= 'Halberds') and (suit == 'Fleurons' or suit == 'Halberds') then
+                        return false
+                    end
+                end
+            end
+        end
 
 '''

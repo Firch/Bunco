@@ -66,6 +66,16 @@ return {
             }
         }
     },
+    abyss = {
+        ['en-us'] = {
+            ['name'] = 'The Abyss',
+            ['text'] = {
+                [1] = 'Converts up to',
+                [2] = '{C:attention}#1#{} selected cards',
+                [3] = 'to {C:halberds}Halberds{}',
+            }
+        }
+    },
     cassette = {
         ['en-us'] = {
             ['name'] = 'Cassette',
@@ -338,6 +348,136 @@ return {
                 [1] = '{C:red}+#1#{} Mult if played',
                 [2] = 'hand contains',
                 [3] = 'a {C:attention}Spectrum'
+            }
+        }
+    },
+    lurid = {
+        ['en-us'] = {
+            ['name'] = 'Lurid Joker',
+            ['text'] = {
+                [1] = '{C:chips}+#1#{} Chips if played',
+                [2] = 'hand contains',
+                [3] = 'a {C:attention}Spectrum'
+            }
+        }
+    },
+    envious = {
+        ['en-us'] = {
+            ['name'] = 'Envious Joker',
+            ['text'] = {
+                [1] = 'Played cards with',
+                [2] = '{C:fleurons}Fleuron{} suit give',
+                [3] = '{C:mult}+#1#{} Mult when scored'
+            }
+        }
+    },
+    proud = {
+        ['en-us'] = {
+            ['name'] = 'Proud Joker',
+            ['text'] = {
+                [1] = 'Played cards with',
+                [2] = '{C:halberds}Halberd{} suit give',
+                [3] = '{C:mult}+#1#{} Mult when scored'
+            }
+        }
+    },
+    wishalloy = {
+        ['en-us'] = {
+            ['name'] = 'Wishalloy',
+            ['text'] = {
+                [1] = '{C:green}#1# in #2#{} chance for',
+                [2] = 'played {C:fleurons}Fleurons{}',
+                [3] = 'to earn money equal',
+                [4] = "to card's scored chips"
+            }
+        }
+    },
+    unobtanium = {
+        ['en-us'] = {
+            ['name'] = 'Unobtanium',
+            ['text'] = {
+                [1] = 'Played cards with',
+                [2] = '{C:halberds}Halberd{} suit',
+                [3] = 'give {C:chips}+100{} Chips and {C:red}+12{} Mult',
+                [4] = "when scored"
+            }
+        }
+    },
+    dynasty = {
+        ['en-us'] = {
+            ['name'] = 'The Dynasty',
+            ['text'] = {
+                [1] = '{X:mult,C:white}X#1#{} Mult if played',
+                [2] = 'hand contains',
+                [3] = 'a {C:attention}Spectrum'
+            }
+        }
+    },
+    magic_wand = {
+        ['en-us'] = {
+            ['name'] = 'Magic Wand',
+            ['text'] = {
+                [1] = 'Gains {X:mult,C:white}X#1#{} Mult for each played',
+                [2] = 'hand containing a {C:attention}Spectrum{}, resets',
+                [3] = 'when a non-Spectrum hand is played',
+                [4] = '{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)'
+            }
+        }
+    },
+    starfruit = {
+        ['en-us'] = {
+            ['name'] = 'Starfruit',
+            ['text'] = {
+                [1] = '{C:green}#1# in #2#{} chance to level up',
+                [2] = 'played poker hand if it contains a {C:attention}Spectrum',
+                [3] = '{C:green}#1# in #3#{} chance to destroy itself',
+                [4] = 'at the end of the round if that hand was played'
+            }
+        }
+    },
+    fondue = {
+        ['en-us'] = {
+            ['name'] = 'Fondue',
+            ['text'] = {
+                [1] = 'Scored cards in the first',
+                [2] = 'hand of round are converted',
+                [3] = 'to {C:fleurons}Fleurons'
+            }
+        }
+    },
+    myopia = {
+        ['en-us'] = {
+            ['name'] = 'Myopia',
+            ['text'] = {
+                [1] = '{C:spades}Spades{} and {C:clubs}Clubs{}',
+                [2] = 'count as {C:halberds}Halberds'
+            }
+        }
+    },
+    astigmatism = {
+        ['en-us'] = {
+            ['name'] = 'Astigmatism',
+            ['text'] = {
+                [1] = '{C:hearts}Hearts{} and {C:diamonds}Diamonds{}',
+                [2] = 'count as {C:fleurons}Fleurons'
+            }
+        }
+    },
+    roygbiv = {
+        ['en-us'] = {
+            ['name'] = 'Roy G. Biv',
+            ['text'] = {
+                [1] = ''
+            }
+        }
+    },
+    rigoletto = {
+        ['en-us'] = {
+            ['name'] = 'Rigoletto',
+            ['text'] = {
+                [1] = 'Each scored card permanently',
+                [2] = 'gains {C:red}+#1#{} Mult if played hand',
+                [3] = 'contains {C:halberds}Halberds{} or {C:fleurons}Fleurons'
             }
         }
     }

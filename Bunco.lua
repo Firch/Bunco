@@ -25,7 +25,7 @@ G.SHADERS['splash'] = love.graphics.newShader(splash_shader)
 -- Debug message
 
 local function say(message)
-    sendDebugMessage(message)
+    sendDebugMessage('[BUNCO] - '..message)
 end
 
 -- Index-based coordinates generation
@@ -33,6 +33,10 @@ end
 local function get_coordinates(position, width)
     if width == nil then width = 10 end -- 10 is default for Jokers
     return {x = (position) % width, y = math.floor((position) / width)}
+end
+
+local function coordinate(position)
+    return get_coordinates(position - 1)
 end
 
 -- Forced messages for evaluation
@@ -184,7 +188,7 @@ local function create_joker(joker)
 
     loc_txt = loc[key],
 
-    config = joker.config,
+    config = joker.custom_config or joker.config,
     loc_vars = joker.custom_vars or function(self, info_queue, card)
 
         -- Localization values
@@ -204,9 +208,13 @@ local function create_joker(joker)
     update = joker.update,
     remove_from_deck = joker.remove,
     add_to_deck = joker.add,
-    add_to_pool = pool
+    add_to_pool = pool,
+
+    effect = joker.effect
     }
 end
+
+-- Jokers
 
 create_joker({ -- Cassette
             name = 'Cassette', position = 1,
@@ -470,7 +478,7 @@ create_joker({ -- Prehistoric
     calculate = function(self, card, context)
         if context.individual and context.cardarea == G.play then
             for k, v in pairs(card.ability.extra.card_list) do
-                if v == context.other_card.base.id .. context.other_card.base.suit then
+                if (v == context.other_card.base.id .. context.other_card.base.suit) and context.other_card.config.center ~= G.P_CENTERS.m_stone then
                     return {
                         message = localize {
                             type = 'variable',
@@ -484,7 +492,9 @@ create_joker({ -- Prehistoric
             end
 
             if not context.blueprint then
-                table.insert(card.ability.extra.card_list, context.other_card.base.id .. context.other_card.base.suit) -- Add the card to the list
+                if context.other_card.config.center ~= G.P_CENTERS.m_stone then
+                    table.insert(card.ability.extra.card_list, context.other_card.base.id .. context.other_card.base.suit) -- Add the card to the list
+                end
             end
 
         end
@@ -507,7 +517,7 @@ create_joker({ -- Linocut
                 if context.scoring_hand ~= nil and #context.scoring_hand == 2 and context.scoring_hand[1] == context.other_card then
                     G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.15, func = function() context.scoring_hand[1]:flip(); play_sound('card1', 1); context.scoring_hand[1]:juice_up(0.3, 0.3); return true end }))
                     G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.1,  func = function() context.scoring_hand[1]:change_suit(context.scoring_hand[2].config.card.suit); return true end }))
-                    G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.15, func = function() context.scoring_hand[1]:flip(); play_sound('tarot2', 1, 0.6);context.scoring_hand[1]:juice_up(0.3, 0.3); return true end }))
+                    G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.15, func = function() context.scoring_hand[1]:flip(); play_sound('tarot2', 1, 0.6); context.scoring_hand[1]:juice_up(0.3, 0.3); return true end }))
 
                     forced_message('Copied!', card, G.C.RED, true)
 
@@ -749,7 +759,7 @@ create_joker({ -- Fiendish
         else
             vars = {1, card.ability.extra.odds}
         end
-        return { vars = vars }
+        return {vars = vars}
     end,
     rarity = 'Uncommon', cost = 5,
     blueprint = false, eternal = true,
@@ -934,14 +944,21 @@ create_joker({ -- Registration Plate (WIP)
     end
 })
 
-create_joker({ -- Slothful (WIP)
+create_joker({ -- Slothful
     name = 'Slothful', position = 27,
     vars = {{mult = 9}},
     rarity = 'Uncommon', cost = 5,
     blueprint = true, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
-
+        if context.individual and context.cardarea == G.play then
+            if context.other_card.config.center == G.P_CENTERS.m_wild then
+                return {
+                    mult = card.ability.extra.mult,
+                    card = card
+                }
+            end
+        end
     end
 })
 
@@ -950,11 +967,336 @@ create_joker({ -- Slothful (WIP)
 create_joker({ -- Zealous
     type = 'Exotic',
     name = 'Zealous', position = 1,
-    vars = {{t_mult = 30}, {type = 'Spectrum'}},
+    custom_vars = function(self, info_queue, card) return {vars = {card.ability.t_mult}} end,
+    custom_config = {t_mult = 30, type = 'h_bunc_Spectrum'},
     rarity = 'Common', cost = 3,
     blueprint = true, eternal = true,
     unlocked = true
 })
+
+create_joker({ -- Lurid
+    type = 'Exotic',
+    name = 'Lurid', position = 2,
+    custom_vars = function(self, info_queue, card) return {vars = {card.ability.t_chips}} end,
+    custom_config = {t_chips = 120, type = 'h_bunc_Spectrum'},
+    rarity = 'Common', cost = 3,
+    blueprint = true, eternal = true,
+    unlocked = true
+})
+
+create_joker({ -- Envious
+    type = 'Exotic',
+    name = 'Envious', position = 3,
+    vars = {{s_mult = 12}, {suit = 'Fleurons'}},
+    rarity = 'Common', cost = 5,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    effect = 'Suit Mult'
+})
+
+create_joker({ -- Proud
+    type = 'Exotic',
+    name = 'Proud', position = 4,
+    custom_vars = function(self, info_queue, card) return {vars = {card.ability.extra.s_mult}} end,
+    custom_config = {extra = {s_mult = 12, suit = 'Halberds'}},
+    rarity = 'Common', cost = 5,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    effect = 'Suit Mult'
+})
+
+create_joker({ -- Wishalloy
+    type = 'Exotic',
+    name = 'Wishalloy', position = 5,
+    vars = {{odds = 7}},
+    custom_vars = function(self, info_queue, card)
+        local vars
+        if G.GAME and G.GAME.probabilities.normal then
+            vars = {G.GAME.probabilities.normal, card.ability.extra.odds}
+        else
+            vars = {1, card.ability.extra.odds}
+        end
+        return {vars = vars}
+    end,
+    rarity = 'Uncommon', cost = 7,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.individual and context.cardarea == G.play and context.other_card:is_suit('Fleurons') then
+            if pseudorandom('wishalloy'..G.SEED) < G.GAME.probabilities.normal / card.ability.extra.odds then
+                local value = context.other_card:get_chip_bonus()
+                ease_dollars(value)
+                forced_message('$'..value, context.other_card, G.C.MONEY, true, card)
+            end
+        end
+    end
+})
+
+create_joker({ -- Unobtanium (WIP, the chips timing is broken a bit)
+    type = 'Exotic',
+    name = 'Unobtanium', position = 6,
+    vars = {{mult = 12}, {chips = 100}},
+    rarity = 'Uncommon', cost = 7,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.individual and context.cardarea == G.play and context.other_card:is_suit('Halberds') then
+
+            hand_chips = mod_chips(hand_chips + card.ability.extra.chips)
+            update_hand_text({delay = 0, sound = 'chips1'}, {chips = hand_chips, mult = mult})
+
+            forced_message('+'..tostring(card.ability.extra.chips), context.other_card, G.C.CHIPS, true, card)
+
+            return {
+                message = localize {
+                    type = 'variable',
+                    key = 'a_mult',
+                    vars = {card.ability.extra.mult}
+                },
+                mult = card.ability.extra.mult,
+                card = card
+            }
+        end
+    end
+})
+
+create_joker({ -- Dynasty
+    type = 'Exotic',
+    name = 'Dynasty', position = 7,
+    custom_vars = function(self, info_queue, card) return {vars = {card.ability.x_mult}} end,
+    custom_config = {Xmult = 5, type = 'h_bunc_Spectrum'},
+    rarity = 'Rare', cost = 8,
+    blueprint = true, eternal = true,
+    unlocked = true
+})
+
+create_joker({ -- Magic Wand
+    type = 'Exotic',
+    name = 'Magic Wand', position = 8,
+    vars = {{bonus = 0.3}, {xmult = 1}},
+    rarity = 'Common', cost = 5,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.before and context.poker_hands ~= nil and next(context.poker_hands['h_bunc_Spectrum']) and not context.blueprint then
+            card.ability.extra.xmult = card.ability.extra.xmult + 0.3
+        elseif context.after and context.poker_hands ~= nil and not next(context.poker_hands['h_bunc_Spectrum']) and not context.blueprint then
+            if card.ability.extra.xmult ~= 1 then
+                card.ability.extra.xmult = 1
+
+                forced_message(localize('k_reset'), card, G.C.RED)
+            end
+        end
+
+        if context.joker_main then
+            if card.ability.extra.xmult ~= 1 then
+                return {
+                    message = localize {
+                        type = 'variable',
+                        key = 'a_xmult',
+                        vars = { card.ability.extra.xmult }
+                    },
+                    Xmult_mod = card.ability.extra.xmult,
+                    card = card
+                }
+            end
+        end
+    end
+})
+
+create_joker({ -- Starfruit
+    type = 'Exotic',
+    name = 'Starfruit', position = 9,
+    vars = {{level_odds = 3}, {destroy_odds = 6}, {condition = false}},
+    custom_vars = function(self, info_queue, card)
+        local vars
+        if G.GAME and G.GAME.probabilities.normal then
+            vars = {G.GAME.probabilities.normal, card.ability.extra.level_odds, card.ability.extra.destroy_odds}
+        else
+            vars = {1, card.ability.extra.level_odds, card.ability.extra.destroy_odds}
+        end
+        return {vars = vars}
+    end,
+    rarity = 'Uncommon', cost = 5,
+    blueprint = false, eternal = false,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.before and context.poker_hands ~= nil and next(context.poker_hands['h_bunc_Spectrum']) and not context.blueprint then
+            if pseudorandom('starfruit'..G.SEED) < G.GAME.probabilities.normal / card.ability.extra.level_odds then
+
+                forced_message(localize('k_level_up_ex'), card, G.C.RED, true)
+                level_up_hand(card, context.scoring_name, false, 1)
+                --update_hand_text({delay = 0, sound = false})
+
+            end
+
+            card.ability.extra.condition = true
+
+        end
+
+        if context.end_of_round and not context.other_card and card.ability.extra.condition == true and not context.blueprint then
+            if pseudorandom('starfruit'..G.SEED) < G.GAME.probabilities.normal / card.ability.extra.destroy_odds then
+
+                forced_message(localize('k_eaten_ex'), card, G.C.FILTER, true)
+                card:start_dissolve()
+
+            else
+
+                forced_message(localize('k_safe_ex'), card, nil, true)
+                card.ability.extra.condition = false
+
+            end
+        end
+    end
+})
+
+create_joker({ -- Fondue
+    type = 'Exotic',
+    name = 'Fondue', position = 10,
+    rarity = 'Rare', cost = 8,
+    blueprint = false, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.after and G.GAME.current_round.hands_played == 0 and not context.blueprint then
+            enable_exotics()
+
+            for i = 1, #context.scoring_hand do
+                G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.15, func = function() context.scoring_hand[i]:flip(); play_sound('card1', 1); context.scoring_hand[i]:juice_up(0.3, 0.3); return true end }))
+            end
+
+            for i = 1, #context.scoring_hand do
+                G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.1,  func = function() context.scoring_hand[i]:change_suit('Fleurons'); return true end }))
+            end
+
+            for i = 1, #context.scoring_hand do
+                G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.15, func = function() context.scoring_hand[i]:flip(); play_sound('tarot2', 1, 0.6); context.scoring_hand[i]:juice_up(0.3, 0.3); return true end }))
+            end
+        end
+    end
+})
+
+create_joker({ -- Myopia
+    type = 'Exotic',
+    name = 'Myopia', position = 11,
+    rarity = 'Uncommon', cost = 8,
+    blueprint = false, eternal = true,
+    unlocked = true
+})
+
+create_joker({ -- Astigmatism
+    type = 'Exotic',
+    name = 'Astigmatism', position = 12,
+    rarity = 'Uncommon', cost = 8,
+    blueprint = false, eternal = true,
+    unlocked = true
+})
+
+create_joker({ -- ROYGBIV
+    type = 'Exotic',
+    name = 'ROYGBIV', position = 13,
+    rarity = 'Uncommon', cost = 8,
+    blueprint = true, eternal = true,
+    unlocked = true
+})
+
+-- Legendary Jokers
+
+create_joker({ -- Rigoletto
+    type = 'Exotic',
+    name = 'Rigoletto', position = 1,
+    vars = {{bonus = 4}},
+    rarity = 'Legendary', cost = 20,
+    blueprint = true, eternal = true,
+    unlocked = true
+})
+
+-- Tarots
+
+SMODS.Atlas({key = 'bunco_tarots', path = 'Consumables/Tarots.png', px = 71, py = 95})
+
+SMODS.Consumable { -- The Sky
+    set = 'Tarot', atlas = 'bunco_tarots',
+    key = 'sky', loc_txt = loc.sky,
+    set_card_type_badge = function(self, card, badges)
+        badges[1] = create_badge('Tarot?', HEX('a782d1'), HEX('FFFFFF'), 1.2)
+    end,
+
+    config = {max_highlighted = 3, suit_conv = 'Fleurons'},
+    pos = coordinate(1),
+
+    loc_vars = function(self) return {vars = {self.config.max_highlighted}} end,
+
+    use = function(self)
+        enable_exotics()
+
+        for i=1, #G.hand.highlighted do
+            local percent = 1.15 - (i-0.999)/(#G.hand.highlighted-0.998)*0.3
+            event({trigger = 'after', delay = 0.15, func = function()
+                G.hand.highlighted[i]:flip();play_sound('card1', percent);G.hand.highlighted[i]:juice_up(0.3, 0.3);
+            return true end })
+        end
+        delay(0.2)
+        for i=1, #G.hand.highlighted do
+            event({trigger = 'after', delay = 0.1, func = function()
+                G.hand.highlighted[i]:change_suit(self.config.suit_conv);
+            return true end })
+        end
+        for i=1, #G.hand.highlighted do
+            local percent = 0.85 + ( i - 0.999 ) / ( #G.hand.highlighted - 0.998 ) * 0.3
+            event({trigger = 'after', delay = 0.15, func = function()
+                G.hand.highlighted[i]:flip(); play_sound('tarot2', percent, 0.6); G.hand.highlighted[i]:juice_up(0.3, 0.3);
+            return true end })
+        end
+        event({trigger = 'after', delay = 0.2, func = function()
+            G.hand:unhighlight_all();
+        return true end })
+        delay(0.5)
+    end,
+
+    add_to_pool = add_exotic
+}
+
+SMODS.Consumable { -- The Abyss
+    set = 'Tarot', atlas = 'bunco_tarots',
+    key = 'abyss', loc_txt = loc.abyss,
+    set_card_type_badge = function(self, card, badges)
+        badges[1] = create_badge('Tarot?', HEX('a782d1'), HEX('FFFFFF'), 1.2)
+    end,
+
+    config = {max_highlighted = 3, suit_conv = 'Halberds'},
+    pos = coordinate(2),
+
+    loc_vars = function(self) return {vars = {self.config.max_highlighted}} end,
+
+    use = function(self)
+        enable_exotics()
+
+        for i=1, #G.hand.highlighted do
+            local percent = 1.15 - (i-0.999)/(#G.hand.highlighted-0.998)*0.3
+            event({trigger = 'after', delay = 0.15, func = function()
+                G.hand.highlighted[i]:flip();play_sound('card1', percent);G.hand.highlighted[i]:juice_up(0.3, 0.3);
+            return true end })
+        end
+        delay(0.2)
+        for i=1, #G.hand.highlighted do
+            event({trigger = 'after', delay = 0.1, func = function()
+                G.hand.highlighted[i]:change_suit(self.config.suit_conv);
+            return true end })
+        end
+        for i=1, #G.hand.highlighted do
+            local percent = 0.85 + ( i - 0.999 ) / ( #G.hand.highlighted - 0.998 ) * 0.3
+            event({trigger = 'after', delay = 0.15, func = function()
+                G.hand.highlighted[i]:flip(); play_sound('tarot2', percent, 0.6); G.hand.highlighted[i]:juice_up(0.3, 0.3);
+            return true end })
+        end
+        event({trigger = 'after', delay = 0.2, func = function()
+            G.hand:unhighlight_all();
+        return true end })
+        delay(0.5)
+    end,
+
+    add_to_pool = add_exotic
+}
 
 -- Exotic system
 
@@ -1038,13 +1380,15 @@ SMODS.Suit{ -- Halberds
     end
 }
 
+-- Exotic system toggle logic
+
 function disable_exotics()
     if G.GAME then G.GAME.Exotic = false end
 
     SMODS.Suits.Halberds:disable()
     SMODS.Suits.Fleurons:disable()
 
-    say('Exotic System disabled!')
+    say('Triggered Exotic System disabling.')
 end
 
 function enable_exotics()
@@ -1053,10 +1397,8 @@ function enable_exotics()
     SMODS.Suits.Halberds:populate()
     SMODS.Suits.Fleurons:populate()
 
-    say('Exotic System enabled!')
+    say('Triggered Exotic System enabling.')
 end
-
--- Exotic system toggle logic
 
 local original_start_run = Game.start_run
 
@@ -1146,7 +1488,7 @@ SMODS.PokerHand { -- Spectrum (Referenced from SixSuits)
 
 SMODS.PokerHand { -- Straight Spectrum (Referenced from SixSuits)
     key = 'Straight Spectrum',
-    above_hand = 'Five of a Kind',
+    above_hand = 'Straight Flush',
     visible = true,
     chips = 120,
     mult = 10,
@@ -1168,16 +1510,18 @@ SMODS.PokerHand { -- Straight Spectrum (Referenced from SixSuits)
         local str, spec = parts._straight, parts['h_bunc_Spectrum']
         local ret = {}
         if next(str) and next(spec) then
+            local hand = {}
             for _, v in ipairs(spec[1]) do
-                ret[#ret + 1] = v
+                hand[#hand + 1] = v
             end
             for _, v in ipairs(str[1]) do
                 local in_straight = nil
                 for _, vv in ipairs(spec[1]) do
                     if vv == v then in_straight = true end
                 end
-                if not in_straight then ret[#ret + 1] = v end
+                if not in_straight then hand[#hand + 1] = v end
             end
+            table.insert(ret, hand)
         end
         return ret
     end,
@@ -1195,7 +1539,7 @@ SMODS.PokerHand { -- Straight Spectrum (Referenced from SixSuits)
 
 SMODS.PokerHand { -- Spectrum House (Referenced from SixSuits)
     key = 'Spectrum House',
-    above_hand = 'Flush Five',
+    above_hand = 'Flush House',
     visible = true,
     chips = 150,
     mult = 15,
@@ -1210,8 +1554,9 @@ SMODS.PokerHand { -- Spectrum House (Referenced from SixSuits)
     },
     loc_txt = loc.spectrum_house,
     composite = function(parts)
-        local fh_hand = {}
+        local ret = {}
         if next(parts._3) and next(parts._2) and next(parts['h_bunc_Spectrum']) then
+            local fh_hand = {}
             local fh_3 = parts._3[1]
             local fh_2 = parts._2[1]
             for i = 1, #fh_3 do
@@ -1220,8 +1565,9 @@ SMODS.PokerHand { -- Spectrum House (Referenced from SixSuits)
             for i = 1, #fh_2 do
                 fh_hand[#fh_hand + 1] = fh_2[i]
             end
+            table.insert(ret, fh_hand)
         end
-        return fh_hand
+        return ret
     end
 }
 
@@ -1248,106 +1594,4 @@ SMODS.PokerHand { -- Spectrum Five (Referenced from SixSuits)
         end
         return ret
     end
-}
-
--- Tarots
-
-SMODS.Atlas({key = 'bunco_tarots', path = 'Consumables/Tarots.png', px = 71, py = 95})
-
-SMODS.Consumable { -- The Sky
-    set = 'Tarot', atlas = 'bunco_tarots',
-
-    key = 'sky', loc_txt = loc.sky,
-
-    config = {max_highlighted = 3, suit_conv = 'Fleurons'},
-
-    pos = get_coordinates(0),
-
-    loc_vars = function(self)
-        return {
-            vars = {
-                self.config.max_highlighted,
-                localize(self.config.suit_conv, 'suits_plural'),
-                colours = { G.C.SUITS[self.config.suit_conv] },
-            },
-        }
-    end,
-
-    use = function(self)
-        enable_exotics()
-
-        for i=1, #G.hand.highlighted do
-            local percent = 1.15 - (i-0.999)/(#G.hand.highlighted-0.998)*0.3
-            event({trigger = 'after', delay = 0.15, func = function()
-                G.hand.highlighted[i]:flip();play_sound('card1', percent);G.hand.highlighted[i]:juice_up(0.3, 0.3);
-            return true end })
-        end
-        delay(0.2)
-        for i=1, #G.hand.highlighted do
-            event({trigger = 'after', delay = 0.1, func = function()
-                G.hand.highlighted[i]:change_suit(self.config.suit_conv);
-            return true end })
-        end
-        for i=1, #G.hand.highlighted do
-            local percent = 0.85 + ( i - 0.999 ) / ( #G.hand.highlighted - 0.998 ) * 0.3
-            event({trigger = 'after', delay = 0.15, func = function()
-                G.hand.highlighted[i]:flip(); play_sound('tarot2', percent, 0.6); G.hand.highlighted[i]:juice_up(0.3, 0.3);
-            return true end })
-        end
-        event({trigger = 'after', delay = 0.2, func = function()
-            G.hand:unhighlight_all();
-        return true end })
-        delay(0.5)
-    end,
-
-    add_to_pool = add_exotic
-}
-
-SMODS.Consumable { -- The Abyss
-    set = 'Tarot', atlas = 'bunco_tarots',
-
-    key = 'sky', loc_txt = loc.sky,
-
-    config = {max_highlighted = 3, suit_conv = 'Fleurons'},
-
-    pos = get_coordinates(0),
-
-    loc_vars = function(self)
-        return {
-            vars = {
-                self.config.max_highlighted,
-                localize(self.config.suit_conv, 'suits_plural'),
-                colours = { G.C.SUITS[self.config.suit_conv] },
-            },
-        }
-    end,
-
-    use = function(self)
-        enable_exotics()
-
-        for i=1, #G.hand.highlighted do
-            local percent = 1.15 - (i-0.999)/(#G.hand.highlighted-0.998)*0.3
-            event({trigger = 'after', delay = 0.15, func = function()
-                G.hand.highlighted[i]:flip();play_sound('card1', percent);G.hand.highlighted[i]:juice_up(0.3, 0.3);
-            return true end })
-        end
-        delay(0.2)
-        for i=1, #G.hand.highlighted do
-            event({trigger = 'after', delay = 0.1, func = function()
-                G.hand.highlighted[i]:change_suit(self.config.suit_conv);
-            return true end })
-        end
-        for i=1, #G.hand.highlighted do
-            local percent = 0.85 + ( i - 0.999 ) / ( #G.hand.highlighted - 0.998 ) * 0.3
-            event({trigger = 'after', delay = 0.15, func = function()
-                G.hand.highlighted[i]:flip(); play_sound('tarot2', percent, 0.6); G.hand.highlighted[i]:juice_up(0.3, 0.3);
-            return true end })
-        end
-        event({trigger = 'after', delay = 0.2, func = function()
-            G.hand:unhighlight_all();
-        return true end })
-        delay(0.5)
-    end,
-
-    add_to_pool = add_exotic
 }
