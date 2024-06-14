@@ -93,7 +93,7 @@ local break_table = {before = nil, after = nil}
 
 '''
 
-# Node:drag() (Joker Knight)
+# Node:drag() (Joker Knight 1/2)
 [[patches]]
 [patches.pattern]
 target = 'engine/node.lua'
@@ -122,7 +122,7 @@ end
 
 '''
 
-# Node:stop_drag() (Joker Knight)
+# Node:stop_drag() (Joker Knight 2/2)
 [[patches]]
 [patches.pattern]
 target = 'engine/node.lua'
@@ -305,6 +305,81 @@ if G.jokers ~= nil then
                     end
                 end
             end
+        end
+
+'''
+
+# G.FUNCS.discard_cards_from_highlighted() (The Paling 1/2)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = 'G.GAME.current_round.discards_used = G.GAME.current_round.discards_used + 1'
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_paling' and not G.GAME.blind.disabled then
+            if G.GAME.current_round.hands_left > 1 then
+                ease_hands_played(-1)
+            elseif G.GAME.current_round.hands_left == 1 or G.GAME.current_round.hands_left == 0 then
+                ease_hands_played(-1)
+
+                G.E_MANAGER:add_event(Event({ trigger = 'after', delay = 1.8, func = function()
+                    G.STATE = G.STATES.GAME_OVER
+                    if not G.GAME.won and not G.GAME.seeded and not G.GAME.challenge then 
+                        G.PROFILES[G.SETTINGS.profile].high_scores.current_streak.amt = 0
+                    end
+                    G:save_settings()
+                    G.FILE_HANDLER.force = true
+                    G.STATE_COMPLETE = false
+                return true end }))
+            end
+            G.GAME.blind:wiggle()
+        end
+
+'''
+
+# G.FUNCS.play_cards_from_highlighted() (The Paling 2/2)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "inc_career_stat('c_hands_played', 1)"
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_paling' and not G.GAME.blind.disabled then
+            if G.GAME.current_round.discards_left >= 1 then
+                ease_discard(-1, true)
+                G.GAME.blind:wiggle()
+                G.GAME.blind.triggered = true
+            end
+        end
+
+'''
+
+# G.FUNCS.play_cards_from_highlighted() (The Umbrella)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "inc_career_stat('c_hands_played', 1)"
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_umbrella' and not G.GAME.blind.disabled then
+            G.E_MANAGER:add_event(Event({ func = function()
+
+                for k, v in ipairs(G.hand.cards) do
+                    if v.facing == 'front' then
+                        v:flip()
+                    end
+                end
+
+                G.GAME.blind:wiggle()
+                G.GAME.blind.triggered = true
+
+            return true end }))
         end
 
 '''

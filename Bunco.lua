@@ -1695,3 +1695,28 @@ SMODS.PokerHand{ -- Spectrum Five (Referenced from SixSuits)
         return ret
     end
 }
+
+-- Blinds
+
+SMODS.Atlas({key = 'bunco_blinds', path = 'Blinds/Blinds.png', px = 34, py = 34, frames = 21, atlas_table = 'ANIMATION_ATLAS'})
+SMODS.Atlas({key = 'bunco_blinds_finisher', path = 'Blinds/BlindsFinisher.png', px = 34, py = 34, frames = 21, atlas_table = 'ANIMATION_ATLAS'})
+
+SMODS.Blind{
+    key = 'paling', loc_txt = loc.paling,
+    boss = {min = 2},
+
+    boss_colour = HEX('45d368'),
+
+    pos = {y = 0},
+    atlas = 'bunco_blinds'
+}
+
+SMODS.Blind{
+    key = 'umbrella', loc_txt = loc.umbrella,
+    boss = {min = 2},
+
+    boss_colour = HEX('1e408e'),
+
+    pos = {y = 1},
+    atlas = 'bunco_blinds'
+}

@@ -526,5 +526,26 @@ return {
                 [3] = 'contains {C:halberds}Halberds{} or {C:fleurons}Fleurons'
             }
         }
+    },
+
+    -- Blinds
+
+    paling = {
+        ['en-us'] = {
+            ['name'] = 'The Paling',
+            ['text'] = {
+                [1] = 'Playing or discarding costs',
+                [2] = 'both play and discard'
+            }
+        }
+    },
+    umbrella = {
+        ['en-us'] = {
+            ['name'] = 'The Umbrella',
+            ['text'] = {
+                [1] = 'After Play, all non-flipped',
+                [2] = 'cards get flipped'
+            }
+        }
     }
 }
