@@ -1191,7 +1191,7 @@ create_joker({ -- Astigmatism
     unlocked = true
 })
 
-create_joker({ -- ROYGBIV
+create_joker({ -- ROYGBIV (WIP)
     type = 'Exotic',
     name = 'ROYGBIV', position = 13,
     rarity = 'Uncommon', cost = 8,
@@ -1201,7 +1201,7 @@ create_joker({ -- ROYGBIV
 
 -- Legendary Jokers
 
-create_joker({ -- Rigoletto
+create_joker({ -- Rigoletto (WIP)
     type = 'Exotic',
     name = 'Rigoletto', position = 1,
     vars = {{bonus = 4}},
@@ -1214,11 +1214,11 @@ create_joker({ -- Rigoletto
 
 SMODS.Atlas({key = 'bunco_tarots', path = 'Consumables/Tarots.png', px = 71, py = 95})
 
-SMODS.Consumable { -- The Sky
+SMODS.Consumable{ -- The Sky
     set = 'Tarot', atlas = 'bunco_tarots',
     key = 'sky', loc_txt = loc.sky,
     set_card_type_badge = function(self, card, badges)
-        badges[1] = create_badge('Tarot?', HEX('a782d1'), HEX('FFFFFF'), 1.2)
+        badges[1] = create_badge('Tarot?', get_type_colour(self or card.config, card), nil, 1.2)
     end,
 
     config = {max_highlighted = 3, suit_conv = 'Fleurons'},
@@ -1256,11 +1256,11 @@ SMODS.Consumable { -- The Sky
     add_to_pool = add_exotic
 }
 
-SMODS.Consumable { -- The Abyss
+SMODS.Consumable{ -- The Abyss
     set = 'Tarot', atlas = 'bunco_tarots',
     key = 'abyss', loc_txt = loc.abyss,
     set_card_type_badge = function(self, card, badges)
-        badges[1] = create_badge('Tarot?', HEX('a782d1'), HEX('FFFFFF'), 1.2)
+        badges[1] = create_badge('Tarot?', get_type_colour(self or card.config, card), nil, 1.2)
     end,
 
     config = {max_highlighted = 3, suit_conv = 'Halberds'},
@@ -1298,7 +1298,83 @@ SMODS.Consumable { -- The Abyss
     add_to_pool = add_exotic
 }
 
--- Exotic system
+-- Planets
+
+SMODS.Atlas({key = 'bunco_planets', path = 'Consumables/Planets.png', px = 71, py = 95})
+
+SMODS.Consumable{ -- Quaoar
+    set = 'Planet', atlas = 'bunco_planets',
+    key = 'Quaoar', loc_txt = loc.quaoar,
+    set_card_type_badge = function(self, card, badges)
+        badges[1] = create_badge('Planet?', get_type_colour(self or card.config, card), nil, 1.2)
+    end,
+
+    config = {hand_type = 'h_bunc_Spectrum'},
+    pos = coordinate(1),
+
+    generate_ui = 0,
+    process_loc_text = function(self)
+        local target_text = G.localization.descriptions[self.set]['c_mercury'].text
+        SMODS.Consumable.process_loc_text(self)
+        G.localization.descriptions[self.set][self.key].text = target_text
+    end
+}
+
+SMODS.Consumable{ -- Haumea
+    set = 'Planet', atlas = 'bunco_planets',
+    key = 'Haumea', loc_txt = loc.haumea,
+    set_card_type_badge = function(self, card, badges)
+        badges[1] = create_badge('Planet?', get_type_colour(self or card.config, card), nil, 1.2)
+    end,
+
+    config = {hand_type = 'h_bunc_Straight Spectrum'},
+    pos = coordinate(2),
+
+    generate_ui = 0,
+    process_loc_text = function(self)
+        local target_text = G.localization.descriptions[self.set]['c_mercury'].text
+        SMODS.Consumable.process_loc_text(self)
+        G.localization.descriptions[self.set][self.key].text = target_text
+    end
+}
+
+SMODS.Consumable{ -- Sedna
+    set = 'Planet', atlas = 'bunco_planets',
+    key = 'Sedna', loc_txt = loc.sedna,
+    set_card_type_badge = function(self, card, badges)
+        badges[1] = create_badge('Planet?', get_type_colour(self or card.config, card), nil, 1.2)
+    end,
+
+    config = {hand_type = 'h_bunc_Spectrum House'},
+    pos = coordinate(3),
+
+    generate_ui = 0,
+    process_loc_text = function(self)
+        local target_text = G.localization.descriptions[self.set]['c_mercury'].text
+        SMODS.Consumable.process_loc_text(self)
+        G.localization.descriptions[self.set][self.key].text = target_text
+    end
+}
+
+SMODS.Consumable{ -- Makemake
+    set = 'Planet', atlas = 'bunco_planets',
+    key = 'Makemake', loc_txt = loc.makemake,
+    set_card_type_badge = function(self, card, badges)
+        badges[1] = create_badge('Planet?', get_type_colour(self or card.config, card), nil, 1.2)
+    end,
+
+    config = {hand_type = 'h_bunc_Spectrum Five'},
+    pos = coordinate(4),
+
+    generate_ui = 0,
+    process_loc_text = function(self)
+        local target_text = G.localization.descriptions[self.set]['c_mercury'].text
+        SMODS.Consumable.process_loc_text(self)
+        G.localization.descriptions[self.set][self.key].text = target_text
+    end
+}
+
+-- Exotic suits
 
 SMODS.Atlas({key = 'bunco_cards', path = 'Exotic/ExoticCards.png', px = 71, py = 95})
 SMODS.Atlas({key = 'bunco_cards_hc', path = 'Exotic/ExoticCardsHC.png', px = 71, py = 95})
@@ -1438,7 +1514,7 @@ end
 
 -- Poker hands
 
-SMODS.PokerHand { -- Spectrum (Referenced from SixSuits)
+SMODS.PokerHand{ -- Spectrum (Referenced from SixSuits)
     key = 'Spectrum',
     above_hand = 'Full House',
     visible = true,
@@ -1486,7 +1562,7 @@ SMODS.PokerHand { -- Spectrum (Referenced from SixSuits)
     end
 }
 
-SMODS.PokerHand { -- Straight Spectrum (Referenced from SixSuits)
+SMODS.PokerHand{ -- Straight Spectrum (Referenced from SixSuits)
     key = 'Straight Spectrum',
     above_hand = 'Straight Flush',
     visible = true,
@@ -1537,7 +1613,7 @@ SMODS.PokerHand { -- Straight Spectrum (Referenced from SixSuits)
     end
 }
 
-SMODS.PokerHand { -- Spectrum House (Referenced from SixSuits)
+SMODS.PokerHand{ -- Spectrum House (Referenced from SixSuits)
     key = 'Spectrum House',
     above_hand = 'Flush House',
     visible = true,
@@ -1571,7 +1647,7 @@ SMODS.PokerHand { -- Spectrum House (Referenced from SixSuits)
     end
 }
 
-SMODS.PokerHand { -- Spectrum Five (Referenced from SixSuits)
+SMODS.PokerHand{ -- Spectrum Five (Referenced from SixSuits)
     key = 'Spectrum Five',
     above_hand = 'Flush Five',
     visible = true,

@@ -8,6 +8,9 @@ return {
             chance = 'Chance'
         }
     },
+
+    -- Suits
+
     fleurons = {
         ['en-us'] = {
             singular = 'Fleuron',
@@ -20,6 +23,9 @@ return {
             plural = 'Halberds',
         }
     },
+
+    -- Poker hands
+
     spectrum = {
         ['en-us'] = {
             name = 'Spectrum',
@@ -56,6 +62,9 @@ return {
             },
         }
     },
+
+    -- Consumables
+
     sky = {
         ['en-us'] = {
             ['name'] = 'The Sky',
@@ -76,6 +85,30 @@ return {
             }
         }
     },
+    quaoar = {
+        ['en-us'] = {
+            name = 'Quaoar'
+        }
+    },
+    haumea = {
+        ['en-us'] = {
+            name = 'Haumea'
+        }
+    },
+    sedna = {
+        ['en-us'] = {
+            name = 'Sedna'
+        }
+    },
+    makemake = {
+        ['en-us'] = {
+            name = 'Makemake'
+        }
+    },
+
+
+    -- Jokers
+
     cassette = {
         ['en-us'] = {
             ['name'] = 'Cassette',
