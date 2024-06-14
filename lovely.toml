@@ -383,3 +383,58 @@ if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_umbrella' and not G.GAME.blind
         end
 
 '''
+
+# The Tine 1/3
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "highlight_card(scoring_hand[i],(i-0.999)/5,'up')"
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.GAME.played_ranks == nil then G.GAME.played_ranks = {} end
+
+if G.GAME.played_ranks[tostring(scoring_hand[i]:get_id())] then
+    G.GAME.played_ranks[tostring(scoring_hand[i]:get_id())] = G.GAME.played_ranks[tostring(scoring_hand[i]:get_id())] + 1
+else
+    G.GAME.played_ranks[tostring(scoring_hand[i]:get_id())] = 1
+end
+
+'''
+
+# The Tine 2/3
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "G.GAME.current_round.most_played_poker_hand = _handname"
+position = 'before'
+match_indent = true
+payload = '''
+
+if G.GAME.played_ranks ~= nil then
+    local max_rank = nil
+    local max_count = -1
+
+    for rank, count in pairs(G.GAME.played_ranks) do
+        if count > max_count then
+            max_count = count
+            max_rank = rank
+        end
+    end
+
+    G.GAME.current_round.most_played_rank = tonumber(max_rank)
+end
+
+
+'''
+
+# The Tine 3/3
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = "most_played_poker_hand = 'High Card',"
+position = 'after'
+match_indent = true
+payload = '''
+most_played_rank = 2,'''

@@ -1701,7 +1701,7 @@ SMODS.PokerHand{ -- Spectrum Five (Referenced from SixSuits)
 SMODS.Atlas({key = 'bunco_blinds', path = 'Blinds/Blinds.png', px = 34, py = 34, frames = 21, atlas_table = 'ANIMATION_ATLAS'})
 SMODS.Atlas({key = 'bunco_blinds_finisher', path = 'Blinds/BlindsFinisher.png', px = 34, py = 34, frames = 21, atlas_table = 'ANIMATION_ATLAS'})
 
-SMODS.Blind{
+SMODS.Blind{ -- The Paling
     key = 'paling', loc_txt = loc.paling,
     boss = {min = 2},
 
@@ -1711,12 +1711,32 @@ SMODS.Blind{
     atlas = 'bunco_blinds'
 }
 
-SMODS.Blind{
+SMODS.Blind{ -- The Umbrella
     key = 'umbrella', loc_txt = loc.umbrella,
     boss = {min = 2},
 
     boss_colour = HEX('1e408e'),
 
     pos = {y = 1},
+    atlas = 'bunco_blinds'
+}
+
+SMODS.Blind{ -- The Tine (descriptions suck for now)
+    key = 'tine', loc_txt = loc.tine,
+    boss = {min = 2},
+
+    debuff_card = function(self, blind, card, from_blind)
+        if self.debuff and not self.disabled and card.area ~= G.jokers then
+            if card:get_id() == G.GAME.current_round.most_played_rank then
+                card:set_debuff(true)
+                return true
+            end
+            return false
+        end
+    end,
+
+    boss_colour = HEX('e36cbe'),
+
+    pos = {y = 2},
     atlas = 'bunco_blinds'
 }

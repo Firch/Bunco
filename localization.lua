@@ -5,7 +5,8 @@ return {
             nothing = 'Nothing',
             chips = 'Chips',
             loop = 'Loop!',
-            chance = 'Chance'
+            chance = 'Chance',
+            most_played_rank = 'most played rank'
         },
         ['fr'] = {
             nothing = 'Rien'
@@ -545,6 +546,14 @@ return {
             ['text'] = {
                 [1] = 'After Play, all non-flipped',
                 [2] = 'cards get flipped'
+            }
+        }
+    },
+    tine = {
+        ['en-us'] = {
+            ['name'] = 'The Tine',
+            ['text'] = {
+                [1] = 'All #1# are debuffed'
             }
         }
     }
