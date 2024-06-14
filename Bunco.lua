@@ -6,9 +6,9 @@
 --- VERSION: 5.0
 
 -- ToDo:
--- Fix Crop Circles always showing Fleurons
--- Check how to add custom entries to the localization (for card messages like linocut's one)
--- Cassette proper coordinates
+-- Fix Crop Circles always showing Fleurons (done)
+-- Check how to add custom entries to the localization (for card messages like linocut's one) (done)
+-- Cassette proper coordinates (done)
 
 local bunco = SMODS.current_mod
 local filesystem = NFS or love.filesystem
@@ -25,7 +25,7 @@ G.SHADERS['splash'] = love.graphics.newShader(splash_shader)
 -- Debug message
 
 local function say(message)
-    sendDebugMessage('[BUNCO] - '..message)
+    sendDebugMessage('[BUNCO] - '..(message or '???'))
 end
 
 -- Index-based coordinates generation
@@ -72,10 +72,6 @@ local function forced_message(message, card, color, delay, juice)
     end})
 end
 
-local function text(ref_table, ref_value, loc_txt, key)
-    process_loc_text(ref_table, ref_value, loc_txt, key)
-end
-
 -- Enhancements pool
 
 local enhancement_pool = {
@@ -97,6 +93,14 @@ add_exotic = function()
     else
         return {add = false}
     end
+end
+
+-- Dictionary wrapper
+
+function SMODS.current_mod.process_loc_text()
+    SMODS.process_loc_text(G.localization.misc.dictionary, 'bunco', loc.dictionary)
+
+    loc.dictionary = G.localization.misc.dictionary.bunco
 end
 
 -- Joker creation setup
@@ -187,6 +191,7 @@ local function create_joker(joker)
     eternal_compat = joker.eternal,
 
     loc_txt = loc[key],
+    process_loc_text = joker.process_loc_text,
 
     config = joker.custom_config or joker.config,
     loc_vars = joker.custom_vars or function(self, info_queue, card)
@@ -202,7 +207,8 @@ local function create_joker(joker)
             table.insert(vars, card.ability.extra[k])
         end
 
-        return { vars = vars } end,
+        return {vars = vars}
+    end,
 
     calculate = joker.calculate,
     update = joker.update,
@@ -261,9 +267,9 @@ create_joker({ -- Cassette
             update = function(self, card)
                 if card.VT.w <= 0 then
                     if card.ability.extra.side == 'A' then
-                        card.children.center:set_sprite_pos(get_coordinates(1 - 1))
+                        card.children.center:set_sprite_pos(coordinate(1))
                     else
-                        card.children.center:set_sprite_pos(get_coordinates(2 - 1))
+                        card.children.center:set_sprite_pos(coordinate(2))
                     end
                 end
             end
@@ -326,6 +332,15 @@ create_joker({ -- Voxel
 create_joker({ -- Crop Circles
     name = 'Crop Circles', position = 5,
     rarity = 'Common', cost = 4,
+    process_loc_text = function(self)
+        SMODS.Joker.process_loc_text(self)
+        SMODS.process_loc_text(G.localization.descriptions.Joker, self.key..'_additional', loc.crop_circles_exotic)
+    end,
+    custom_vars = function(self)
+        if G.GAME and G.GAME.Exotic then
+            return {key = self.key..'_additional'}
+        end
+    end,
     blueprint = true, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
@@ -519,7 +534,7 @@ create_joker({ -- Linocut
                     G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.1,  func = function() context.scoring_hand[1]:change_suit(context.scoring_hand[2].config.card.suit); return true end }))
                     G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.15, func = function() context.scoring_hand[1]:flip(); play_sound('tarot2', 1, 0.6); context.scoring_hand[1]:juice_up(0.3, 0.3); return true end }))
 
-                    forced_message('Copied!', card, G.C.RED, true)
+                    forced_message(loc.dictionary.copied, card, G.C.RED, true)
 
                 end
             end
@@ -530,6 +545,15 @@ create_joker({ -- Linocut
 create_joker({ -- Ghost Print
     name = 'Ghost Print', position = 10,
     vars = {{last_hand = 'Nothing'}},
+    custom_vars = function(self, info_queue, card)
+        local vars
+        if card.ability.extra.last_hand == 'Nothing' then
+            vars = {loc.dictionary.nothing}
+        else
+            vars = {G.localization.misc['poker_hands'][card.ability.extra.last_hand]}
+        end
+        return {vars = vars}
+    end,
     rarity = 'Uncommon', cost = 6,
     blueprint = true, eternal = true,
     unlocked = true,
@@ -595,7 +619,7 @@ create_joker({ -- Shepherd
         if context.after and context.poker_hands ~= nil and next(context.poker_hands['Pair']) and not context.blueprint then
             card.ability.extra.chips = card.ability.extra.chips + 6
 
-            forced_message('+'..tostring(card.ability.extra.chips)..' Chips', card, G.C.BLUE, true)
+            forced_message('+'..tostring(card.ability.extra.chips)..' '..loc.dictionary.chips, card, G.C.BLUE, true)
         end
 
         if context.joker_main then
@@ -786,7 +810,7 @@ create_joker({ -- Carnival
                     card:juice_up(0.8, 0.8)
                     card.ability.extra.ante = G.GAME.round_resets.ante
                     ease_ante(-1)
-                    forced_message('Loop!', card, G.C.BLACK)
+                    forced_message(loc.dictionary.loop, card, G.C.BLACK)
                     joker_to_destroy:start_dissolve({G.C.BLACK}, nil, 1.6)
                     play_sound('slice1', 0.96+math.random()*0.08)
                 end
@@ -880,7 +904,7 @@ create_joker({ -- Zero Shapiro
                 end
 
                 return {
-                    extra = {focus = context.other_card, message = '+'..card.ability.extra.bonus..' Chance', colour = G.C.GREEN},
+                    extra = {focus = context.other_card, message = '+'..card.ability.extra.bonus..' '..loc.dictionary.chance, colour = G.C.GREEN},
                     card = card
                 }
             end

@@ -1,11 +1,14 @@
 return {
-    dictionary = { -- I have no idea how to hook this dictionary to the mod
+    dictionary = {
         ['en-us'] = {
             copied = 'Copied!',
             nothing = 'Nothing',
             chips = 'Chips',
             loop = 'Loop!',
             chance = 'Chance'
+        },
+        ['fr'] = {
+            nothing = 'Rien'
         }
     },
 
@@ -142,6 +145,16 @@ return {
         }
     },
     crop_circles = {
+        ['en-us'] = {
+            ['name'] = 'Crop Circles',
+            ['text'] = {
+                [1] = '{C:clubs}Clubs{} give {C:mult}+3{} Mult,',
+                [2] = '8 give {C:mult}+2{} Mult,',
+                [3] = 'Q, 10, 9, 6 give {C:mult}+1{} Mult'
+            }
+        }
+    },
+    crop_circles_exotic = {
         ['en-us'] = {
             ['name'] = 'Crop Circles',
             ['text'] = {
