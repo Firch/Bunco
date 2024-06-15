@@ -617,10 +617,18 @@ return {
         ['en-us'] = {
             ['name'] = 'The Knoll',
             ['text'] = {
-                [1] = 'Having more than $10',
+                [1] = 'Having more than $5',
                 [2] = 'debuffs first hand drawn'
             }
         }
+    },
+    stone = {
+        ['en-us'] = {
+            ['name'] = 'The Stone',
+            ['text'] = {
+                [1] = 'Blind score scales',
+                [2] = 'for every $10'
+            }
+        }
     }
-
 }

@@ -1890,7 +1890,7 @@ SMODS.Blind{ -- The Knoll
     stay_flipped = function(self, blind, area, card)
         if self.debuff and not self.disabled and card.area ~= G.jokers and
         G.GAME.current_round.hands_played == 0 and G.GAME.current_round.discards_used == 0 then
-            if G.GAME.dollars > 10 then
+            if G.GAME.dollars > 5 then
                 card:set_debuff(true)
             end
         end
@@ -1899,5 +1899,39 @@ SMODS.Blind{ -- The Knoll
     boss_colour = HEX('6d8f2d'),
 
     pos = {y = 9},
+    atlas = 'bunco_blinds'
+}
+
+SMODS.Blind{ -- The Stone
+    key = 'stone', loc_txt = loc.stone,
+    boss = {min = 4},
+
+    boss_colour = HEX('586372'),
+
+    set_blind = function(self, blind, reset, silent)
+        if self.debuff and not self.disabled and G.GAME.dollars > 10 then
+            local final_chips = G.GAME.blind.chips * math.floor(G.GAME.dollars / 10)
+            local step = 0
+            say(math.floor(G.GAME.dollars / 10))
+            event({trigger = 'after', blocking = true, func = function()
+                G.GAME.blind.chips = G.GAME.blind.chips + G.SETTINGS.GAMESPEED * 30
+                if G.GAME.blind.chips < final_chips then
+                    G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+                    if step % 5 == 0 then
+                        play_sound('chips1', 0.8 + (step * 0.005))
+                    end
+                    step = step + 1
+                end
+                if G.GAME.blind.chips >= final_chips then
+                    G.GAME.blind.chips = final_chips
+                    G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+                    G.GAME.blind:wiggle()
+                    return true
+                end
+            end})
+        end
+    end,
+
+    pos = {y = 10},
     atlas = 'bunco_blinds'
 }
