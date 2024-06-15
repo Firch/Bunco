@@ -393,17 +393,19 @@ position = 'after'
 match_indent = true
 payload = '''
 
+local played_rank = scoring_hand[i].base.value
+
 if G.GAME.played_ranks == nil then G.GAME.played_ranks = {} end
 
-if G.GAME.played_ranks[tostring(scoring_hand[i]:get_id())] then
-    G.GAME.played_ranks[tostring(scoring_hand[i]:get_id())] = G.GAME.played_ranks[tostring(scoring_hand[i]:get_id())] + 1
+if G.GAME.played_ranks[played_rank] then
+    G.GAME.played_ranks[played_rank] = G.GAME.played_ranks[played_rank] + 1
 else
-    G.GAME.played_ranks[tostring(scoring_hand[i]:get_id())] = 1
+    G.GAME.played_ranks[played_rank] = 1
 end
 
 '''
 
-# The Tine 2/3
+# function end_round() (The Tine 2/3)
 [[patches]]
 [patches.pattern]
 target = 'functions/state_events.lua'
@@ -423,7 +425,7 @@ if G.GAME.played_ranks ~= nil then
         end
     end
 
-    G.GAME.current_round.most_played_rank = tonumber(max_rank)
+    G.GAME.current_round.most_played_rank = max_rank
 end
 
 
@@ -437,4 +439,150 @@ pattern = "most_played_poker_hand = 'High Card',"
 position = 'after'
 match_indent = true
 payload = '''
-most_played_rank = 2,'''
+most_played_rank = '2','''
+
+# G.FUNCS.discard_cards_from_highlighted() (The Swing 1/2)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = 'G.GAME.current_round.discards_used = G.GAME.current_round.discards_used + 1'
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_swing' and not G.GAME.blind.disabled then
+            G.E_MANAGER:add_event(Event({ func = function()
+                for k, v in ipairs(G.hand.cards) do
+                    v:flip()
+                end
+
+                G.GAME.blind:wiggle()
+                G.GAME.blind.triggered = true
+
+                if G.GAME.Swing == true then
+                    G.GAME.Swing = false
+                else
+                    G.GAME.Swing = true
+                end
+            return true end }))
+        end
+
+'''
+
+# G.FUNCS.play_cards_from_highlighted() (The Swing 2/2)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "inc_career_stat('c_hands_played', 1)"
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_swing' and not G.GAME.blind.disabled then
+            G.E_MANAGER:add_event(Event({ func = function()
+                for k, v in ipairs(G.hand.cards) do
+                    if not (v.area == G.hand and v.highlighted and v.facing == 'front') then
+                        v:flip()
+                    end
+                end
+
+                G.GAME.blind:wiggle()
+                G.GAME.blind.triggered = true
+
+                if G.GAME.Swing == true then
+                    G.GAME.Swing = false
+                else
+                    G.GAME.Swing = true
+                end
+            return true end }))
+        end
+
+'''
+
+# G.FUNCS.cash_out (The Miser)
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = 'G.STATE = G.STATES.SHOP'
+position = 'at'
+match_indent = true
+payload = '''
+
+if G.GAME.Miser then
+    G.STATE = G.STATES.BLIND_SELECT
+    G.GAME.Miser = false
+else
+    G.STATE = G.STATES.SHOP
+end
+
+'''
+
+# function Card:highlight (The Gate 1/2)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'self.highlighted = is_higlighted'
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_gate' and not G.GAME.blind.disabled and is_higlighted and self.area == G.hand then
+            self.ability.forced_selection = true
+        end
+
+'''
+
+# function CardArea:remove_from_highlighted (The Gate 2/2)
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+pattern = 'function CardArea:remove_from_highlighted(card, force)'
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_gate' and not force and card.area == G.hand then
+    if G.GAME.blind.disabled then
+        card.ability.forced_selection = false
+    elseif not G.GAME.blind.disabled and card.ability.forced_selection == true then
+        G.GAME.blind:wiggle()
+    end
+end
+
+'''
+
+# function end_round() (The Mask 1/2)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "G.GAME.current_round.most_played_poker_hand = _handname"
+position = 'before'
+match_indent = true
+payload = '''
+
+local lowestValue = math.huge
+        local leastPlayedHand = ''
+
+        for i = #G.handlist, 1, -1 do
+            local v = G.handlist[i]
+            local playedCount = G.GAME.hands[v].played
+            if playedCount < lowestValue then
+                lowestValue = playedCount
+                leastPlayedHand = v
+            end
+        end
+
+        G.GAME.current_round.least_played_poker_hand = leastPlayedHand
+
+'''
+
+# The Mask 2/2
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = "most_played_poker_hand = 'High Card',"
+position = 'after'
+match_indent = true
+payload = '''
+least_played_poker_hand = 'High Card','''
+

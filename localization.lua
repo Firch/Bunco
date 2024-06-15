@@ -6,7 +6,8 @@ return {
             chips = 'Chips',
             loop = 'Loop!',
             chance = 'Chance',
-            most_played_rank = 'most played rank'
+            most_played_rank = '(most played rank)',
+            least_played_hand = '(least played hand)'
         },
         ['fr'] = {
             nothing = 'Rien'
@@ -553,8 +554,73 @@ return {
         ['en-us'] = {
             ['name'] = 'The Tine',
             ['text'] = {
-                [1] = 'All #1# are debuffed'
+                [1] = 'Each #1#',
+                [2] = 'is debuffed'
+            }
+        }
+    },
+    swing = {
+        ['en-us'] = {
+            ['name'] = 'The Swing',
+            ['text'] = {
+                [1] = 'After Play or Discard,',
+                [2] = 'all cards are flipped'
+            }
+        }
+    },
+    miser = {
+        ['en-us'] = {
+            ['name'] = 'The Miser',
+            ['text'] = {
+                [1] = 'Shop is skipped after',
+                [2] = 'defeating this blind'
+            }
+        }
+    },
+    gate = {
+        ['en-us'] = {
+            ['name'] = 'The Gate',
+            ['text'] = {
+                [1] = 'Cards cannot',
+                [2] = 'be unselected'
+            }
+        }
+    },
+    flame = {
+        ['en-us'] = {
+            ['name'] = 'The Flame',
+            ['text'] = {
+                [1] = 'All Enhanced cards',
+                [2] = 'are debuffed'
+            }
+        }
+    },
+    mask = {
+        ['en-us'] = {
+            ['name'] = 'The Mask',
+            ['text'] = {
+                [1] = '#1# has the base',
+                [2] = 'Chips and Mult of #2#'
+            }
+        }
+    },
+    bulwark = {
+        ['en-us'] = {
+            ['name'] = 'The Bulwark',
+            ['text'] = {
+                [1] = 'Playing a #1# discards',
+                [2] = 'all cards held in hand'
+            }
+        }
+    },
+    knoll = {
+        ['en-us'] = {
+            ['name'] = 'The Knoll',
+            ['text'] = {
+                [1] = 'Having more than $10',
+                [2] = 'debuffs first hand drawn'
             }
         }
     }
+
 }

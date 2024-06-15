@@ -72,19 +72,6 @@ local function forced_message(message, card, color, delay, juice)
     end})
 end
 
--- Enhancements pool
-
-local enhancement_pool = {
-    G.P_CENTERS.m_bonus,
-    G.P_CENTERS.m_mult,
-    G.P_CENTERS.m_wild,
-    G.P_CENTERS.m_stone,
-    G.P_CENTERS.m_steel,
-    G.P_CENTERS.m_glass,
-    G.P_CENTERS.m_gold,
-    G.P_CENTERS.m_lucky
-}
-
 -- Exotic add_to_pool function
 
 add_exotic = function()
@@ -705,7 +692,7 @@ create_joker({ -- JMJB
 
                             for _, v in ipairs(G.pack_cards.cards) do
                                 if v.config.center == G.P_CENTERS.c_base then
-                                    v:set_ability(enhancement_pool[math.random(#enhancement_pool)])
+                                    v:set_ability(G.P_CENTER_POOLS.Enhanced[math.random(#G.P_CENTER_POOLS.Enhanced)])
                                 end
                             end
 
@@ -1541,7 +1528,7 @@ end
 SMODS.PokerHand{ -- Spectrum (Referenced from SixSuits)
     key = 'Spectrum',
     above_hand = 'Full House',
-    visible = true,
+    visible = false,
     chips = 50,
     mult = 6,
     l_chips = 25,
@@ -1589,7 +1576,7 @@ SMODS.PokerHand{ -- Spectrum (Referenced from SixSuits)
 SMODS.PokerHand{ -- Straight Spectrum (Referenced from SixSuits)
     key = 'Straight Spectrum',
     above_hand = 'Straight Flush',
-    visible = true,
+    visible = false,
     chips = 120,
     mult = 10,
     l_chips = 35,
@@ -1640,7 +1627,7 @@ SMODS.PokerHand{ -- Straight Spectrum (Referenced from SixSuits)
 SMODS.PokerHand{ -- Spectrum House (Referenced from SixSuits)
     key = 'Spectrum House',
     above_hand = 'Flush House',
-    visible = true,
+    visible = false,
     chips = 150,
     mult = 15,
     l_chips = 50,
@@ -1674,7 +1661,7 @@ SMODS.PokerHand{ -- Spectrum House (Referenced from SixSuits)
 SMODS.PokerHand{ -- Spectrum Five (Referenced from SixSuits)
     key = 'Spectrum Five',
     above_hand = 'Flush Five',
-    visible = true,
+    visible = false,
     chips = 180,
     mult = 18,
     l_chips = 60,
@@ -1721,13 +1708,22 @@ SMODS.Blind{ -- The Umbrella
     atlas = 'bunco_blinds'
 }
 
-SMODS.Blind{ -- The Tine (descriptions suck for now)
+SMODS.Blind{ -- The Tine
     key = 'tine', loc_txt = loc.tine,
     boss = {min = 2},
 
+    vars = {},
+    loc_vars = function(self, blind)
+        return {vars = {localize(G.GAME.current_round.most_played_rank, 'ranks')}}
+    end,
+    process_loc_text = function(self)
+        SMODS.Blind.process_loc_text(self)
+        self.vars = {loc.dictionary.most_played_rank}
+    end,
+
     debuff_card = function(self, blind, card, from_blind)
         if self.debuff and not self.disabled and card.area ~= G.jokers then
-            if card:get_id() == G.GAME.current_round.most_played_rank then
+            if card.base.value == G.GAME.current_round.most_played_rank then
                 card:set_debuff(true)
                 return true
             end
@@ -1738,5 +1734,170 @@ SMODS.Blind{ -- The Tine (descriptions suck for now)
     boss_colour = HEX('e36cbe'),
 
     pos = {y = 2},
+    atlas = 'bunco_blinds'
+}
+
+SMODS.Blind{ -- The Swing
+    key = 'swing', loc_txt = loc.swing,
+    boss = {min = 3},
+
+    defeat = function(self, blind)
+        G.GAME.Swing = false
+    end,
+
+    stay_flipped = function(self, blind, area, card)
+        if G.GAME.Swing == true then
+            return true
+        else
+            return false
+        end
+    end,
+
+    boss_colour = HEX('17f3d0'),
+
+    pos = {y = 3},
+    atlas = 'bunco_blinds'
+}
+
+SMODS.Blind{ -- The Miser
+    key = 'miser', loc_txt = loc.miser,
+    boss = {min = 2},
+
+    defeat = function(self, blind)
+        if not self.disabled then
+            G.GAME.Miser = true
+        end
+    end,
+
+    add_to_pool = function()
+        if G.GAME.round_resets.ante % 8 == 7 then
+            return false
+        else
+            return true
+        end
+    end,
+
+    boss_colour = HEX('991a7f'),
+
+    pos = {y = 4},
+    atlas = 'bunco_blinds'
+}
+
+SMODS.Blind{ -- The Gate
+    key = 'gate', loc_txt = loc.gate,
+    boss = {min = 1},
+
+    boss_colour = HEX('c9a27a'),
+
+    pos = {y = 5},
+    atlas = 'bunco_blinds'
+}
+
+SMODS.Blind{ -- The Flame
+    key = 'flame', loc_txt = loc.flame,
+    boss = {min = 3},
+
+    debuff_card = function(self, blind, card, from_blind)
+        if self.debuff and not self.disabled and card.area ~= G.jokers then
+            if card.config.center ~= G.P_CENTERS.c_base then
+                card:set_debuff(true)
+                return true
+            end
+            return false
+        end
+    end,
+
+    boss_colour = HEX('9b2d49'),
+
+    pos = {y = 6},
+    atlas = 'bunco_blinds'
+}
+
+SMODS.Blind{ -- The Mask
+    key = 'mask', loc_txt = loc.mask,
+    boss = {min = 2},
+
+    vars = {},
+    loc_vars = function(self, blind)
+        return {vars = {localize(G.GAME.current_round.most_played_poker_hand, 'poker_hands'), localize(G.GAME.current_round.least_played_poker_hand, 'poker_hands')}}
+    end,
+    process_loc_text = function(self)
+        SMODS.Blind.process_loc_text(self)
+        self.vars = {localize('ph_most_played'), loc.dictionary.least_played_hand}
+    end,
+
+    modify_hand = function(self, blind, cards, poker_hands, text, mult, hand_chips)
+        if self.debuff and not self.disabled then
+            if G.GAME.last_hand_played == G.GAME.current_round.most_played_poker_hand then
+                self.triggered = true
+                return G.GAME.hands[G.GAME.current_round.least_played_poker_hand].s_mult, G.GAME.hands[G.GAME.current_round.least_played_poker_hand].s_chips, true
+            end
+        end
+    end,
+
+    boss_colour = HEX('efcca6'),
+
+    pos = {y = 7},
+    atlas = 'bunco_blinds'
+}
+
+SMODS.Blind{ -- The Bulwark
+    key = 'bulwark', loc_txt = loc.bulwark,
+    boss = {min = 2},
+
+    vars = {},
+    loc_vars = function(self, blind)
+        return {vars = {localize(G.GAME.current_round.most_played_poker_hand, 'poker_hands')}}
+    end,
+    process_loc_text = function(self)
+        SMODS.Blind.process_loc_text(self)
+        self.vars = {localize('ph_most_played')}
+    end,
+
+    press_play = function(self, blind)
+        if self.debuff and not self.disabled then
+            if G.FUNCS.get_poker_hand_info(G.hand.highlighted) == G.GAME.current_round.most_played_poker_hand then
+                local original_limit = G.hand.config.highlighted_limit
+                G.E_MANAGER:add_event(Event({ func = function()
+                    G.hand.config.highlighted_limit = math.huge
+                    if G.hand.cards then
+                        for k, v in ipairs(G.hand.cards) do
+                            G.hand:add_to_highlighted(v, true)
+                            if k <= 3 then
+                                play_sound('card1', 1)
+                            end
+                        end
+                        G.hand.config.highlighted_limit = original_limit or 5
+                        G.FUNCS.discard_cards_from_highlighted(nil, true)
+                    end
+                return true end }))
+                self.triggered = true
+                delay(0.7)
+            end
+        end
+    end,
+
+    boss_colour = HEX('672f69'),
+
+    pos = {y = 8},
+    atlas = 'bunco_blinds'
+}
+
+SMODS.Blind{ -- The Knoll
+    key = 'knoll', loc_txt = loc.knoll,
+    boss = {min = 4},
+
+    stay_flipped = function(self, blind, area, card)
+        if self.debuff and not self.disabled and card.area ~= G.jokers and
+        G.GAME.current_round.hands_played == 0 and G.GAME.current_round.discards_used == 0 then
+            if G.GAME.dollars > 10 then
+                card:set_debuff(true)
+            end
+        end
+    end,
+
+    boss_colour = HEX('6d8f2d'),
+
+    pos = {y = 9},
     atlas = 'bunco_blinds'
 }
