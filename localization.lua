@@ -627,7 +627,52 @@ return {
             ['name'] = 'The Stone',
             ['text'] = {
                 [1] = 'Blind score scales',
-                [2] = 'for every $10'
+                [2] = 'for every $10 held'
+            }
+        }
+    },
+    sand = {
+        ['en-us'] = {
+            ['name'] = 'The Sand',
+            ['text'] = {
+                [1] = 'Blind score scales',
+                [2] = 'for every tag held'
+            }
+        }
+    },
+    blade = {
+        ['en-us'] = {
+            ['name'] = 'The Blade',
+            ['text'] = {
+                [1] = ' ',
+                [2] = ' '
+            }
+        }
+    },
+    claw = {
+        ['en-us'] = {
+            ['name'] = 'The Claw',
+            ['text'] = {
+                [1] = 'Discarded cards',
+                [2] = 'go back into the deck'
+            }
+        }
+    },
+    veil = {
+        ['en-us'] = {
+            ['name'] = 'The Veil',
+            ['text'] = {
+                [1] = 'Selected non-flipped',
+                [2] = 'cards are flipped'
+            }
+        }
+    },
+    cadaver = {
+        ['en-us'] = {
+            ['name'] = 'The Cadaver',
+            ['text'] = {
+                [1] = 'Must not play',
+                [2] = 'any face cards'
             }
         }
     }

@@ -586,3 +586,38 @@ match_indent = true
 payload = '''
 least_played_poker_hand = 'High Card','''
 
+# G.FUNCS.discard_cards_from_highlighted (The Claw)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "draw_card(G.hand, G.discard, i*100/highlighted_count, 'down', false, G.hand.highlighted[i])"
+position = 'at'
+match_indent = true
+payload = '''
+
+if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_claw' and not G.GAME.blind.disabled then
+    draw_card(G.hand, G.deck, i*100/highlighted_count, 'down', false, G.hand.highlighted[i])
+    G.deck:shuffle('claw'..G.GAME.round_resets.ante)
+else
+    draw_card(G.hand, G.discard, i*100/highlighted_count, 'down', false, G.hand.highlighted[i])
+end
+
+'''
+
+# function Card:highlight (The Veil)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'self.highlighted = is_higlighted'
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_veil' and not G.GAME.blind.disabled and is_higlighted and self.area == G.hand then
+    if self.facing == 'front' then
+        self:flip()
+        G.GAME.blind:wiggle()
+    end
+end
+
+'''

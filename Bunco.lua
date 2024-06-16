@@ -1909,20 +1909,19 @@ SMODS.Blind{ -- The Stone
     boss_colour = HEX('586372'),
 
     set_blind = function(self, blind, reset, silent)
-        if self.debuff and not self.disabled and G.GAME.dollars > 10 then
-            local final_chips = G.GAME.blind.chips * math.floor(G.GAME.dollars / 10)
+        if self.debuff and not self.disabled and G.GAME.dollars >= 10 then
+            local final_chips = (G.GAME.blind.chips / G.GAME.blind.mult) * (math.floor(G.GAME.dollars / 10) + G.GAME.blind.mult)
+            local chip_mod = math.floor(G.GAME.dollars / 10)
             local step = 0
-            say(math.floor(G.GAME.dollars / 10))
             event({trigger = 'after', blocking = true, func = function()
-                G.GAME.blind.chips = G.GAME.blind.chips + G.SETTINGS.GAMESPEED * 30
+                G.GAME.blind.chips = G.GAME.blind.chips + G.SETTINGS.GAMESPEED * 30 * chip_mod
                 if G.GAME.blind.chips < final_chips then
                     G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
                     if step % 5 == 0 then
                         play_sound('chips1', 0.8 + (step * 0.005))
                     end
                     step = step + 1
-                end
-                if G.GAME.blind.chips >= final_chips then
+                else
                     G.GAME.blind.chips = final_chips
                     G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
                     G.GAME.blind:wiggle()
@@ -1933,5 +1932,89 @@ SMODS.Blind{ -- The Stone
     end,
 
     pos = {y = 10},
+    atlas = 'bunco_blinds'
+}
+
+SMODS.Blind{ -- The Sand
+    key = 'sand', loc_txt = loc.sand,
+    boss = {min = 4},
+
+    boss_colour = HEX('b79131'),
+
+    set_blind = function(self, blind, reset, silent)
+        if self.debuff and not self.disabled and #G.HUD_tags ~= 0 then
+            local final_chips = (G.GAME.blind.chips / G.GAME.blind.mult) * (#G.HUD_tags + G.GAME.blind.mult)
+            local chip_mod = #G.HUD_tags
+            local step = 0
+            event({trigger = 'after', blocking = true, func = function()
+                G.GAME.blind.chips = G.GAME.blind.chips + G.SETTINGS.GAMESPEED * 30 * chip_mod
+                if G.GAME.blind.chips < final_chips then
+                    G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+                    if step % 5 == 0 then
+                        play_sound('chips1', 0.8 + (step * 0.005))
+                    end
+                    step = step + 1
+                else
+                    G.GAME.blind.chips = final_chips
+                    G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+                    G.GAME.blind:wiggle()
+                    return true
+                end
+            end})
+        end
+    end,
+
+    pos = {y = 11},
+    atlas = 'bunco_blinds'
+}
+
+SMODS.Blind{ -- The Blade (WIP)
+    key = 'blade', loc_txt = loc.blade,
+    boss = {min = 3},
+
+    boss_colour = HEX('b11c32'),
+
+    pos = {y = 12},
+    atlas = 'bunco_blinds'
+}
+
+SMODS.Blind{ -- The Claw
+    key = 'claw', loc_txt = loc.claw,
+    boss = {min = 1},
+
+    boss_colour = HEX('d45741'),
+
+    pos = {y = 13},
+    atlas = 'bunco_blinds'
+}
+
+SMODS.Blind{ -- The Veil
+    key = 'veil', loc_txt = loc.veil,
+    boss = {min = 1},
+
+    boss_colour = HEX('ffdf7d'),
+
+    pos = {y = 14},
+    atlas = 'bunco_blinds'
+}
+
+SMODS.Blind{ -- The Cadaver
+    key = 'cadaver', loc_txt = loc.cadaver,
+    boss = {min = 2},
+
+    debuff_hand = function(self, blind, cards, hand, handname, check)
+        if self.debuff and not self.disabled then
+            for i = 1, #cards do
+                if cards[i]:is_face() then
+                    return true
+                end
+            end
+            return false
+        end
+    end,
+
+    boss_colour = HEX('a132d5'),
+
+    pos = {y = 15},
     atlas = 'bunco_blinds'
 }
