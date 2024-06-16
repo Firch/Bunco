@@ -696,5 +696,23 @@ return {
                 [2] = 'during this Ante'
             }
         }
+    },
+    indigo_tower = {
+        ['en-us'] = {
+            ['name'] = 'Indigo Tower',
+            ['text'] = {
+                [1] = 'Cards unplayed previously',
+                [2] = 'this Ante are debuffed'
+            }
+        }
+    },
+    magenta_dagger = {
+        ['en-us'] = {
+            ['name'] = 'Magenta Dagger',
+            ['text'] = {
+                [1] = 'Discarding cards plays them',
+                [2] = 'instead and subtracts scored value'
+            }
+        }
     }
 }

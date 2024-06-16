@@ -2081,3 +2081,33 @@ SMODS.Blind{ -- Vermilion Trident
     pos = {y = 1},
     atlas = 'bunco_blinds_finisher'
 }
+
+SMODS.Blind{ -- Indigo Tower
+    key = 'final_tower', loc_txt = loc.indigo_tower,
+    boss = {showdown = true, min = 10, max = 10},
+
+    debuff_card = function(self, blind, card, from_blind)
+        if self.debuff and not self.disabled and card.area ~= G.jokers then
+            if not card.ability.played_this_ante then
+                card:set_debuff(true)
+                return true
+            end
+            return false
+        end
+    end,
+
+    boss_colour = HEX('4f4caa'),
+
+    pos = {y = 2},
+    atlas = 'bunco_blinds_finisher'
+}
+
+SMODS.Blind{ -- Magenta Dagger
+    key = 'final_dagger', loc_txt = loc.magenta_dagger,
+    boss = {showdown = true, min = 10, max = 10},
+
+    boss_colour = HEX('cb589f'),
+
+    pos = {y = 3},
+    atlas = 'bunco_blinds_finisher'
+}

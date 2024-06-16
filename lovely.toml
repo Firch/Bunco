@@ -320,9 +320,9 @@ payload = '''
 
 if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_paling' and not G.GAME.blind.disabled then
             if G.GAME.current_round.hands_left > 1 then
-                ease_hands_played(-1)
+                ease_hands_played(-1) --
             elseif G.GAME.current_round.hands_left == 1 or G.GAME.current_round.hands_left == 0 then
-                ease_hands_played(-1)
+                ease_hands_played(-1) --
 
                 G.E_MANAGER:add_event(Event({ trigger = 'after', delay = 1.8, func = function()
                     G.STATE = G.STATES.GAME_OVER
@@ -652,6 +652,64 @@ if boss == 'bl_bunc_final_trident' then
     G.GAME.Trident = true
 else
     G.GAME.Trident = false
+end
+
+'''
+
+# G.FUNCS.discard_cards_from_highlighted (Magenta Dagger 1/2)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "G.FUNCS.discard_cards_from_highlighted = function(e, hook)"
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_final_dagger' and not G.GAME.blind.disabled then
+    G.FUNCS.play_cards_from_highlighted({antiscore = true})
+    return
+end
+
+'''
+
+# G.FUNCS.play_cards_from_highlighted (Magenta Dagger 2/2)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "ease_hands_played(-1)"
+position = 'at'
+match_indent = true
+payload = '''
+
+if e.antiscore then
+    ease_discard(-1)
+
+    for i=1, highlighted_count do
+        G.hand.highlighted[i]:calculate_seal({discard = true})
+        local removed = false
+        for j = 1, #G.jokers.cards do
+            local eval = nil
+            eval = G.jokers.cards[j]:calculate_joker({discard = true, other_card =  G.hand.highlighted[i], full_hand = G.hand.highlighted})
+            if eval then
+                if eval.remove then removed = true end
+                card_eval_status_text(G.jokers.cards[j], 'jokers', nil, 1, nil, eval)
+            end
+        end
+        table.insert(cards, G.hand.highlighted[i])
+        if removed then
+            destroyed_cards[#destroyed_cards + 1] = G.hand.highlighted[i]
+            if G.hand.highlighted[i].ability.name == 'Glass Card' then 
+                G.hand.highlighted[i]:shatter()
+            else
+                G.hand.highlighted[i]:start_dissolve()
+            end
+        else 
+            G.hand.highlighted[i].ability.discarded = true
+            draw_card(G.hand, G.discard, i*100/highlighted_count, 'down', false, G.hand.highlighted[i])
+        end
+    end
+else
+    ease_hands_played(-1)
 end
 
 '''
