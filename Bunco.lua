@@ -842,21 +842,21 @@ create_joker({ -- Fingerprints
             card.ability.extra.new_card_list = {}
 
             for i = 1, #context.scoring_hand do
-                table.insert(card.ability.extra.new_card_list, context.scoring_hand[i])
+                card.ability.extra.new_card_list[context.scoring_hand[i].unique_val] = true
             end
         end
 
         if context.end_of_round and not context.other_card and not context.blueprint then
-            for _, v in ipairs(card.ability.extra.old_card_list) do
-                v.ability.perma_bonus = v.ability.perma_bonus or 0
-                v.ability.perma_bonus = v.ability.perma_bonus - card.ability.extra.bonus
+            for _, v in ipairs(G.playing_cards) do
+                if card.ability.extra.old_card_list[v.unique_val] then
+                    v.ability.perma_bonus = v.ability.perma_bonus or 0
+                    v.ability.perma_bonus = v.ability.perma_bonus - card.ability.extra.bonus
+                end
+                if card.ability.extra.new_card_list[v.unique_val] then
+                    v.ability.perma_bonus = v.ability.perma_bonus or 0
+                    v.ability.perma_bonus = v.ability.perma_bonus + card.ability.extra.bonus
+                end
             end
-
-            for _, v in ipairs(card.ability.extra.new_card_list) do
-                v.ability.perma_bonus = v.ability.perma_bonus or 0
-                v.ability.perma_bonus = v.ability.perma_bonus + card.ability.extra.bonus
-            end
-
             card.ability.extra.old_card_list = card.ability.extra.new_card_list
             -- not needed, but good style to fail fast
             card.ability.extra.new_card_list = nil
@@ -866,9 +866,11 @@ create_joker({ -- Fingerprints
         end
 
         if context.selling_self and not context.blueprint then
-            for _, v in ipairs(card.ability.extra.old_card_list) do
-                v.ability.perma_bonus = v.ability.perma_bonus or 0
-                v.ability.perma_bonus = v.ability.perma_bonus - card.ability.extra.bonus
+            for _, v in ipairs(G.playing_cards) do
+                if card.ability.extra.old_card_list[v.unique_val] then
+                    v.ability.perma_bonus = v.ability.perma_bonus or 0
+                    v.ability.perma_bonus = v.ability.perma_bonus - card.ability.extra.bonus
+                end
             end
         end
     end
