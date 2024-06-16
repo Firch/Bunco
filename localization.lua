@@ -675,5 +675,26 @@ return {
                 [2] = 'any face cards'
             }
         }
+    },
+
+    -- Finishers
+
+    chartreuse_crown = {
+        ['en-us'] = {
+            ['name'] = 'Chartreuse Crown',
+            ['text'] = {
+                [1] = 'All Spade, Heart, Club and Diamond',
+                [2] = 'base suit cards are debuffed'
+            }
+        }
+    },
+    vermilion_trident = {
+        ['en-us'] = {
+            ['name'] = 'Vermilion Trident',
+            ['text'] = {
+                [1] = 'Shops are disabled',
+                [2] = 'during this Ante'
+            }
+        }
     }
 }

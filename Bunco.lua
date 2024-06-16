@@ -2020,3 +2020,64 @@ SMODS.Blind{ -- The Cadaver
     pos = {y = 15},
     atlas = 'bunco_blinds'
 }
+
+-- Finishers
+
+SMODS.Blind{ -- Chartreuse Crown
+    key = 'final_crown', loc_txt = loc.chartreuse_crown,
+    boss = {showdown = true, min = 10, max = 10},
+
+    debuff_card = function(self, blind, card, from_blind)
+        if self.debuff and not self.disabled and card.area ~= G.jokers then
+            if card.base.suit == ('Spades') or
+            card.base.suit == ('Hearts') or
+            card.base.suit == ('Clubs') or
+            card.base.suit == ('Diamonds') then
+                if card.ability.name ~= 'Stone Card' then
+                    card:set_debuff(true)
+                    return true
+                end
+            end
+            return false
+        end
+    end,
+
+    add_to_pool = function()
+        local exotic_amount = 0
+
+        if G.playing_cards then
+            for k, v in pairs(G.playing_cards) do
+                if (v.base.suit == ('Fleurons') or
+                v.base.suit == ('Halberds')) and
+                v.ability.name ~= 'Stone Card' then
+                    exotic_amount = exotic_amount + 1
+                end
+            end
+        end
+
+        if exotic_amount >= 10 then
+            return true
+        else
+            return false
+        end
+    end,
+
+    boss_colour = HEX('96a756'),
+
+    pos = {y = 0},
+    atlas = 'bunco_blinds_finisher'
+}
+
+SMODS.Blind{ -- Vermilion Trident
+    key = 'final_trident', loc_txt = loc.vermilion_trident,
+    boss = {showdown = true, min = 10, max = 10},
+
+    defeat = function(self, blind)
+        G.GAME.Trident = false
+    end,
+
+    boss_colour = HEX('db481e'),
+
+    pos = {y = 1},
+    atlas = 'bunco_blinds_finisher'
+}

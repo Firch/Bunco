@@ -621,3 +621,37 @@ if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_veil' and not G.GAME.blind.dis
 end
 
 '''
+
+# G.FUNCS.cash_out (Vermilion Trident 1/2)
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = 'G.STATE = G.STATES.SHOP'
+position = 'at'
+match_indent = true
+payload = '''
+
+if G.GAME.Trident then
+    G.STATE = G.STATES.BLIND_SELECT
+else
+    G.STATE = G.STATES.SHOP
+end
+
+'''
+
+# function get_new_boss() (Vermilion Trident 2/2)
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = 'return boss'
+position = 'before'
+match_indent = true
+payload = '''
+
+if boss == 'bl_bunc_final_trident' then
+    G.GAME.Trident = true
+else
+    G.GAME.Trident = false
+end
+
+'''
