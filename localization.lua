@@ -14,6 +14,16 @@ return {
         }
     },
 
+    -- Temporary chips
+
+    temporary_extra_chips = {
+        ['en-us'] = {
+            ['text'] = {
+                [1] = "{C:chips}+#1#{} extra chips this round"
+            }
+        }
+    },
+
     -- Suits
 
     fleurons = {

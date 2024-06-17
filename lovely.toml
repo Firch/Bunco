@@ -89,7 +89,7 @@ pattern = "if main_end then"
 position = "before"
 match_indent = true
 payload = """
-if (_c.set == 'Default' or _c.set == 'Enhanced') and card.ability.extra and type(card.ability.extra) == 'table' and card.ability.extra.temporary_extra_chips then
+if (_c.set == 'Default' or _c.set == 'Enhanced') and card.ability.extra and type(card.ability.extra) == 'table' and card.ability.extra.temporary_extra_chips and not card.debuff then
     localize{type = 'other', key = 'temporary_extra_chips', nodes = desc_nodes, vars = {card.ability.extra.temporary_extra_chips}}
 end"""
 

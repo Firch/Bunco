@@ -89,13 +89,7 @@ function SMODS.current_mod.process_loc_text()
 
     loc.dictionary = G.localization.misc.dictionary.bunco
 
-    SMODS.process_loc_text(G.localization.descriptions.Other, 'temporary_extra_chips', {
-        ['en-us'] = {
-            ['text'] = {
-                [1] = "{C:chips}+#1#{} extra chips this round"
-            }
-        }
-    })
+    SMODS.process_loc_text(G.localization.descriptions.Other, 'temporary_extra_chips', loc.temporary_extra_chips)
 end
 
 -- Implement temporary extra chips
@@ -112,9 +106,7 @@ end
 
 local Card_get_chip_bonus = Card.get_chip_bonus
 function Card:get_chip_bonus()
-    if type(self.ability.extra) == 'table' then
-        return Card_get_chip_bonus(self) + (self.ability.extra and type(self.ability.extra) == 'table' and self.ability.extra.temporary_extra_chips or 0)
-    end
+    return Card_get_chip_bonus(self) + (self.ability.extra and type(self.ability.extra) == 'table' and not self.debuff and self.ability.extra.temporary_extra_chips or 0)
 end
 
 -- Joker creation setup
