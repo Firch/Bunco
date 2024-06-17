@@ -833,7 +833,7 @@ create_joker({ -- Doorhanger
 
 create_joker({ -- Fingerprints
     name = 'Fingerprints', position = 22,
-    vars = {{bonus = 50}, {new_card_list = {}}, {old_card_list = {}}},
+    vars = {{bonus = 50}, {new_card_list = {}}},
     rarity = 'Uncommon', cost = 8,
     blueprint = false, eternal = true,
     unlocked = true,
@@ -848,33 +848,30 @@ create_joker({ -- Fingerprints
 
         if context.end_of_round and not context.other_card and not context.blueprint then
             for _, v in ipairs(G.playing_cards) do
-                if card.ability.extra.old_card_list[v.unique_val] then
-                    v.ability.perma_bonus = v.ability.perma_bonus or 0
-                    v.ability.perma_bonus = v.ability.perma_bonus - card.ability.extra.bonus
-                end
                 if card.ability.extra.new_card_list[v.unique_val] then
-                    v.ability.perma_bonus = v.ability.perma_bonus or 0
-                    v.ability.perma_bonus = v.ability.perma_bonus + card.ability.extra.bonus
+                    v.ability.perma_bonus = (v.ability.perma_bonus or 0) + card.ability.extra.bonus
+                    v.ability.extra = v.ability.extra or {}
+                    v.ability.extra.bunc_fingerprint_bonus = (v.ability.extra.bunc_fingerprint_bonus or 0) + card.ability.extra.bonus
                 end
             end
-            card.ability.extra.old_card_list = card.ability.extra.new_card_list
             -- not needed, but good style to fail fast
             card.ability.extra.new_card_list = nil
 
             forced_message(localize('k_upgrade_ex'), card, G.C.CHIPS)
-
-        end
-
-        if context.selling_self and not context.blueprint then
-            for _, v in ipairs(G.playing_cards) do
-                if card.ability.extra.old_card_list[v.unique_val] then
-                    v.ability.perma_bonus = v.ability.perma_bonus or 0
-                    v.ability.perma_bonus = v.ability.perma_bonus - card.ability.extra.bonus
-                end
-            end
         end
     end
 })
+
+local end_round_ref = end_round
+function end_round()
+    for _, v in ipairs(G.playing_cards) do
+        if v.ability.extra and v.ability.extra.bunc_fingerprint_bonus then
+            v.ability.perma_bonus = (v.ability.perma_bonus or 0) - v.ability.extra.bunc_fingerprint_bonus
+            v.ability.extra.bunc_fingerprint_bonus = nil
+        end
+    end
+    end_round_ref()
+end
 
 create_joker({ -- Zero Shapiro
     name = 'Zero Shapiro', position = 23,
