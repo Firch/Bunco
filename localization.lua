@@ -711,7 +711,16 @@ return {
             ['name'] = 'Magenta Dagger',
             ['text'] = {
                 [1] = 'Discarding cards plays them',
-                [2] = 'instead and subtracts scored value'
+                [2] = 'and subtracts scored value'
+            }
+        }
+    },
+    turquoise_shield = {
+        ['en-us'] = {
+            ['name'] = 'Turquoise Shield',
+            ['text'] = {
+                [1] = 'Excess score this Ante adds',
+                [2] = "to this blind's required score"
             }
         }
     }

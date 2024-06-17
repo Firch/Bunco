@@ -2111,3 +2111,13 @@ SMODS.Blind{ -- Magenta Dagger
     pos = {y = 3},
     atlas = 'bunco_blinds_finisher'
 }
+
+SMODS.Blind{ -- Turquoise Shield
+    key = 'final_shield', loc_txt = loc.turquoise_shield,
+    boss = {showdown = true, min = 10, max = 10},
+
+    boss_colour = HEX('2cdea8'),
+
+    pos = {y = 3},
+    atlas = 'bunco_blinds_finisher'
+}

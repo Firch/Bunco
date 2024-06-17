@@ -25,24 +25,6 @@ position = 'after'
 line_prepend = '$indent'
 payload = '''end'''
 
-# CardArea:emplace() (X-Ray)
-[[patches]]
-[patches.pattern]
-target = 'cardarea.lua'
-pattern = 'if #self.cards > self.config.card_limit then'
-position = 'before'
-match_indent = true
-payload = '''
-
-if G.jokers ~= nil and self == G.hand then
-    for _, v in ipairs(G.jokers.cards) do
-        if v.ability.name == 'Xray' then
-            v:calculate_joker({ emplaced_card = card })
-        end
-    end
-end
-
-'''
 
 # UI Suit hiding, part 3/4
 [[patches]]
@@ -76,6 +58,25 @@ or text == 'h_bunc_Straight Spectrum'
 or text == 'h_bunc_Spectrum House'
 or text == 'h_bunc_Spectrum Five' then
     enable_exotics()
+end
+
+'''
+
+# CardArea:emplace() (X-Ray)
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+pattern = 'if #self.cards > self.config.card_limit then'
+position = 'before'
+match_indent = true
+payload = '''
+
+if G.jokers ~= nil and self == G.hand then
+    for _, v in ipairs(G.jokers.cards) do
+        if v.ability.name == 'Xray' then
+            v:calculate_joker({ emplaced_card = card })
+        end
+    end
 end
 
 '''
@@ -656,7 +657,7 @@ end
 
 '''
 
-# G.FUNCS.discard_cards_from_highlighted (Magenta Dagger 1/2)
+# G.FUNCS.discard_cards_from_highlighted (Magenta Dagger 1/4)
 [[patches]]
 [patches.pattern]
 target = 'functions/state_events.lua'
@@ -672,7 +673,7 @@ end
 
 '''
 
-# G.FUNCS.play_cards_from_highlighted (Magenta Dagger 2/2)
+# G.FUNCS.play_cards_from_highlighted (Magenta Dagger 2/4)
 [[patches]]
 [patches.pattern]
 target = 'functions/state_events.lua'
@@ -680,36 +681,47 @@ pattern = "ease_hands_played(-1)"
 position = 'at'
 match_indent = true
 payload = '''
+local function calculate_discard()
+    for i = 1, #G.hand.cards do
+        eval_card(G.hand.cards[i], {pre_discard = true, full_hand = G.hand.highlighted, hook = hook})
+    end
+    for j = 1, #G.jokers.cards do
+        G.jokers.cards[j]:calculate_joker({pre_discard = true, full_hand = G.hand.highlighted, hook = hook})
+    end
+end
 
 if e.antiscore then
     ease_discard(-1)
-
-    for i=1, highlighted_count do
-        G.hand.highlighted[i]:calculate_seal({discard = true})
-        local removed = false
-        for j = 1, #G.jokers.cards do
-            local eval = nil
-            eval = G.jokers.cards[j]:calculate_joker({discard = true, other_card =  G.hand.highlighted[i], full_hand = G.hand.highlighted})
-            if eval then
-                if eval.remove then removed = true end
-                card_eval_status_text(G.jokers.cards[j], 'jokers', nil, 1, nil, eval)
-            end
-        end
-        table.insert(cards, G.hand.highlighted[i])
-        if removed then
-            destroyed_cards[#destroyed_cards + 1] = G.hand.highlighted[i]
-            if G.hand.highlighted[i].ability.name == 'Glass Card' then 
-                G.hand.highlighted[i]:shatter()
-            else
-                G.hand.highlighted[i]:start_dissolve()
-            end
-        else 
-            G.hand.highlighted[i].ability.discarded = true
-            draw_card(G.hand, G.discard, i*100/highlighted_count, 'down', false, G.hand.highlighted[i])
-        end
-    end
+    calculate_discard()
 else
     ease_hands_played(-1)
 end
 
 '''
+
+# G.FUNCS.play_cards_from_highlighted (Magenta Dagger 3/4)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "G.FUNCS.evaluate_play()"
+position = 'at'
+match_indent = true
+payload = '''
+
+if e.antiscore then
+    G.FUNCS.evaluate_play(e)
+else
+    G.FUNCS.evaluate_play()
+end
+
+'''
+
+# function update_hand_text (Magenta Dagger 4/4)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "ease_to = G.GAME.chips + math.floor(hand_chips*mult),"
+position = 'at'
+match_indent = true
+payload = '''ease_to = G.GAME.chips + math.floor(hand_chips * mult) * (e and e.antiscore and -1 or 1),'''
+
