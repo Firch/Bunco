@@ -112,7 +112,9 @@ end
 
 local Card_get_chip_bonus = Card.get_chip_bonus
 function Card:get_chip_bonus()
-    return Card_get_chip_bonus(self) + (self.ability.extra and self.ability.extra.temporary_extra_chips or 0)
+    if type(self.ability.extra) == 'table' then
+        return Card_get_chip_bonus(self) + (self.ability.extra and self.ability.extra.temporary_extra_chips or 0)
+    end
 end
 
 -- Joker creation setup
