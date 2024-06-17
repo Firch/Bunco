@@ -113,7 +113,7 @@ end
 local Card_get_chip_bonus = Card.get_chip_bonus
 function Card:get_chip_bonus()
     if type(self.ability.extra) == 'table' then
-        return Card_get_chip_bonus(self) + (self.ability.extra and self.ability.extra.temporary_extra_chips or 0)
+        return Card_get_chip_bonus(self) + (self.ability.extra and type(self.ability.extra) == 'table' and self.ability.extra.temporary_extra_chips or 0)
     end
 end
 
