@@ -88,6 +88,31 @@ function SMODS.current_mod.process_loc_text()
     SMODS.process_loc_text(G.localization.misc.dictionary, 'bunco', loc.dictionary)
 
     loc.dictionary = G.localization.misc.dictionary.bunco
+
+    SMODS.process_loc_text(G.localization.descriptions.Other, 'temporary_extra_chips', {
+        ['en-us'] = {
+            ['text'] = {
+                [1] = "{C:chips}+#1#{} extra chips this round"
+            }
+        }
+    })
+end
+
+-- Implement temporary extra chips
+
+local end_round_ref = end_round
+function end_round()
+    for _, v in ipairs(G.playing_cards) do
+        if v.ability.extra and v.ability.extra.temporary_extra_chips then
+            v.ability.extra.temporary_extra_chips = nil
+        end
+    end
+    end_round_ref()
+end
+
+local Card_get_chip_bonus = Card.get_chip_bonus
+function Card:get_chip_bonus()
+    return Card_get_chip_bonus(self) + (self.ability.extra and self.ability.extra.temporary_extra_chips or 0)
 end
 
 -- Joker creation setup
@@ -833,45 +858,32 @@ create_joker({ -- Doorhanger
 
 create_joker({ -- Fingerprints
     name = 'Fingerprints', position = 22,
-    vars = {{bonus = 50}, {new_card_list = {}}},
+    vars = {{bonus = 50}, {scoring_card_set = {}}},
     rarity = 'Uncommon', cost = 8,
     blueprint = false, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
         if context.after and context.scoring_name ~= nil and context.scoring_hand ~= nil and not context.blueprint then
-            card.ability.extra.new_card_list = {}
-
+            card.ability.extra.scoring_card_set = {}
             for i = 1, #context.scoring_hand do
-                card.ability.extra.new_card_list[context.scoring_hand[i].unique_val] = true
+                card.ability.extra.scoring_card_set[context.scoring_hand[i].unique_val] = true
             end
         end
 
         if context.end_of_round and not context.other_card and not context.blueprint then
             for _, v in ipairs(G.playing_cards) do
-                if card.ability.extra.new_card_list[v.unique_val] then
-                    v.ability.perma_bonus = (v.ability.perma_bonus or 0) + card.ability.extra.bonus
+                if card.ability.extra.scoring_card_set[v.unique_val] then
                     v.ability.extra = v.ability.extra or {}
-                    v.ability.extra.bunc_fingerprint_bonus = (v.ability.extra.bunc_fingerprint_bonus or 0) + card.ability.extra.bonus
+                    v.ability.extra.temporary_extra_chips = (v.ability.extra.temporary_extra_chips or 0) + card.ability.extra.bonus
                 end
             end
             -- not needed, but good style to fail fast
-            card.ability.extra.new_card_list = nil
+            card.ability.extra.scoring_card_set = nil
 
             forced_message(localize('k_upgrade_ex'), card, G.C.CHIPS)
         end
     end
 })
-
-local end_round_ref = end_round
-function end_round()
-    for _, v in ipairs(G.playing_cards) do
-        if v.ability.extra and v.ability.extra.bunc_fingerprint_bonus then
-            v.ability.perma_bonus = (v.ability.perma_bonus or 0) - v.ability.extra.bunc_fingerprint_bonus
-            v.ability.extra.bunc_fingerprint_bonus = nil
-        end
-    end
-    end_round_ref()
-end
 
 create_joker({ -- Zero Shapiro
     name = 'Zero Shapiro', position = 23,
@@ -932,14 +944,30 @@ create_joker({ -- Nil Bill
     end
 })
 
-create_joker({ -- Bierdeckel (WIP)
+create_joker({ -- Bierdeckel
     name = 'Bierdeckel', position = 25,
-    vars = {{bonus = 10}, {card_list = {}}},
+    vars = {{bonus = 10}},
     rarity = 'Uncommon', cost = 4,
     blueprint = false, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
+        if (context.after or context.discard and context.other_card == context.full_hand[#context.full_hand]) and not context.blueprint then
+            local full_hand_set = {}
+            if context.discard then
+                for _, c in ipairs(context.full_hand) do
+                    full_hand_set[c] = true
+                end
+            end
+            for _, c in ipairs(G.hand.cards) do
+                if not full_hand_set[c] then
+                    c.ability.extra = c.ability.extra or {}
+                    c.ability.extra.temporary_extra_chips = (c.ability.extra.temporary_extra_chips or 0) + card.ability.extra.bonus
+                end
+            end
 
+            -- maybe juice all held cards, that'd be fun
+            forced_message(localize('k_upgrade_ex'), card, G.C.CHIPS)
+        end
     end
 })
 
