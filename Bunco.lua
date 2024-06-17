@@ -14,13 +14,51 @@ local bunco = SMODS.current_mod
 local filesystem = NFS or love.filesystem
 
 local loc = filesystem.load(bunco.path..'localization.lua')()
+local config = filesystem.load(bunco.path..'config.lua')()
 
 -- Shaders
 
-local background_shader = NFS.read(bunco.path..'resources/shaders/background.fs')
-local splash_shader = NFS.read(bunco.path..'resources/shaders/splash.fs')
-G.SHADERS['background'] = love.graphics.newShader(background_shader)
-G.SHADERS['splash'] = love.graphics.newShader(splash_shader)
+if config.high_quality_shaders then
+    local background_shader = NFS.read(bunco.path..'resources/shaders/background.fs')
+    local splash_shader = NFS.read(bunco.path..'resources/shaders/splash.fs')
+    local flame_shader = NFS.read(bunco.path..'resources/shaders/flame.fs')
+    G.SHADERS['background'] = love.graphics.newShader(background_shader)
+    G.SHADERS['splash'] = love.graphics.newShader(splash_shader)
+    G.SHADERS['flame'] = love.graphics.newShader(flame_shader)
+end
+
+-- Custom high contrast
+
+if config.high_contrast then
+    SMODS.Atlas({key = 'cards_2', path = 'Resprites/EnhancedContrast.png', px = 71, py = 95})
+    SMODS.Atlas({key = 'ui_2', path = 'Resprites/EnhancedUIContrast.png', px = 18, py = 18})
+
+    local Game_start_up = Game.start_up
+    function Game:start_up()
+        Game_start_up(self)
+        G.C["SO_2"] = {
+            Hearts = HEX('ee151b'),
+            Diamonds = HEX('e56b10'),
+            Spades = HEX("5d55a6"),
+            Clubs = HEX("197f77"),
+        }
+    end
+
+    local new_colour_proto = G.C["SO_"..(G.SETTINGS.colourblind_option and 2 or 1)]
+    G.C.SUITS.Hearts = new_colour_proto.Hearts
+    G.C.SUITS.Diamonds = new_colour_proto.Diamonds
+    G.C.SUITS.Spades = new_colour_proto.Spades
+    G.C.SUITS.Clubs = new_colour_proto.Clubs
+    for k, v in pairs(G.I.SPRITE) do
+        if v.atlas and string.find(v.atlas.name, 'cards_') then
+            v.atlas = G.ASSET_ATLAS["cards_"..(G.SETTINGS.colourblind_option and 2 or 1)]
+        end
+    end
+end
+
+-- Colorful Finishers
+
+if config.colorful_finishers then bunco_colorful_finishers = true end
 
 -- Debug message
 
@@ -92,16 +130,16 @@ function SMODS.current_mod.process_loc_text()
     SMODS.process_loc_text(G.localization.descriptions.Other, 'temporary_extra_chips', loc.temporary_extra_chips)
 end
 
--- Implement temporary extra chips
+-- Temporary extra chips
 
-local end_round_ref = end_round
+local original_end_round = end_round
 function end_round()
     for _, v in ipairs(G.playing_cards) do
-        if v.ability.extra and v.ability.extra.temporary_extra_chips then
+        if v.ability.extra and type(v.ability.extra) == 'table' and v.ability.extra.temporary_extra_chips then
             v.ability.extra.temporary_extra_chips = nil
         end
     end
-    end_round_ref()
+    original_end_round()
 end
 
 local Card_get_chip_bonus = Card.get_chip_bonus
@@ -1341,7 +1379,7 @@ SMODS.Consumable{ -- Quaoar
         badges[1] = create_badge('Planet?', get_type_colour(self or card.config, card), nil, 1.2)
     end,
 
-    config = {hand_type = 'h_bunc_Spectrum'},
+    config = {hand_type = 'h_bunc_Spectrum', softlock = true},
     pos = coordinate(1),
 
     generate_ui = 0,
@@ -1359,7 +1397,7 @@ SMODS.Consumable{ -- Haumea
         badges[1] = create_badge('Planet?', get_type_colour(self or card.config, card), nil, 1.2)
     end,
 
-    config = {hand_type = 'h_bunc_Straight Spectrum'},
+    config = {hand_type = 'h_bunc_Straight Spectrum', softlock = true},
     pos = coordinate(2),
 
     generate_ui = 0,
@@ -1377,7 +1415,7 @@ SMODS.Consumable{ -- Sedna
         badges[1] = create_badge('Planet?', get_type_colour(self or card.config, card), nil, 1.2)
     end,
 
-    config = {hand_type = 'h_bunc_Spectrum House'},
+    config = {hand_type = 'h_bunc_Spectrum House', softlock = true},
     pos = coordinate(3),
 
     generate_ui = 0,
@@ -1395,7 +1433,7 @@ SMODS.Consumable{ -- Makemake
         badges[1] = create_badge('Planet?', get_type_colour(self or card.config, card), nil, 1.2)
     end,
 
-    config = {hand_type = 'h_bunc_Spectrum Five'},
+    config = {hand_type = 'h_bunc_Spectrum Five', softlock = true},
     pos = coordinate(4),
 
     generate_ui = 0,
@@ -1791,7 +1829,7 @@ SMODS.Blind{ -- The Miser
     end,
 
     add_to_pool = function()
-        if G.GAME.round_resets.ante % 8 == 7 then
+        if G.GAME.round_resets.ante < 2 or G.GAME.round_resets.ante % 8 == 7 then
             return false
         else
             return true
@@ -1932,10 +1970,10 @@ SMODS.Blind{ -- The Stone
     set_blind = function(self, blind, reset, silent)
         if self.debuff and not self.disabled and G.GAME.dollars >= 10 then
             local final_chips = (G.GAME.blind.chips / G.GAME.blind.mult) * (math.floor(G.GAME.dollars / 10) + G.GAME.blind.mult)
-            local chip_mod = math.floor(G.GAME.dollars / 10)
+            local chip_mod = math.ceil((final_chips - G.GAME.blind.chips) / 120) -- iterate over ~120 ticks
             local step = 0
             event({trigger = 'after', blocking = true, func = function()
-                G.GAME.blind.chips = G.GAME.blind.chips + G.SETTINGS.GAMESPEED * 30 * chip_mod
+                G.GAME.blind.chips = G.GAME.blind.chips + G.SETTINGS.GAMESPEED * chip_mod
                 if G.GAME.blind.chips < final_chips then
                     G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
                     if step % 5 == 0 then
@@ -1965,10 +2003,10 @@ SMODS.Blind{ -- The Sand
     set_blind = function(self, blind, reset, silent)
         if self.debuff and not self.disabled and #G.HUD_tags ~= 0 then
             local final_chips = (G.GAME.blind.chips / G.GAME.blind.mult) * (#G.HUD_tags + G.GAME.blind.mult)
-            local chip_mod = #G.HUD_tags
+            local chip_mod = math.ceil((final_chips - G.GAME.blind.chips) / 120) -- iterate over ~120 ticks
             local step = 0
             event({trigger = 'after', blocking = true, func = function()
-                G.GAME.blind.chips = G.GAME.blind.chips + G.SETTINGS.GAMESPEED * 30 * chip_mod
+                G.GAME.blind.chips = G.GAME.blind.chips + G.SETTINGS.GAMESPEED * chip_mod
                 if G.GAME.blind.chips < final_chips then
                     G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
                     if step % 5 == 0 then
@@ -1985,6 +2023,14 @@ SMODS.Blind{ -- The Sand
         end
     end,
 
+    add_to_pool = function()
+        if G.GAME.round_resets.ante < 4 or (G.HUD_tags and #G.HUD_tags < 2) then
+            return false
+        else
+            return true
+        end
+    end,
+
     pos = {y = 11},
     atlas = 'bunco_blinds'
 }
@@ -1993,7 +2039,7 @@ SMODS.Blind{ -- The Blade (WIP)
     key = 'blade', loc_txt = loc.blade,
     boss = {min = 3},
 
-    boss_colour = HEX('b11c32'),
+    boss_colour = HEX('d92034'),
 
     pos = {y = 12},
     atlas = 'bunco_blinds'
@@ -2135,8 +2181,35 @@ SMODS.Blind{ -- Turquoise Shield
     key = 'final_shield', loc_txt = loc.turquoise_shield,
     boss = {showdown = true, min = 10, max = 10},
 
-    boss_colour = HEX('2cdea8'),
+    set_blind = function(self, blind, reset, silent)
+        if self.debuff and not self.disabled and G.GAME.overscore ~= 0 then
+            local final_chips = (G.GAME.blind.chips / G.GAME.blind.mult) + (G.GAME.overscore or 0)
+            local chip_mod = math.ceil((final_chips - G.GAME.blind.chips) / 120) -- iterate over ~120 ticks
+            local step = 0
+            event({trigger = 'after', blocking = true, func = function()
+                G.GAME.blind.chips = G.GAME.blind.chips + G.SETTINGS.GAMESPEED * chip_mod
+                if G.GAME.blind.chips < final_chips then
+                    G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+                    if step % 5 == 0 then
+                        play_sound('chips1', 0.8 + (step * 0.005))
+                    end
+                    step = step + 1
+                else
+                    G.GAME.blind.chips = final_chips
+                    G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+                    G.GAME.blind:wiggle()
+                    return true
+                end
+            end})
+        end
+    end,
 
-    pos = {y = 3},
+    defeat = function(self, blind)
+        G.GAME.Shield = false
+    end,
+
+    boss_colour = HEX('12e2bf'),
+
+    pos = {y = 4},
     atlas = 'bunco_blinds_finisher'
 }

@@ -62,7 +62,180 @@ end
 
 '''
 
-# CardArea:emplace() (X-Ray)
+# Colorful Finishers, part 1/4
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = "function ease_background_colour_blind(state, blind_override)"
+position = 'before'
+match_indent = true
+payload = '''
+
+local function invert_color(color, invert_red, invert_green, invert_blue)
+    local inverted_color = {
+    1 - (color[1] or 0),
+    1 - (color[2] or 0),
+    1 - (color[3] or 0),
+    color[4] or 1
+    }
+
+    if invert_red then
+        inverted_color[1] = color[1] or 0
+    end
+    if invert_green then
+        inverted_color[2] = color[2] or 0
+    end
+    if invert_blue then
+        inverted_color[3] = color[3] or 0
+    end
+
+    return inverted_color
+end
+
+local function increase_saturation(color, value)
+    -- Extract RGB components
+    local r = color[1] or 0
+    local g = color[2] or 0
+    local b = color[3] or 0
+
+    -- Convert RGB to HSL
+    local max_val = math.max(r, g, b)
+    local min_val = math.min(r, g, b)
+    local delta = max_val - min_val
+
+    local h, s, l = 0, 0, (max_val + min_val) / 2
+
+    if delta ~= 0 then
+        if l < 0.5 then
+            s = delta / (max_val + min_val)
+        else
+            s = delta / (2 - max_val - min_val)
+        end
+
+        if r == max_val then
+            h = (g - b) / delta
+        elseif g == max_val then
+            h = 2 + (b - r) / delta
+        else
+            h = 4 + (r - g) / delta
+        end
+
+        h = h * 60
+        if h < 0 then
+            h = h + 360
+        end
+    end
+
+    -- Increase saturation
+    s = math.min(s + value, 1)
+
+    -- Convert back to RGB
+    local c = (1 - math.abs(2 * l - 1)) * s
+    local x = c * (1 - math.abs((h / 60) % 2 - 1))
+    local m = l - c / 2
+
+    local r_new, g_new, b_new = 0, 0, 0
+
+    if h < 60 then
+        r_new, g_new, b_new = c, x, 0
+    elseif h < 120 then
+        r_new, g_new, b_new = x, c, 0
+    elseif h < 180 then
+        r_new, g_new, b_new = 0, c, x
+    elseif h < 240 then
+        r_new, g_new, b_new = 0, x, c
+    elseif h < 300 then
+        r_new, g_new, b_new = x, 0, c
+    else
+        r_new, g_new, b_new = c, 0, x
+    end
+
+    -- Adjust RGB values
+    r_new, g_new, b_new = (r_new + m), (g_new + m), (b_new + m)
+
+    return {r_new, g_new, b_new, color[4] or 1}
+end
+
+'''
+
+# Colorful Finishers, part 2/4
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = "if v.name == blindname then"
+position = 'after'
+match_indent = true
+payload = '''
+boss_col = v.boss_colour
+'''
+# Colorful Finishers, part 3/4
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = "ease_background_colour{new_colour = G.C.BLUE, special_colour = G.C.RED, tertiary_colour = darken(G.C.BLACK, 0.4), contrast = 3}"
+position = 'at'
+match_indent = true
+payload = '''
+
+if bunco_colorful_finishers then
+    ease_background_colour{new_colour = increase_saturation(mix_colours(boss_col, invert_color(boss_col), 0.3), 1),
+    special_colour = boss_col,
+    tertiary_colour = darken(increase_saturation(mix_colours(boss_col, invert_color(boss_col, true, false, false), 0.3), 0.6), 0.4), contrast = 1.7}
+else
+    ease_background_colour{new_colour = G.C.BLUE, special_colour = G.C.RED, tertiary_colour = darken(G.C.BLACK, 0.4), contrast = 3}
+end
+
+'''
+
+# Colorful Finishers, part 4/4
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = "elseif G.GAME.won then"
+position = 'at'
+match_indent = true
+payload = '''elseif G.GAME.won and not bunco_colorful_finishers then'''
+
+# # Shiny Blinds
+# [[patches]]
+# [patches.pattern]
+# target = 'blind.lua'
+# pattern = "self.children.animatedSprite:draw_shader('dissolve', 0.1)"
+# position = 'at'
+# match_indent = true
+# payload = '''
+
+# self.ARGS.send_to_shader = self.ARGS.send_to_shader or {}
+# self.ARGS.send_to_shader[1] = self.children.animatedSprite.VT.r*10 + G.TIMERS.REAL/(28) + (self.children.animatedSprite.juice and self.children.animatedSprite.juice.r*10 or 0) + self.tilt_var.amt
+# self.ARGS.send_to_shader[2] = G.TIMERS.REAL
+# self.children.animatedSprite:draw_shader('polychrome', 0.1, self.ARGS.send_to_shader)
+
+# '''
+# # Shiny Blinds
+# [[patches]]
+# [patches.pattern]
+# target = 'blind.lua'
+# pattern = "self.children.animatedSprite:draw_shader('dissolve')"
+# position = 'at'
+# match_indent = true
+# payload = '''
+
+# self.children.animatedSprite:draw_shader('polychrome', nil, self.ARGS.send_to_shader)
+
+# '''
+
+# # Shiny Blinds
+# [[patches]]
+# [patches.pattern]
+# target = 'functions\UI_definitions.lua'
+# pattern = "{shader = 'dissolve', shadow_height = 0.05}"
+# position = 'at'
+# match_indent = true
+# payload = '''
+# {shader = 'polychrome', shadow_height = 0.05}
+# '''
+
+# function CardArea:emplace() (X-Ray)
 [[patches]]
 [patches.pattern]
 target = 'cardarea.lua'
@@ -81,7 +254,7 @@ end
 
 '''
 
-# generate_card_ui() (Temporary extra chips)
+# function generate_card_ui() (Temporary extra chips)
 [[patches]]
 [patches.pattern]
 target = "functions/common_events.lua"
@@ -89,7 +262,7 @@ pattern = "if main_end then"
 position = "before"
 match_indent = true
 payload = """
-if (_c.set == 'Default' or _c.set == 'Enhanced') and card.ability.extra and type(card.ability.extra) == 'table' and card.ability.extra.temporary_extra_chips and not card.debuff then
+if (_c.set == 'Default' or _c.set == 'Enhanced') and card and card.ability and card.ability.extra and type(card.ability.extra) == 'table' and card.ability.extra.temporary_extra_chips and not card.debuff then
     localize{type = 'other', key = 'temporary_extra_chips', nodes = desc_nodes, vars = {card.ability.extra.temporary_extra_chips}}
 end"""
 
@@ -106,7 +279,7 @@ local break_table = {before = nil, after = nil}
 
 '''
 
-# Node:drag() (Joker Knight 1/2)
+# function Node:drag() (Joker Knight 1/2)
 [[patches]]
 [patches.pattern]
 target = 'engine/node.lua'
@@ -135,7 +308,7 @@ end
 
 '''
 
-# Node:stop_drag() (Joker Knight 2/2)
+# function Node:stop_drag() (Joker Knight 2/2)
 [[patches]]
 [patches.pattern]
 target = 'engine/node.lua'
@@ -172,7 +345,7 @@ end
 
 '''
 
-# create_card() (JMJB)
+# function create_card() (JMJB)
 [[patches]]
 [patches.pattern]
 target = 'functions/common_events.lua'
@@ -189,7 +362,7 @@ end
 
 '''
 
-# ease_dollars() (Fiendish)
+# function ease_dollars() (Fiendish)
 [[patches]]
 [patches.pattern]
 target = 'functions/common_events.lua'
@@ -224,7 +397,7 @@ end
 
 '''
 
-# create_card() (Doorhanger)
+# function create_card() (Doorhanger)
 [[patches]]
 [patches.pattern]
 target = 'functions/common_events.lua'
@@ -250,7 +423,7 @@ end
 
 '''
 
-# evaluate_play (Nil Bill)
+# function evaluate_play (Nil Bill)
 [[patches]]
 [patches.pattern]
 target = 'functions/state_events.lua'
@@ -269,7 +442,7 @@ end
 
 '''
 
-# Card:is_suit (Myopia & Astigmatism)
+# function Card:is_suit (Myopia & Astigmatism)
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
@@ -737,3 +910,32 @@ position = 'at'
 match_indent = true
 payload = '''ease_to = G.GAME.chips + math.floor(hand_chips * mult) * (e and e.antiscore and -1 or 1),'''
 
+# function get_new_boss() (Turquoise Shield 1/2)
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = 'return boss'
+position = 'before'
+match_indent = true
+payload = '''
+
+if boss == 'bl_bunc_final_shield' then
+    G.GAME.Shield = true
+else
+    G.GAME.Shield = false
+end
+
+'''
+
+# function end_round() (Turquoise Shield 2/2)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "function end_round()"
+position = 'after'
+match_indent = true
+payload = '''
+if G.GAME.Shield == true and G.GAME.chips - G.GAME.blind.chips >= 0 then
+    G.GAME.overscore = (G.GAME.overscore or 0) + G.GAME.chips - G.GAME.blind.chips
+end
+'''
