@@ -8,7 +8,7 @@ return {
             chance = 'Chance',
             most_played_rank = '(most played rank)',
             least_played_hand = '(least played hand)',
-            blade = '(1.5X of the score)',
+            blade = '(1.5X blind score)',
             exceeded_score = 'Exceeded the limit!',
             temporary_extra_chips = {['text'] = {[1] = '{C:chips}+#1#{} extra chips this round'}}
         },

@@ -772,6 +772,46 @@ match_indent = true
 payload = '''
 least_played_poker_hand = 'High Card','''
 
+# The Blade
+[[patches]]
+[patches.regex]
+target = 'functions/state_events.lua'
+pattern = "(?<indent>[\t ]*)\\}\\)\\)\n[\t ]*end\n[\t ]*else"
+position = 'at'
+line_prepend = '$indent'
+payload = '''}))
+end
+
+if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_blade' and not G.GAME.blind.disabled then
+
+    local overscore = get_blind_amount(G.GAME.round_resets.ante)*G.GAME.blind.mult*G.GAME.starting_params.ante_scaling
+    overscore = overscore * 1.5
+
+    if G.GAME.Blade and not G.GAME.Blade.disabled and (overscore < math.floor(hand_chips*mult)) then
+
+        mult = mod_mult(0)
+        hand_chips = mod_chips(0)
+
+        G.GAME.chips = G.GAME.Blade.chips
+
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            func = (function()
+                G.GAME.blind:wiggle()
+                return true
+            end)
+        }))
+
+        local blade_message = global_bunco_loc and global_bunco_loc.exceeded_score or ' '
+        play_area_status_text(blade_message)
+
+        G.GAME.Blade.disabled = true
+
+    end
+end
+
+else'''
+
 # G.FUNCS.discard_cards_from_highlighted (The Claw)
 [[patches]]
 [patches.pattern]
@@ -939,43 +979,3 @@ if G.GAME.Shield == true and G.GAME.chips - G.GAME.blind.chips >= 0 then
     G.GAME.overscore = (G.GAME.overscore or 0) + G.GAME.chips - G.GAME.blind.chips
 end
 '''
-
-# 
-[[patches]]
-[patches.regex]
-target = 'functions/state_events.lua'
-pattern = "(?<indent>[\t ]*)\\}\\)\\)\n[\t ]*end\n[\t ]*else"
-position = 'at'
-line_prepend = '$indent'
-payload = '''}))
-end
-
-if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_blade' and not G.GAME.blind.disabled then
-
-    local overscore = get_blind_amount(G.GAME.round_resets.ante)*G.GAME.blind.mult*G.GAME.starting_params.ante_scaling
-    overscore = overscore * 1.5
-
-    if G.GAME.Blade and not G.GAME.Blade.disabled and (overscore < math.floor(hand_chips*mult)) then
-
-        mult = mod_mult(0)
-        hand_chips = mod_chips(0)
-
-        G.GAME.chips = G.GAME.Blade.chips
-
-        G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            func = (function()
-                G.GAME.blind:wiggle()
-                return true
-            end)
-        }))
-
-        local blade_message = global_bunco_loc and global_bunco_loc.exceeded_score or ' '
-        play_area_status_text(blade_message)
-
-        G.GAME.Blade.disabled = true
-
-    end
-end
-
-else'''
