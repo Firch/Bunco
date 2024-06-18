@@ -235,6 +235,18 @@ payload = '''elseif G.GAME.won and not bunco_colorful_finishers then'''
 # {shader = 'polychrome', shadow_height = 0.05}
 # '''
 
+# function generate_card_ui() (Temporary extra chips)
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "if main_end then"
+position = "before"
+match_indent = true
+payload = """
+if (_c.set == 'Default' or _c.set == 'Enhanced') and card and card.ability and card.ability.extra and type(card.ability.extra) == 'table' and card.ability.extra.temporary_extra_chips and not card.debuff then
+    localize{type = 'other', key = 'temporary_extra_chips', nodes = desc_nodes, vars = {card.ability.extra.temporary_extra_chips}}
+end"""
+
 # function CardArea:emplace() (X-Ray)
 [[patches]]
 [patches.pattern]
@@ -253,18 +265,6 @@ if G.jokers ~= nil and self == G.hand then
 end
 
 '''
-
-# function generate_card_ui() (Temporary extra chips)
-[[patches]]
-[patches.pattern]
-target = "functions/common_events.lua"
-pattern = "if main_end then"
-position = "before"
-match_indent = true
-payload = """
-if (_c.set == 'Default' or _c.set == 'Enhanced') and card and card.ability and card.ability.extra and type(card.ability.extra) == 'table' and card.ability.extra.temporary_extra_chips and not card.debuff then
-    localize{type = 'other', key = 'temporary_extra_chips', nodes = desc_nodes, vars = {card.ability.extra.temporary_extra_chips}}
-end"""
 
 # Joker Knight variables
 [[patches]]
@@ -939,3 +939,43 @@ if G.GAME.Shield == true and G.GAME.chips - G.GAME.blind.chips >= 0 then
     G.GAME.overscore = (G.GAME.overscore or 0) + G.GAME.chips - G.GAME.blind.chips
 end
 '''
+
+# 
+[[patches]]
+[patches.regex]
+target = 'functions/state_events.lua'
+pattern = "(?<indent>[\t ]*)\\}\\)\\)\n[\t ]*end\n[\t ]*else"
+position = 'at'
+line_prepend = '$indent'
+payload = '''}))
+end
+
+if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_blade' and not G.GAME.blind.disabled then
+
+    local overscore = get_blind_amount(G.GAME.round_resets.ante)*G.GAME.blind.mult*G.GAME.starting_params.ante_scaling
+    overscore = overscore * 1.5
+
+    if G.GAME.Blade and not G.GAME.Blade.disabled and (overscore < math.floor(hand_chips*mult)) then
+
+        mult = mod_mult(0)
+        hand_chips = mod_chips(0)
+
+        G.GAME.chips = G.GAME.Blade.chips
+
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            func = (function()
+                G.GAME.blind:wiggle()
+                return true
+            end)
+        }))
+
+        local blade_message = global_bunco_loc and global_bunco_loc.exceeded_score or ' '
+        play_area_status_text(blade_message)
+
+        G.GAME.Blade.disabled = true
+
+    end
+end
+
+else'''

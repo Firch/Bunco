@@ -127,7 +127,12 @@ function SMODS.current_mod.process_loc_text()
 
     loc.dictionary = G.localization.misc.dictionary.bunco
 
-    SMODS.process_loc_text(G.localization.descriptions.Other, 'temporary_extra_chips', loc.temporary_extra_chips)
+    -- Other localization
+
+    global_bunco_loc = global_bunco_loc or {}
+
+    SMODS.process_loc_text(G.localization.descriptions.Other, 'temporary_extra_chips', loc.dictionary.temporary_extra_chips)
+    global_bunco_loc.exceeded_score = loc.dictionary.exceeded_score
 end
 
 -- Temporary extra chips
@@ -2037,7 +2042,27 @@ SMODS.Blind{ -- The Sand
 
 SMODS.Blind{ -- The Blade (WIP)
     key = 'blade', loc_txt = loc.blade,
-    boss = {min = 3},
+    boss = {min = 4},
+
+    vars = {},
+    loc_vars = function(self, blind)
+        local overscore = get_blind_amount(G.GAME.round_resets.ante)*self.mult*G.GAME.starting_params.ante_scaling
+        overscore = number_format(overscore * 1.5)
+        return {vars = {overscore}}
+    end,
+    process_loc_text = function(self)
+        SMODS.Blind.process_loc_text(self)
+        self.vars = {loc.dictionary.blade}
+    end,
+
+    press_play = function()
+        if not G.GAME.Blade then G.GAME.Blade = {} end
+        G.GAME.Blade.chips = G.GAME.chips
+    end,
+
+    defeat = function(self, blind)
+        G.GAME.Blade = nil
+    end,
 
     boss_colour = HEX('d92034'),
 

@@ -7,20 +7,13 @@ return {
             loop = 'Loop!',
             chance = 'Chance',
             most_played_rank = '(most played rank)',
-            least_played_hand = '(least played hand)'
+            least_played_hand = '(least played hand)',
+            blade = '(1.5x of the score)',
+            exceeded_score = 'Exceeded the limit!',
+            temporary_extra_chips = {['text'] = {[1] = '{C:chips}+#1#{} extra chips this round'}}
         },
         ['fr'] = {
             nothing = 'Rien'
-        }
-    },
-
-    -- Temporary chips
-
-    temporary_extra_chips = {
-        ['en-us'] = {
-            ['text'] = {
-                [1] = "{C:chips}+#1#{} extra chips this round"
-            }
         }
     },
 
@@ -636,8 +629,8 @@ return {
         ['en-us'] = {
             ['name'] = 'The Stone',
             ['text'] = {
-                [1] = 'Blind score scales',
-                [2] = 'for every $10 held'
+                [1] = '+1X Base score for',
+                [2] = 'every $10 held'
             }
         }
     },
@@ -645,8 +638,8 @@ return {
         ['en-us'] = {
             ['name'] = 'The Sand',
             ['text'] = {
-                [1] = 'Blind score scales',
-                [2] = 'for every tag held'
+                [1] = '+1X Base score for',
+                [2] = 'every tag held'
             }
         }
     },
@@ -654,8 +647,8 @@ return {
         ['en-us'] = {
             ['name'] = 'The Blade',
             ['text'] = {
-                [1] = ' ',
-                [2] = ' '
+                [1] = 'First time score exceeds #1#',
+                [2] = 'makes last played hand score 0'
             }
         }
     },
@@ -682,7 +675,7 @@ return {
             ['name'] = 'The Cadaver',
             ['text'] = {
                 [1] = 'Must not play',
-                [2] = 'any face cards'
+                [2] = 'face cards'
             }
         }
     },
@@ -703,7 +696,7 @@ return {
             ['name'] = 'Vermilion Trident',
             ['text'] = {
                 [1] = 'Shops are disabled',
-                [2] = 'during this Ante'
+                [2] = 'this Ante'
             }
         }
     },
@@ -711,7 +704,7 @@ return {
         ['en-us'] = {
             ['name'] = 'Indigo Tower',
             ['text'] = {
-                [1] = 'Cards unplayed previously',
+                [1] = 'Cards not played previously',
                 [2] = 'this Ante are debuffed'
             }
         }
