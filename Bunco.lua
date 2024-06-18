@@ -1010,7 +1010,7 @@ create_joker({ -- Bierdeckel
 
 create_joker({ -- Registration Plate (WIP)
     name = 'Registration Plate', position = 26,
-    vars = {{xmult = 5}, {combination = ''}, {card_list = {}}},
+    vars = {{xmult = 5}, {combination = {}}, {card_list = {}}},
     rarity = 'Rare', cost = 8,
     blueprint = false, eternal = true,
     unlocked = true,
@@ -1266,12 +1266,40 @@ create_joker({ -- Astigmatism
     unlocked = true
 })
 
-create_joker({ -- ROYGBIV (WIP)
+create_joker({ -- ROYGBIV
     type = 'Exotic',
     name = 'ROYGBIV', position = 13,
+    vars = {{odds = 7}},
+    custom_vars = function(self, info_queue, card)
+        local vars
+        if G.GAME and G.GAME.probabilities.normal then
+            vars = {G.GAME.probabilities.normal, card.ability.extra.odds}
+        else
+            vars = {1, card.ability.extra.odds}
+        end
+        return {vars = vars}
+    end,
     rarity = 'Uncommon', cost = 8,
     blueprint = true, eternal = true,
-    unlocked = true
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.before and context.poker_hands ~= nil and next(context.poker_hands['h_bunc_Spectrum']) and not context.blueprint then
+            if pseudorandom('roygbiv'..G.SEED) < G.GAME.probabilities.normal / card.ability.extra.odds then
+                if context.scoring_hand then
+
+                    local cards = {}
+
+                    for i = 1, #context.scoring_hand do
+                        if context.scoring_hand[i]:get_edition() == nil then
+                            table.insert(cards, context.scoring_hand[i])
+                        end
+                    end
+
+                    if cards and #cards > 0 then cards[math.random(#cards)]:set_edition({polychrome = true}) end
+                end
+            end
+        end
+    end
 })
 
 -- Legendary Jokers

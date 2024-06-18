@@ -8,7 +8,7 @@ return {
             chance = 'Chance',
             most_played_rank = '(most played rank)',
             least_played_hand = '(least played hand)',
-            blade = '(1.5x of the score)',
+            blade = '(1.5X of the score)',
             exceeded_score = 'Exceeded the limit!',
             temporary_extra_chips = {['text'] = {[1] = '{C:chips}+#1#{} extra chips this round'}}
         },
@@ -518,7 +518,10 @@ return {
         ['en-us'] = {
             ['name'] = 'Roy G. Biv',
             ['text'] = {
-                [1] = ''
+                [1] = '{C:green}#1# in #2#{} chance to apply',
+                [2] = '{C:dark_edition}Polychrome{} edition',
+                [3] = 'to a random scored card if',
+                [4] = 'hand contains a {C:attention}Spectrum'
             }
         }
     },
