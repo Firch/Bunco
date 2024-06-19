@@ -442,6 +442,43 @@ end
 
 '''
 
+# function CardArea:parse_highlighted (Registration Plate 1/3)
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+pattern = "update_hand_text({immediate = true, nopulse = nil, delay = 0}, {handname=disp_text, level=G.GAME.hands[text].level, mult = G.GAME.hands[text].mult, chips = G.GAME.hands[text].chips})"
+position = 'at'
+match_indent = true
+payload = '''
+if text == 'h_bunc_Deal' then
+    update_hand_text({immediate = true, nopulse = nil, delay = 0}, {handname=disp_text, level='0', mult = G.GAME.hands[text].mult, chips = G.GAME.hands[text].chips})
+else
+    update_hand_text({immediate = true, nopulse = nil, delay = 0}, {handname=disp_text, level=G.GAME.hands[text].level, mult = G.GAME.hands[text].mult, chips = G.GAME.hands[text].chips})
+end
+'''
+
+# function Game:set_globals (Registration Plate 2/3)
+[[patches]]
+[patches.pattern]
+target = 'globals.lua'
+pattern = "G.C.HAND_LEVELS[0] = G.C.RED"
+position = 'at'
+match_indent = true
+payload = '''
+G.C.HAND_LEVELS[0] = G.C.JOKER_GREY
+'''
+
+# function level_up_hand (Registration Plate 3/3)
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = "function level_up_hand(card, hand, instant, amount)"
+position = 'after'
+match_indent = true
+payload = '''
+if hand == 'h_bunc_Deal' then return end
+'''
+
 # function Card:is_suit (Myopia & Astigmatism)
 [[patches]]
 [patches.pattern]

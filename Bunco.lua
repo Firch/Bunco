@@ -9,6 +9,7 @@
 -- Fix Crop Circles always showing Fleurons (done)
 -- Check how to add custom entries to the localization (for card messages like linocut's one) (done)
 -- Cassette proper coordinates (done)
+-- Polychrome desc on roy g biv
 
 local bunco = SMODS.current_mod
 local filesystem = NFS or love.filesystem
@@ -1010,12 +1011,64 @@ create_joker({ -- Bierdeckel
 
 create_joker({ -- Registration Plate (WIP)
     name = 'Registration Plate', position = 26,
-    vars = {{xmult = 5}, {combination = {}}, {card_list = {}}},
+    vars = {{xmult = 5}, {combination = ''}, {card_list = {}}, {ranks = {}}},
     rarity = 'Rare', cost = 8,
     blueprint = false, eternal = true,
     unlocked = true,
-    calculate = function(self, card, context)
+    custom_vars = function(self, info_queue, card)
+        local vars
+        if card.ability.extra.combination == '' then
+            vars = {card.ability.extra.xmult, '2, 3, 4, 5 '..loc.dictionary.word_and..' 6'}
+        else
+            vars = {card.ability.extra.xmult, card.ability.extra.combination}
+        end
+        return {vars = vars}
+    end,
+    add = function(self, card)
+        card.ability.extra.card_list = {}
 
+        for i = 1, 5 do
+            local index = math.random(#G.deck.cards)
+            table.insert(card.ability.extra.card_list, G.deck.cards[index])
+        end
+
+        local combination = {}
+
+        for i = 1, 5 do
+            table.insert(combination, card.ability.extra.card_list[i].base.value)
+        end
+
+        card.ability.extra.ranks = {}
+
+        for i = 1, 5 do
+            table.insert(card.ability.extra.ranks, card.ability.extra.card_list[i]:get_id())
+        end
+
+        card.ability.extra.combination = table.concat(combination, ", ", 1, 4).." "..loc.dictionary.word_and.." "..table.concat(combination, " ", 5)
+    end,
+    calculate = function(self, card, context)
+        if context.end_of_round then
+            card.ability.extra.card_list = {}
+
+            for i = 1, 5 do
+                local index = math.random(#G.deck.cards)
+                table.insert(card.ability.extra.card_list, G.deck.cards[index])
+            end
+
+            local combination = {}
+
+            for i = 1, 5 do
+                table.insert(combination, card.ability.extra.card_list[i].base.value)
+            end
+
+            card.ability.extra.ranks = {}
+
+            for i = 1, 5 do
+                table.insert(card.ability.extra.ranks, card.ability.extra.card_list[i]:get_id())
+            end
+
+            card.ability.extra.combination = table.concat(combination, ", ", 1, 4).." "..loc.dictionary.word_and.." "..table.concat(combination, " ", 5)
+        end
     end
 })
 
@@ -1772,6 +1825,87 @@ SMODS.PokerHand{ -- Spectrum Five (Referenced from SixSuits)
             ret = parts._5
         end
         return ret
+    end
+}
+
+SMODS.PokerHand{ -- Deal
+    key = 'Deal',
+    above_hand = 'Flush Five',
+    visible = false,
+    chips = 0,
+    mult = 0,
+    l_chips = 0,
+    l_mult = 0,
+    example = {},
+    loc_txt = loc.deal,
+    atomic_part = function(hand)
+        local current_ranks = {}
+        local deals = {}
+        for i = 1, #hand do
+            table.insert(current_ranks, hand[i]:get_id())
+        end
+
+        if G.jokers ~= nil then
+            for _, v in ipairs(G.jokers.cards) do
+                if v.ability.name == 'Registration Plate' then
+                    table.insert(deals, v.ability.extra.ranks)
+                end
+            end
+        end
+
+        local count1 = {}
+        for _, value in ipairs(current_ranks) do
+            if count1[value] then
+                count1[value] = count1[value] + 1
+            else
+                count1[value] = 1
+            end
+        end
+
+        for i, deal in ipairs(deals) do
+            local count2 = {}
+            for _, value in ipairs(deal) do
+                if count2[value] then
+                    count2[value] = count2[value] + 1
+                else
+                    count2[value] = 1
+                end
+            end
+
+            local equal = true
+            for key, count in pairs(count1) do
+                if count2[key] ~= count then
+                    equal = false
+                    break
+                end
+            end
+
+            if equal then
+                for key, count in pairs(count2) do
+                    if count1[key] ~= count then
+                        equal = false
+                        break
+                    end
+                end
+            end
+
+            if equal then
+                local self = G.GAME.hands['h_bunc_Deal']
+
+                self.chips = 0
+                self.mult = 0
+                self.level = 0
+
+                for k, v in pairs(G.GAME.hands) do
+                    if v.visible and v.played > 0 and v ~= self then
+                        self.chips = self.chips + v.chips
+                        self.mult = self.mult + v.mult
+                    end
+                end
+                return {hand}
+            end
+        end
+        return {}
     end
 }
 

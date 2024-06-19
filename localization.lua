@@ -6,6 +6,7 @@ return {
             chips = 'Chips',
             loop = 'Loop!',
             chance = 'Chance',
+            word_and = 'and',
             most_played_rank = '(most played rank)',
             least_played_hand = '(least played hand)',
             blade = '(1.5X blind score)',
@@ -67,6 +68,15 @@ return {
             description = {
                 '5 cards with the same rank,',
                 'each with a different suit'
+            },
+        }
+    },
+    deal = {
+        ['en-us'] = {
+            name = 'Deal',
+            description = {
+                '5 ranks picked',
+                'by the Registration Plate'
             },
         }
     },
@@ -375,9 +385,9 @@ return {
         ['en-us'] = {
             ['name'] = 'Registration Plate',
             ['text'] = {
-                [1] = '{X:mult,C:white}X#1#{} Mult when played hand',
-                [2] = 'is a combination of',
-                [3] = '#2#',
+                [1] = '#2#',
+                [2] = 'has the Chips and Mult of all',
+                [3] = '{C:attention}Poker hands{} played this game',
                 [4] = '{s:0.8}Combination changes every round'
             }
         }
