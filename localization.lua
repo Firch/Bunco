@@ -76,7 +76,7 @@ return {
             name = 'Deal',
             description = {
                 '5 ranks picked',
-                'by the Registration Plate'
+                'by Registration Plate'
             },
         }
     },
@@ -387,7 +387,7 @@ return {
             ['text'] = {
                 [1] = '#2#',
                 [2] = 'has the Chips and Mult of all',
-                [3] = '{C:attention}Poker hands{} played this game',
+                [3] = '{C:attention}poker hands{} played this game',
                 [4] = '{s:0.8}Combination changes every round'
             }
         }
