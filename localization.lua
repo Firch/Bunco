@@ -739,5 +739,31 @@ return {
                 [2] = "to this blind's required score"
             }
         }
+    },
+
+    -- Decks
+
+    fairy = {
+        ['en-us'] = {
+            ['name'] = 'Fairy Deck',
+            ['text'] = {
+                [1] = 'After defeating each',
+                [2] = '{C:attention}Boss Blind{}, add 4',
+                [3] = "random {C:bunco_exotic}Exotic cards",
+                [4] = "to your deck"
+            }
+        }
+    },
+
+    -- Tags
+
+    filigree = {
+        ['en-us'] = {
+            ['name'] = 'Filigree Tag',
+            ['text'] = {
+                [1] = 'Standard Pack has',
+                [2] = 'only {C:bunco_exotic}Exotic suits'
+            }
+        }
     }
 }

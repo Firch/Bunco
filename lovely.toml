@@ -62,6 +62,24 @@ end
 
 '''
 
+# Exotic color, part 1/2
+[[patches]]
+[patches.pattern]
+target = 'globals.lua'
+pattern = "RENTAL = HEX('b18f43'),"
+position = 'after'
+match_indent = true
+payload = '''BUNCO_EXOTIC = HEX('ef9ae7'),'''
+
+# Exotic color, part 2/2
+[[patches]]
+[patches.pattern]
+target = 'functions/misc_functions.lua'
+pattern = "legendary = G.C.RARITY[4],"
+position = 'after'
+match_indent = true
+payload = '''bunco_exotic = G.C.BUNCO_EXOTIC,'''
+
 # Colorful Finishers, part 1/4
 [[patches]]
 [patches.pattern]
@@ -1015,4 +1033,25 @@ payload = '''
 if G.GAME.Shield == true and G.GAME.chips - G.GAME.blind.chips >= 0 then
     G.GAME.overscore = (G.GAME.overscore or 0) + G.GAME.chips - G.GAME.blind.chips
 end
+'''
+
+# function card_open() (Filigree Tag)
+[[patches]]
+[patches.regex]
+target = 'card.lua'
+pattern = "(?<indent>[\t ]*)for\\s+i\\s*=\\s*1,\\s*#G\\.jokers\\.cards\\s*do\\s*\\n[\\t ]*G\\.jokers\\.cards\\[i\\]:calculate_joker\\(\\{\\s*open_booster\\s*=\\s*true,\\s*card\\s*=\\s*self\\s*\\}\\)\\s*\\n[\\t ]*end"
+position = 'after'
+line_prepend = '$indent'
+payload = '''
+
+for i = 1, #G.GAME.tags do
+    sendDebugMessage('1')
+    if (self.ability.name == 'Standard Pack' or
+    self.ability.name == 'Jumbo Standard Pack' or
+    self.ability.name == 'Mega Standard Pack') then
+        sendDebugMessage('2')
+        G.GAME.tags[1]:apply_to_run({type = 'standard_pack_opened'})
+    end
+end
+
 '''

@@ -15,6 +15,9 @@
 -- Unlocks
 -- Check whats up with joker knight
 -- Add purist config
+-- Card sizes
+-- Magenta dagger wobble?
+-- Disable Bierdeckel upgrade message on win
 
 local bunco = SMODS.current_mod
 local filesystem = NFS or love.filesystem
@@ -2404,4 +2407,86 @@ SMODS.Blind{ -- Turquoise Shield
 
     pos = {y = 4},
     atlas = 'bunco_blinds_finisher'
+}
+
+-- Decks
+
+SMODS.Atlas({key = 'bunco_decks', path = 'Decks/Decks.png', px = 71, py = 95})
+
+SMODS.Back{
+	key = "fairy", loc_txt = loc.fairy,
+
+    apply = function()
+        enable_exotics()
+    end,
+
+    trigger_effect = function(self, args)
+        if args.context == 'eval' and G.GAME.last_blind and G.GAME.last_blind.boss then
+            event({
+                func = (function()
+                    local numbers = {}
+                    for _, v in ipairs(SMODS.Rank.obj_buffer) do
+                        local r = SMODS.Ranks[v]
+                        table.insert(numbers, r.card_key)
+                    end
+
+                    local suits = {'FLEURON', 'HALBERD'}
+
+                    for i = 1, 4 do
+                        local rank = pseudorandom_element(numbers, pseudoseed('fairy'..G.SEED))
+                        local suit = pseudorandom_element(suits, pseudoseed('fairy'..G.SEED))
+                        create_playing_card({front = G.P_CARDS[suit .. '_' .. rank]}, G.deck, false, false, {G.C.BUNCO_EXOTIC})
+                    end
+
+                    return true
+                end)
+            })
+        end
+    end,
+
+    atlas = 'bunco_decks'
+}
+
+-- Tags
+
+SMODS.Atlas({key = 'bunco_tags', path = 'Tags/Tags.png', px = 34, py = 34})
+
+SMODS.Tag{
+    key = 'filigree', loc_txt = loc.filigree,
+
+    config = {type = 'standard_pack_opened'},
+    apply = function(tag, context)
+        say(context.type)
+        if context.type == 'standard_pack_opened' then
+            tag:yep('+', G.C.BUNCO_EXOTIC, function()
+                return true
+            end)
+            event({
+                trigger = 'after',
+                delay = 1.3 * math.sqrt(G.SETTINGS.GAMESPEED),
+                blockable = false,
+                blocking = false,
+                func = function()
+                    if G.pack_cards and G.pack_cards.cards ~= nil and G.pack_cards.cards[1] and G.pack_cards.VT.y < G.ROOM.T.h then
+
+                        enable_exotics()
+
+                        for _, v in ipairs(G.pack_cards.cards) do
+                            if not v:is_suit('Fleurons') and not v:is_suit('Halberds') then
+                                local suits = {'Fleurons', 'Halberds'}
+                                local suit = pseudorandom_element(suits, pseudoseed('filigree'..G.SEED))
+                                v:change_suit(suit)
+                            end
+                        end
+
+                        return true
+                    end
+                end
+            })
+            tag.triggered = true
+            return true
+        end
+    end,
+
+    atlas = 'bunco_tags'
 }
