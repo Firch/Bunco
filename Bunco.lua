@@ -10,6 +10,11 @@
 -- Check how to add custom entries to the localization (for card messages like linocut's one) (done)
 -- Cassette proper coordinates (done)
 -- Polychrome desc on roy g biv
+-- Debuff registration plate level with shader if possible
+-- Nan morgan or make zero shapiro count letter rank cards
+-- Unlocks
+-- Check whats up with joker knight
+-- Add purist config
 
 local bunco = SMODS.current_mod
 local filesystem = NFS or love.filesystem

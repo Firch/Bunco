@@ -489,46 +489,46 @@ match_indent = true
 payload = '''
 
 if G.jokers ~= nil then
-            for _, v in ipairs(G.jokers.cards) do
-                if v.ability.name == 'Myopia' and not v.debuff then
-                    if self.base.suit == 'Spades' and (self.base.suit == 'Spades') == (suit == 'Spades' or suit == 'Halberds') then
-                        return true
-                    end
-                    if self.base.suit == 'Clubs' and (self.base.suit == 'Clubs') == (suit == 'Clubs' or suit == 'Halberds') then
-                        return true
-                    end
-                end
+    for _, v in ipairs(G.jokers.cards) do
+        if v.ability.name == 'Myopia' and not v.debuff then
+            if self.base.suit == 'Spades' and (self.base.suit == 'Spades') == (suit == 'Spades' or suit == 'Halberds') then
+                return true
+            end
+            if self.base.suit == 'Clubs' and (self.base.suit == 'Clubs') == (suit == 'Clubs' or suit == 'Halberds') then
+                return true
             end
         end
+    end
+end
 
 if G.jokers ~= nil then
-            for _, v in ipairs(G.jokers.cards) do
-                if v.ability.name == 'Astigmatism' and not v.debuff then
-                    if self.base.suit == 'Hearts' and (self.base.suit == 'Hearts') == (suit == 'Hearts' or suit == 'Fleurons') then
-                        return true
-                    end
-                    if self.base.suit == 'Diamonds' and (self.base.suit == 'Diamonds') == (suit == 'Diamonds' or suit == 'Fleurons') then
-                        return true
-                    end
-                end
+    for _, v in ipairs(G.jokers.cards) do
+        if v.ability.name == 'Astigmatism' and not v.debuff then
+            if self.base.suit == 'Hearts' and (self.base.suit == 'Hearts') == (suit == 'Hearts' or suit == 'Fleurons') then
+                return true
+            end
+            if self.base.suit == 'Diamonds' and (self.base.suit == 'Diamonds') == (suit == 'Diamonds' or suit == 'Fleurons') then
+                return true
             end
         end
+    end
+end
 
-        if G.jokers ~= nil then
-            for _, v in ipairs(G.jokers.cards) do
-                if v.ability.name == 'Smeared Joker' and not v.debuff then
-                    if self.base.suit == 'Fleurons' and (suit ~= 'Fleurons') then
-                        return false
-                    end
-                    if self.base.suit == 'Halberds' and (suit ~= 'Halberds') then
-                        return false
-                    end
-                    if (self.base.suit ~= 'Fleurons' and self.base.suit ~= 'Halberds') and (suit == 'Fleurons' or suit == 'Halberds') then
-                        return false
-                    end
-                end
+if G.jokers ~= nil then
+    for _, v in ipairs(G.jokers.cards) do
+        if v.ability.name == 'Smeared Joker' and not v.debuff then
+            if self.base.suit == 'Fleurons' and (suit ~= 'Fleurons') then
+                return false
+            end
+            if self.base.suit == 'Halberds' and (suit ~= 'Halberds') then
+                return false
+            end
+            if (self.base.suit ~= 'Fleurons' and self.base.suit ~= 'Halberds') and (suit == 'Fleurons' or suit == 'Halberds') then
+                return false
             end
         end
+    end
+end
 
 '''
 
@@ -542,23 +542,23 @@ match_indent = true
 payload = '''
 
 if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_paling' and not G.GAME.blind.disabled then
-            if G.GAME.current_round.hands_left > 1 then
-                ease_hands_played(-1) --
-            elseif G.GAME.current_round.hands_left == 1 or G.GAME.current_round.hands_left == 0 then
-                ease_hands_played(-1) --
+    if G.GAME.current_round.hands_left > 1 then
+        ease_hands_played(-1) --
+    elseif G.GAME.current_round.hands_left == 1 or G.GAME.current_round.hands_left == 0 then
+        ease_hands_played(-1) --
 
-                G.E_MANAGER:add_event(Event({ trigger = 'after', delay = 1.8, func = function()
-                    G.STATE = G.STATES.GAME_OVER
-                    if not G.GAME.won and not G.GAME.seeded and not G.GAME.challenge then 
-                        G.PROFILES[G.SETTINGS.profile].high_scores.current_streak.amt = 0
-                    end
-                    G:save_settings()
-                    G.FILE_HANDLER.force = true
-                    G.STATE_COMPLETE = false
-                return true end }))
+        G.E_MANAGER:add_event(Event({ trigger = 'after', delay = 1.8, func = function()
+            G.STATE = G.STATES.GAME_OVER
+            if not G.GAME.won and not G.GAME.seeded and not G.GAME.challenge then 
+                G.PROFILES[G.SETTINGS.profile].high_scores.current_streak.amt = 0
             end
-            G.GAME.blind:wiggle()
-        end
+            G:save_settings()
+            G.FILE_HANDLER.force = true
+            G.STATE_COMPLETE = false
+        return true end }))
+    end
+    G.GAME.blind:wiggle()
+end
 
 '''
 
@@ -572,12 +572,12 @@ match_indent = true
 payload = '''
 
 if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_paling' and not G.GAME.blind.disabled then
-            if G.GAME.current_round.discards_left >= 1 then
-                ease_discard(-1, true)
-                G.GAME.blind:wiggle()
-                G.GAME.blind.triggered = true
-            end
-        end
+    if G.GAME.current_round.discards_left >= 1 then
+        ease_discard(-1, true)
+        G.GAME.blind:wiggle()
+        G.GAME.blind.triggered = true
+    end
+end
 
 '''
 
@@ -591,19 +591,19 @@ match_indent = true
 payload = '''
 
 if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_umbrella' and not G.GAME.blind.disabled then
-            G.E_MANAGER:add_event(Event({ func = function()
+    G.E_MANAGER:add_event(Event({ func = function()
 
-                for k, v in ipairs(G.hand.cards) do
-                    if v.facing == 'front' then
-                        v:flip()
-                    end
-                end
-
-                G.GAME.blind:wiggle()
-                G.GAME.blind.triggered = true
-
-            return true end }))
+        for k, v in ipairs(G.hand.cards) do
+            if v.facing == 'front' then
+                v:flip()
+            end
         end
+
+        G.GAME.blind:wiggle()
+        G.GAME.blind.triggered = true
+
+    return true end }))
+end
 
 '''
 
@@ -674,21 +674,21 @@ match_indent = true
 payload = '''
 
 if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_swing' and not G.GAME.blind.disabled then
-            G.E_MANAGER:add_event(Event({ func = function()
-                for k, v in ipairs(G.hand.cards) do
-                    v:flip()
-                end
-
-                G.GAME.blind:wiggle()
-                G.GAME.blind.triggered = true
-
-                if G.GAME.Swing == true then
-                    G.GAME.Swing = false
-                else
-                    G.GAME.Swing = true
-                end
-            return true end }))
+    G.E_MANAGER:add_event(Event({ func = function()
+        for k, v in ipairs(G.hand.cards) do
+            v:flip()
         end
+
+        G.GAME.blind:wiggle()
+        G.GAME.blind.triggered = true
+
+        if G.GAME.Swing == true then
+            G.GAME.Swing = false
+        else
+            G.GAME.Swing = true
+        end
+    return true end }))
+end
 
 '''
 
@@ -702,23 +702,23 @@ match_indent = true
 payload = '''
 
 if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_swing' and not G.GAME.blind.disabled then
-            G.E_MANAGER:add_event(Event({ func = function()
-                for k, v in ipairs(G.hand.cards) do
-                    if not (v.area == G.hand and v.highlighted and v.facing == 'front') then
-                        v:flip()
-                    end
-                end
-
-                G.GAME.blind:wiggle()
-                G.GAME.blind.triggered = true
-
-                if G.GAME.Swing == true then
-                    G.GAME.Swing = false
-                else
-                    G.GAME.Swing = true
-                end
-            return true end }))
+    G.E_MANAGER:add_event(Event({ func = function()
+        for k, v in ipairs(G.hand.cards) do
+            if not (v.area == G.hand and v.highlighted and v.facing == 'front') then
+                v:flip()
+            end
         end
+
+        G.GAME.blind:wiggle()
+        G.GAME.blind.triggered = true
+
+        if G.GAME.Swing == true then
+            G.GAME.Swing = false
+        else
+            G.GAME.Swing = true
+        end
+    return true end }))
+end
 
 '''
 
@@ -750,8 +750,8 @@ match_indent = true
 payload = '''
 
 if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_gate' and not G.GAME.blind.disabled and is_higlighted and self.area == G.hand then
-            self.ability.forced_selection = true
-        end
+    self.ability.forced_selection = true
+end
 
 '''
 
@@ -784,18 +784,18 @@ match_indent = true
 payload = '''
 
 local lowestValue = math.huge
-        local leastPlayedHand = ''
+local leastPlayedHand = ''
 
-        for i = #G.handlist, 1, -1 do
-            local v = G.handlist[i]
-            local playedCount = G.GAME.hands[v].played
-            if playedCount < lowestValue then
-                lowestValue = playedCount
-                leastPlayedHand = v
-            end
-        end
+for i = #G.handlist, 1, -1 do
+    local v = G.handlist[i]
+    local playedCount =  G.GAME.hands and G.GAME.hands[v] and G.GAME.hands[v].played or 0
+    if playedCount < lowestValue then
+        lowestValue = playedCount
+        leastPlayedHand = v
+    end
+end
 
-        G.GAME.current_round.least_played_poker_hand = leastPlayedHand
+G.GAME.current_round.least_played_poker_hand = leastPlayedHand
 
 '''
 
