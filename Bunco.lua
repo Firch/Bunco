@@ -2414,7 +2414,7 @@ SMODS.Blind{ -- Turquoise Shield
 
 SMODS.Atlas({key = 'bunco_decks', path = 'Decks/Decks.png', px = 71, py = 95})
 
-SMODS.Back{
+SMODS.Back{ -- Fairy
 	key = "fairy", loc_txt = loc.fairy,
 
     apply = function()
@@ -2448,11 +2448,101 @@ SMODS.Back{
     atlas = 'bunco_decks'
 }
 
--- Tags
+-- Tags (I desperately need add_to_pool for these)
 
 SMODS.Atlas({key = 'bunco_tags', path = 'Tags/Tags.png', px = 34, py = 34})
 
-SMODS.Tag{
+SMODS.Tag{ -- Chips
+    key = 'chips', loc_txt = loc.chips,
+
+    config = {type = 'hand_played'},
+    apply = function(tag, context)
+        if context.type == 'hand_played' then
+
+            hand_chips = mod_chips(hand_chips + 50)
+            update_hand_text({delay = 0}, {chips = hand_chips})
+
+            tag:instayep('+', G.C.CHIPS, function()
+                return true
+            end, 0)
+            tag.triggered = true
+            return true
+        end
+    end,
+
+    pos = coordinate(1),
+    atlas = 'bunco_tags'
+}
+
+SMODS.Tag{ -- Mult
+    key = 'mult', loc_txt = loc.mult,
+
+    config = {type = 'hand_played'},
+    apply = function(tag, context)
+        if context.type == 'hand_played' then
+
+            mult = mod_mult(mult + 10)
+            update_hand_text({delay = 0}, {mult = mult})
+
+            tag:instayep('+', G.C.MULT, function()
+                return true
+            end, 0)
+            tag.triggered = true
+            return true
+        end
+    end,
+
+    pos = coordinate(2),
+    atlas = 'bunco_tags'
+}
+
+SMODS.Tag{ -- Xmult
+    key = 'xmult', loc_txt = loc.xmult,
+
+    config = {type = 'hand_played'},
+    apply = function(tag, context)
+        if context.type == 'hand_played' then
+            say(tag.key)
+
+            mult = mod_mult(mult * 1.5)
+            update_hand_text({delay = 0}, {mult = mult})
+
+            tag:instayep('+', G.C.MULT, function()
+                return true
+            end, 0)
+            tag.triggered = true
+            return true
+        end
+    end,
+
+    pos = coordinate(3),
+    atlas = 'bunco_tags'
+}
+
+SMODS.Tag{ -- Xchip
+    key = 'xchips', loc_txt = loc.xchips,
+
+    config = {type = 'hand_played'},
+    apply = function(tag, context)
+        if context.type == 'hand_played' then
+            say(tag.key)
+
+            hand_chips = mod_chips(hand_chips * 2)
+            update_hand_text({delay = 0}, {chips = hand_chips})
+
+            tag:instayep('+', G.C.CHIPS, function()
+                return true
+            end, 0)
+            tag.triggered = true
+            return true
+        end
+    end,
+
+    pos = coordinate(4),
+    atlas = 'bunco_tags'
+}
+
+SMODS.Tag{ -- Filigree
     key = 'filigree', loc_txt = loc.filigree,
 
     config = {type = 'standard_pack_opened'},
@@ -2488,5 +2578,6 @@ SMODS.Tag{
         end
     end,
 
+    pos = coordinate(5),
     atlas = 'bunco_tags'
 }

@@ -831,11 +831,10 @@ least_played_poker_hand = 'High Card','''
 [[patches]]
 [patches.regex]
 target = 'functions/state_events.lua'
-pattern = "(?<indent>[\t ]*)\\}\\)\\)\n[\t ]*end\n[\t ]*else"
-position = 'at'
+pattern = "(?<indent>[\t ]*)else\\s*\\n[\\t ]*mult\\s*=\\s*mod_mult\\(\\s*0\\s*\\)\\s*\\n[\\t ]*hand_chips\\s*=\\s*mod_chips\\(\\s*0\\s*\\)\\s*"
+position = 'before'
 line_prepend = '$indent'
-payload = '''}))
-end
+payload = '''
 
 if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_blade' and not G.GAME.blind.disabled then
 
@@ -865,7 +864,7 @@ if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_blade' and not G.GAME.blind.di
     end
 end
 
-else'''
+'''
 
 # G.FUNCS.discard_cards_from_highlighted (The Claw)
 [[patches]]
@@ -1035,7 +1034,7 @@ if G.GAME.Shield == true and G.GAME.chips - G.GAME.blind.chips >= 0 then
 end
 '''
 
-# Insta-yep for tags
+# Insta-yep for tags, delayless-yep
 [[patches]]
 [patches.pattern]
 target = 'tag.lua'
@@ -1044,45 +1043,130 @@ position = 'before'
 match_indent = true
 payload = '''
 
-function Tag:instayep(message, _colour, func)
+function Tag:instayep(message, _colour, func, delay)
     stop_use()
-
-    attention_text({
-        text = message,
-        colour = G.C.WHITE,
-        scale = 1,
-        hold = 0.3/G.SETTINGS.GAMESPEED,
-        cover = self.HUD_tag,
-        cover_colour = _colour or G.C.GREEN,
-        align = 'cm',
-        })
-    play_sound('generic1', 0.9 + math.random()*0.1, 0.8)
-    play_sound('holo1', 1.2 + math.random()*0.1, 0.4)
-
-    G.E_MANAGER:add_event(Event({
-        blockable = false,
-        blocking = false,
+    if delay then
+        G.E_MANAGER:add_event(Event({
+        delay = delay,
         trigger = 'after',
         func = (function()
-            self.HUD_tag.states.visible = false
+            attention_text({
+                text = message,
+                colour = G.C.WHITE,
+                scale = 1, 
+                hold = 0.3/G.SETTINGS.GAMESPEED,
+                cover = self.HUD_tag,
+                cover_colour = _colour or G.C.GREEN,
+                align = 'cm',
+                })
+            play_sound('generic1', 0.9 + math.random()*0.1, 0.8)
+            play_sound('holo1', 1.2 + math.random()*0.1, 0.4)
             return true
         end)
-    }))
-    G.E_MANAGER:add_event(Event({
-        blockable = false,
-        blocking = false,
-        func = func
-    }))
-    G.E_MANAGER:add_event(Event({
-        blockable = false,
-        blocking = false,
-        trigger = 'after',
-        delay = 0.7,
-        func = (function()
-            self:remove()
-            return true
-        end)
-    }))
+        }))
+        G.E_MANAGER:add_event(Event({
+            func = (function()
+                self.HUD_tag.states.visible = false
+                return true
+            end)
+        }))
+        G.E_MANAGER:add_event(Event({
+            func = func
+        }))
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.7,
+            func = (function()
+                self:remove()
+                return true
+            end)
+        }))
+    else
+        attention_text({
+            text = message,
+            colour = G.C.WHITE,
+            scale = 1,
+            hold = 0.3/G.SETTINGS.GAMESPEED,
+            cover = self.HUD_tag,
+            cover_colour = _colour or G.C.GREEN,
+            align = 'cm',
+            })
+        play_sound('generic1', 0.9 + math.random()*0.1, 0.8)
+        play_sound('holo1', 1.2 + math.random()*0.1, 0.4)
+
+        G.E_MANAGER:add_event(Event({
+            blockable = false,
+            blocking = false,
+            trigger = 'after',
+            func = (function()
+                self.HUD_tag.states.visible = false
+                return true
+            end)
+        }))
+        G.E_MANAGER:add_event(Event({
+            blockable = false,
+            blocking = false,
+            func = func
+        }))
+        G.E_MANAGER:add_event(Event({
+            blockable = false,
+            blocking = false,
+            trigger = 'after',
+            delay = 0.7,
+            func = (function()
+                self:remove()
+                return true
+            end)
+        }))
+    end
+end
+
+'''
+
+# Tag rerolling
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = "local _tag = e.UIBox:get_UIE_by_ID('tag_'..e.config.id)"
+position = 'at'
+match_indent = true
+payload = '''
+local _tag = e.UIBox:get_UIE_by_ID('tag_'..'tag_bunc_chips')
+'''
+
+# Edition tags
+[[patches]]
+[patches.regex]
+target = 'functions/state_events.lua'
+pattern = "(?<indent>[\t ]*)else\\s*\\n[\\t ]*mult\\s*=\\s*mod_mult\\(\\s*0\\s*\\)\\s*\\n[\\t ]*hand_chips\\s*=\\s*mod_chips\\(\\s*0\\s*\\)\\s*"
+position = 'before'
+line_prepend = '$indent'
+payload = '''
+
+for i = 1, #G.GAME.tags do
+    G.GAME.tags[i]:apply_to_run({type = 'hand_played'})
+end
+
+'''
+
+# function Card:use_consumeable()
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'local used_tarot = copier or self'
+position = 'after'
+match_indent = true
+payload = '''
+
+if used_tarot.edition.foil then
+    add_tag(Tag('tag_bunc_chips'))
+    play_sound('generic1')
+elseif used_tarot.edition.holo then
+    add_tag(Tag('tag_bunc_mult'))
+    play_sound('generic1')
+elseif used_tarot.edition.polychrome then
+    add_tag(Tag('tag_bunc_xmult'))
+    play_sound('generic1')
 end
 
 '''

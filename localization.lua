@@ -757,6 +757,42 @@ return {
 
     -- Tags
 
+    chips = {
+        ['en-us'] = {
+            ['name'] = 'Chips Tag',
+            ['text'] = {
+                [1] = 'Adds {C:chips}+50{} Chips',
+                [2] = 'to the next hand'
+            }
+        }
+    },
+    mult = {
+        ['en-us'] = {
+            ['name'] = 'Mult Tag',
+            ['text'] = {
+                [1] = 'Adds {C:mult}+10{} Mult',
+                [2] = 'to the next hand'
+            }
+        }
+    },
+    xmult = {
+        ['en-us'] = {
+            ['name'] = 'Megamult Tag',
+            ['text'] = {
+                [1] = 'Adds {X:mult,C:white}X1.5{} Mult',
+                [2] = 'to the next hand'
+            }
+        }
+    },
+    xchips = {
+        ['en-us'] = {
+            ['name'] = 'Ultrachips Tag',
+            ['text'] = {
+                [1] = 'Adds {X:chips,C:white}X1.2{} Chips',
+                [2] = 'to the next hand'
+            }
+        }
+    },
     filigree = {
         ['en-us'] = {
             ['name'] = 'Filigree Tag',
