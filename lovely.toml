@@ -1123,17 +1123,6 @@ end
 
 '''
 
-# Tag rerolling
-[[patches]]
-[patches.pattern]
-target = 'functions/button_callbacks.lua'
-pattern = "local _tag = e.UIBox:get_UIE_by_ID('tag_'..e.config.id)"
-position = 'at'
-match_indent = true
-payload = '''
-local _tag = e.UIBox:get_UIE_by_ID('tag_'..'tag_bunc_chips')
-'''
-
 # Edition tags
 [[patches]]
 [patches.regex]

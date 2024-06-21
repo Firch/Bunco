@@ -793,6 +793,15 @@ return {
             }
         }
     },
+    glitter_tag = {
+        ['en-us'] = {
+            ['name'] = 'Glitter Tag',
+            ['text'] = {
+                [1] = '',
+                [2] = ''
+            }
+        }
+    },
     filigree = {
         ['en-us'] = {
             ['name'] = 'Filigree Tag',
@@ -801,5 +810,17 @@ return {
                 [2] = 'only {C:bunco_exotic}Exotic suits'
             }
         }
-    }
+    },
+
+    -- Editions
+
+    glitter_edition = {
+        ['en-us'] = {
+            ['name'] = 'Glitter',
+            ['label'] = 'Glitter',
+            ['text'] = {
+                [1] = '{X:chips,C:white}X1.2{} Chips'
+            }
+        }
+    },
 }

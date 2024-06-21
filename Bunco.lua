@@ -28,9 +28,9 @@ local config = filesystem.load(bunco.path..'config.lua')()
 -- Shaders
 
 if config.high_quality_shaders then
-    local background_shader = NFS.read(bunco.path..'resources/shaders/background.fs')
-    local splash_shader = NFS.read(bunco.path..'resources/shaders/splash.fs')
-    local flame_shader = NFS.read(bunco.path..'resources/shaders/flame.fs')
+    local background_shader = NFS.read(bunco.path..'assets/shaders/background.fs')
+    local splash_shader = NFS.read(bunco.path..'assets/shaders/splash.fs')
+    local flame_shader = NFS.read(bunco.path..'assets/shaders/flame.fs')
     G.SHADERS['background'] = love.graphics.newShader(background_shader)
     G.SHADERS['splash'] = love.graphics.newShader(splash_shader)
     G.SHADERS['flame'] = love.graphics.newShader(flame_shader)
@@ -2578,6 +2578,16 @@ SMODS.Tag{ -- Filigree
         end
     end,
 
-    pos = coordinate(5),
+    pos = coordinate(6),
     atlas = 'bunco_tags'
+}
+
+-- Editions
+
+SMODS.Shader({key = 'glitter', path = 'glitter.fs'})
+
+SMODS.Edition{ -- Glitter (WIP, no effect)
+    key = 'glitter', loc_txt = loc.glitter_edition,
+
+    shader = 'glitter'
 }
