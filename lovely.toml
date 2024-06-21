@@ -1035,6 +1035,58 @@ if G.GAME.Shield == true and G.GAME.chips - G.GAME.blind.chips >= 0 then
 end
 '''
 
+# Insta-yep for tags
+[[patches]]
+[patches.pattern]
+target = 'tag.lua'
+pattern = 'function Tag:yep(message, _colour, func)'
+position = 'before'
+match_indent = true
+payload = '''
+
+function Tag:instayep(message, _colour, func)
+    stop_use()
+
+    attention_text({
+        text = message,
+        colour = G.C.WHITE,
+        scale = 1,
+        hold = 0.3/G.SETTINGS.GAMESPEED,
+        cover = self.HUD_tag,
+        cover_colour = _colour or G.C.GREEN,
+        align = 'cm',
+        })
+    play_sound('generic1', 0.9 + math.random()*0.1, 0.8)
+    play_sound('holo1', 1.2 + math.random()*0.1, 0.4)
+
+    G.E_MANAGER:add_event(Event({
+        blockable = false,
+        blocking = false,
+        trigger = 'after',
+        func = (function()
+            self.HUD_tag.states.visible = false
+            return true
+        end)
+    }))
+    G.E_MANAGER:add_event(Event({
+        blockable = false,
+        blocking = false,
+        func = func
+    }))
+    G.E_MANAGER:add_event(Event({
+        blockable = false,
+        blocking = false,
+        trigger = 'after',
+        delay = 0.7,
+        func = (function()
+            self:remove()
+            return true
+        end)
+    }))
+end
+
+'''
+
 # function card_open() (Filigree Tag)
 [[patches]]
 [patches.regex]

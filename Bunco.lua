@@ -2458,7 +2458,7 @@ SMODS.Tag{
     apply = function(tag, context)
         say(context.type)
         if context.type == 'standard_pack_opened' then
-            tag:yep('+', G.C.BUNCO_EXOTIC, function()
+            tag:instayep('+', G.C.BUNCO_EXOTIC, function()
                 return true
             end)
             event({
