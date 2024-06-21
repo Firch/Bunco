@@ -1097,12 +1097,10 @@ line_prepend = '$indent'
 payload = '''
 
 for i = 1, #G.GAME.tags do
-    sendDebugMessage('1')
     if (self.ability.name == 'Standard Pack' or
     self.ability.name == 'Jumbo Standard Pack' or
     self.ability.name == 'Mega Standard Pack') then
-        sendDebugMessage('2')
-        G.GAME.tags[1]:apply_to_run({type = 'standard_pack_opened'})
+        if G.GAME.tags[i]:apply_to_run({type = 'standard_pack_opened'}) then break end
     end
 end
 
