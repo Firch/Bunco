@@ -2067,6 +2067,7 @@ SMODS.Blind{ -- The Mask
                 return G.GAME.hands[G.GAME.current_round.least_played_poker_hand].s_mult, G.GAME.hands[G.GAME.current_round.least_played_poker_hand].s_chips, true
             end
         end
+        return mult, hand_chips, false
     end,
 
     boss_colour = HEX('efcca6'),
