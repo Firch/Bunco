@@ -1017,18 +1017,18 @@ create_joker({ -- Bierdeckel
     end
 })
 
-create_joker({ -- Registration Plate (WIP)
+create_joker({ -- Registration Plate
     name = 'Registration Plate', position = 26,
-    vars = {{xmult = 5}, {combination = ''}, {card_list = {}}, {ranks = {}}},
+    vars = {{combination = ''}, {card_list = {}}, {ranks = {}}},
     rarity = 'Rare', cost = 8,
     blueprint = false, eternal = true,
     unlocked = true,
     custom_vars = function(self, info_queue, card)
         local vars
         if card.ability.extra.combination == '' then
-            vars = {card.ability.extra.xmult, '2, 3, 4, 5 '..loc.dictionary.word_and..' 6'}
+            vars = {'2, 3, 4, 5 '..loc.dictionary.word_and..' 6'}
         else
-            vars = {card.ability.extra.xmult, card.ability.extra.combination}
+            vars = {card.ability.extra.combination}
         end
         return {vars = vars}
     end,
@@ -2211,7 +2211,7 @@ SMODS.Blind{ -- The Sand
     atlas = 'bunco_blinds'
 }
 
-SMODS.Blind{ -- The Blade (WIP)
+SMODS.Blind{ -- The Blade
     key = 'blade', loc_txt = loc.blade,
     boss = {min = 4},
 
