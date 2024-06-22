@@ -221,8 +221,8 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
     vec4 colour_2 = vec4(0.875,0.188,0.222, 0.8); // Crimson
     vec4 colour_3 = vec4(0.416,0.573,0.369, 0.6); // Greenish
 
-    float noise = cnoise(vec3(uv * 42.0, 3.0 * mod)); // Noise for the sparkles
-    float antinoise = cnoise(vec3(uv * 10.0, 2.0 * mod)); // Bigger noise to remove the sparkles in some areas
+    float noise = cnoise(vec3(uv * 50.0, 3.0 * mod)); // Noise for the sparkles
+    float antinoise = cnoise(vec3(uv * 30.0, 2.0 * mod)); // Bigger noise to remove the sparkles in some areas
 
     vec4 grad = mix(colour_1, colour_2, uv.x + uv.y + sin(mod) - 1.0); // Colours
     grad =      mix(grad,    colour_3, uv.y - uv.x + cos(mod) + 1.0); // and gradient (3 colours total)
@@ -236,7 +236,7 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
 
     saturated_colour = RGB(saturated_colour); // Back to RGB
 
-    saturated_colour.r *= saturated_colour.r; // Red feels a bit dim
+    saturated_colour.r *= (saturated_colour.r * 0.9); // Red feels a bit dim
     saturated_colour = lighten(tex, saturated_colour * 5.0) / glitter_brightness; // Removing dark colors from saturated color, then making it darker
 
     colour = lighten(mix((colour - 0.4) + (saturated_colour * spark), grad, 0.03), grad);
