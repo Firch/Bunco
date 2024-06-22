@@ -1156,6 +1156,9 @@ elseif used_tarot.edition.holo then
 elseif used_tarot.edition.polychrome then
     add_tag(Tag('tag_bunc_xmult'))
     play_sound('generic1')
+elseif used_tarot.edition.bunc_glitter then
+    add_tag(Tag('tag_bunc_xchips'))
+    play_sound('generic1')
 end
 
 '''

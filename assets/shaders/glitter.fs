@@ -190,6 +190,16 @@ float cnoise(vec3 P) {
   return 2.2 * n_xyz;
 }
 
+// Lighten blending mode
+vec4 lighten(vec4 colour1, vec4 colour2) {
+    vec4 result;
+    result.r = max(colour1.r, colour2.r);
+    result.g = max(colour1.g, colour2.g);
+    result.b = max(colour1.b, colour2.b);
+    result.a = max(colour1.a, colour2.a);
+    return result;
+}
+
 // this is what actually changes the look of card
 vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords )
 {
@@ -197,25 +207,35 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
     vec4 tex = Texel(texture, texture_coords);
     vec2 uv = (((texture_coords)*(image_details)) - texture_details.xy*texture_details.ba)/texture_details.ba;
 
-    // Dummy, doesn't do anything but at least it makes the shader useable
+    // Dummy, doesn't do anything but at least it makes the shader useable  
     if (uv.x > uv.x * 2){
         uv = glitter;
     }
 
-    vec4 color_1 = vec4(0.6196, 0.6941, 0.8509, 1.0);
-    vec4 color_2 = vec4(0.118,0.827,0.624, 0.35);
-    vec4 color_3 = vec4(0.996,0.337,0.765, 0.3);
-    vec4 blended_color_1 = mix(tex, color_1, color_1.a);
-    vec4 blended_color_2 = mix(tex, color_2, color_2.a);
-    vec4 blended_color_3 = mix(tex, color_3, color_3.a);
+    float mod = glitter.r * 2.0;
+    float glitter_amount = 0.15; // 1.0 - no glitter, 0.0 - maximum glitter
+    float saturation_amount = 0.5;
 
-    float noise = cnoise(vec3((uv) * 38.0, 1.0 - glitter.r * glitter.r * 0.7));
-    float bignoise = cnoise(vec3((uv) * 16.0, 1.0 - glitter.r * glitter.r * 0.7));
+    vec4 colour_1 = vec4(0.188,0.471,0.875, 1.0); // Blue
+    vec4 colour_2 = vec4(0.875,0.188,0.222, 0.8); // Crimson
+    vec4 colour_3 = vec4(0.416,0.573,0.369, 0.6); // Greenish
 
-    vec4 grad = mix(blended_color_1, blended_color_2, (uv.x + uv.y + sin((glitter.r - glitter.r) / 2)) * 0.7);
-    grad = mix(grad, blended_color_3, (uv.y + uv.x - cos(glitter.r * 0.8) * 1.8) * 0.7);
+    float noise = cnoise(vec3(uv * 42.0, 3.0 * mod));
+    float antinoise = cnoise(vec3(uv * 10.0, 2.0 * mod));
 
-    colour = max(colour * grad, colour * (grad + ((noise*colour*5)*-bignoise*((colour * 0.5) * (bignoise - 0.8)))));
+    vec4 grad = mix(colour_1, colour_2, uv.x + uv.y + sin(mod) - 1.0); // Colours
+    grad =      mix(grad,    colour_3, uv.y - uv.x + cos(mod) + 1.0); // and gradient (3 colours total)
+
+    float spark = max(0.0, noise - antinoise - glitter_amount);
+
+    vec4 saturated_colour = HSL(mix(tex, grad, 0.2));
+
+    saturated_colour.g *= 5.0 * saturation_amount;
+    saturated_colour.b = 0.3;
+    saturated_colour = RGB(saturated_colour);
+    saturated_colour = lighten(colour, saturated_colour * 5.0) * 0.5;
+
+    colour = lighten(mix((colour - 0.4) + (saturated_colour * spark), grad, 0.03), grad);
 
     // required
     return dissolve_mask(tex*colour, texture_coords, uv);
