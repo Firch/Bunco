@@ -9,7 +9,7 @@
 -- Fix Crop Circles always showing Fleurons (done)
 -- Check how to add custom entries to the localization (for card messages like linocut's one) (done)
 -- Cassette proper coordinates (done)
--- Polychrome desc on roy g biv
+-- Polychrome desc on roy g biv (done)
 -- Debuff registration plate level with shader if possible
 -- Nan morgan or make zero shapiro count letter rank cards
 -- Unlocks
@@ -18,6 +18,7 @@
 -- Card sizes
 -- Magenta dagger wobble?
 -- Disable Bierdeckel upgrade message on win
+-- Global variable for glitter (done)
 
 local bunco = SMODS.current_mod
 local filesystem = NFS or love.filesystem
@@ -142,6 +143,7 @@ function SMODS.current_mod.process_loc_text()
 
     SMODS.process_loc_text(G.localization.descriptions.Other, 'temporary_extra_chips', loc.dictionary.temporary_extra_chips)
     global_bunco_loc.exceeded_score = loc.dictionary.exceeded_score
+    global_bunco_loc.chips = loc.dictionary.chips
 end
 
 -- Temporary extra chips
@@ -1332,6 +1334,9 @@ create_joker({ -- ROYGBIV
     name = 'ROYGBIV', position = 13,
     vars = {{odds = 7}},
     custom_vars = function(self, info_queue, card)
+
+        info_queue[#info_queue+1] = G.P_CENTERS.e_polychrome
+
         local vars
         if G.GAME and G.GAME.probabilities.normal then
             vars = {G.GAME.probabilities.normal, card.ability.extra.odds}
@@ -2448,7 +2453,7 @@ SMODS.Back{ -- Fairy
     atlas = 'bunco_decks'
 }
 
--- Tags (I desperately need add_to_pool for these)
+-- Tags (WIP, I desperately need add_to_pool for these)
 
 SMODS.Atlas({key = 'bunco_tags', path = 'Tags/Tags.png', px = 34, py = 34})
 
@@ -2522,12 +2527,12 @@ SMODS.Tag{ -- Xmult
 SMODS.Tag{ -- Xchip
     key = 'xchips', loc_txt = loc.xchips,
 
-    config = {type = 'hand_played'},
+    config = {type = 'hand_played', odds = -1},
     apply = function(tag, context)
         if context.type == 'hand_played' then
             say(tag.key)
 
-            hand_chips = mod_chips(hand_chips * 2)
+            hand_chips = mod_chips(hand_chips * 1.2)
             update_hand_text({delay = 0}, {chips = hand_chips})
 
             tag:instayep('+', G.C.CHIPS, function()
@@ -2539,6 +2544,43 @@ SMODS.Tag{ -- Xchip
     end,
 
     pos = coordinate(4),
+    atlas = 'bunco_tags'
+}
+
+SMODS.Tag{ -- Glitter
+    key = 'glitter', loc_txt = loc.glitter_tag,
+
+    config = {type = 'store_joker_modify', edition = 'bunc_glitter', odds = 4},
+    loc_vars = function(self, info_queue)
+        info_queue[#info_queue+1] = G.P_CENTERS.e_bunc_glitter
+        return {}
+    end,
+
+    apply = function(tag, context)
+        if context.type == 'store_joker_modify' then
+            local applied = nil
+            if not context.card.edition and not context.card.temp_edition and context.card.ability.set == 'Joker' then
+                local lock = tag.ID
+                G.CONTROLLER.locks[lock] = true
+
+                context.card.temp_edition = true
+                tag:yep('+', G.C.DARK_EDITION,function()
+                    context.card:set_edition({bunc_glitter = true}, true)
+                    context.card.ability.couponed = true
+                    context.card:set_cost()
+                    context.card.temp_edition = nil
+                    G.CONTROLLER.locks[lock] = nil
+                    return true
+                end)
+                applied = true
+
+                tag.triggered = true
+            end
+            return applied
+        end
+    end,
+
+    pos = coordinate(5),
     atlas = 'bunco_tags'
 }
 
@@ -2585,9 +2627,22 @@ SMODS.Tag{ -- Filigree
 -- Editions
 
 SMODS.Shader({key = 'glitter', path = 'glitter.fs'})
+SMODS.Sound({key = 'glitter', path = 'glitter.ogg'})
 
-SMODS.Edition{ -- Glitter (WIP, no effect)
+SMODS.Edition{
     key = 'glitter', loc_txt = loc.glitter_edition,
+
+    config = {Xchips = 1.2},
+    loc_vars = function(self, info_queue)
+        return {vars = {self.config.Xchips}}
+    end,
+
+    sound = {sound = 'bunc_glitter', per = 1.2, vol = 0.4},
+    in_shop = true,
+    weight = 9,
+    get_weight = function(self)
+        return G.GAME.edition_rate * self.weight
+    end,
 
     shader = 'glitter'
 }

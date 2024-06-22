@@ -1181,3 +1181,53 @@ for i = 1, #G.GAME.tags do
 end
 
 '''
+
+# Glitter edition 1/2
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = 'if effects[ii].edition then'
+position = 'after'
+match_indent = true
+payload = '''
+
+if scoring_hand[i].edition.bunc_glitter then
+    local xchips = G.P_CENTERS.e_bunc_glitter.config.Xchips
+    hand_chips = mod_chips(hand_chips * xchips)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+    card_eval_status_text(scoring_hand[i], 'extra', nil, percent, nil,
+    {message = 'X'..xchips..' '..global_bunco_loc.chips,
+    edition = true,
+    x_chips = true})
+end
+
+'''
+
+# Two options (bonus first vs bonus last):
+
+# pattern = 'edition_effects.jokers.edition = true'
+# position = 'after'
+
+# pattern = 'if edition_effects.jokers.x_mult_mod then'
+# position = 'before'
+
+# Glitter edition 2/2
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = 'if edition_effects.jokers.x_mult_mod then'
+position = 'before'
+match_indent = true
+payload = '''
+
+if G.jokers.cards[i].edition.bunc_glitter then
+    local xchips = G.P_CENTERS.e_bunc_glitter.config.Xchips
+    hand_chips = mod_chips(hand_chips * xchips)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+    card_eval_status_text(G.jokers.cards[i], 'extra', nil, percent, nil,
+    {message = 'X'..xchips..' '..global_bunco_loc.chips,
+    edition = true,
+    x_chips = true})
+end
+
+'''

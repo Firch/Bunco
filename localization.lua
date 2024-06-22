@@ -797,8 +797,9 @@ return {
         ['en-us'] = {
             ['name'] = 'Glitter Tag',
             ['text'] = {
-                [1] = '',
-                [2] = ''
+                [1] = 'Next base edition shop',
+                [2] = 'Joker is free and',
+                [3] = 'becomes {C:dark_edition}Glitter'
             }
         }
     },
@@ -819,7 +820,7 @@ return {
             ['name'] = 'Glitter',
             ['label'] = 'Glitter',
             ['text'] = {
-                [1] = '{X:chips,C:white}X1.2{} Chips'
+                [1] = '{X:chips,C:white}X#1#{} Chips'
             }
         }
     },
