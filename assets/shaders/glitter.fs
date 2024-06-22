@@ -214,26 +214,30 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
 
     float mod = glitter.r * 2.0;
     float glitter_amount = 0.15; // 1.0 - no glitter, 0.0 - maximum glitter
-    float saturation_amount = 0.5;
+    float saturation_amount = 5.0;
+    float glitter_brightness = 3.0;
 
     vec4 colour_1 = vec4(0.188,0.471,0.875, 1.0); // Blue
     vec4 colour_2 = vec4(0.875,0.188,0.222, 0.8); // Crimson
     vec4 colour_3 = vec4(0.416,0.573,0.369, 0.6); // Greenish
 
-    float noise = cnoise(vec3(uv * 42.0, 3.0 * mod));
-    float antinoise = cnoise(vec3(uv * 10.0, 2.0 * mod));
+    float noise = cnoise(vec3(uv * 42.0, 3.0 * mod)); // Noise for the sparkles
+    float antinoise = cnoise(vec3(uv * 10.0, 2.0 * mod)); // Bigger noise to remove the sparkles in some areas
 
     vec4 grad = mix(colour_1, colour_2, uv.x + uv.y + sin(mod) - 1.0); // Colours
     grad =      mix(grad,    colour_3, uv.y - uv.x + cos(mod) + 1.0); // and gradient (3 colours total)
 
-    float spark = max(0.0, noise - antinoise - glitter_amount);
+    float spark = max(0.0, noise - antinoise - glitter_amount); // Sparkles (takes noise and removes antinoise from it)
 
-    vec4 saturated_colour = HSL(mix(tex, grad, 0.2));
+    vec4 saturated_colour = HSL(mix(tex, grad, 0.2)); // Saturating default color, adding a bit of grad so sparkles will never be pure white
 
-    saturated_colour.g *= 5.0 * saturation_amount;
-    saturated_colour.b = 0.3;
-    saturated_colour = RGB(saturated_colour);
-    saturated_colour = lighten(colour, saturated_colour * 5.0) * 0.5;
+    saturated_colour.g *= saturation_amount; // Saturating
+    saturated_colour.b = 0.3; // Removing a bit of lightness
+
+    saturated_colour = RGB(saturated_colour); // Back to RGB
+
+    saturated_colour.r *= saturated_colour.r; // Red feels a bit dim
+    saturated_colour = lighten(tex, saturated_colour * 5.0) / glitter_brightness; // Removing dark colors from saturated color, then making it darker
 
     colour = lighten(mix((colour - 0.4) + (saturated_colour * spark), grad, 0.03), grad);
 
