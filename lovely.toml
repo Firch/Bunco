@@ -1146,19 +1146,20 @@ pattern = 'local used_tarot = copier or self'
 position = 'after'
 match_indent = true
 payload = '''
-
-if used_tarot.edition.foil then
-    add_tag(Tag('tag_bunc_chips'))
-    play_sound('generic1')
-elseif used_tarot.edition.holo then
-    add_tag(Tag('tag_bunc_mult'))
-    play_sound('generic1')
-elseif used_tarot.edition.polychrome then
-    add_tag(Tag('tag_bunc_xmult'))
-    play_sound('generic1')
-elseif used_tarot.edition.bunc_glitter then
-    add_tag(Tag('tag_bunc_xchips'))
-    play_sound('generic1')
+if used_tarot.edition then
+    if used_tarot.edition.foil then
+        add_tag(Tag('tag_bunc_chips'))
+        play_sound('generic1')
+    elseif used_tarot.edition.holo then
+        add_tag(Tag('tag_bunc_mult'))
+        play_sound('generic1')
+    elseif used_tarot.edition.polychrome then
+        add_tag(Tag('tag_bunc_xmult'))
+        play_sound('generic1')
+    elseif used_tarot.edition.bunc_glitter then
+        add_tag(Tag('tag_bunc_xchips'))
+        play_sound('generic1')
+    end
 end
 
 '''
