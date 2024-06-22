@@ -121,14 +121,10 @@ local function forced_message(message, card, color, delay, juice)
     end})
 end
 
--- Exotic add_to_pool function
+-- Exotic in_pool function
 
-add_exotic = function()
-    if G.GAME and G.GAME.Exotic then
-        return {add = true}
-    else
-        return {add = false}
-    end
+exotic_in_pool = function()
+    return G.GAME and G.GAME.Exotic
 end
 
 -- Dictionary wrapper
@@ -229,7 +225,7 @@ local function create_joker(joker)
     local pool
 
     if joker.type == 'Exotic' then
-        pool = add_exotic
+        pool = exotic_in_pool
     end
 
     -- Joker creation
@@ -275,7 +271,7 @@ local function create_joker(joker)
     update = joker.update,
     remove_from_deck = joker.remove,
     add_to_deck = joker.add,
-    add_to_pool = pool,
+    in_pool = pool,
 
     effect = joker.effect
     }
@@ -1423,7 +1419,7 @@ SMODS.Consumable{ -- The Sky
         delay(0.5)
     end,
 
-    add_to_pool = add_exotic
+    in_pool = exotic_in_pool
 }
 
 SMODS.Consumable{ -- The Abyss
@@ -1465,7 +1461,7 @@ SMODS.Consumable{ -- The Abyss
         delay(0.5)
     end,
 
-    add_to_pool = add_exotic
+    in_pool = exotic_in_pool
 }
 
 -- Planets
@@ -1570,23 +1566,7 @@ SMODS.Suit{ -- Fleurons
 
     loc_txt = loc.fleurons,
 
-    should_add_to_deck = function() end,
-
-    disable = function(self)
-        for _, other in pairs(SMODS.Ranks) do
-            self:update_p_card(other, true)
-        end
-    end,
-
-    populate = function(self)
-        if G.GAME and G.GAME.Exotic == true then
-            for _, other in pairs(SMODS.Ranks) do
-                if not other.disabled then
-                    self:update_p_card(other)
-                end
-            end
-        end
-    end
+    in_pool = exotic_in_pool
 }
 
 SMODS.Suit{ -- Halberds
@@ -1607,42 +1587,18 @@ SMODS.Suit{ -- Halberds
 
     loc_txt = loc.halberds,
 
-    should_add_to_deck = function() end,
-
-    disable = function(self)
-        for _, other in pairs(SMODS.Ranks) do
-            self:update_p_card(other, true)
-        end
-    end,
-
-    populate = function(self)
-        if G.GAME and G.GAME.Exotic == true then
-            for _, other in pairs(SMODS.Ranks) do
-                if not other.disabled then
-                    self:update_p_card(other)
-                end
-            end
-        end
-    end
+    in_pool = exotic_in_pool
 }
 
 -- Exotic system toggle logic
 
 function disable_exotics()
     if G.GAME then G.GAME.Exotic = false end
-
-    SMODS.Suits.Halberds:disable()
-    SMODS.Suits.Fleurons:disable()
-
     say('Triggered Exotic System disabling.')
 end
 
 function enable_exotics()
     if G.GAME then G.GAME.Exotic = true end
-
-    SMODS.Suits.Halberds:populate()
-    SMODS.Suits.Fleurons:populate()
-
     say('Triggered Exotic System enabling.')
 end
 
@@ -1662,20 +1618,6 @@ function Game:start_run(args)
         end
     else
         saved_game = nil
-    end
-
-    if saved_game then
-        if saved_game.Exotic == nil then
-            saved_game.Exotic = false
-        end
-
-        if saved_game.Exotic == true then
-            enable_exotics()
-        else
-            disable_exotics()
-        end
-    else
-        disable_exotics()
     end
 
     original_start_run(self, args)
@@ -2009,7 +1951,7 @@ SMODS.Blind{ -- The Miser
         end
     end,
 
-    add_to_pool = function()
+    in_pool = function()
         if G.GAME.round_resets.ante < 2 or G.GAME.round_resets.ante % 8 == 7 then
             return false
         else
@@ -2205,7 +2147,7 @@ SMODS.Blind{ -- The Sand
         end
     end,
 
-    add_to_pool = function()
+    in_pool = function()
         if G.GAME.round_resets.ante < 4 or (G.HUD_tags and #G.HUD_tags < 2) then
             return false
         else
@@ -2309,7 +2251,7 @@ SMODS.Blind{ -- Chartreuse Crown
         end
     end,
 
-    add_to_pool = function()
+    in_pool = function()
         local exotic_amount = 0
 
         if G.playing_cards then
