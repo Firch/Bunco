@@ -1566,7 +1566,12 @@ SMODS.Suit{ -- Fleurons
 
     loc_txt = loc.fleurons,
 
-    in_pool = exotic_in_pool
+    in_pool = function(self, args)
+        if args and args.initial_deck then
+            return false
+        end
+        return exotic_in_pool()
+    end
 }
 
 SMODS.Suit{ -- Halberds
@@ -1587,7 +1592,12 @@ SMODS.Suit{ -- Halberds
 
     loc_txt = loc.halberds,
 
-    in_pool = exotic_in_pool
+    in_pool = function(self, args)
+        if args and args.initial_deck then
+            return false
+        end
+        return exotic_in_pool()
+    end
 }
 
 -- Exotic system toggle logic
