@@ -2406,7 +2406,7 @@ SMODS.Back{ -- Fairy
     atlas = 'bunco_decks'
 }
 
--- Tags (WIP, I desperately need add_to_pool for these)
+-- Tags
 
 SMODS.Atlas({key = 'bunco_tags', path = 'Tags/Tags.png', px = 34, py = 34})
 
@@ -2444,7 +2444,7 @@ SMODS.Tag{ -- Glitter
     end,
 
     pos = coordinate(1),
-    atlas = 'bunco_tags'
+    atlas = 'bunco_tags',
 }
 
 SMODS.Tag{ -- Chips
@@ -2466,7 +2466,9 @@ SMODS.Tag{ -- Chips
     end,
 
     pos = coordinate(3),
-    atlas = 'bunco_tags'
+    atlas = 'bunco_tags',
+
+    in_pool = function() return false end
 }
 
 SMODS.Tag{ -- Mult
@@ -2488,7 +2490,9 @@ SMODS.Tag{ -- Mult
     end,
 
     pos = coordinate(4),
-    atlas = 'bunco_tags'
+    atlas = 'bunco_tags',
+
+    in_pool = function() return false end
 }
 
 SMODS.Tag{ -- Xmult
@@ -2511,7 +2515,9 @@ SMODS.Tag{ -- Xmult
     end,
 
     pos = coordinate(5),
-    atlas = 'bunco_tags'
+    atlas = 'bunco_tags',
+
+    in_pool = function() return false end
 }
 
 SMODS.Tag{ -- Xchip
@@ -2534,7 +2540,9 @@ SMODS.Tag{ -- Xchip
     end,
 
     pos = coordinate(6),
-    atlas = 'bunco_tags'
+    atlas = 'bunco_tags',
+
+    in_pool = function() return false end
 }
 
 SMODS.Tag{ -- Filigree
@@ -2574,7 +2582,9 @@ SMODS.Tag{ -- Filigree
     end,
 
     pos = coordinate(7),
-    atlas = 'bunco_tags'
+    atlas = 'bunco_tags',
+
+    in_pool = exotic_in_pool
 }
 
 -- Editions
