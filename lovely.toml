@@ -1146,6 +1146,7 @@ pattern = 'local used_tarot = copier or self'
 position = 'after'
 match_indent = true
 payload = '''
+
 if used_tarot.edition then
     if used_tarot.edition.foil then
         add_tag(Tag('tag_bunc_chips'))
@@ -1192,7 +1193,7 @@ position = 'after'
 match_indent = true
 payload = '''
 
-if scoring_hand[i].edition.bunc_glitter then
+if scoring_hand[i].edition and scoring_hand[i].edition.bunc_glitter then
     local xchips = G.P_CENTERS.e_bunc_glitter.config.Xchips
     hand_chips = mod_chips(hand_chips * xchips)
     update_hand_text({delay = 0}, {chips = hand_chips})
