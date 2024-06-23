@@ -19,6 +19,7 @@
 -- Magenta dagger wobble?
 -- Disable Bierdeckel upgrade message on win
 -- Global variable for glitter (done)
+-- Config for double lovers
 
 local bunco = SMODS.current_mod
 local filesystem = NFS or love.filesystem
@@ -2457,96 +2458,6 @@ SMODS.Back{ -- Fairy
 
 SMODS.Atlas({key = 'bunco_tags', path = 'Tags/Tags.png', px = 34, py = 34})
 
-SMODS.Tag{ -- Chips
-    key = 'chips', loc_txt = loc.chips,
-
-    config = {type = 'hand_played'},
-    apply = function(tag, context)
-        if context.type == 'hand_played' then
-
-            hand_chips = mod_chips(hand_chips + 50)
-            update_hand_text({delay = 0}, {chips = hand_chips})
-
-            tag:instayep('+', G.C.CHIPS, function()
-                return true
-            end, 0)
-            tag.triggered = true
-            return true
-        end
-    end,
-
-    pos = coordinate(1),
-    atlas = 'bunco_tags'
-}
-
-SMODS.Tag{ -- Mult
-    key = 'mult', loc_txt = loc.mult,
-
-    config = {type = 'hand_played'},
-    apply = function(tag, context)
-        if context.type == 'hand_played' then
-
-            mult = mod_mult(mult + 10)
-            update_hand_text({delay = 0}, {mult = mult})
-
-            tag:instayep('+', G.C.MULT, function()
-                return true
-            end, 0)
-            tag.triggered = true
-            return true
-        end
-    end,
-
-    pos = coordinate(2),
-    atlas = 'bunco_tags'
-}
-
-SMODS.Tag{ -- Xmult
-    key = 'xmult', loc_txt = loc.xmult,
-
-    config = {type = 'hand_played'},
-    apply = function(tag, context)
-        if context.type == 'hand_played' then
-            say(tag.key)
-
-            mult = mod_mult(mult * 1.5)
-            update_hand_text({delay = 0}, {mult = mult})
-
-            tag:instayep('+', G.C.MULT, function()
-                return true
-            end, 0)
-            tag.triggered = true
-            return true
-        end
-    end,
-
-    pos = coordinate(3),
-    atlas = 'bunco_tags'
-}
-
-SMODS.Tag{ -- Xchip
-    key = 'xchips', loc_txt = loc.xchips,
-
-    config = {type = 'hand_played', odds = -1},
-    apply = function(tag, context)
-        if context.type == 'hand_played' then
-            say(tag.key)
-
-            hand_chips = mod_chips(hand_chips * 1.2)
-            update_hand_text({delay = 0}, {chips = hand_chips})
-
-            tag:instayep('+', G.C.CHIPS, function()
-                return true
-            end, 0)
-            tag.triggered = true
-            return true
-        end
-    end,
-
-    pos = coordinate(4),
-    atlas = 'bunco_tags'
-}
-
 SMODS.Tag{ -- Glitter
     key = 'glitter', loc_txt = loc.glitter_tag,
 
@@ -2580,7 +2491,97 @@ SMODS.Tag{ -- Glitter
         end
     end,
 
+    pos = coordinate(1),
+    atlas = 'bunco_tags'
+}
+
+SMODS.Tag{ -- Chips
+    key = 'chips', loc_txt = loc.chips,
+
+    config = {type = 'hand_played'},
+    apply = function(tag, context)
+        if context.type == 'hand_played' then
+
+            hand_chips = mod_chips(hand_chips + 50)
+            update_hand_text({delay = 0}, {chips = hand_chips})
+
+            tag:instayep('+', G.C.CHIPS, function()
+                return true
+            end, 0)
+            tag.triggered = true
+            return true
+        end
+    end,
+
+    pos = coordinate(3),
+    atlas = 'bunco_tags'
+}
+
+SMODS.Tag{ -- Mult
+    key = 'mult', loc_txt = loc.mult,
+
+    config = {type = 'hand_played'},
+    apply = function(tag, context)
+        if context.type == 'hand_played' then
+
+            mult = mod_mult(mult + 10)
+            update_hand_text({delay = 0}, {mult = mult})
+
+            tag:instayep('+', G.C.MULT, function()
+                return true
+            end, 0)
+            tag.triggered = true
+            return true
+        end
+    end,
+
+    pos = coordinate(4),
+    atlas = 'bunco_tags'
+}
+
+SMODS.Tag{ -- Xmult
+    key = 'xmult', loc_txt = loc.xmult,
+
+    config = {type = 'hand_played'},
+    apply = function(tag, context)
+        if context.type == 'hand_played' then
+            say(tag.key)
+
+            mult = mod_mult(mult * 1.5)
+            update_hand_text({delay = 0}, {mult = mult})
+
+            tag:instayep('+', G.C.MULT, function()
+                return true
+            end, 0)
+            tag.triggered = true
+            return true
+        end
+    end,
+
     pos = coordinate(5),
+    atlas = 'bunco_tags'
+}
+
+SMODS.Tag{ -- Xchip
+    key = 'xchips', loc_txt = loc.xchips,
+
+    config = {type = 'hand_played', odds = -1},
+    apply = function(tag, context)
+        if context.type == 'hand_played' then
+            say(tag.key)
+
+            hand_chips = mod_chips(hand_chips * 1.2)
+            update_hand_text({delay = 0}, {chips = hand_chips})
+
+            tag:instayep('+', G.C.CHIPS, function()
+                return true
+            end, 0)
+            tag.triggered = true
+            return true
+        end
+    end,
+
+    pos = coordinate(6),
     atlas = 'bunco_tags'
 }
 
@@ -2620,7 +2621,7 @@ SMODS.Tag{ -- Filigree
         end
     end,
 
-    pos = coordinate(6),
+    pos = coordinate(7),
     atlas = 'bunco_tags'
 }
 
@@ -2645,4 +2646,20 @@ SMODS.Edition{
     end,
 
     shader = 'glitter'
+}
+
+SMODS.Shader({key = 'fluorescent', path = 'fluorescent.fs'})
+-- SMODS.Sound({key = 'fluorescent', path = 'fluorescent.ogg'})
+
+SMODS.Edition{
+    key = 'fluorescent', loc_txt = loc.fluorescent_edition,
+
+    -- sound = {sound = 'bunc_fluorescent', per = 1.2, vol = 0.4},
+    in_shop = true,
+    weight = 9,
+    get_weight = function(self)
+        return G.GAME.edition_rate * self.weight
+    end,
+
+    shader = 'fluorescent'
 }

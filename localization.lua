@@ -757,6 +757,16 @@ return {
 
     -- Tags
 
+    glitter_tag = {
+        ['en-us'] = {
+            ['name'] = 'Glitter Tag',
+            ['text'] = {
+                [1] = 'Next base edition shop',
+                [2] = 'Joker is free and',
+                [3] = 'becomes {C:dark_edition}Glitter'
+            }
+        }
+    },
     chips = {
         ['en-us'] = {
             ['name'] = 'Chips Tag',
@@ -793,16 +803,6 @@ return {
             }
         }
     },
-    glitter_tag = {
-        ['en-us'] = {
-            ['name'] = 'Glitter Tag',
-            ['text'] = {
-                [1] = 'Next base edition shop',
-                [2] = 'Joker is free and',
-                [3] = 'becomes {C:dark_edition}Glitter'
-            }
-        }
-    },
     filigree = {
         ['en-us'] = {
             ['name'] = 'Filigree Tag',
@@ -824,4 +824,14 @@ return {
             }
         }
     },
+    fluorescent_edition = {
+        ['en-us'] = {
+            ['name'] = 'Fluorescent',
+            ['label'] = 'Fluorescent',
+            ['text'] = {
+                [1] = 'Cannot be flipped, debuffed',
+                [2] = 'or forced to be selected'
+            }
+        }
+    }
 }

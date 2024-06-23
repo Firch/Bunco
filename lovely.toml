@@ -1193,7 +1193,7 @@ position = 'after'
 match_indent = true
 payload = '''
 
-if scoring_hand[i].edition and scoring_hand[i].edition.bunc_glitter then
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.bunc_glitter then
     local xchips = G.P_CENTERS.e_bunc_glitter.config.Xchips
     hand_chips = mod_chips(hand_chips * xchips)
     update_hand_text({delay = 0}, {chips = hand_chips})
@@ -1222,7 +1222,7 @@ position = 'before'
 match_indent = true
 payload = '''
 
-if G.jokers.cards[i].edition.bunc_glitter then
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.bunc_glitter then
     local xchips = G.P_CENTERS.e_bunc_glitter.config.Xchips
     hand_chips = mod_chips(hand_chips * xchips)
     update_hand_text({delay = 0}, {chips = hand_chips})
@@ -1230,6 +1230,52 @@ if G.jokers.cards[i].edition.bunc_glitter then
     {message = 'X'..xchips..' '..global_bunco_loc.chips,
     edition = true,
     x_chips = true})
+end
+
+'''
+
+# Fluorescent edition 1/3
+[[patches]]
+[patches.pattern]
+target = 'blind.lua'
+pattern = 'function Blind:debuff_card(card, from_blind)'
+position = 'after'
+match_indent = true
+payload = '''
+
+if card.edition and card.edition.bunc_fluorescent then
+    card:set_debuff(false)
+    return
+end
+
+'''
+
+# Fluorescent edition 2/3
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "if self.facing == 'front' then"
+position = 'after'
+match_indent = true
+payload = '''
+
+if self.area == G.hand and self.edition and self.edition.bunc_fluorescent then
+    return
+end
+
+'''
+
+# Fluorescent edition 3/3
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+pattern = "function CardArea:remove_from_highlighted(card, force)"
+position = 'after'
+match_indent = true
+payload = '''
+
+if card.edition and card.edition.bunc_fluorescent then
+    card.ability.forced_selection = false
 end
 
 '''
