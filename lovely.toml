@@ -559,7 +559,7 @@ position = 'after'
 match_indent = true
 payload = '''
 
-if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_paling' and not G.GAME.blind.disabled then
+if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_paling' and not G.GAME.blind.disabled and not hook then
     if G.GAME.current_round.hands_left > 1 then
         ease_hands_played(-1) --
     elseif G.GAME.current_round.hands_left == 1 or G.GAME.current_round.hands_left == 0 then
