@@ -2103,21 +2103,21 @@ SMODS.Blind{ -- The Stone
 
     set_blind = function(self, blind, reset, silent)
         if blind.debuff and not blind.disabled and G.GAME.dollars >= 10 then
-            local final_chips = (G.GAME.blind.chips / G.GAME.blind.mult) * (math.floor(G.GAME.dollars / 10) + G.GAME.blind.mult)
-            local chip_mod = math.ceil((final_chips - G.GAME.blind.chips) / 120) -- iterate over ~120 ticks
+            local final_chips = (blind.chips / blind.mult) * (math.floor(G.GAME.dollars / 10) + blind.mult)
+            local chip_mod = math.ceil((final_chips - blind.chips) / 120) -- iterate over ~120 ticks
             local step = 0
             event({trigger = 'after', blocking = true, func = function()
-                G.GAME.blind.chips = G.GAME.blind.chips + G.SETTINGS.GAMESPEED * chip_mod
-                if G.GAME.blind.chips < final_chips then
-                    G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+                blind.chips = blind.chips + G.SETTINGS.GAMESPEED * chip_mod
+                if blind.chips < final_chips then
+                    blind.chip_text = number_format(blind.chips)
                     if step % 5 == 0 then
                         play_sound('chips1', 0.8 + (step * 0.005))
                     end
                     step = step + 1
                 else
-                    G.GAME.blind.chips = final_chips
-                    G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
-                    G.GAME.blind:wiggle()
+                    blind.chips = final_chips
+                    blind.chip_text = number_format(blind.chips)
+                    blind:wiggle()
                     return true
                 end
             end})
@@ -2136,21 +2136,21 @@ SMODS.Blind{ -- The Sand
 
     set_blind = function(self, blind, reset, silent)
         if blind.debuff and not blind.disabled and #G.HUD_tags ~= 0 then
-            local final_chips = (G.GAME.blind.chips / G.GAME.blind.mult) * (#G.HUD_tags + G.GAME.blind.mult)
-            local chip_mod = math.ceil((final_chips - G.GAME.blind.chips) / 120) -- iterate over ~120 ticks
+            local final_chips = (blind.chips / blind.mult) * (#G.HUD_tags + blind.mult)
+            local chip_mod = math.ceil((final_chips - blind.chips) / 120) -- iterate over ~120 ticks
             local step = 0
             event({trigger = 'after', blocking = true, func = function()
-                G.GAME.blind.chips = G.GAME.blind.chips + G.SETTINGS.GAMESPEED * chip_mod
-                if G.GAME.blind.chips < final_chips then
-                    G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+                blind.chips = blind.chips + G.SETTINGS.GAMESPEED * chip_mod
+                if blind.chips < final_chips then
+                    blind.chip_text = number_format(blind.chips)
                     if step % 5 == 0 then
                         play_sound('chips1', 0.8 + (step * 0.005))
                     end
                     step = step + 1
                 else
-                    G.GAME.blind.chips = final_chips
-                    G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
-                    G.GAME.blind:wiggle()
+                    blind.chips = final_chips
+                    blind.chip_text = number_format(blind.chips)
+                    blind:wiggle()
                     return true
                 end
             end})
@@ -2337,21 +2337,21 @@ SMODS.Blind{ -- Turquoise Shield
 
     set_blind = function(self, blind, reset, silent)
         if blind.debuff and not blind.disabled and G.GAME.overscore ~= 0 then
-            local final_chips = (G.GAME.blind.chips / G.GAME.blind.mult) + (G.GAME.overscore or 0)
-            local chip_mod = math.ceil((final_chips - G.GAME.blind.chips) / 120) -- iterate over ~120 ticks
+            local final_chips = (blind.chips / blind.mult) + (G.GAME.overscore or 0)
+            local chip_mod = math.ceil((final_chips - blind.chips) / 120) -- iterate over ~120 ticks
             local step = 0
             event({trigger = 'after', blocking = true, func = function()
-                G.GAME.blind.chips = G.GAME.blind.chips + G.SETTINGS.GAMESPEED * chip_mod
-                if G.GAME.blind.chips < final_chips then
-                    G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+                blind.chips = blind.chips + G.SETTINGS.GAMESPEED * chip_mod
+                if blind.chips < final_chips then
+                    blind.chip_text = number_format(blind.chips)
                     if step % 5 == 0 then
                         play_sound('chips1', 0.8 + (step * 0.005))
                     end
                     step = step + 1
                 else
-                    G.GAME.blind.chips = final_chips
-                    G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
-                    G.GAME.blind:wiggle()
+                    blind.chips = final_chips
+                    blind.chip_text = number_format(blind.chips)
+                    blind:wiggle()
                     return true
                 end
             end})
