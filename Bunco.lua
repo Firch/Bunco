@@ -1914,7 +1914,7 @@ SMODS.Blind{ -- The Tine
     end,
 
     debuff_card = function(self, blind, card, from_blind)
-        if self.debuff and not self.disabled and card.area ~= G.jokers then
+        if blind.debuff and not blind.disabled and card.area ~= G.jokers then
             if card.base.value == G.GAME.current_round.most_played_rank then
                 card:set_debuff(true)
                 return true
@@ -1990,7 +1990,7 @@ SMODS.Blind{ -- The Flame
     boss = {min = 3},
 
     debuff_card = function(self, blind, card, from_blind)
-        if self.debuff and not self.disabled and card.area ~= G.jokers then
+        if blind.debuff and not blind.disabled and card.area ~= G.jokers then
             if card.config.center ~= G.P_CENTERS.c_base then
                 card:set_debuff(true)
                 return true
@@ -2019,9 +2019,9 @@ SMODS.Blind{ -- The Mask
     end,
 
     modify_hand = function(self, blind, cards, poker_hands, text, mult, hand_chips)
-        if self.debuff and not self.disabled then
+        if blind.debuff and not blind.disabled then
             if G.GAME.last_hand_played == G.GAME.current_round.most_played_poker_hand then
-                self.triggered = true
+                blind.triggered = true
                 return G.GAME.hands[G.GAME.current_round.least_played_poker_hand].s_mult, G.GAME.hands[G.GAME.current_round.least_played_poker_hand].s_chips, true
             end
         end
@@ -2048,7 +2048,7 @@ SMODS.Blind{ -- The Bulwark
     end,
 
     press_play = function(self, blind)
-        if self.debuff and not self.disabled then
+        if blind.debuff and not blind.disabled then
             if G.FUNCS.get_poker_hand_info(G.hand.highlighted) == G.GAME.current_round.most_played_poker_hand then
                 local original_limit = G.hand.config.highlighted_limit
                 G.E_MANAGER:add_event(Event({ func = function()
@@ -2064,7 +2064,7 @@ SMODS.Blind{ -- The Bulwark
                         G.FUNCS.discard_cards_from_highlighted(nil, true)
                     end
                 return true end }))
-                self.triggered = true
+                blind.triggered = true
                 delay(0.7)
             end
         end
@@ -2081,7 +2081,7 @@ SMODS.Blind{ -- The Knoll
     boss = {min = 4},
 
     stay_flipped = function(self, blind, area, card)
-        if self.debuff and not self.disabled and card.area ~= G.jokers and
+        if blind.debuff and not blind.disabled and card.area ~= G.jokers and
         G.GAME.current_round.hands_played == 0 and G.GAME.current_round.discards_used == 0 then
             if G.GAME.dollars > 5 then
                 card:set_debuff(true)
@@ -2102,7 +2102,7 @@ SMODS.Blind{ -- The Stone
     boss_colour = HEX('586372'),
 
     set_blind = function(self, blind, reset, silent)
-        if self.debuff and not self.disabled and G.GAME.dollars >= 10 then
+        if blind.debuff and not blind.disabled and G.GAME.dollars >= 10 then
             local final_chips = (G.GAME.blind.chips / G.GAME.blind.mult) * (math.floor(G.GAME.dollars / 10) + G.GAME.blind.mult)
             local chip_mod = math.ceil((final_chips - G.GAME.blind.chips) / 120) -- iterate over ~120 ticks
             local step = 0
@@ -2135,7 +2135,7 @@ SMODS.Blind{ -- The Sand
     boss_colour = HEX('b79131'),
 
     set_blind = function(self, blind, reset, silent)
-        if self.debuff and not self.disabled and #G.HUD_tags ~= 0 then
+        if blind.debuff and not blind.disabled and #G.HUD_tags ~= 0 then
             local final_chips = (G.GAME.blind.chips / G.GAME.blind.mult) * (#G.HUD_tags + G.GAME.blind.mult)
             local chip_mod = math.ceil((final_chips - G.GAME.blind.chips) / 120) -- iterate over ~120 ticks
             local step = 0
@@ -2175,7 +2175,7 @@ SMODS.Blind{ -- The Blade
 
     vars = {},
     loc_vars = function(self, blind)
-        local overscore = get_blind_amount(G.GAME.round_resets.ante)*self.mult*G.GAME.starting_params.ante_scaling
+        local overscore = get_blind_amount(G.GAME.round_resets.ante)*blind.mult*G.GAME.starting_params.ante_scaling
         overscore = number_format(overscore * 1.5)
         return {vars = {overscore}}
     end,
@@ -2189,7 +2189,7 @@ SMODS.Blind{ -- The Blade
         G.GAME.Blade.chips = G.GAME.chips
     end,
 
-    defeat = function(self, blind)
+    defeat = function()
         G.GAME.Blade = nil
     end,
 
@@ -2224,7 +2224,7 @@ SMODS.Blind{ -- The Cadaver
     boss = {min = 2},
 
     debuff_hand = function(self, blind, cards, hand, handname, check)
-        if self.debuff and not self.disabled then
+        if blind.debuff and not blind.disabled then
             for i = 1, #cards do
                 if cards[i]:is_face() then
                     return true
@@ -2247,7 +2247,7 @@ SMODS.Blind{ -- Chartreuse Crown
     boss = {showdown = true, min = 10, max = 10},
 
     debuff_card = function(self, blind, card, from_blind)
-        if self.debuff and not self.disabled and card.area ~= G.jokers then
+        if blind.debuff and not blind.disabled and card.area ~= G.jokers then
             if card.base.suit == ('Spades') or
             card.base.suit == ('Hearts') or
             card.base.suit == ('Clubs') or
@@ -2306,7 +2306,7 @@ SMODS.Blind{ -- Indigo Tower
     boss = {showdown = true, min = 10, max = 10},
 
     debuff_card = function(self, blind, card, from_blind)
-        if self.debuff and not self.disabled and card.area ~= G.jokers then
+        if blind.debuff and not blind.disabled and card.area ~= G.jokers then
             if not card.ability.played_this_ante then
                 card:set_debuff(true)
                 return true
@@ -2336,7 +2336,7 @@ SMODS.Blind{ -- Turquoise Shield
     boss = {showdown = true, min = 10, max = 10},
 
     set_blind = function(self, blind, reset, silent)
-        if self.debuff and not self.disabled and G.GAME.overscore ~= 0 then
+        if blind.debuff and not blind.disabled and G.GAME.overscore ~= 0 then
             local final_chips = (G.GAME.blind.chips / G.GAME.blind.mult) + (G.GAME.overscore or 0)
             local chip_mod = math.ceil((final_chips - G.GAME.blind.chips) / 120) -- iterate over ~120 ticks
             local step = 0
