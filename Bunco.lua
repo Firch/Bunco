@@ -2595,7 +2595,7 @@ SMODS.Sound({key = 'glitter', path = 'glitter.ogg'})
 SMODS.Edition{
     key = 'glitter', loc_txt = loc.glitter_edition,
 
-    config = {Xchips = 1.2},
+    config = {Xchips = 1.3},
     loc_vars = function(self, info_queue)
         return {vars = {self.config.Xchips}}
     end,
