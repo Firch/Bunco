@@ -6,10 +6,10 @@
 --- VERSION: 5.0
 
 -- ToDo:
--- Fix Crop Circles always showing Fleurons (done)
--- Check how to add custom entries to the localization (for card messages like linocut's one) (done)
--- Cassette proper coordinates (done)
--- Polychrome desc on roy g biv (done)
+-- (done) Fix Crop Circles always showing Fleurons
+-- (done) Check how to add custom entries to the localization (for card messages like linocut's one)
+-- (done) Cassette proper coordinates
+-- (done) Polychrome desc on roy g biv
 -- Debuff registration plate level with shader if possible
 -- Nan morgan or make zero shapiro count letter rank cards
 -- Unlocks
@@ -18,8 +18,11 @@
 -- Card sizes
 -- Magenta dagger wobble?
 -- Disable Bierdeckel upgrade message on win
--- Global variable for glitter (done)
+-- (done) Global variable for glitter
 -- Config for double lovers
+-- Fix suit colors
+-- Talisman support
+-- Make tags use global values of editions (+ loc vars for it)
 
 local bunco = SMODS.current_mod
 local filesystem = NFS or love.filesystem
@@ -938,7 +941,7 @@ create_joker({ -- Zero Shapiro
     unlocked = true,
     calculate = function(self, card, context)
         if context.individual and context.cardarea == G.play then
-            if context.other_card.config.center == G.P_CENTERS.m_stone or context.other_card:get_id() == 0 then
+            if context.other_card.config.center == G.P_CENTERS.m_stone or context.other_card:get_id() == 0 or not tonumber(context.other_card.base.value) and context.other_card.base.value ~= 'Ace' then
 
                 card.ability.extra.amount = card.ability.extra.amount + card.ability.extra.bonus
 
@@ -1090,6 +1093,33 @@ create_joker({ -- Slothful
             if context.other_card.config.center == G.P_CENTERS.m_wild then
                 return {
                     mult = card.ability.extra.mult,
+                    card = card
+                }
+            end
+        end
+    end
+})
+
+create_joker({ -- Neon
+    name = 'Neon', position = 28,
+    vars = {{xmult = 1}},
+    rarity = 'Uncommon', cost = 5,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.debuffed_card then
+            card.ability.extra.xmult = card.ability.extra.xmult + 0.2
+        end
+
+        if context.joker_main then
+            if card.ability.extra.xmult ~= 1 then
+                return {
+                    message = localize {
+                        type = 'variable',
+                        key = 'a_xmult',
+                        vars = { card.ability.extra.xmult }
+                    },
+                    Xmult_mod = card.ability.extra.xmult,
                     card = card
                 }
             end
@@ -2175,8 +2205,9 @@ SMODS.Blind{ -- The Blade
 
     vars = {},
     loc_vars = function(self)
-        local overscore = get_blind_amount(G.GAME.round_resets.ante)*G.GAME.blind.mult*G.GAME.starting_params.ante_scaling
+        local overscore = get_blind_amount(G.GAME.round_resets.ante)*G.P_BLINDS.bl_bunc_blade.mult*G.GAME.starting_params.ante_scaling
         overscore = number_format(overscore * 1.5)
+        say(G.GAME.round_resets.ante..' '..G.GAME.blind.mult..' '..G.GAME.starting_params.ante_scaling..' '..overscore)
         return {vars = {overscore}}
     end,
     process_loc_text = function(self)
@@ -2447,6 +2478,43 @@ SMODS.Tag{ -- Glitter
     atlas = 'bunco_tags',
 }
 
+SMODS.Tag{ -- Fluorescent
+    key = 'fluorescent', loc_txt = loc.fluorescent_tag,
+
+    config = {type = 'store_joker_modify', edition = 'bunc_fluorescent', odds = 4},
+    loc_vars = function(self, info_queue)
+        info_queue[#info_queue+1] = G.P_CENTERS.e_bunc_fluorescent
+        return {}
+    end,
+
+    apply = function(tag, context)
+        if context.type == 'store_joker_modify' then
+            local applied = nil
+            if not context.card.edition and not context.card.temp_edition and context.card.ability.set == 'Joker' then
+                local lock = tag.ID
+                G.CONTROLLER.locks[lock] = true
+
+                context.card.temp_edition = true
+                tag:yep('+', G.C.DARK_EDITION,function()
+                    context.card:set_edition({bunc_fluorescent = true}, true)
+                    context.card.ability.couponed = true
+                    context.card:set_cost()
+                    context.card.temp_edition = nil
+                    G.CONTROLLER.locks[lock] = nil
+                    return true
+                end)
+                applied = true
+
+                tag.triggered = true
+            end
+            return applied
+        end
+    end,
+
+    pos = coordinate(2),
+    atlas = 'bunco_tags',
+}
+
 SMODS.Tag{ -- Chips
     key = 'chips', loc_txt = loc.chips,
 
@@ -2501,7 +2569,6 @@ SMODS.Tag{ -- Xmult
     config = {type = 'hand_played'},
     apply = function(tag, context)
         if context.type == 'hand_played' then
-            say(tag.key)
 
             mult = mod_mult(mult * 1.5)
             update_hand_text({delay = 0}, {mult = mult})
@@ -2526,7 +2593,6 @@ SMODS.Tag{ -- Xchip
     config = {type = 'hand_played', odds = -1},
     apply = function(tag, context)
         if context.type == 'hand_played' then
-            say(tag.key)
 
             hand_chips = mod_chips(hand_chips * 1.2)
             update_hand_text({delay = 0}, {chips = hand_chips})
@@ -2611,14 +2677,14 @@ SMODS.Edition{
 }
 
 SMODS.Shader({key = 'fluorescent', path = 'fluorescent.fs'})
--- SMODS.Sound({key = 'fluorescent', path = 'fluorescent.ogg'})
+SMODS.Sound({key = 'fluorescent', path = 'fluorescent.ogg'})
 
 SMODS.Edition{
     key = 'fluorescent', loc_txt = loc.fluorescent_edition,
 
-    -- sound = {sound = 'bunc_fluorescent', per = 1.2, vol = 0.4},
+    sound = {sound = 'bunc_fluorescent', per = 1.2, vol = 0.4},
     in_shop = true,
-    weight = 9,
+    weight = 18,
     get_weight = function(self)
         return G.GAME.edition_rate * self.weight
     end,

@@ -119,7 +119,7 @@ vec4 lighten(vec4 colour1, vec4 colour2) {
 }
 
 // Overlay blending mode
-vec4 overlay(vec4 baseColor, vec4 blendColor, float blendAmount) {
+vec4 overlay(vec4 baseColor, vec4 blendColor) {
     vec3 result;
 
     for (int i = 0; i < 3; i++) {
@@ -130,15 +130,15 @@ vec4 overlay(vec4 baseColor, vec4 blendColor, float blendAmount) {
         }
     }
 
-    vec3 blendedRGB = mix(baseColor.rgb, result, blendAmount);
+    vec3 blendedRGB = mix(baseColor.rgb, result, 1.0);
     return vec4(blendedRGB, baseColor.a);
 }
 
 // White-to-color blending mode
-vec4 rewhite(vec4 baseColor, vec4 blendColor, float blendAmount) {
+vec4 rewhite(vec4 baseColor, vec4 blendColor) {
     float whiteness = (baseColor.r + baseColor.g + baseColor.b) / 3.0;
 
-    float blendFactor = whiteness * blendAmount;
+    float blendFactor = whiteness;
 
     vec3 blendedRGB = mix(baseColor.rgb, blendColor.rgb, blendFactor);
 
@@ -146,30 +146,55 @@ vec4 rewhite(vec4 baseColor, vec4 blendColor, float blendAmount) {
 }
 
 // Hue blending mode (3 functions)
-vec3 rgb2hsv(vec3 c) {
+vec4 rgb2hsv(vec4 c) {
     vec4 K = vec4(0.0, -1.0/3.0, 2.0/3.0, -1.0);
     vec4 p = mix(vec4(c.bg, K.wz), vec4(c.gb, K.xy), step(c.b, c.g));
     vec4 q = mix(vec4(p.xyw, c.r), vec4(c.r, p.yzx), step(p.x, c.r));
 
     float d = q.x - min(q.w, q.y);
     float e = 1.0e-10;
-    return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
+    return vec4(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x, c.a);
 }
 
-vec3 hsv2rgb(vec3 c) {
+vec4 hsv2rgb(vec4 c) {
     vec4 K = vec4(1.0, 2.0/3.0, 1.0/3.0, 3.0);
     vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
-    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+    return vec4(c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y), c.a);
 }
 
 vec4 hueBlend(vec4 baseColor, vec4 blendColor) {
-    vec3 baseHSV = rgb2hsv(baseColor.rgb);
-    vec3 blendHSV = rgb2hsv(blendColor.rgb);
+    vec4 baseHSV = rgb2hsv(baseColor);
+    vec4 blendHSV = rgb2hsv(blendColor);
 
     baseHSV.x = blendHSV.x;  // Replace hue
 
-    vec3 resultRGB = hsv2rgb(baseHSV);
-    return vec4(resultRGB, baseColor.a);  // Preserve the original alpha
+    vec4 resultRGB = hsv2rgb(baseHSV);
+    return vec4(resultRGB.rgb, baseColor.a);
+}
+
+// Hueshift
+vec4 hueShift(vec4 color, float shift) {
+    vec4 hsv = rgb2hsv(color);
+
+    hsv.x = mod(hsv.x + shift, 1.0);
+
+    vec4 resultRGB = hsv2rgb(hsv);
+    return vec4(resultRGB.rgb, color.a);
+}
+
+// Colorburn blending mode
+vec4 colorBurn(vec4 baseColor, vec4 blendColor) {
+    vec3 result;
+
+    for(int i = 0; i < 3; i++) {
+        if (blendColor[i] == 0.0) {
+            result[i] = 0.0;
+        } else {
+            result[i] = 1.0 - (1.0 - baseColor[i]) / blendColor[i];
+        }
+    }
+
+    return vec4(result, baseColor.a);
 }
 
 // this is what actually changes the look of card
@@ -202,27 +227,27 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
     // Actual shader
     vec4 white = vec4(1.0,1.0,1.0,1.0);
     vec4 black = vec4(0.0,0.0,0.0,1.0);
-
-    vec4 final = overlay(tex / 1.3, tex, 1.0) - 0.6;
-    final = lighten(final, (rewhite(tex, black, 1.0) - 0.1) * 3.0);
-    final += final * clamp(final - 0.1, 0.005, 10.0);
-    final += (tex - rewhite(final, black, 0.96)) * -1.0;
-
-    final *= 0.9 + (final * final);
-
-    final = overlay(final, (tex - tex * 0.82), 1.0);
-
-    final = hueBlend(final, mix(tex, final, 0.5));
-
-    final -= 0.01;
-    final += final * final;
-
     vec4 jokerblack = vec4(0.31,0.388,0.404,1.0);
 
+    vec4 final = tex;
+    final.rgb = (final.rgb - 1.0) * -1.0; // Invert
 
-    final += vec4(0.086,0.039,0.196,1.0) * maxfac * 0.36;
-    final = lighten(final + jokerblack, jokerblack);
+    vec4 burned = tex;
 
+    burned = hueShift(tex / 2.0, 0.32); // Burn color hue-shifted
+    final = colorBurn(final, burned); // Burn the color
+
+    final = hueBlend(final, tex); // Restore the original hue
+    final.r += final.r + final.r;
+
+    vec4 rewhited = rewhite(tex, tex / 1.2) / 0.9;
+    rewhited = rgb2hsv(rewhited);
+    rewhited.y /= 3.0;
+    rewhited = hsv2rgb(rewhited);
+
+    final += rewhited; // Various contrast & jokerblack tweaks
+    final += tex * 0.15;
+    final = lighten(final, jokerblack + tex * 0.3);
 
     final.a = tex.a; // Restore alpha
 

@@ -355,9 +355,10 @@ return {
             ['name'] = 'Zero Shapiro',
             ['text'] = {
                 [1] = 'Played cards with',
-                [2] = '{C:attention}no{} or {C:attention}zero{} rank give',
+                [2] = '{C:attention}no{}, {C:attention}zero{} or {C:attention}uncountable{} rank give',
                 [3] = '{C:green}+#1#{} to {C:green,E:1,S:1.1}probabilities{}',
-                [4] = 'for current round when scored'
+                [4] = 'for current round when scored',
+                [5] = '{C:inactive}(K, Q, J, 0, Stone)'
             }
         }
     },
@@ -402,6 +403,19 @@ return {
             }
         }
     },
+    neon = {
+        ['en-us'] = {
+            ['name'] = 'Neon Joker',
+            ['text'] = {
+                [1] = 'Gains {X:mult,C:white}X0.2{} Mult',
+                [2] = 'per debuffed card played',
+                [3] = '{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive} Mult)'
+            }
+        }
+    },
+
+    -- Exotic
+
     zealous = {
         ['en-us'] = {
             ['name'] = 'Zealous Joker',
