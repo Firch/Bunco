@@ -2133,7 +2133,7 @@ SMODS.Blind{ -- The Stone
     boss_colour = HEX('586372'),
 
     set_blind = function(self, reset, silent)
-        if G.GAME.blind.debuff and not G.GAME.blind.disabled and G.GAME.dollars >= 10 then
+        if not reset and G.GAME.blind.debuff and not G.GAME.blind.disabled and G.GAME.dollars >= 10 then
             local final_chips = (G.GAME.blind.chips / G.GAME.blind.mult) * (math.floor(G.GAME.dollars / 10) + G.GAME.blind.mult)
             local chip_mod = math.ceil((final_chips - G.GAME.blind.chips) / 120) -- iterate over ~120 ticks
             local step = 0
@@ -2166,7 +2166,7 @@ SMODS.Blind{ -- The Sand
     boss_colour = HEX('b79131'),
 
     set_blind = function(self, reset, silent)
-        if G.GAME.blind.debuff and not G.GAME.blind.disabled and #G.HUD_tags ~= 0 then
+        if not reset and G.GAME.blind.debuff and not G.GAME.blind.disabled and #G.HUD_tags ~= 0 then
             local final_chips = (G.GAME.blind.chips / G.GAME.blind.mult) * (#G.HUD_tags + G.GAME.blind.mult)
             local chip_mod = math.ceil((final_chips - G.GAME.blind.chips) / 120) -- iterate over ~120 ticks
             local step = 0
@@ -2368,7 +2368,7 @@ SMODS.Blind{ -- Turquoise Shield
     boss = {showdown = true, min = 10, max = 10},
 
     set_blind = function(self, reset, silent)
-        if G.GAME.blind.debuff and not G.GAME.blind.disabled and G.GAME.overscore ~= 0 then
+        if not reset and G.GAME.blind.debuff and not G.GAME.blind.disabled and G.GAME.overscore ~= 0 then
             local final_chips = (G.GAME.blind.chips / G.GAME.blind.mult) + (G.GAME.overscore or 0)
             local chip_mod = math.ceil((final_chips - G.GAME.blind.chips) / 120) -- iterate over ~120 ticks
             local step = 0
