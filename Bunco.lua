@@ -23,6 +23,7 @@
 -- Fix suit colors
 -- Talisman support
 -- Make tags use global values of editions (+ loc vars for it)
+-- Make editioned consumables and replace their info_queue
 
 local bunco = SMODS.current_mod
 local filesystem = NFS or love.filesystem

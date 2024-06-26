@@ -781,6 +781,16 @@ return {
             }
         }
     },
+    fluorescent_tag = {
+        ['en-us'] = {
+            ['name'] = 'Fluorescent Tag',
+            ['text'] = {
+                [1] = 'Next base edition shop',
+                [2] = 'Joker is free and',
+                [3] = 'becomes {C:dark_edition}Fluorescent'
+            }
+        }
+    },
     chips = {
         ['en-us'] = {
             ['name'] = 'Chips Tag',
