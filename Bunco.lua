@@ -24,7 +24,10 @@
 -- Talisman support
 -- Make tags use global values of editions (+ loc vars for it)
 -- Make editioned consumables and replace their info_queue
+-- Fix bulwark stray pixels
+-- Add config to the consumable editions
 
+global_bunco = global_bunco or {loc = {}, vars = {}}
 local bunco = SMODS.current_mod
 local filesystem = NFS or love.filesystem
 
@@ -140,11 +143,9 @@ function SMODS.current_mod.process_loc_text()
 
     -- Other localization
 
-    global_bunco_loc = global_bunco_loc or {}
-
     SMODS.process_loc_text(G.localization.descriptions.Other, 'temporary_extra_chips', loc.dictionary.temporary_extra_chips)
-    global_bunco_loc.exceeded_score = loc.dictionary.exceeded_score
-    global_bunco_loc.chips = loc.dictionary.chips
+    global_bunco.loc.exceeded_score = loc.dictionary.exceeded_score
+    global_bunco.loc.chips = loc.dictionary.chips
 end
 
 -- Temporary extra chips

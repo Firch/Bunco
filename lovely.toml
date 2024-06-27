@@ -856,7 +856,7 @@ if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_blade' and not G.GAME.blind.di
             end)
         }))
 
-        local blade_message = global_bunco_loc and global_bunco_loc.exceeded_score or ' '
+        local blade_message = global_bunco and global_bunco.loc.exceeded_score or ' '
         play_area_status_text(blade_message)
 
         G.GAME.Blade.disabled = true
@@ -1123,7 +1123,7 @@ end
 
 '''
 
-# Edition tags
+# Edition tags 1/4
 [[patches]]
 [patches.regex]
 target = 'functions/state_events.lua'
@@ -1138,7 +1138,7 @@ end
 
 '''
 
-# function Card:use_consumeable()
+# function Card:use_consumeable() Edition tags 2/4
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
@@ -1164,6 +1164,24 @@ if used_tarot.edition then
 end
 
 '''
+
+# Edition tags 3/4
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = 'for i=1, #G.jokers.cards + #G.consumeables.cards do'
+position = 'at'
+match_indent = true
+payload = '''for i=1, #G.jokers.cards do'''
+
+# Edition tags 4/4
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = 'local _card = G.jokers.cards[i] or G.consumeables.cards[i - #G.jokers.cards]'
+position = 'at'
+match_indent = true
+payload = '''local _card = G.jokers.cards[i]'''
 
 # function card_open() (Filigree Tag)
 [[patches]]
@@ -1198,7 +1216,7 @@ if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand
     hand_chips = mod_chips(hand_chips * xchips)
     update_hand_text({delay = 0}, {chips = hand_chips})
     card_eval_status_text(scoring_hand[i], 'extra', nil, percent, nil,
-    {message = 'X'..xchips..' '..global_bunco_loc.chips,
+    {message = 'X'..xchips..' '..global_bunco.loc.chips,
     edition = true,
     x_chips = true})
 end
@@ -1227,7 +1245,7 @@ if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.joke
     hand_chips = mod_chips(hand_chips * xchips)
     update_hand_text({delay = 0}, {chips = hand_chips})
     card_eval_status_text(G.jokers.cards[i], 'extra', nil, percent, nil,
-    {message = 'X'..xchips..' '..global_bunco_loc.chips,
+    {message = 'X'..xchips..' '..global_bunco.loc.chips,
     edition = true,
     x_chips = true})
 end
