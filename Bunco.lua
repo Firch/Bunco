@@ -24,7 +24,7 @@
 -- Talisman support
 -- Make tags use global values of editions (+ loc vars for it)
 -- Make editioned consumables and replace their info_queue
--- Fix bulwark stray pixels
+-- (done) Fix bulwark stray pixels
 -- Add config to the consumable editions
 
 global_bunco = global_bunco or {loc = {}, vars = {}}
