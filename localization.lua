@@ -413,6 +413,17 @@ return {
             }
         }
     },
+    gameplan = {
+        ['en-us'] = {
+            ['name'] = 'Gameplan',
+            ['text'] = {
+                [1] = '{C:red}Debuffs{} Jokers',
+                [2] = 'to the left and right,',
+                [3] = 'each Joker next to this Joker',
+                [4] = 'grants {C:mult}+#1#{} Mult'
+            }
+        }
+    },
 
     -- Exotic
 

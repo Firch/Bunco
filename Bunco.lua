@@ -26,6 +26,7 @@
 -- Make editioned consumables and replace their info_queue
 -- (done) Fix bulwark stray pixels
 -- Add config to the consumable editions
+-- Remove debuff when fluorescent edition is applied to a debuffed card
 
 global_bunco = global_bunco or {loc = {}, vars = {}}
 local bunco = SMODS.current_mod
@@ -136,7 +137,7 @@ end
 
 -- Dictionary wrapper
 
-function SMODS.current_mod.process_loc_text()
+function bunco.process_loc_text()
     SMODS.process_loc_text(G.localization.misc.dictionary, 'bunco', loc.dictionary)
 
     loc.dictionary = G.localization.misc.dictionary.bunco
@@ -284,57 +285,71 @@ end
 
 -- Jokers
 
+function bunco.set_debuff(card)
+    local my_pos = nil
+    for i = 1, #G.jokers.cards do
+        if G.jokers.cards[i] == card then my_pos = i; break end
+    end
+
+    if my_pos then
+        if G.jokers.cards[my_pos - 1] and G.jokers.cards[my_pos - 1].ability.name == 'Gameplan' and not G.jokers.cards[my_pos - 1].debuff then return true end
+        if G.jokers.cards[my_pos + 1] and G.jokers.cards[my_pos + 1].ability.name == 'Gameplan' and not G.jokers.cards[my_pos + 1].debuff then return true end
+    end
+
+    return false
+end
+
 create_joker({ -- Cassette
-            name = 'Cassette', position = 1,
-            vars = {{ chips = 45 }, { mult = 6 }, { side = 'A' }},
-            rarity = 'Uncommon', cost = 5,
-            blueprint = true, eternal = true,
-            unlocked = true,
-            calculate = function(self, card, context)
-                if context.pre_discard then
+    name = 'Cassette', position = 1,
+    vars = {{ chips = 45 }, { mult = 6 }, { side = 'A' }},
+    rarity = 'Uncommon', cost = 5,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.pre_discard then
 
-                    if card.ability.extra.side == 'A' then
-                        card.ability.extra.side = 'B'
-                    else
-                        card.ability.extra.side = 'A'
-                    end
+            if card.ability.extra.side == 'A' then
+                card.ability.extra.side = 'B'
+            else
+                card.ability.extra.side = 'A'
+            end
 
-                    card:flip() card:flip() -- Double flip plays the animation but doesn't flip the card, awesome!
-                end
+            card:flip() card:flip() -- Double flip plays the animation but doesn't flip the card, awesome!
+        end
 
-                if context.individual and context.cardarea == G.play then
+        if context.individual and context.cardarea == G.play then
 
-                    local other_card = context.other_card
-                    local side = card.ability.extra.side
+            local other_card = context.other_card
+            local side = card.ability.extra.side
 
-                    if other_card:is_suit('Hearts') or other_card:is_suit('Diamonds') or other_card:is_suit('Fleurons') then
-                        if side == 'A' then
-                            return {
-                                chips = card.ability.extra.chips,
-                                card = card
-                            }
-                        end
-                    end
-
-                    if other_card:is_suit('Spades') or other_card:is_suit('Clubs') or other_card:is_suit('Halberds') then
-                        if side == 'B' then
-                            return {
-                                mult = card.ability.extra.mult,
-                                card = card
-                            }
-                        end
-                    end
-                end
-            end,
-            update = function(self, card)
-                if card.VT.w <= 0 then
-                    if card.ability.extra.side == 'A' then
-                        card.children.center:set_sprite_pos(coordinate(1))
-                    else
-                        card.children.center:set_sprite_pos(coordinate(2))
-                    end
+            if other_card:is_suit('Hearts') or other_card:is_suit('Diamonds') or other_card:is_suit('Fleurons') then
+                if side == 'A' then
+                    return {
+                        chips = card.ability.extra.chips,
+                        card = card
+                    }
                 end
             end
+
+            if other_card:is_suit('Spades') or other_card:is_suit('Clubs') or other_card:is_suit('Halberds') then
+                if side == 'B' then
+                    return {
+                        mult = card.ability.extra.mult,
+                        card = card
+                    }
+                end
+            end
+        end
+    end,
+    update = function(self, card)
+        if card.VT.w <= 0 then
+            if card.ability.extra.side == 'A' then
+                card.children.center:set_sprite_pos(coordinate(1))
+            else
+                card.children.center:set_sprite_pos(coordinate(2))
+            end
+        end
+    end
 })
 
 create_joker({ -- Mosaic
@@ -1122,6 +1137,43 @@ create_joker({ -- Neon
                         vars = { card.ability.extra.xmult }
                     },
                     Xmult_mod = card.ability.extra.xmult,
+                    card = card
+                }
+            end
+        end
+    end
+})
+
+create_joker({ -- Gameplan
+    name = 'Gameplan', position = 29,
+    vars = {{mult = 20}},
+    rarity = 'Uncommon', cost = 5,
+    blueprint = false, eternal = true,
+    unlocked = true,
+    update = function(self, card)
+        for i = 1, #G.jokers.cards do
+            G.GAME.blind:debuff_card(G.jokers.cards[i])
+        end
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            local mult = 0
+
+            local my_pos = nil
+            for i = 1, #G.jokers.cards do
+                if G.jokers.cards[i] == card then my_pos = i; break end
+            end
+            if G.jokers.cards[my_pos - 1] then mult = mult + card.ability.extra.mult end
+            if G.jokers.cards[my_pos + 1] then mult = mult + card.ability.extra.mult end
+
+            if mult ~= 0 then
+                return {
+                    message = localize {
+                        type = 'variable',
+                        key = 'a_mult',
+                        vars = { mult }
+                    },
+                    mult_mod = mult,
                     card = card
                 }
             end
