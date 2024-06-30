@@ -16,7 +16,7 @@
 -- Check whats up with joker knight
 -- Add purist config
 -- Card sizes
--- Magenta dagger wobble?
+-- (done) Magenta dagger wobble?
 -- Disable Bierdeckel upgrade message on win
 -- (done) Global variable for glitter
 -- Config for double lovers

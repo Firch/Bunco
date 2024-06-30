@@ -946,6 +946,7 @@ match_indent = true
 payload = '''
 
 if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_final_dagger' and not G.GAME.blind.disabled then
+    G.GAME.blind:wiggle()
     G.FUNCS.play_cards_from_highlighted({antiscore = true})
     return
 end
