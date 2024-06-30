@@ -11,7 +11,7 @@
 -- (done) Cassette proper coordinates
 -- (done) Polychrome desc on roy g biv
 -- Debuff registration plate level with shader if possible
--- Nan morgan or make zero shapiro count letter rank cards
+-- (done) Nan morgan or make zero shapiro count letter rank cards
 -- Unlocks
 -- Check whats up with joker knight
 -- Add purist config
@@ -1031,7 +1031,7 @@ create_joker({ -- Bierdeckel
             end
 
             -- maybe juice all held cards, that'd be fun
-            forced_message(localize('k_upgrade_ex'), card, G.C.CHIPS)
+            forced_message(localize('k_upgrade_ex'), card, G.C.CHIPS, true)
         end
     end
 })
@@ -1151,8 +1151,10 @@ create_joker({ -- Gameplan
     blueprint = false, eternal = true,
     unlocked = true,
     update = function(self, card)
-        for i = 1, #G.jokers.cards do
-            G.GAME.blind:debuff_card(G.jokers.cards[i])
+        if G.jokers then
+            for i = 1, #G.jokers.cards do
+                G.GAME.blind:debuff_card(G.jokers.cards[i])
+            end
         end
     end,
     calculate = function(self, card, context)
