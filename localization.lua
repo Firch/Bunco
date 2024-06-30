@@ -806,7 +806,7 @@ return {
         ['en-us'] = {
             ['name'] = 'Chips Tag',
             ['text'] = {
-                [1] = 'Adds {C:chips}+50{} Chips',
+                [1] = 'Adds {C:chips}+#1#{} Chips',
                 [2] = 'to the next hand'
             }
         }
@@ -815,7 +815,7 @@ return {
         ['en-us'] = {
             ['name'] = 'Mult Tag',
             ['text'] = {
-                [1] = 'Adds {C:mult}+10{} Mult',
+                [1] = 'Adds {C:mult}+#1#{} Mult',
                 [2] = 'to the next hand'
             }
         }
@@ -824,7 +824,7 @@ return {
         ['en-us'] = {
             ['name'] = 'Megamult Tag',
             ['text'] = {
-                [1] = 'Adds {X:mult,C:white}X1.5{} Mult',
+                [1] = 'Adds {X:mult,C:white}X#1#{} Mult',
                 [2] = 'to the next hand'
             }
         }
@@ -833,7 +833,7 @@ return {
         ['en-us'] = {
             ['name'] = 'Ultrachips Tag',
             ['text'] = {
-                [1] = 'Adds {X:chips,C:white}X1.2{} Chips',
+                [1] = 'Adds {X:chips,C:white}X#1#{} Chips',
                 [2] = 'to the next hand'
             }
         }
