@@ -26,7 +26,7 @@
 -- Make editioned consumables and replace their info_queue
 -- (done) Fix bulwark stray pixels
 -- Add config to the consumable editions
--- Remove debuff when fluorescent edition is applied to a debuffed card
+-- (done) Remove debuff when fluorescent edition is applied to a debuffed card
 
 global_bunco = global_bunco or {loc = {}, vars = {}}
 local bunco = SMODS.current_mod

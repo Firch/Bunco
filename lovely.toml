@@ -1308,6 +1308,7 @@ match_indent = true
 payload = '''
 
 if (self.area == G.hand or self.area == G.jokers or self.area == G.consumeables) and self.edition and self.edition.bunc_fluorescent then
+    self.debuff = false
     return
 end
 
