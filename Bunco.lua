@@ -21,7 +21,7 @@
 -- (done) Global variable for glitter
 -- (done) Config for double lovers
 -- Fix suit colors
--- Talisman support
+-- (done) Talisman support
 -- Make tags use global values of editions (+ loc vars for it)
 -- Make editioned consumables and replace their info_queue
 -- (done) Fix bulwark stray pixels
@@ -2206,7 +2206,12 @@ SMODS.Blind{ -- The Stone
     set_blind = function(self, reset, silent)
         if not reset and G.GAME.blind.debuff and not G.GAME.blind.disabled and G.GAME.dollars >= 10 then
             local final_chips = (G.GAME.blind.chips / G.GAME.blind.mult) * (math.floor(G.GAME.dollars / 10) + G.GAME.blind.mult)
-            local chip_mod = math.ceil((final_chips - G.GAME.blind.chips) / 120) -- iterate over ~120 ticks
+            local chip_mod -- iterate over ~120 ticks
+            if type(G.GAME.blind.chips) ~= 'table' then
+                chip_mod = math.ceil((final_chips - G.GAME.blind.chips) / 120)
+            else
+                chip_mod = ((final_chips - G.GAME.blind.chips) / 120):ceil()
+            end
             local step = 0
             event({trigger = 'after', blocking = true, func = function()
                 G.GAME.blind.chips = G.GAME.blind.chips + G.SETTINGS.GAMESPEED * chip_mod
@@ -2239,7 +2244,12 @@ SMODS.Blind{ -- The Sand
     set_blind = function(self, reset, silent)
         if not reset and G.GAME.blind.debuff and not G.GAME.blind.disabled and #G.HUD_tags ~= 0 then
             local final_chips = (G.GAME.blind.chips / G.GAME.blind.mult) * (#G.HUD_tags + G.GAME.blind.mult)
-            local chip_mod = math.ceil((final_chips - G.GAME.blind.chips) / 120) -- iterate over ~120 ticks
+            local chip_mod -- iterate over ~120 ticks
+            if type(G.GAME.blind.chips) ~= 'table' then
+                chip_mod = math.ceil((final_chips - G.GAME.blind.chips) / 120)
+            else
+                chip_mod = ((final_chips - G.GAME.blind.chips) / 120):ceil()
+            end
             local step = 0
             event({trigger = 'after', blocking = true, func = function()
                 G.GAME.blind.chips = G.GAME.blind.chips + G.SETTINGS.GAMESPEED * chip_mod
@@ -2441,7 +2451,12 @@ SMODS.Blind{ -- Turquoise Shield
     set_blind = function(self, reset, silent)
         if not reset and G.GAME.blind.debuff and not G.GAME.blind.disabled and G.GAME.overscore ~= 0 then
             local final_chips = (G.GAME.blind.chips / G.GAME.blind.mult) + (G.GAME.overscore or 0)
-            local chip_mod = math.ceil((final_chips - G.GAME.blind.chips) / 120) -- iterate over ~120 ticks
+            local chip_mod -- iterate over ~120 ticks
+            if type(G.GAME.blind.chips) ~= 'table' then
+                chip_mod = math.ceil((final_chips - G.GAME.blind.chips) / 120)
+            else
+                chip_mod = ((final_chips - G.GAME.blind.chips) / 120):ceil()
+            end
             local step = 0
             event({trigger = 'after', blocking = true, func = function()
                 G.GAME.blind.chips = G.GAME.blind.chips + G.SETTINGS.GAMESPEED * chip_mod

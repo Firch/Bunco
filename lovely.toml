@@ -1030,8 +1030,16 @@ pattern = "function end_round()"
 position = 'after'
 match_indent = true
 payload = '''
-if G.GAME.Shield == true and G.GAME.chips - G.GAME.blind.chips >= 0 then
-    G.GAME.overscore = (G.GAME.overscore or 0) + G.GAME.chips - G.GAME.blind.chips
+if G.GAME.Shield == true then
+    if type(G.GAME.chips) ~= 'table' then
+        if G.GAME.chips - G.GAME.blind.chips >= 0 then
+            G.GAME.overscore = (G.GAME.overscore or 0) + G.GAME.chips - G.GAME.blind.chips
+        end
+    else
+        if G.GAME.chips - G.GAME.blind.chips >= to_big(0) then
+            G.GAME.overscore = (G.GAME.overscore or 0) + G.GAME.chips - G.GAME.blind.chips
+        end
+    end
 end
 '''
 
