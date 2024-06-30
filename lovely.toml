@@ -1124,7 +1124,7 @@ end
 
 '''
 
-# Edition tags 1/4
+# Edition tags 1/3
 [[patches]]
 [patches.regex]
 target = 'functions/state_events.lua'
@@ -1139,7 +1139,7 @@ end
 
 '''
 
-# function Card:use_consumeable() Edition tags 2/4
+# function Card:use_consumeable() Edition tags 2/3
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
@@ -1166,23 +1166,15 @@ end
 
 '''
 
-# Edition tags 3/4
+# Edition tags 3/3
 [[patches]]
 [patches.pattern]
 target = 'functions/state_events.lua'
 pattern = 'for i=1, #G.jokers.cards + #G.consumeables.cards do'
 position = 'at'
 match_indent = true
-payload = '''for i=1, #G.jokers.cards do'''
+payload = '''for i=1, #G.jokers.cards + (global_bunco and global_bunco.vars and global_bunco.vars.jokerlike_consumable_editions and #G.consumeables.cards or 0) do'''
 
-# Edition tags 4/4
-[[patches]]
-[patches.pattern]
-target = 'functions/state_events.lua'
-pattern = 'local _card = G.jokers.cards[i] or G.consumeables.cards[i - #G.jokers.cards]'
-position = 'at'
-match_indent = true
-payload = '''local _card = G.jokers.cards[i]'''
 
 # function card_open() (Filigree Tag)
 [[patches]]

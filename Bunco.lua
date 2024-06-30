@@ -10,22 +10,22 @@
 -- (done) Check how to add custom entries to the localization (for card messages like linocut's one)
 -- (done) Cassette proper coordinates
 -- (done) Polychrome desc on roy g biv
--- Debuff registration plate level with shader if possible
+-- (?) Debuff registration plate level with shader if possible
 -- (done) Nan morgan or make zero shapiro count letter rank cards
 -- Unlocks
 -- Check whats up with joker knight
--- Add purist config
+-- (done) Add purist config
 -- Card sizes
 -- (done) Magenta dagger wobble?
--- Disable Bierdeckel upgrade message on win
+-- (?) Disable Bierdeckel upgrade message on win
 -- (done) Global variable for glitter
--- Config for double lovers
+-- (done) Config for double lovers
 -- Fix suit colors
 -- Talisman support
 -- Make tags use global values of editions (+ loc vars for it)
 -- Make editioned consumables and replace their info_queue
 -- (done) Fix bulwark stray pixels
--- Add config to the consumable editions
+-- (done) Add config to the consumable editions
 -- (done) Remove debuff when fluorescent edition is applied to a debuffed card
 
 global_bunco = global_bunco or {loc = {}, vars = {}}
@@ -149,6 +149,16 @@ function bunco.process_loc_text()
     global_bunco.loc.chips = loc.dictionary.chips
 end
 
+-- Config globals
+
+global_bunco.vars.jokerlike_consumable_editions = config.jokerlike_consumable_editions
+
+-- Double lovers
+
+if config.double_lovers then
+    G.P_CENTERS.c_lovers.config.max_highlighted = 2
+end
+
 -- Temporary extra chips
 
 local original_end_round = end_round
@@ -236,51 +246,52 @@ local function create_joker(joker)
 
     -- Joker creation
 
-    SMODS.Joker{
-    name = joker.name,
-    key = key,
+    if not (joker.purist == false and config.purist_mode) then SMODS.Joker{
+        name = joker.name,
+        key = key,
 
-    atlas = joker.atlas,
-    pos = joker.position,
-    soul_pos = joker.soul,
+        atlas = joker.atlas,
+        pos = joker.position,
+        soul_pos = joker.soul,
 
-    rarity = joker.rarity,
-    cost = joker.cost,
+        rarity = joker.rarity,
+        cost = joker.cost,
 
-    unlocked = joker.unlocked,
-    discovered = false,
+        unlocked = joker.unlocked,
+        discovered = false,
 
-    blueprint_compat = joker.blueprint,
-    eternal_compat = joker.eternal,
+        blueprint_compat = joker.blueprint,
+        eternal_compat = joker.eternal,
 
-    loc_txt = loc[key],
-    process_loc_text = joker.process_loc_text,
+        loc_txt = loc[key],
+        process_loc_text = joker.process_loc_text,
 
-    config = joker.custom_config or joker.config,
-    loc_vars = joker.custom_vars or function(self, info_queue, card)
+        config = joker.custom_config or joker.config,
+        loc_vars = joker.custom_vars or function(self, info_queue, card)
 
-        -- Localization values
+            -- Localization values
 
-        local vars = {}
+            local vars = {}
 
-        for _, kv_pair in ipairs(joker.vars) do
-            -- kv_pair is {a = 1}
-            local k, v = next(kv_pair)
-            -- k is `a`, v is `1`
-            table.insert(vars, card.ability.extra[k])
-        end
+            for _, kv_pair in ipairs(joker.vars) do
+                -- kv_pair is {a = 1}
+                local k, v = next(kv_pair)
+                -- k is `a`, v is `1`
+                table.insert(vars, card.ability.extra[k])
+            end
 
-        return {vars = vars}
-    end,
+            return {vars = vars}
+        end,
 
-    calculate = joker.calculate,
-    update = joker.update,
-    remove_from_deck = joker.remove,
-    add_to_deck = joker.add,
-    in_pool = pool,
+        calculate = joker.calculate,
+        update = joker.update,
+        remove_from_deck = joker.remove,
+        add_to_deck = joker.add,
+        in_pool = pool,
 
-    effect = joker.effect
-    }
+        effect = joker.effect
+        }
+    end
 end
 
 -- Jokers
@@ -668,6 +679,7 @@ create_joker({ -- Basement
     rarity = 'Rare', cost = 8,
     blueprint = true, eternal = true,
     unlocked = true,
+    purist = false,
     calculate = function(self, card, context)
         if context.end_of_round and G.GAME.blind.boss and not context.other_card then
             if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
@@ -721,6 +733,7 @@ create_joker({ -- Knight
     rarity = 'Uncommon', cost = 6,
     blueprint = true, eternal = true,
     unlocked = true,
+    purist = false,
     calculate = function(self, card, context)
         if context.setting_blind and not card.getting_sliced and not context.blueprint then
             card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.bonus
@@ -766,6 +779,7 @@ create_joker({ -- JMJB
     rarity = 'Rare', cost = 5,
     blueprint = false, eternal = true,
     unlocked = true,
+    purist = false,
     calculate = function(self, card, context)
         if context.open_booster and context.card.ability.name then
             if (context.open_booster and context.card.ability.name == 'Standard Pack' or
@@ -864,7 +878,8 @@ create_joker({ -- Fiendish
     end,
     rarity = 'Uncommon', cost = 5,
     blueprint = false, eternal = true,
-    unlocked = true
+    unlocked = true,
+    purist = false
 })
 
 create_joker({ -- Carnival
@@ -873,6 +888,7 @@ create_joker({ -- Carnival
     rarity = 'Rare', cost = 10,
     blueprint = false, eternal = true,
     unlocked = true,
+    purist = false,
     calculate = function(self, card, context)
         if context.end_of_round and G.GAME.blind.boss and not context.other_card and not context.blueprint then
             if G.GAME.round_resets.ante > card.ability.extra.ante then
