@@ -1460,7 +1460,7 @@ create_joker({ -- ROYGBIV
                         end
                     end
 
-                    if cards and #cards > 0 then cards[math.random(#cards)]:set_edition({polychrome = true}) end
+                    if cards and #cards > 0 then cards[math.random(#cards)]:set_edition({polychrome = true}, true) end
                 end
             end
         end
@@ -1639,6 +1639,47 @@ SMODS.Consumable{ -- Makemake
         local target_text = G.localization.descriptions[self.set]['c_mercury'].text
         SMODS.Consumable.process_loc_text(self)
         G.localization.descriptions[self.set][self.key].text = target_text
+    end
+}
+
+-- Spectrals
+
+SMODS.Atlas({key = 'bunco_spectrals', path = 'Consumables/Spectrals.png', px = 71, py = 95})
+
+SMODS.Consumable{ -- Cleanse
+    set = 'Spectral', atlas = 'bunco_spectrals',
+    key = 'cleanse', loc_txt = loc.cleanse,
+
+    config = {max_highlighted = 3},
+    pos = coordinate(1),
+
+    loc_vars = function(self, info_queue)
+        info_queue[#info_queue+1] = G.P_CENTERS.e_bunc_fluorescent
+        return {vars = {self.config.max_highlighted}}
+    end,
+
+    can_use = function(self, card)
+        if G.hand and (#G.hand.highlighted <= self.config.max_highlighted) and G.hand.highlighted[1] then
+            local condition = true
+            for i = 1, #G.hand.highlighted do
+                if G.hand.highlighted[i].edition then
+                    condition = false
+                end
+            end
+            if condition then return true end
+        end
+        return false
+    end,
+
+    use = function(self, card)
+        local edition = {bunc_fluorescent = true}
+        for i = 1, #G.hand.highlighted do
+            event({trigger = 'after', delay = 0.1, func = function()
+                local highlighted = G.hand.highlighted[i]
+                highlighted:set_edition(edition, true)
+            return true end })
+        end
+        card:juice_up(0.3, 0.5)
     end
 }
 

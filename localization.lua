@@ -123,6 +123,15 @@ return {
             name = 'Makemake'
         }
     },
+    cleanse = {
+        ['en-us'] = {
+            ['name'] = 'Cleanse',
+            ['text'] = {
+                [1] = 'Adds {C:dark_edition}Fluorescent{} to',
+                [2] = '{C:attention}#1#{} selected cards in hand'
+            }
+        }
+    },
 
 
     -- Jokers
