@@ -1142,6 +1142,7 @@ create_joker({ -- Neon
     calculate = function(self, card, context)
         if context.debuffed_card then
             card.ability.extra.xmult = card.ability.extra.xmult + 0.2
+            forced_message(localize('k_upgrade_ex'), card, G.C.MULT, true)
         end
 
         if context.joker_main then
