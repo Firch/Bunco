@@ -417,7 +417,7 @@ return {
             ['name'] = 'Neon Joker',
             ['text'] = {
                 [1] = 'Gains {X:mult,C:white}X0.2{} Mult',
-                [2] = 'per debuffed card played',
+                [2] = 'per debuffed card scored',
                 [3] = '{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive} Mult)'
             }
         }
