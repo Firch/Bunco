@@ -108,7 +108,7 @@ local function event(config)
     }))
 end
 
-local function forced_message(message, card, color, delay, juice)
+local function forced_message(message, card, color, delay)
     if delay == true then
         delay = 0.7 * 1.25
     elseif delay == nil then
@@ -116,9 +116,6 @@ local function forced_message(message, card, color, delay, juice)
     end
 
     event({trigger = 'before', delay = delay, func = function()
-
-        if juice == true then juice:juice_up(0.7) end
-
         card_eval_status_text(
             card,
             'extra',
@@ -1142,6 +1139,7 @@ create_joker({ -- Neon
     calculate = function(self, card, context)
         if context.debuffed_card then
             card.ability.extra.xmult = card.ability.extra.xmult + 0.2
+            forced_message(localize('k_upgrade_ex'), card, G.C.MULT, true)
         end
 
         if context.joker_main then
