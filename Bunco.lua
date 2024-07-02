@@ -117,7 +117,7 @@ local function forced_message(message, card, color, delay, juice)
 
     event({trigger = 'before', delay = delay, func = function()
 
-        if juice == true then juice:juice_up(0.7) end
+        if juice then juice:juice_up(0.7) end
 
         card_eval_status_text(
             card,
