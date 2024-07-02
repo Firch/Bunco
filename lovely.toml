@@ -1293,7 +1293,10 @@ position = 'after'
 match_indent = true
 payload = '''
 if self.edition and self.edition.bunc_fluorescent then
-    self.debuff = false
+    if self.debuff then
+        self.debuff = false
+        if self.area == G.jokers then self:add_to_deck(true) end
+    end
     return
 end
 
