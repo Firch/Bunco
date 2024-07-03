@@ -297,6 +297,7 @@ end
 -- Jokers
 
 function bunco.set_debuff(card)
+    -- Gameplan
     local my_pos = nil
     for i = 1, #G.jokers.cards do
         if G.jokers.cards[i] == card then my_pos = i; break end
@@ -305,6 +306,11 @@ function bunco.set_debuff(card)
     if my_pos then
         if G.jokers.cards[my_pos - 1] and G.jokers.cards[my_pos - 1].ability.name == 'Gameplan' and not G.jokers.cards[my_pos - 1].debuff then return true end
         if G.jokers.cards[my_pos + 1] and G.jokers.cards[my_pos + 1].ability.name == 'Gameplan' and not G.jokers.cards[my_pos + 1].debuff then return true end
+    end
+
+    -- Fluorescent things
+    if card.edition and card.edition.bunc_fluorescent then
+        return 'prevent_debuff'
     end
 
     return false
