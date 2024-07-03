@@ -23,7 +23,7 @@
 -- Fix suit colors
 -- (done) Talisman support
 -- (done) Make tags use global values of editions (+ loc vars for it)
--- Make editioned consumables and replace their info_queue
+-- (1/2) Make editioned consumables and replace their info_queue (to check: common events.lua)
 -- (done) Fix bulwark stray pixels
 -- (done) Add config to the consumable editions
 -- (done) Remove debuff when fluorescent edition is applied to a debuffed card
