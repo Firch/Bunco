@@ -1263,6 +1263,21 @@ card:set_edition(edition)
 
 '''
 
+# # Info queue for consumables 1/??? (WIP)
+# [[patches]]
+# [patches.pattern]
+# target = 'functions/common_events.lua'
+# pattern = "info_queue[#info_queue + 1] = G.P_CENTERS[v]"
+# position = 'at'
+# match_indent = true
+# payload = '''
+
+# if _c.set ~= 'Joker' then
+#     info_queue[#info_queue + 1] = G.P_CENTERS[v]
+# end
+
+# '''
+
 # function card_open() (Filigree Tag)
 [[patches]]
 [patches.regex]

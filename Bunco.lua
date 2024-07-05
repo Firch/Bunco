@@ -15,7 +15,7 @@
 -- Unlocks
 -- Check whats up with joker knight
 -- (done) Add purist config
--- Card sizes
+-- (skip: waiting for steamodded) Card sizes
 -- (done) Magenta dagger wobble?
 -- (?) Disable Bierdeckel upgrade message on win
 -- (done) Global variable for glitter
@@ -27,6 +27,7 @@
 -- (done) Fix bulwark stray pixels
 -- (done) Add config to the consumable editions
 -- (done) Remove debuff when fluorescent edition is applied to a debuffed card
+-- (done) Make tarot badges use localization
 
 global_bunco = global_bunco or {loc = {}, vars = {}}
 local bunco = SMODS.current_mod
@@ -145,6 +146,8 @@ function bunco.process_loc_text()
     -- Other localization
 
     SMODS.process_loc_text(G.localization.descriptions.Other, 'temporary_extra_chips', loc.dictionary.temporary_extra_chips)
+    SMODS.process_loc_text(G.localization.descriptions.Other, 'exotic_cards', loc.exotic_cards)
+
     global_bunco.loc.exceeded_score = loc.dictionary.exceeded_score
     global_bunco.loc.chips = loc.dictionary.chips
 end
@@ -389,21 +392,23 @@ create_joker({ -- Mosaic
 
 create_joker({ -- Voxel
     name = 'Voxel', position = 4,
-    vars = {{base = 3}, {xmult = 3}, {tally = 0}},
+    vars = {{base = 3}, {bonus = 0.1}, {xmult = 3}, {tally = 0}},
     rarity = 'Uncommon', cost = 5,
     blueprint = true, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
         if context.joker_main then
-            return {
-                Xmult_mod = card.ability.extra.xmult,
-                card = card,
-                message = localize {
-                    type = 'variable',
-                    key = 'a_xmult',
-                    vars = { card.ability.extra.xmult }
+            if card.ability.extra.xmult ~= 1 then
+                return {
+                    Xmult_mod = card.ability.extra.xmult,
+                    card = card,
+                    message = localize {
+                        type = 'variable',
+                        key = 'a_xmult',
+                        vars = { card.ability.extra.xmult }
+                    }
                 }
-            }
+            end
         end
     end,
     update = function(self, card)
@@ -414,8 +419,8 @@ create_joker({ -- Voxel
                 if v.config.center ~= G.P_CENTERS.c_base then card.ability.extra.tally = card.ability.extra.tally + 1 end
             end
 
-            if (card.ability.extra.base - card.ability.extra.tally * 0.1) >= 1 then
-                card.ability.extra.xmult = card.ability.extra.base - card.ability.extra.tally * 0.1
+            if (card.ability.extra.base - card.ability.extra.tally * card.ability.extra.bonus) >= 1 then
+                card.ability.extra.xmult = card.ability.extra.base - card.ability.extra.tally * card.ability.extra.bonus
             else
                 card.ability.extra.xmult = 1
             end
@@ -496,15 +501,15 @@ create_joker({ -- Crop Circles
 
 create_joker({ -- Xray
     name = 'Xray', position = 6,
-    vars = {{xmult = 1}},
+    vars = {{bonus = 0.2}, {xmult = 1}},
     rarity = 'Common', cost = 4,
     blueprint = true, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
         if context.emplaced_card and context.emplaced_card.facing == 'back' and not context.blueprint then
-            card.ability.extra.xmult = card.ability.extra.xmult + 0.2
+            card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.bonus
 
-            forced_message('X'..tostring(card.ability.extra.xmult)..' '..localize('k_mult'), card, G.C.RED, 0.2)
+            forced_message('X'..tostring(card.ability.extra.xmult)..' '..localize('k_mult'), card, G.C.RED, card.ability.extra.bonus)
         end
 
         if context.joker_main then
@@ -670,12 +675,13 @@ create_joker({ -- Ghost Print
 
 create_joker({ -- Loan Shark
     name = 'Loan Shark', position = 11,
+    vars = {{dollars = 50}, {cost = -100}},
     rarity = 'Uncommon', cost = 3,
     blueprint = false, eternal = true,
     unlocked = true,
     add = function(self, card)
-        ease_dollars(50)
-        card.ability.extra_value = -100 - card.sell_cost
+        ease_dollars(card.ability.extra.dollars)
+        card.ability.extra_value = card.ability.extra.cost - card.sell_cost
         card:set_cost()
     end
 })
@@ -706,13 +712,13 @@ create_joker({ -- Basement
 
 create_joker({ -- Shepherd
     name = 'Shepherd', position = 13,
-    vars = {{chips = 0}},
+    vars = {{bonus = 6}, {chips = 0}},
     rarity = 'Common', cost = 5,
     blueprint = true, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
         if context.after and context.poker_hands ~= nil and next(context.poker_hands['Pair']) and not context.blueprint then
-            card.ability.extra.chips = card.ability.extra.chips + 6
+            card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.bonus
 
             forced_message('+'..tostring(card.ability.extra.chips)..' '..loc.dictionary.chips, card, G.C.BLUE, true)
         end
@@ -1141,13 +1147,13 @@ create_joker({ -- Slothful
 
 create_joker({ -- Neon
     name = 'Neon', position = 28,
-    vars = {{xmult = 1}},
+    vars = {{bonus = 0.2}, {xmult = 1}},
     rarity = 'Uncommon', cost = 5,
     blueprint = true, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
         if context.debuffed_card then
-            card.ability.extra.xmult = card.ability.extra.xmult + 0.2
+            card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.bonus
             forced_message(localize('k_upgrade_ex'), card, G.C.MULT, true)
         end
 
@@ -1276,7 +1282,7 @@ create_joker({ -- Wishalloy
     end
 })
 
-create_joker({ -- Unobtanium (WIP, the chips timing is broken a bit)
+create_joker({ -- Unobtanium
     type = 'Exotic',
     name = 'Unobtanium', position = 6,
     vars = {{mult = 12}, {chips = 100}},
@@ -1285,18 +1291,13 @@ create_joker({ -- Unobtanium (WIP, the chips timing is broken a bit)
     unlocked = true,
     calculate = function(self, card, context)
         if context.individual and context.cardarea == G.play and context.other_card:is_suit('Halberds') then
-
-            hand_chips = mod_chips(hand_chips + card.ability.extra.chips)
-            update_hand_text({delay = 0, sound = 'chips1'}, {chips = hand_chips, mult = mult})
-
-            forced_message('+'..tostring(card.ability.extra.chips), context.other_card, G.C.CHIPS, true, card)
-
             return {
                 message = localize {
                     type = 'variable',
                     key = 'a_mult',
                     vars = {card.ability.extra.mult}
                 },
+                chips = card.ability.extra.chips,
                 mult = card.ability.extra.mult,
                 card = card
             }
@@ -1476,13 +1477,43 @@ create_joker({ -- ROYGBIV
 
 -- Legendary Jokers
 
-create_joker({ -- Rigoletto (WIP)
+create_joker({ -- Rigoletto
     type = 'Exotic',
     name = 'Rigoletto', position = 1,
-    vars = {{bonus = 4}},
+    vars = {{bonus = 0.2}, {xmult = 1}, {tally = 0}},
+    custom_vars = function(self, info_queue, card)
+        info_queue[#info_queue+1] = {set = 'Other', key = 'exotic_cards'}
+        return {vars = {card.ability.extra.bonus, card.ability.extra.xmult}}
+    end,
     rarity = 'Legendary', cost = 20,
     blueprint = true, eternal = true,
-    unlocked = true
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            if card.ability.extra.xmult ~= 1 then
+                return {
+                    Xmult_mod = card.ability.extra.xmult,
+                    card = card,
+                    message = localize {
+                        type = 'variable',
+                        key = 'a_xmult',
+                        vars = { card.ability.extra.xmult }
+                    }
+                }
+            end
+        end
+    end,
+    update = function(self, card)
+        if G.playing_cards ~= nil then
+            card.ability.extra.tally = 0
+
+            for k, v in pairs(G.playing_cards) do
+                if v:is_suit('Fleurons') or v:is_suit('Halberds') then card.ability.extra.tally = card.ability.extra.tally + 1 end
+            end
+
+            card.ability.extra.xmult = 1 + (card.ability.extra.tally * card.ability.extra.bonus)
+        end
+    end
 })
 
 -- Tarots
@@ -1493,7 +1524,7 @@ SMODS.Consumable{ -- The Sky
     set = 'Tarot', atlas = 'bunco_tarots',
     key = 'sky', loc_txt = loc.sky,
     set_card_type_badge = function(self, card, badges)
-        badges[1] = create_badge('Tarot?', get_type_colour(self or card.config, card), nil, 1.2)
+        badges[1] = create_badge(loc.dictionary.mysterious_tarot, get_type_colour(self or card.config, card), nil, 1.2)
     end,
 
     config = {max_highlighted = 3, suit_conv = 'Fleurons'},
@@ -1535,7 +1566,7 @@ SMODS.Consumable{ -- The Abyss
     set = 'Tarot', atlas = 'bunco_tarots',
     key = 'abyss', loc_txt = loc.abyss,
     set_card_type_badge = function(self, card, badges)
-        badges[1] = create_badge('Tarot?', get_type_colour(self or card.config, card), nil, 1.2)
+        badges[1] = create_badge(loc.dictionary.mysterious_tarot, get_type_colour(self or card.config, card), nil, 1.2)
     end,
 
     config = {max_highlighted = 3, suit_conv = 'Halberds'},
@@ -2541,10 +2572,14 @@ SMODS.Atlas({key = 'bunco_decks', path = 'Decks/Decks.png', px = 71, py = 95})
 SMODS.Back{ -- Fairy
 	key = "fairy", loc_txt = loc.fairy,
 
+    config = {amount = 4},
+    loc_vars = function(self)
+        return {vars = {self.config.amount, localize{type = 'name_text', set = 'Other', key = 'exotic_cards'}}}
+    end,
+
     apply = function()
         enable_exotics()
     end,
-
     trigger_effect = function(self, args)
         if args.context == 'eval' and G.GAME.last_blind and G.GAME.last_blind.boss then
             event({
@@ -2557,7 +2592,7 @@ SMODS.Back{ -- Fairy
 
                     local suits = {'FLEURON', 'HALBERD'}
 
-                    for i = 1, 4 do
+                    for i = 1, self.config.amount do
                         local rank = pseudorandom_element(numbers, pseudoseed('fairy'..G.SEED))
                         local suit = pseudorandom_element(suits, pseudoseed('fairy'..G.SEED))
                         create_playing_card({front = G.P_CARDS[suit .. '_' .. rank]}, G.deck, false, false, {G.C.BUNCO_EXOTIC})
@@ -2762,6 +2797,10 @@ SMODS.Tag{ -- Filigree
     key = 'filigree', loc_txt = loc.filigree,
 
     config = {type = 'standard_pack_opened'},
+    loc_vars = function(self, info_queue)
+        info_queue[#info_queue+1] = {set = 'Other', key = 'exotic_cards'}
+        return {}
+    end,
     apply = function(tag, context)
         if context.type == 'standard_pack_opened' then
             tag:instayep('+', G.C.BUNCO_EXOTIC, function()
