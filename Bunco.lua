@@ -261,6 +261,7 @@ local function create_joker(joker)
         cost = joker.cost,
 
         unlocked = joker.unlocked,
+        check_for_unlock = joker.check_for_unlock,
         discovered = false,
 
         blueprint_compat = joker.blueprint,
@@ -504,7 +505,13 @@ create_joker({ -- Xray
     vars = {{bonus = 0.2}, {xmult = 1}},
     rarity = 'Common', cost = 4,
     blueprint = true, eternal = true,
-    unlocked = true,
+    unlocked = false,
+    check_for_unlock = function(self, args)
+        if args.type == 'win_challenge' and G.GAME.challenge == 'c_xray_1' then
+            self.challenge_bypass = true
+            unlock_card(self)
+        end
+    end,
     calculate = function(self, card, context)
         if context.emplaced_card and context.emplaced_card.facing == 'back' and not context.blueprint then
             card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.bonus
@@ -678,7 +685,14 @@ create_joker({ -- Loan Shark
     vars = {{dollars = 50}, {cost = -100}},
     rarity = 'Uncommon', cost = 3,
     blueprint = false, eternal = true,
-    unlocked = true,
+    unlocked = false,
+    check_for_unlock = function(self, args)
+        if args.type == 'money' then
+            if G.GAME.dollars < -20 then
+                unlock_card(self)
+            end
+        end
+    end,
     add = function(self, card)
         ease_dollars(card.ability.extra.dollars)
         card.ability.extra_value = card.ability.extra.cost - card.sell_cost
@@ -861,7 +875,12 @@ create_joker({ -- Righthook
     vars = {},
     rarity = 'Rare', cost = 8,
     blueprint = true, eternal = true,
-    unlocked = true,
+    unlocked = false,
+    check_for_unlock = function(self, args)
+        if args.type == 'repetition' and args.repetition_amount >= 5 then
+            unlock_card(self)
+        end
+    end,
     calculate = function(self, card, context)
         if context.repetition and context.cardarea == G.play and context.scoring_hand ~= nil and context.other_card == context.scoring_hand[#context.scoring_hand] then
 
@@ -890,7 +909,13 @@ create_joker({ -- Fiendish
     end,
     rarity = 'Uncommon', cost = 5,
     blueprint = false, eternal = true,
-    unlocked = true,
+    unlocked = false,
+    check_for_unlock = function(self, args)
+        if args.type == 'win_challenge' and G.GAME.challenge == 'c_double_nothing_1' then
+            self.challenge_bypass = true
+            unlock_card(self)
+        end
+    end,
     purist = false
 })
 
@@ -1069,7 +1094,13 @@ create_joker({ -- Registration Plate
     vars = {{combination = ''}, {card_list = {}}, {ranks = {}}},
     rarity = 'Rare', cost = 8,
     blueprint = false, eternal = true,
-    unlocked = true,
+    unlocked = false,
+    check_for_unlock = function(self, args)
+        if args.type == 'win_challenge' and G.GAME.challenge == 'c_city_1' then
+            self.challenge_bypass = true
+            unlock_card(self)
+        end
+    end,
     custom_vars = function(self, info_queue, card)
         local vars
         if card.ability.extra.combination == '' then
@@ -2576,6 +2607,8 @@ SMODS.Back{ -- Fairy
     loc_vars = function(self)
         return {vars = {self.config.amount, localize{type = 'name_text', set = 'Other', key = 'exotic_cards'}}}
     end,
+
+    unlocked = false,
 
     apply = function()
         enable_exotics()

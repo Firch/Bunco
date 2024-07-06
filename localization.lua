@@ -209,6 +209,10 @@ return {
                 [1] = 'Gains {X:mult,C:white}X#1#{} Mult',
                 [2] = 'per card drawn face down',
                 [3] = '{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)'
+            },
+            ['unlock'] = {
+                [1] = 'Beat the {E:1,C:attention}X-ray Vision',
+                [2] = 'challenge'
             }
         }
     },
@@ -261,6 +265,10 @@ return {
             ['text'] = {
                 [1] = 'Grants {C:money}$#1#',
                 [2] = 'when acquired...'
+            },
+            ['unlock'] = {
+                [1] = 'Have less than {E:1,C:attention}$-20',
+                [2] = 'during a single run'
             }
         }
     },
@@ -319,6 +327,11 @@ return {
                 [1] = 'Retrigger rightmost played card',
                 [2] = 'the same amount of times as',
                 [3] = 'your current amount of hands'
+            },
+            ['unlock'] = {
+                [1] = 'Retrigger played',
+                [2] = 'card at least',
+                [3] = '{E:1,C:attention}5 times{} in a row'
             }
         }
     },
@@ -329,6 +342,10 @@ return {
                 [1] = 'Doubles all sources of money,',
                 [2] = '{C:green}#1# in #2#{} chance to pay out',
                 [3] = 'with {C:money}$1{} instead'
+            },
+            ['unlock'] = {
+                [1] = 'Beat the {E:1,C:attention}Double or Nothing',
+                [2] = 'challenge'
             }
         }
     },
@@ -412,6 +429,10 @@ return {
                 [2] = 'has the Chips and Mult of all',
                 [3] = '{C:attention}poker hands{} played this game',
                 [4] = '{s:0.8}Combination changes every round'
+            },
+            ['unlock'] = {
+                [1] = 'Beat the {E:1,C:attention}15 Minute City',
+                [2] = 'challenge'
             }
         }
     },
@@ -799,6 +820,10 @@ return {
                 [2] = '{C:attention}Boss Blind{}, add #1#',
                 [3] = "random {C:bunco_exotic,T:exotic_cards}#2#",
                 [4] = "to your deck"
+            },
+            ['unlock'] = {
+                [1] = 'Play {E:1,C:attention}5 different suits',
+                [2] = 'in a single hand'
             }
         }
     },
