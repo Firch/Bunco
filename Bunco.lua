@@ -848,8 +848,9 @@ create_joker({ -- Dogs Playing Poker
 
             if context.scoring_hand ~= nil then
                 for i = 1, #context.scoring_hand do
-                    if context.scoring_hand[i]:get_id() >= 6 or
-                    context.scoring_hand[i]:get_id() < 2 then
+                    if (context.scoring_hand[i]:get_id() >= 6 or
+                    context.scoring_hand[i]:get_id() < 2) and
+                    context.scoring_hand[i].config.center ~= G.P_CENTERS.m_stone then
                         condition = false
                     end
                 end
