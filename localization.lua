@@ -315,8 +315,8 @@ return {
         ['en-us'] = {
             ['name'] = 'Dogs Playing Poker',
             ['text'] = {
-                [1] = '{X:mult,C:white}X#1#{} Mult if all scored',
-                [2] = 'cards are {C:attention}2{}, {C:attention}3{}, {C:attention}4{}, or {C:attention}5{}'
+                [1] = '{X:mult,C:white}X#1#{} Mult if every scored',
+                [2] = 'rank is {C:attention}2{}, {C:attention}3{}, {C:attention}4{}, or {C:attention}5'
             }
         }
     },
