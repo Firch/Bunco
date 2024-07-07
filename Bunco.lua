@@ -301,20 +301,33 @@ end
 -- Jokers
 
 function bunco.set_debuff(card)
-    -- Gameplan
+    -- Fluorescent edition
+    if card.edition and card.edition.bunc_fluorescent then
+        return 'prevent_debuff'
+    end
+
+    -- Jokers
+
     local my_pos = nil
     for i = 1, #G.jokers.cards do
         if G.jokers.cards[i] == card then my_pos = i; break end
     end
+
+    -- Gameplan
 
     if my_pos then
         if G.jokers.cards[my_pos - 1] and G.jokers.cards[my_pos - 1].ability.name == 'Gameplan' and not G.jokers.cards[my_pos - 1].debuff then return true end
         if G.jokers.cards[my_pos + 1] and G.jokers.cards[my_pos + 1].ability.name == 'Gameplan' and not G.jokers.cards[my_pos + 1].debuff then return true end
     end
 
-    -- Fluorescent things
-    if card.edition and card.edition.bunc_fluorescent then
-        return 'prevent_debuff'
+    -- Conquest
+
+    for i = 1, #G.jokers.cards do
+        if G.jokers.cards[i].ability.name == 'Conquest' then
+            if G.jokers.cards[i].ability.extra.joker ~= 0 and card == G.jokers.cards[i].ability.extra.joker then
+                return true
+            end
+        end
     end
 
     return false
@@ -448,7 +461,7 @@ create_joker({ -- Crop Circles
 
             local other_card = context.other_card
 
-            if other_card.ability.effect ~= 'Stone Card' then
+            if other_card.config.center ~= G.P_CENTERS.m_stone then
 
                 if other_card.base.suit == ('Fleurons') then
                     if other_card:get_id() == 8 then
@@ -1218,6 +1231,13 @@ create_joker({ -- Gameplan
             end
         end
     end,
+    remove = function(self, card)
+        if G.jokers then
+            for i = 1, #G.jokers.cards do
+                G.GAME.blind:debuff_card(G.jokers.cards[i])
+            end
+        end
+    end,
     calculate = function(self, card, context)
         if context.joker_main then
             local mult = 0
@@ -1240,6 +1260,110 @@ create_joker({ -- Gameplan
                     card = card
                 }
             end
+        end
+    end
+})
+
+create_joker({ -- Conquest
+    name = 'Conquest', position = 30,
+    vars = {{chips = 200}, {joker = 0}},
+    rarity = 'Uncommon', cost = 5,
+    blueprint = false, eternal = true,
+    unlocked = true,
+    update = function(self, card)
+        if G.jokers then
+            for i = 1, #G.jokers.cards do
+                G.GAME.blind:debuff_card(G.jokers.cards[i])
+            end
+        end
+    end,
+    remove = function(self, card)
+        if G.jokers then
+            for i = 1, #G.jokers.cards do
+                G.GAME.blind:debuff_card(G.jokers.cards[i])
+            end
+        end
+    end,
+    calculate = function(self, card, context)
+        if context.setting_blind then
+            local my_pos = nil
+            for i = 1, #G.jokers.cards do
+                if G.jokers.cards[i] == card then my_pos = i; break end
+            end
+
+            if #G.jokers.cards > 1 then
+                card.ability.extra.joker = G.jokers.cards[math.random(#G.jokers.cards)]
+                while card.ability.extra.joker == G.jokers.cards[my_pos] do
+                    card.ability.extra.joker = G.jokers.cards[math.random(#G.jokers.cards)]
+                end
+            else
+                card.ability.extra.joker = 0
+            end
+
+            if card.ability.extra.joker ~= 0 then
+                forced_message(loc.dictionary.debuffed, card, G.C.RED, true, card.ability.extra.joker)
+            end
+        end
+        if context.joker_main then
+            return {
+                message = localize {
+                    type = 'variable',
+                    key = 'a_chips',
+                    vars = { card.ability.extra.chips }
+                },
+                chip_mod = card.ability.extra.chips,
+                card = card
+            }
+        end
+    end
+})
+
+create_joker({ -- Hierarchy of Needs
+    name = 'Hierarchy of Needs', position = 31,
+    vars = {{bonus = 5}, {mult = 20}},
+    rarity = 'Uncommon', cost = 5,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    update = function(self, card)
+        if G.playing_cards then
+            local required_ranks = {'2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace'}
+            local rank_count = {}
+            local set_count = 0
+
+            for _, rank in ipairs(required_ranks) do
+                rank_count[rank] = 0
+            end
+
+            for _, deck_card in ipairs(G.playing_cards) do
+                local rank
+
+                if deck_card.config.center ~= G.P_CENTERS.m_stone then
+                    rank = deck_card.base.value
+                end
+
+                if rank and rank_count[rank] then
+                    rank_count[rank] = rank_count[rank] + 1
+
+                    local complete_set = true
+                    for _, req_rank in ipairs(required_ranks) do
+                        if rank_count[req_rank] == 0 then
+                            complete_set = false
+                            break
+                        end
+                    end
+
+                    if complete_set then
+                        set_count = set_count + 1
+                        for _, req_rank in ipairs(required_ranks) do
+                            rank_count[req_rank] = rank_count[req_rank] - 1
+                        end
+                    end
+                end
+            end
+
+            card.ability.extra.mult = card.ability.extra.bonus * set_count
+        else
+            card.ability.extra.mult = card.ability.extra.bonus * 4
         end
     end
 })

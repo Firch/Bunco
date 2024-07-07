@@ -7,6 +7,7 @@ return {
             loop = 'Loop!',
             chance = 'Chance',
             word_and = 'and',
+            debuffed = 'Debuffed!',
             mysterious_tarot = 'Tarot?',
             most_played_rank = '(most played rank)',
             least_played_hand = '(least played hand)',
@@ -464,6 +465,27 @@ return {
                 [2] = 'to the left and right,',
                 [3] = 'each Joker next to this Joker',
                 [4] = 'grants {C:mult}+#1#{} Mult'
+            }
+        }
+    },
+    conquest = {
+        ['en-us'] = {
+            ['name'] = 'Conquest',
+            ['text'] = {
+                [1] = '{C:chips}+#1#{} Chips,',
+                [2] = '{C:red}Debuffs{} random Joker',
+                [3] = 'when {C:attention}Blind{} is selected'
+            }
+        }
+    },
+    hierarchy_of_needs = {
+        ['en-us'] = {
+            ['name'] = 'Hierarchy of Needs',
+            ['text'] = {
+                [1] = '{C:red}+#1#{} Mult for each',
+                [2] = '{C:attention}full set of ranks{} in',
+                [3] = 'your {C:attention}full deck',
+                [4] = '{C:inactive}(Currently {C:red}+#2#{C:inactive} Mult)'
             }
         }
     },
