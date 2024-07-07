@@ -831,7 +831,7 @@ create_joker({ -- JMJB
                     blocking = false,
                     func = function()
 
-                        if G.pack_cards and G.pack_cards.cards ~= nil and G.pack_cards.cards[1] and G.pack_cards.VT.y < G.ROOM.T.h then
+                        if G.pack_cards and G.pack_cards.cards and G.pack_cards.cards[1] and G.pack_cards.VT.y < G.ROOM.T.h then
 
                             for _, v in ipairs(G.pack_cards.cards) do
                                 if v.config.center == G.P_CENTERS.c_base then
@@ -1321,7 +1321,7 @@ create_joker({ -- Conquest
 create_joker({ -- Hierarchy of Needs
     name = 'Hierarchy of Needs', position = 31,
     vars = {{bonus = 5}, {mult = 20}},
-    rarity = 'Uncommon', cost = 5,
+    rarity = 'Common', cost = 5,
     blueprint = true, eternal = true,
     unlocked = true,
     update = function(self, card)
@@ -1378,6 +1378,113 @@ create_joker({ -- Hierarchy of Needs
                     mult_mod = card.ability.extra.mult,
                     card = card
                 }
+            end
+        end
+    end
+})
+
+create_joker({ -- Dwarven
+    name = 'Dwarven', position = 32,
+    custom_vars = function(self, info_queue, card)
+        info_queue[#info_queue+1] = G.P_CENTERS.m_stone
+        info_queue[#info_queue+1] = G.P_CENTERS.m_steel
+        info_queue[#info_queue+1] = G.P_CENTERS.m_gold
+        return {}
+    end,
+    rarity = 'Uncommon', cost = 8,
+    blueprint = false, eternal = true,
+    unlocked = true,
+    update = function(self, card)
+        if card.area == G.jokers and not card.debuff then
+            G.P_CENTERS.m_stone.config.h_x_mult = G.P_CENTERS.m_steel.config.h_x_mult
+            G.P_CENTERS.m_stone.config.h_dollars = G.P_CENTERS.m_gold.config.h_dollars
+        end
+    end,
+    remove = function(self, card)
+        G.P_CENTERS.m_stone.config.h_x_mult = nil
+        G.P_CENTERS.m_stone.config.h_dollars = nil
+    end
+})
+
+create_joker({ -- Aristocrat
+    name = 'Aristocrat', position = 33,
+    rarity = 'Uncommon', cost = 6,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.open_booster and context.card.ability.name then
+            event({
+                trigger = 'after',
+                delay = 1.3 * math.sqrt(G.SETTINGS.GAMESPEED),
+                blockable = false,
+                blocking = false,
+                func = function()
+                    if G.pack_cards.VT.y < G.ROOM.T.h then
+                        G.GAME.pack_choices = G.GAME.pack_choices + 1
+                        if G.pack_cards and G.pack_cards.cards and G.pack_cards.cards[1] then
+                            if G.GAME.pack_choices > #G.pack_cards.cards then
+                                G.GAME.pack_choices = #G.pack_cards.cards
+                            end
+                        end
+                    end
+                    return true
+                end
+            })
+        end
+    end
+})
+
+create_joker({ -- Metallurgist
+    name = 'Metallurgist', position = 34,
+    vars = {{mult = 10}},
+    custom_vars = function(self, info_queue, card)
+        info_queue[#info_queue+1] = G.P_CENTERS.m_gold
+        return {vars = {card.ability.extra.mult}}
+    end,
+    rarity = 'Common', cost = 6,
+    blueprint = false, eternal = true,
+    unlocked = true,
+    update = function(self, card)
+        if card.area == G.jokers and not card.debuff then
+            G.P_CENTERS.m_gold.config.h_mult = card.ability.extra.mult
+        end
+    end,
+    remove = function(self, card)
+        G.P_CENTERS.m_gold.config.h_x_mult = 0
+    end
+})
+
+create_joker({ -- Juggalo
+    name = 'Juggalo', position = 35,
+    custom_vars = function(self, info_queue, card)
+        info_queue[#info_queue+1] = G.P_CENTERS.e_foil
+        info_queue[#info_queue+1] = G.P_CENTERS.e_holo
+        info_queue[#info_queue+1] = G.P_CENTERS.e_polychrome
+        info_queue[#info_queue+1] = G.P_CENTERS.e_bunc_glitter
+        return {}
+    end,
+    rarity = 'Rare', cost = 8,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.setting_blind then
+            if G.consumeables.cards[1] then
+                local consumables_table = {}
+                for i = 1, #G.consumeables.cards do
+                    if G.consumeables.cards[i]:get_edition() == nil then
+                        table.insert(consumables_table, G.consumeables.cards[i])
+                    end
+                end
+                local consumable = consumables_table[math.random(#consumables_table)]
+                local edition = poll_edition('standard_edition'..G.GAME.round_resets.ante, nil, true, true,
+                {'e_holo', 'e_foil', 'e_polychrome', 'e_bunc_glitter'})
+                if consumable then
+                    event({func = function()
+                        consumable:set_edition(edition, true)
+                        return true
+                    end})
+                    forced_message(localize('k_upgrade_ex'), card, G.C.RED, true, consumable)
+                end
             end
         end
     end

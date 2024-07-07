@@ -489,6 +489,45 @@ return {
             }
         }
     },
+    dwarven = {
+        ['en-us'] = {
+            ['name'] = 'Dwarven Joker',
+            ['text'] = {
+                [1] = 'Held in hand {C:attention}Stone Cards{}',
+                [2] = 'have abilities of {C:attention}Steel Cards{}',
+                [3] = 'and {C:attention}Gold Cards'
+            }
+        }
+    },
+    aristocrat = {
+        ['en-us'] = {
+            ['name'] = 'Aristocrat',
+            ['text'] = {
+                [1] = 'An additional card can be',
+                [2] = 'selected from {C:attention}Booster Packs'
+            }
+        }
+    },
+    metallurgist = {
+        ['en-us'] = {
+            ['name'] = 'Metallurgist',
+            ['text'] = {
+                [1] = 'Held in hand {C:attention}Gold Cards{}',
+                [2] = 'give {C:red}+#1#{} Mult'
+            }
+        }
+    },
+    juggalo = {
+        ['en-us'] = {
+            ['name'] = 'Juggalo',
+            ['text'] = {
+                [1] = 'Adds {C:dark_edition}Foil{}, {C:dark_edition}Holographic{},',
+                [2] = '{C:dark_edition}Polychrome{} or {C:dark_edition}Glitter{} edition',
+                [3] = 'to a random {C:attention}consumable{}',
+                [4] = 'when {C:attention}Blind{} is selected'
+            }
+        }
+    },
 
     -- Exotic
 
