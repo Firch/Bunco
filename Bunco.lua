@@ -1365,6 +1365,21 @@ create_joker({ -- Hierarchy of Needs
         else
             card.ability.extra.mult = card.ability.extra.bonus * 4
         end
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            if card.ability.extra.mult ~= 0 then
+                return {
+                    message = localize {
+                        type = 'variable',
+                        key = 'a_mult',
+                        vars = { card.ability.extra.mult }
+                    },
+                    mult_mod = card.ability.extra.mult,
+                    card = card
+                }
+            end
+        end
     end
 })
 
