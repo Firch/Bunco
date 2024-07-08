@@ -483,7 +483,7 @@ return {
             ['name'] = 'Hierarchy of Needs',
             ['text'] = {
                 [1] = '{C:red}+#1#{} Mult for each',
-                [2] = '{C:attention}full set of ranks{} in',
+                [2] = '{C:attention}full set of suit{} in',
                 [3] = 'your {C:attention}full deck',
                 [4] = '{C:inactive}(Currently {C:red}+#2#{C:inactive} Mult)'
             }

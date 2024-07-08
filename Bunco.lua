@@ -1327,40 +1327,43 @@ create_joker({ -- Hierarchy of Needs
     update = function(self, card)
         if G.playing_cards then
             local required_ranks = {'2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace'}
-            local rank_count = {}
             local set_count = 0
 
-            for _, rank in ipairs(required_ranks) do
-                rank_count[rank] = 0
-            end
+            for _, suit_data in pairs(SMODS.Suits) do
+                local suit = tostring(suit_data.key)
+                local rank_count = {}
 
-            for _, deck_card in ipairs(G.playing_cards) do
-                local rank
-
-                if deck_card.config.center ~= G.P_CENTERS.m_stone then
-                    rank = deck_card.base.value
+                for _, rank in ipairs(required_ranks) do
+                    rank_count[rank] = 0
                 end
 
-                if rank and rank_count[rank] then
-                    rank_count[rank] = rank_count[rank] + 1
+                for _, deck_card in ipairs(G.playing_cards) do
+                    local rank
 
-                    local complete_set = true
-                    for _, req_rank in ipairs(required_ranks) do
-                        if rank_count[req_rank] == 0 then
-                            complete_set = false
-                            break
-                        end
+                    if deck_card.config.center ~= G.P_CENTERS.m_stone and deck_card.base.suit == suit then
+                        rank = deck_card.base.value
                     end
 
-                    if complete_set then
-                        set_count = set_count + 1
+                    if rank and rank_count[rank] then
+                        rank_count[rank] = rank_count[rank] + 1
+
+                        local complete_set = true
                         for _, req_rank in ipairs(required_ranks) do
-                            rank_count[req_rank] = rank_count[req_rank] - 1
+                            if rank_count[req_rank] == 0 then
+                                complete_set = false
+                                break
+                            end
+                        end
+
+                        if complete_set then
+                            set_count = set_count + 1
+                            for _, req_rank in ipairs(required_ranks) do
+                                rank_count[req_rank] = rank_count[req_rank] - 1
+                            end
                         end
                     end
                 end
             end
-
             card.ability.extra.mult = card.ability.extra.bonus * set_count
         else
             card.ability.extra.mult = card.ability.extra.bonus * 4
