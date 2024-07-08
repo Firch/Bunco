@@ -1493,6 +1493,36 @@ create_joker({ -- Juggalo
     end
 })
 
+create_joker({ -- Head in the Clouds
+    name = 'Head in the Clouds', position = 36,
+    vars = {{odds = 3}},
+    custom_vars = function(self, info_queue, card)
+        local vars
+        if G.GAME and G.GAME.probabilities.normal then
+            vars = {G.GAME.probabilities.normal, card.ability.extra.odds}
+        else
+            vars = {1, card.ability.extra.odds}
+        end
+        return {vars = vars}
+    end,
+    rarity = 'Uncommon', cost = 6,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.level_up_hand and context.level_up_hand ~= self.name then
+            if pseudorandom('head'..G.SEED) < G.GAME.probabilities.normal / card.ability.extra.odds then
+                event({func = function()
+                    local hand = 'High Card'
+                    card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex')})
+                    update_hand_text({sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3}, {handname=localize(hand, 'poker_hands'),chips = G.GAME.hands[hand].chips, mult = G.GAME.hands[hand].mult, level=G.GAME.hands[hand].level})
+                    level_up_hand(context.blueprint_card or card, self.name, nil, 1)
+                    update_hand_text({sound = 'button', volume = 0.7, pitch = 1.1, delay = 0}, {mult = 0, chips = 0, handname = '', level = ''})
+                return true end})
+            end
+        end
+    end
+})
+
 -- Exotic Jokers
 
 create_joker({ -- Zealous

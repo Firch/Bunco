@@ -441,7 +441,7 @@ end
 
 '''
 
-# function evaluate_play (Nil Bill)
+# function evaluate_play (Nil Bill, Neon)
 [[patches]]
 [patches.pattern]
 target = 'functions/state_events.lua'
@@ -496,6 +496,28 @@ match_indent = true
 payload = '''
 if hand == 'h_bunc_Deal' then return end
 '''
+
+# function level_up_hand (Head in the Clouds)
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = "function level_up_hand(card, hand, instant, amount)"
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.jokers ~= nil then
+    for _, v in ipairs(G.jokers.cards) do
+        if v.ability.name == 'Head in the Clouds' and not v.debuff then
+            v:calculate_joker({level_up_hand = hand})
+        end
+    end
+end
+
+if hand == 'Head in the Clouds' then hand = 'High Card' end
+
+'''
+
 
 # function Card:is_suit (Myopia & Astigmatism)
 [[patches]]

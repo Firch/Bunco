@@ -528,6 +528,16 @@ return {
             }
         }
     },
+    head_in_the_clouds = {
+        ['en-us'] = {
+            ['name'] = 'Head in the Clouds',
+            ['text'] = {
+                [1] = '{C:green}#1# in #2#{} chance to upgrade',
+                [2] = '{C:attention}High Card{} when upgrading',
+                [3] = 'any {C:attention}poker hand'
+            }
+        }
+    },
 
     -- Exotic
 
