@@ -518,6 +518,27 @@ if hand == 'Head in the Clouds' then hand = 'High Card' end
 
 '''
 
+# function Card:highlight (Trigger Finger)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'self.highlighted = is_higlighted'
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.jokers ~= nil then
+    for _, v in ipairs(G.jokers.cards) do
+        if v.ability.name == 'Trigger Finger' and is_higlighted and self.area == G.hand then
+            if pseudorandom('trigger_finger'..G.SEED) < G.GAME.probabilities.normal / v.ability.extra.odds then
+                v:calculate_joker({select_card = true})
+                break
+            end
+        end
+    end
+end
+
+'''
 
 # function Card:is_suit (Myopia & Astigmatism)
 [[patches]]
@@ -1044,7 +1065,7 @@ local function calculate_discard()
     end
 end
 
-if e.antiscore then
+if e and e.antiscore then
     ease_discard(-1)
     calculate_discard()
 else
@@ -1062,7 +1083,7 @@ position = 'at'
 match_indent = true
 payload = '''
 
-if e.antiscore then
+if e and e.antiscore then
     G.FUNCS.evaluate_play(e)
 else
     G.FUNCS.evaluate_play()

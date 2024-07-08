@@ -8,6 +8,7 @@ return {
             chance = 'Chance',
             word_and = 'and',
             debuffed = 'Debuffed!',
+            pew = 'Pew!',
             mysterious_tarot = 'Tarot?',
             most_played_rank = '(most played rank)',
             least_played_hand = '(least played hand)',
@@ -535,6 +536,27 @@ return {
                 [1] = '{C:green}#1# in #2#{} chance to upgrade',
                 [2] = '{C:attention}High Card{} when upgrading',
                 [3] = 'any {C:attention}poker hand'
+            }
+        }
+    },
+    headshot = {
+        ['en-us'] = {
+            ['name'] = 'Headshot',
+            ['text'] = {
+                [1] = '{X:mult,C:white}X#1#{} Mult if played hand',
+                [2] = 'contains only a single',
+                [3] = 'scoring {C:attention}face card{}'
+            }
+        }
+    },
+    trigger_finger = {
+        ['en-us'] = {
+            ['name'] = 'Trigger Finger',
+            ['text'] = {
+                [1] = '{X:mult,C:white}X#1#{} Mult,',
+                [2] = '{C:attention}selecting{} a card',
+                [3] = 'has a {C:green}#2# in #3#{} chance to',
+                [4] = 'play highlighted cards'
             }
         }
     },

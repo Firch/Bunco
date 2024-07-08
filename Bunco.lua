@@ -1510,7 +1510,7 @@ create_joker({ -- Head in the Clouds
     unlocked = true,
     calculate = function(self, card, context)
         if context.level_up_hand and context.level_up_hand ~= self.name then
-            if pseudorandom('head'..G.SEED) < G.GAME.probabilities.normal / card.ability.extra.odds then
+            if pseudorandom('head_in_the_clouds'..G.SEED) < G.GAME.probabilities.normal / card.ability.extra.odds then
                 event({func = function()
                     local hand = 'High Card'
                     card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex')})
@@ -1519,6 +1519,74 @@ create_joker({ -- Head in the Clouds
                     update_hand_text({sound = 'button', volume = 0.7, pitch = 1.1, delay = 0}, {mult = 0, chips = 0, handname = '', level = ''})
                 return true end})
             end
+        end
+    end
+})
+
+create_joker({ -- Headshot
+    name = 'Headshot', position = 37,
+    vars = {{xmult = 3}},
+    rarity = 'Uncommon', cost = 8,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.joker_main and context.scoring_hand then
+            local face_amount = 0
+            for i = 1, #context.scoring_hand do
+                if context.scoring_hand[i]:is_face() then
+                    face_amount = face_amount + 1
+                end
+            end
+
+            if face_amount == 1 then
+                return {
+                    Xmult_mod = card.ability.extra.xmult,
+                    card = card,
+                    message = localize {
+                        type = 'variable',
+                        key = 'a_xmult',
+                        vars = { card.ability.extra.xmult }
+                    },
+                }
+            end
+        end
+    end
+})
+
+create_joker({ -- Trigger Finger
+    name = 'Trigger Finger', position = 38,
+    vars = {{xmult = 4}, {odds = 10}},
+    custom_vars = function(self, info_queue, card)
+        local vars
+        if G.GAME and G.GAME.probabilities.normal then
+            vars = {card.ability.extra.xmult, G.GAME.probabilities.normal, card.ability.extra.odds}
+        else
+            vars = {card.ability.extra.xmult, 1, card.ability.extra.odds}
+        end
+        return {vars = vars}
+    end,
+    rarity = 'Rare', cost = 8,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.select_card then
+            event({trigger = 'after', func = function()
+                if #G.hand.highlighted[1] then
+                    forced_message(loc.dictionary.pew, card, G.C.RED)
+                    G.FUNCS.play_cards_from_highlighted()
+                end
+            return true end})
+        end
+        if context.joker_main then
+            return {
+                Xmult_mod = card.ability.extra.xmult,
+                card = card,
+                message = localize {
+                    type = 'variable',
+                    key = 'a_xmult',
+                    vars = { card.ability.extra.xmult }
+                },
+            }
         end
     end
 })
