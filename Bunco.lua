@@ -1422,7 +1422,7 @@ create_joker({ -- Aristocrat
                 blockable = false,
                 blocking = false,
                 func = function()
-                    if G.pack_cards.VT.y < G.ROOM.T.h then
+                    if G.pack_cards and (G.pack_cards.VT.y < G.ROOM.T.h) then
                         G.GAME.pack_choices = G.GAME.pack_choices + 1
                         if G.pack_cards and G.pack_cards.cards and G.pack_cards.cards[1] then
                             if G.GAME.pack_choices > #G.pack_cards.cards then
