@@ -356,7 +356,7 @@ create_joker({ -- Cassette
             local other_card = context.other_card
             local side = card.ability.extra.side
 
-            if other_card:is_suit('Hearts') or other_card:is_suit('Diamonds') or other_card:is_suit('Fleurons') then
+            if other_card:is_suit('Hearts') or other_card:is_suit('Diamonds') or other_card:is_suit('bunc_Fleurons') then
                 if side == 'A' then
                     return {
                         chips = card.ability.extra.chips,
@@ -365,7 +365,7 @@ create_joker({ -- Cassette
                 end
             end
 
-            if other_card:is_suit('Spades') or other_card:is_suit('Clubs') or other_card:is_suit('Halberds') then
+            if other_card:is_suit('Spades') or other_card:is_suit('Clubs') or other_card:is_suit('bunc_Halberds') then
                 if side == 'B' then
                     return {
                         mult = card.ability.extra.mult,
@@ -463,7 +463,7 @@ create_joker({ -- Crop Circles
 
             if other_card.config.center ~= G.P_CENTERS.m_stone then
 
-                if other_card.base.suit == ('Fleurons') then
+                if other_card.base.suit == ('bunc_Fleurons') then
                     if other_card:get_id() == 8 then
                         return {
                             mult = 6,
@@ -1616,7 +1616,7 @@ create_joker({ -- Lurid
 create_joker({ -- Envious
     type = 'Exotic',
     name = 'Envious', position = 3,
-    vars = {{s_mult = 12}, {suit = 'Fleurons'}},
+    vars = {{s_mult = 12}, {suit = 'bunc_Fleurons'}},
     rarity = 'Common', cost = 5,
     blueprint = true, eternal = true,
     unlocked = true,
@@ -1627,7 +1627,7 @@ create_joker({ -- Proud
     type = 'Exotic',
     name = 'Proud', position = 4,
     custom_vars = function(self, info_queue, card) return {vars = {card.ability.extra.s_mult}} end,
-    custom_config = {extra = {s_mult = 12, suit = 'Halberds'}},
+    custom_config = {extra = {s_mult = 12, suit = 'bunc_Halberds'}},
     rarity = 'Common', cost = 5,
     blueprint = true, eternal = true,
     unlocked = true,
@@ -1651,7 +1651,7 @@ create_joker({ -- Wishalloy
     blueprint = true, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
-        if context.individual and context.cardarea == G.play and context.other_card:is_suit('Fleurons') then
+        if context.individual and context.cardarea == G.play and context.other_card:is_suit('bunc_Fleurons') then
             if pseudorandom('wishalloy'..G.SEED) < G.GAME.probabilities.normal / card.ability.extra.odds then
                 local value = context.other_card:get_chip_bonus()
                 ease_dollars(value)
@@ -1669,7 +1669,7 @@ create_joker({ -- Unobtanium
     blueprint = true, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
-        if context.individual and context.cardarea == G.play and context.other_card:is_suit('Halberds') then
+        if context.individual and context.cardarea == G.play and context.other_card:is_suit('bunc_Halberds') then
             return {
                 message = localize {
                     type = 'variable',
@@ -1789,7 +1789,7 @@ create_joker({ -- Fondue
             end
 
             for i = 1, #context.scoring_hand do
-                G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.1,  func = function() context.scoring_hand[i]:change_suit('Fleurons'); return true end }))
+                G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.1,  func = function() context.scoring_hand[i]:change_suit('bunc_Fleurons'); return true end }))
             end
 
             for i = 1, #context.scoring_hand do
@@ -1887,7 +1887,7 @@ create_joker({ -- Rigoletto
             card.ability.extra.tally = 0
 
             for k, v in pairs(G.playing_cards) do
-                if v:is_suit('Fleurons') or v:is_suit('Halberds') then card.ability.extra.tally = card.ability.extra.tally + 1 end
+                if v:is_suit('bunc_Fleurons') or v:is_suit('bunc_Halberds') then card.ability.extra.tally = card.ability.extra.tally + 1 end
             end
 
             card.ability.extra.xmult = 1 + (card.ability.extra.tally * card.ability.extra.bonus)
@@ -1906,7 +1906,7 @@ SMODS.Consumable{ -- The Sky
         badges[1] = create_badge(loc.dictionary.mysterious_tarot, get_type_colour(self or card.config, card), nil, 1.2)
     end,
 
-    config = {max_highlighted = 3, suit_conv = 'Fleurons'},
+    config = {max_highlighted = 3, suit_conv = 'bunc_Fleurons'},
     pos = coordinate(1),
 
     loc_vars = function(self) return {vars = {self.config.max_highlighted}} end,
@@ -1948,7 +1948,7 @@ SMODS.Consumable{ -- The Abyss
         badges[1] = create_badge(loc.dictionary.mysterious_tarot, get_type_colour(self or card.config, card), nil, 1.2)
     end,
 
-    config = {max_highlighted = 3, suit_conv = 'Halberds'},
+    config = {max_highlighted = 3, suit_conv = 'bunc_Halberds'},
     pos = coordinate(2),
 
     loc_vars = function(self) return {vars = {self.config.max_highlighted}} end,
@@ -2837,8 +2837,8 @@ SMODS.Blind{ -- Chartreuse Crown
 
         if G.playing_cards then
             for k, v in pairs(G.playing_cards) do
-                if (v.base.suit == ('Fleurons') or
-                v.base.suit == ('Halberds')) and
+                if (v.base.suit == ('bunc_Fleurons') or
+                v.base.suit == ('bunc_Halberds')) and
                 v.ability.name ~= 'Stone Card' then
                     exotic_amount = exotic_amount + 1
                 end
@@ -3198,8 +3198,8 @@ SMODS.Tag{ -- Filigree
                         enable_exotics()
 
                         for _, v in ipairs(G.pack_cards.cards) do
-                            if not v:is_suit('Fleurons') and not v:is_suit('Halberds') then
-                                local suits = {'Fleurons', 'Halberds'}
+                            if not v:is_suit('bunc_Fleurons') and not v:is_suit('bunc_Halberds') then
+                                local suits = {'bunc_Fleurons', 'bunc_Halberds'}
                                 local suit = pseudorandom_element(suits, pseudoseed('filigree'..G.SEED))
                                 v:change_suit(suit)
                             end

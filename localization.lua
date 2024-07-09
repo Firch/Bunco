@@ -43,7 +43,7 @@ return {
             ['name'] = 'Exotic cards',
             ['text'] = {
                 [1] = 'Cards with',
-                [2] = '{C:fleurons}Fleuron{} or {C:halberds}Halberd{} suit'
+                [2] = '{C:bunc_fleurons}Fleuron{} or {C:bunc_halberds}Halberd{} suit'
             }
         }
     },
@@ -104,7 +104,7 @@ return {
             ['text'] = {
                 [1] = 'Converts up to',
                 [2] = '{C:attention}#1#{} selected cards',
-                [3] = 'to {C:fleurons}Fleurons{}',
+                [3] = 'to {C:bunc_fleurons}Fleurons{}',
             }
         }
     },
@@ -114,7 +114,7 @@ return {
             ['text'] = {
                 [1] = 'Converts up to',
                 [2] = '{C:attention}#1#{} selected cards',
-                [3] = 'to {C:halberds}Halberds{}',
+                [3] = 'to {C:bunc_halberds}Halberds{}',
             }
         }
     },
@@ -197,7 +197,7 @@ return {
         ['en-us'] = {
             ['name'] = 'Crop Circles',
             ['text'] = {
-                [1] = '{C:fleurons}Fleurons{} give {C:mult}+4{} Mult,',
+                [1] = '{C:bunc_fleurons}Fleurons{} give {C:mult}+4{} Mult,',
                 [2] = '{C:clubs}Clubs{} give {C:mult}+3{} Mult,',
                 [3] = '8 give {C:mult}+2{} Mult,',
                 [4] = 'Q, 10, 9, 6 give {C:mult}+1{} Mult'
@@ -588,7 +588,7 @@ return {
             ['name'] = 'Envious Joker',
             ['text'] = {
                 [1] = 'Played cards with',
-                [2] = '{C:fleurons}Fleuron{} suit give',
+                [2] = '{C:bunc_fleurons}Fleuron{} suit give',
                 [3] = '{C:mult}+#1#{} Mult when scored'
             }
         }
@@ -598,7 +598,7 @@ return {
             ['name'] = 'Proud Joker',
             ['text'] = {
                 [1] = 'Played cards with',
-                [2] = '{C:halberds}Halberd{} suit give',
+                [2] = '{C:bunc_halberds}Halberd{} suit give',
                 [3] = '{C:mult}+#1#{} Mult when scored'
             }
         }
@@ -608,7 +608,7 @@ return {
             ['name'] = 'Wishalloy',
             ['text'] = {
                 [1] = '{C:green}#1# in #2#{} chance for',
-                [2] = 'played {C:fleurons}Fleurons{}',
+                [2] = 'played {C:bunc_fleurons}Fleurons{}',
                 [3] = 'to earn money equal',
                 [4] = "to card's scored chips"
             }
@@ -619,7 +619,7 @@ return {
             ['name'] = 'Unobtanium',
             ['text'] = {
                 [1] = 'Played cards with',
-                [2] = '{C:halberds}Halberd{} suit',
+                [2] = '{C:bunc_halberds}Halberd{} suit',
                 [3] = 'give {C:chips}+100{} Chips and {C:red}+12{} Mult',
                 [4] = "when scored"
             }
@@ -663,7 +663,7 @@ return {
             ['text'] = {
                 [1] = 'Scored cards in the first',
                 [2] = 'hand of round are converted',
-                [3] = 'to {C:fleurons}Fleurons'
+                [3] = 'to {C:bunc_fleurons}Fleurons'
             }
         }
     },
@@ -672,7 +672,7 @@ return {
             ['name'] = 'Myopia',
             ['text'] = {
                 [1] = '{C:spades}Spades{} and {C:clubs}Clubs{}',
-                [2] = 'count as {C:halberds}Halberds'
+                [2] = 'count as {C:bunc_halberds}Halberds'
             }
         }
     },
@@ -681,7 +681,7 @@ return {
             ['name'] = 'Astigmatism',
             ['text'] = {
                 [1] = '{C:hearts}Hearts{} and {C:diamonds}Diamonds{}',
-                [2] = 'count as {C:fleurons}Fleurons'
+                [2] = 'count as {C:bunc_fleurons}Fleurons'
             }
         }
     },
