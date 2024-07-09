@@ -2208,7 +2208,7 @@ SMODS.PokerHand{ -- Spectrum (Referenced from SixSuits)
         { 'S_2',    true },
         { 'D_7',    true },
         { 'C_3', true },
-        { 'FLEURON_5', true },
+        { 'bunc_FLEURON_5', true },
         { 'D_K',    true },
     },
     loc_txt = loc.spectrum,
@@ -2254,7 +2254,7 @@ SMODS.PokerHand{ -- Straight Spectrum (Referenced from SixSuits)
     l_mult = 5,
     example = {
         { 'S_Q',    true },
-        { 'FLEURON_J', true },
+        { 'bunc_FLEURON_J', true },
         { 'C_T',    true },
         { 'D_9', true },
         { 'H_8',    true }
@@ -2305,7 +2305,7 @@ SMODS.PokerHand{ -- Spectrum House (Referenced from SixSuits)
     l_mult = 5,
     example = {
         { 'S_Q',    true },
-        { 'FLEURON_Q', true },
+        { 'bunc_FLEURON_Q', true },
         { 'C_Q',    true },
         { 'D_8',    true },
         { 'H_8',    true }
@@ -2340,7 +2340,7 @@ SMODS.PokerHand{ -- Spectrum Five (Referenced from SixSuits)
     example = {
         { 'S_7',    true },
         { 'D_7', true },
-        { 'FLEURON_7',    true },
+        { 'bunc_FLEURON_7',    true },
         { 'H_7',    true },
         { 'C_7',    true }
     },
@@ -2971,7 +2971,7 @@ SMODS.Back{ -- Fairy
                         table.insert(numbers, r.card_key)
                     end
 
-                    local suits = {'FLEURON', 'HALBERD'}
+                    local suits = {'bunc_FLEURON', 'bunc_HALBERD'}
 
                     for i = 1, self.config.amount do
                         local rank = pseudorandom_element(numbers, pseudoseed('fairy'..G.SEED))
