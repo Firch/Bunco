@@ -291,6 +291,7 @@ local function create_joker(joker)
         update = joker.update,
         remove_from_deck = joker.remove,
         add_to_deck = joker.add,
+        set_ability = joker.set_ability,
         in_pool = pool,
 
         effect = joker.effect
@@ -2177,23 +2178,15 @@ end
 local original_start_run = Game.start_run
 
 function Game:start_run(args)
-
-    local saved_game
-
-    if args.savetext then
-        if not G.SAVED_GAME then
-            G.SAVED_GAME = get_compressed(G.SETTINGS.profile..'/'..'save.jkr')
-            if G.SAVED_GAME ~= nil then G.SAVED_GAME = STR_UNPACK(G.SAVED_GAME) end
-        end
-        if G.SAVED_GAME ~= nil then
-            saved_game = G.SAVED_GAME.GAME
-        end
-    else
-        saved_game = nil
-    end
-
     original_start_run(self, args)
 
+    local sledges = SMODS.find_card('j_bunc_sledgehammer')
+    for _, card in ipairs(sledges) do
+        G.P_CENTERS.m_glass.config.Xmult = G.P_CENTERS.m_glass.config.Xmult + card.ability.extra.plus_xmult
+    end
+    if #sledges >= 1 then
+        G.P_CENTERS.m_glass.config.extra = G.P_CENTERS.m_glass.config.extra / SMODS.Jokers['j_bunc_sledgehammer'].config.extra.div_chance_denom
+    end
 end
 
 -- Poker hands
