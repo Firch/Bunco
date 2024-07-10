@@ -556,7 +556,7 @@ return {
                 [1] = '{X:mult,C:white}X#1#{} Mult,',
                 [2] = '{C:attention}selecting{} a card',
                 [3] = 'has a {C:green}#2# in #3#{} chance to',
-                [4] = 'play highlighted cards'
+                [4] = 'play selected cards'
             }
         }
     },
@@ -578,6 +578,18 @@ return {
                 [2] = 'your deck increases',
                 [3] = 'its rank by {C:attention}1',
                 [4] = 'after being scored'
+            }
+        }
+    },
+    puzzle_board = {
+        ['en-us'] = {
+            ['name'] = 'Puzzle Board',
+            ['text'] = {
+                [1] = 'When {C:tarot}Tarot{} card is used,',
+                [2] = '{C:green}#1# in #2#{} chance to add',
+                [3] = '{C:dark_edition}Foil{}, {C:dark_edition}Holographic{}, or',
+                [4] = '{C:dark_edition}Polychrome{} edition to a random',
+                [5] = 'selected card in hand'
             }
         }
     },

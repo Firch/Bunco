@@ -28,7 +28,8 @@
 -- (done) Add config to the consumable editions
 -- (done) Remove debuff when fluorescent edition is applied to a debuffed card
 -- (done) Make tarot badges use localization
--- Pawn and linocut fake suit and rank
+-- (done) Pawn and linocut fake suit and rank
+-- Check eternal food compat
 
 global_bunco = global_bunco or {loc = {}, vars = {}}
 local bunco = SMODS.current_mod
@@ -1672,6 +1673,47 @@ create_joker({ -- Pawn
     end
 })
 
+create_joker({ -- Puzzle Board
+    name = 'Puzzle Board', position = 41,
+    vars = {{odds = 4}},
+    custom_vars = function(self, info_queue, card)
+
+        info_queue[#info_queue+1] = G.P_CENTERS.e_foil
+        info_queue[#info_queue+1] = G.P_CENTERS.e_holo
+        info_queue[#info_queue+1] = G.P_CENTERS.e_polychrome
+
+        local vars
+        if G.GAME and G.GAME.probabilities.normal then
+            vars = {G.GAME.probabilities.normal, card.ability.extra.odds}
+        else
+            vars = {1, card.ability.extra.odds}
+        end
+        return {vars = vars}
+    end,
+    rarity = 'Uncommon', cost = 6,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.using_consumeable and context.consumeable.ability.set == 'Tarot' then
+            if pseudorandom('puzzle_board'..G.SEED) < G.GAME.probabilities.normal / card.ability.extra.odds then
+                local cards = {}
+                local edition = poll_edition('wheel_of_fortune', nil, true, true)
+
+                for i = 1, #G.hand.highlighted do
+                    if G.hand.highlighted[i]:get_edition() == nil then
+                        table.insert(cards, G.hand.highlighted[i])
+                    end
+                end
+
+                if cards and #cards > 0 then
+                    big_juice(card)
+                    cards[math.random(#cards)]:set_edition(edition, true)
+                end
+            end
+        end
+    end
+})
+
 -- Exotic Jokers
 
 create_joker({ -- Zealous
@@ -1930,7 +1972,10 @@ create_joker({ -- ROYGBIV
                         end
                     end
 
-                    if cards and #cards > 0 then cards[math.random(#cards)]:set_edition({polychrome = true}, true) end
+                    if cards and #cards > 0 then
+                        big_juice(card)
+                        cards[math.random(#cards)]:set_edition({polychrome = true}, true) 
+                    end
                 end
             end
         end
