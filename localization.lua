@@ -560,6 +560,16 @@ return {
             }
         }
     },
+    hopscotch = {
+        ['en-us'] = {
+            ['name'] = 'Hopscotch',
+            ['text'] = {
+                [1] = 'Gain {C:red}+#1#{} discard',
+                [2] = 'if played hand',
+                [3] = 'contains a {C:attention}Straight{}'
+            }
+        }
+    },
 
     -- Exotic
 

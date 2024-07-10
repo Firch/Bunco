@@ -28,6 +28,7 @@
 -- (done) Add config to the consumable editions
 -- (done) Remove debuff when fluorescent edition is applied to a debuffed card
 -- (done) Make tarot badges use localization
+-- Pawn and linocut fake suit and rank
 
 global_bunco = global_bunco or {loc = {}, vars = {}}
 local bunco = SMODS.current_mod
@@ -1587,6 +1588,65 @@ create_joker({ -- Trigger Finger
                     vars = { card.ability.extra.xmult }
                 },
             }
+        end
+    end
+})
+
+create_joker({ -- Hopscotch
+    name = 'Hopscotch', position = 39,
+    vars = {{discard = 1}},
+    rarity = 'Common', cost = 4,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.before and context.poker_hands ~= nil and next(context.poker_hands['Straight']) then
+            ease_discard(card.ability.extra.discard)
+            forced_message('+'..card.ability.extra.discard..' '..localize('b_discard'), card, G.C.RED, true)
+        end
+    end
+})
+
+create_joker({ -- Pawn
+    name = 'Pawn', position = 40,
+    rarity = 'Common', cost = 5,
+    blueprint = false, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.individual and context.cardarea == G.play and context.scoring_hand and context.other_card then
+            local other_card = context.other_card
+            local rank = math.huge
+            for _, deck_card in ipairs(G.playing_cards) do
+                if deck_card:get_id() < rank then
+                    rank = deck_card:get_id()
+                end
+            end
+            if other_card:get_id() == rank then
+                event({trigger = 'after', delay = 0.15, func = function() other_card:flip(); play_sound('card1', 1); other_card:juice_up(0.3, 0.3); return true end })
+                event({
+                    trigger = 'after',
+                    delay = 0.1,
+                    func = function()
+                        local suit_data = SMODS.Suits[other_card.base.suit]
+                        local suit_prefix = suit_data.card_key
+                        local rank_data = SMODS.Ranks[other_card.base.value]
+                        local behavior = rank_data.strength_effect or { fixed = 1, ignore = false, random = false }
+                        local rank_suffix = ''
+                        if behavior.ignore or not next(rank_data.next) then
+                            return true
+                        elseif behavior.random then
+                            -- TODO doesn't respect in_pool
+                            local r = pseudorandom_element(rank_data.next, pseudoseed('strength'))
+                            rank_suffix = SMODS.Ranks[r].card_key
+                        else
+                            local ii = (behavior.fixed and rank_data.next[behavior.fixed]) and behavior.fixed or 1
+                            rank_suffix = SMODS.Ranks[rank_data.next[ii]].card_key
+                        end
+                        other_card:set_base(G.P_CARDS[suit_prefix .. '_' .. rank_suffix])
+                        return true
+                    end
+                })
+                event({trigger = 'after', delay = 0.15, func = function() other_card:flip(); play_sound('tarot2', 1, 0.6); other_card:juice_up(0.3, 0.3); return true end })
+            end
         end
     end
 })
