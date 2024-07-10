@@ -971,11 +971,15 @@ create_joker({ -- Sledgehammer
     unlocked = true,
     add = function(self, card)
         G.P_CENTERS.m_glass.config.Xmult = G.P_CENTERS.m_glass.config.Xmult + card.ability.extra.plus_xmult
-        G.P_CENTERS.m_glass.config.extra = G.P_CENTERS.m_glass.config.extra / self.config.extra.div_chance_denom
+        if #SMODS.find_card('j_bunc_sledgehammer') == 1 then
+            G.P_CENTERS.m_glass.config.extra = G.P_CENTERS.m_glass.config.extra / self.config.extra.div_chance_denom
+        end
     end,
     remove = function(self, card)
         G.P_CENTERS.m_glass.config.Xmult = G.P_CENTERS.m_glass.config.Xmult - card.ability.extra.plus_xmult
-        G.P_CENTERS.m_glass.config.extra = G.P_CENTERS.m_glass.config.extra * self.config.extra.div_chance_denom
+        if #SMODS.find_card('j_bunc_sledgehammer') == 0 then
+            G.P_CENTERS.m_glass.config.extra = G.P_CENTERS.m_glass.config.extra * self.config.extra.div_chance_denom
+        end
     end
 })
 
