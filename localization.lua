@@ -570,6 +570,17 @@ return {
             }
         }
     },
+    pawn = {
+        ['en-us'] = {
+            ['name'] = 'Pawn',
+            ['text'] = {
+                [1] = 'Each lowest rank in',
+                [2] = 'your deck increases',
+                [3] = 'its rank by {C:attention}1',
+                [4] = 'after being scored'
+            }
+        }
+    },
 
     -- Exotic
 

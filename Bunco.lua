@@ -87,6 +87,12 @@ local function say(message)
     sendDebugMessage('[BUNCO] - '..(message or '???'))
 end
 
+local original_juice_up = Card.juice_up
+function Card:juice_up(scale, rot_amount)
+    original_juice_up(self, scale, rot_amount)
+    say((self.ability.name or '???')..' '..(scale or 'nil')..' '..(rot_amount or 'nil'))
+end
+
 -- Index-based coordinates generation
 
 local function get_coordinates(position, width)
@@ -110,6 +116,10 @@ local function event(config)
     }))
 end
 
+local function big_juice(card)
+    card:juice_up(0.7)
+end
+
 local function forced_message(message, card, color, delay, juice)
     if delay == true then
         delay = 0.7 * 1.25
@@ -119,7 +129,7 @@ local function forced_message(message, card, color, delay, juice)
 
     event({trigger = 'before', delay = delay, func = function()
 
-        if juice then juice:juice_up(0.7) end
+        if juice then big_juice(juice) end
 
         card_eval_status_text(
             card,
@@ -661,17 +671,12 @@ create_joker({ -- Linocut
     blueprint = false, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
-        if not context.blueprint then
-            if context.individual and context.cardarea == G.play and context.poker_hands and next(context.poker_hands['Pair']) then
-
-                if context.scoring_hand ~= nil and #context.scoring_hand == 2 and context.scoring_hand[1] == context.other_card then
-                    G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.15, func = function() context.scoring_hand[1]:flip(); play_sound('card1', 1); context.scoring_hand[1]:juice_up(0.3, 0.3); return true end }))
-                    G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.1,  func = function() context.scoring_hand[1]:change_suit(context.scoring_hand[2].config.card.suit); return true end }))
-                    G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.15, func = function() context.scoring_hand[1]:flip(); play_sound('tarot2', 1, 0.6); context.scoring_hand[1]:juice_up(0.3, 0.3); return true end }))
-
-                    forced_message(loc.dictionary.copied, card, G.C.RED, true)
-
-                end
+        if context.after and context.scoring_hand ~= nil and #context.scoring_hand == 2 and not context.blueprint then
+            if context.poker_hands and next(context.poker_hands['Pair']) then
+                event({trigger = 'after', delay = 0.15, func = function() context.scoring_hand[1]:flip(); play_sound('card1', 1); context.scoring_hand[1]:juice_up(0.3, 0.3); return true end })
+                event({trigger = 'after', delay = 0.1,  func = function() context.scoring_hand[1]:change_suit(context.scoring_hand[2].config.card.suit); return true end })
+                event({trigger = 'after', delay = 0.15, func = function() context.scoring_hand[1]:flip(); play_sound('tarot2', 1, 0.6); big_juice(card); context.scoring_hand[1]:juice_up(0.3, 0.3); return true end })
+                forced_message(loc.dictionary.copied, card, G.C.RED, true)
             end
         end
     end
@@ -793,14 +798,14 @@ create_joker({ -- Knight
         if context.setting_blind and not card.getting_sliced and not context.blueprint then
             card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.bonus
 
-            G.E_MANAGER:add_event(Event({ trigger = 'after', delay = 0.2, func = function()
-                G.E_MANAGER:add_event(Event({ func = function() G.jokers:shuffle('aajk'); play_sound('cardSlide1', 0.85);return true end })) 
+            event({ trigger = 'after', delay = 0.2, func = function()
+                event({ func = function() G.jokers:shuffle('aajk'); play_sound('cardSlide1', 0.85);return true end })
                 delay(0.15)
-                G.E_MANAGER:add_event(Event({ func = function() G.jokers:shuffle('aajk'); play_sound('cardSlide1', 1.15);return true end })) 
+                event({ func = function() G.jokers:shuffle('aajk'); play_sound('cardSlide1', 1.15);return true end })
                 delay(0.15)
-                G.E_MANAGER:add_event(Event({ func = function() G.jokers:shuffle('aajk'); play_sound('cardSlide1', 1);return true end })) 
+                event({ func = function() G.jokers:shuffle('aajk'); play_sound('cardSlide1', 1);return true end })
                 delay(0.5)
-            return true end }))
+            return true end })
 
             forced_message('+'..tostring(card.ability.extra.mult)..' '..localize('k_mult'), card, G.C.RED)
         end
@@ -1629,40 +1634,44 @@ create_joker({ -- Pawn
     blueprint = false, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
-        if context.individual and context.cardarea == G.play and context.scoring_hand and context.other_card then
-            local other_card = context.other_card
-            local rank = math.huge
-            for _, deck_card in ipairs(G.playing_cards) do
-                if deck_card:get_id() < rank then
-                    rank = deck_card:get_id()
-                end
-            end
-            if other_card:get_id() == rank then
-                event({trigger = 'after', delay = 0.15, func = function() other_card:flip(); play_sound('card1', 1); other_card:juice_up(0.3, 0.3); return true end })
-                event({
-                    trigger = 'after',
-                    delay = 0.1,
-                    func = function()
-                        local suit_data = SMODS.Suits[other_card.base.suit]
-                        local suit_prefix = suit_data.card_key
-                        local rank_data = SMODS.Ranks[other_card.base.value]
-                        local behavior = rank_data.strength_effect or { fixed = 1, ignore = false, random = false }
-                        local rank_suffix = ''
-                        if behavior.ignore or not next(rank_data.next) then
-                            return true
-                        elseif behavior.random then
-                            -- TODO doesn't respect in_pool
-                            local r = pseudorandom_element(rank_data.next, pseudoseed('strength'))
-                            rank_suffix = SMODS.Ranks[r].card_key
-                        else
-                            local ii = (behavior.fixed and rank_data.next[behavior.fixed]) and behavior.fixed or 1
-                            rank_suffix = SMODS.Ranks[rank_data.next[ii]].card_key
-                        end
-                        other_card:set_base(G.P_CARDS[suit_prefix .. '_' .. rank_suffix])
-                        return true
+        if context.after and context.scoring_hand ~= nil and not context.blueprint then
+            for i = 1, #context.scoring_hand do
+                local other_card = context.scoring_hand[i]
+                local rank = math.huge
+                for _, deck_card in ipairs(G.playing_cards) do
+                    if deck_card:get_id() < rank then
+                        rank = deck_card:get_id()
                     end
-                })
-                event({trigger = 'after', delay = 0.15, func = function() other_card:flip(); play_sound('tarot2', 1, 0.6); other_card:juice_up(0.3, 0.3); return true end })
+                end
+                if other_card:get_id() == rank then
+                    event({trigger = 'after', delay = 0.15, func = function() other_card:flip(); play_sound('card1', 1); other_card:juice_up(0.3, 0.3); return true end })
+                    event({
+                        trigger = 'after',
+                        delay = 0.1,
+                        func = function()
+                            local suit_data = SMODS.Suits[other_card.base.suit]
+                            local suit_prefix = suit_data.card_key
+                            local rank_data = SMODS.Ranks[other_card.base.value]
+                            local behavior = rank_data.strength_effect or { fixed = 1, ignore = false, random = false }
+                            local rank_suffix = ''
+                            if behavior.ignore or not next(rank_data.next) then
+                                return true
+                            elseif behavior.random then
+                                -- TODO doesn't respect in_pool
+                                local r = pseudorandom_element(rank_data.next, pseudoseed('strength'))
+                                rank_suffix = SMODS.Ranks[r].card_key
+                            else
+                                local ii = (behavior.fixed and rank_data.next[behavior.fixed]) and behavior.fixed or 1
+                                rank_suffix = SMODS.Ranks[rank_data.next[ii]].card_key
+                            end
+                            other_card:set_base(G.P_CARDS[suit_prefix .. '_' .. rank_suffix])
+                            return true
+                        end
+                    })
+                    event({trigger = 'after', delay = 0.15, func = function() other_card:flip(); play_sound('tarot2', 1, 0.6); big_juice(card); other_card:juice_up(0.3, 0.3); return true end })
+
+                    delay(0.7 * 1.25)
+                end
             end
         end
     end
@@ -1862,16 +1871,18 @@ create_joker({ -- Fondue
             enable_exotics()
 
             for i = 1, #context.scoring_hand do
-                G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.15, func = function() context.scoring_hand[i]:flip(); play_sound('card1', 1); context.scoring_hand[i]:juice_up(0.3, 0.3); return true end }))
+                event({trigger = 'after', delay = 0.15, func = function() context.scoring_hand[i]:flip(); play_sound('card1', 1); context.scoring_hand[i]:juice_up(0.3, 0.3); return true end })
             end
 
             for i = 1, #context.scoring_hand do
-                G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.1,  func = function() context.scoring_hand[i]:change_suit('bunc_Fleurons'); return true end }))
+                event({trigger = 'after', delay = 0.1,  func = function() context.scoring_hand[i]:change_suit('bunc_Fleurons'); return true end })
             end
 
             for i = 1, #context.scoring_hand do
-                G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.15, func = function() context.scoring_hand[i]:flip(); play_sound('tarot2', 1, 0.6); context.scoring_hand[i]:juice_up(0.3, 0.3); return true end }))
+                event({trigger = 'after', delay = 0.15, func = function() context.scoring_hand[i]:flip(); play_sound('tarot2', 1, 0.6); big_juice(card); context.scoring_hand[i]:juice_up(0.3, 0.3); return true end })
             end
+
+            delay(0.7 * 1.25)
         end
     end
 })
@@ -2666,7 +2677,7 @@ SMODS.Blind{ -- The Bulwark
         if G.GAME.blind.debuff and not G.GAME.blind.disabled then
             if G.FUNCS.get_poker_hand_info(G.hand.highlighted) == G.GAME.current_round.most_played_poker_hand then
                 local original_limit = G.hand.config.highlighted_limit
-                G.E_MANAGER:add_event(Event({ func = function()
+                event({ func = function()
                     G.hand.config.highlighted_limit = math.huge
                     if G.hand.cards then
                         for k, v in ipairs(G.hand.cards) do
@@ -2678,7 +2689,7 @@ SMODS.Blind{ -- The Bulwark
                         G.hand.config.highlighted_limit = original_limit or 5
                         G.FUNCS.discard_cards_from_highlighted(nil, true)
                     end
-                return true end }))
+                return true end })
                 G.GAME.blind.triggered = true
                 delay(0.7)
             end
