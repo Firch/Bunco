@@ -87,12 +87,6 @@ local function say(message)
     sendDebugMessage('[BUNCO] - '..(message or '???'))
 end
 
-local original_juice_up = Card.juice_up
-function Card:juice_up(scale, rot_amount)
-    original_juice_up(self, scale, rot_amount)
-    say((self.ability.name or '???')..' '..(scale or 'nil')..' '..(rot_amount or 'nil'))
-end
-
 -- Index-based coordinates generation
 
 local function get_coordinates(position, width)
@@ -1636,6 +1630,7 @@ create_joker({ -- Pawn
     calculate = function(self, card, context)
         if context.after and context.scoring_hand ~= nil and not context.blueprint then
             for i = 1, #context.scoring_hand do
+                local condition = false
                 local other_card = context.scoring_hand[i]
                 local rank = math.huge
                 for _, deck_card in ipairs(G.playing_cards) do
@@ -1644,6 +1639,7 @@ create_joker({ -- Pawn
                     end
                 end
                 if other_card:get_id() == rank then
+                    condition = true
                     event({trigger = 'after', delay = 0.15, func = function() other_card:flip(); play_sound('card1', 1); other_card:juice_up(0.3, 0.3); return true end })
                     event({
                         trigger = 'after',
@@ -1669,9 +1665,8 @@ create_joker({ -- Pawn
                         end
                     })
                     event({trigger = 'after', delay = 0.15, func = function() other_card:flip(); play_sound('tarot2', 1, 0.6); big_juice(card); other_card:juice_up(0.3, 0.3); return true end })
-
-                    delay(0.7 * 1.25)
                 end
+                if condition then delay(0.7 * 1.25) end
             end
         end
     end
