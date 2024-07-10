@@ -965,19 +965,17 @@ create_joker({ -- Carnival
 
 create_joker({ -- Sledgehammer
     name = 'Sledgehammer', position = 20,
-    vars = {{new_xmult = 3}, {new_chance = 1}},
+    vars = {{plus_xmult = 1}, {div_chance_denom = 4}},
     rarity = 'Uncommon', cost = 5,
     blueprint = false, eternal = true,
     unlocked = true,
-    update = function(self, card)
-        if card.area == G.jokers and not card.debuff then
-            G.P_CENTERS.m_glass.config.Xmult = card.ability.extra.new_xmult
-            G.P_CENTERS.m_glass.config.extra = card.ability.extra.new_chance
-        end
+    add = function(self, card)
+        G.P_CENTERS.m_glass.config.Xmult = G.P_CENTERS.m_glass.config.Xmult + card.ability.extra.plus_xmult
+        G.P_CENTERS.m_glass.config.extra = G.P_CENTERS.m_glass.config.extra / self.config.extra.div_chance_denom
     end,
     remove = function(self, card)
-        G.P_CENTERS.m_glass.config.Xmult = 2
-        G.P_CENTERS.m_glass.config.extra = 4
+        G.P_CENTERS.m_glass.config.Xmult = G.P_CENTERS.m_glass.config.Xmult - card.ability.extra.plus_xmult
+        G.P_CENTERS.m_glass.config.extra = G.P_CENTERS.m_glass.config.extra * self.config.extra.div_chance_denom
     end
 })
 
