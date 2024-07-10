@@ -366,8 +366,8 @@ return {
         ['en-us'] = {
             ['name'] = 'Sledgehammer',
             ['text'] = {
-                [1] = '{C:attention}Glass Cards{} give {X:mult,C:white}X#1#{} Mult',
-                [2] = 'and guaranteed to break'
+                [1] = '{C:attention}Glass Cards{} give {X:mult,C:white}+X#1#{} Mult',
+                [2] = 'but always break'
             }
         }
     },
