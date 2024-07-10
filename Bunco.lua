@@ -335,6 +335,20 @@ function bunco.set_debuff(card)
     return false
 end
 
+local original_start_run = Game.start_run
+
+function Game:start_run(args)
+    original_start_run(self, args)
+
+    local sledgehammers = SMODS.find_card('j_bunc_sledgehammer')
+    for _, card in ipairs(sledgehammers) do
+        G.P_CENTERS.m_glass.config.Xmult = G.P_CENTERS.m_glass.config.Xmult + card.ability.extra.plus_xmult
+    end
+    if #sledgehammers >= 1 then
+        G.P_CENTERS.m_glass.config.extra = G.P_CENTERS.m_glass.config.extra / SMODS.Jokers['j_bunc_sledgehammer'].config.extra.div_chance_denom
+    end
+end
+
 create_joker({ -- Cassette
     name = 'Cassette', position = 1,
     vars = {{ chips = 45 }, { mult = 6 }, { side = 'A' }},
@@ -2233,20 +2247,6 @@ end
 function enable_exotics()
     if G.GAME then G.GAME.Exotic = true end
     say('Triggered Exotic System enabling.')
-end
-
-local original_start_run = Game.start_run
-
-function Game:start_run(args)
-    original_start_run(self, args)
-
-    local sledges = SMODS.find_card('j_bunc_sledgehammer')
-    for _, card in ipairs(sledges) do
-        G.P_CENTERS.m_glass.config.Xmult = G.P_CENTERS.m_glass.config.Xmult + card.ability.extra.plus_xmult
-    end
-    if #sledges >= 1 then
-        G.P_CENTERS.m_glass.config.extra = G.P_CENTERS.m_glass.config.extra / SMODS.Jokers['j_bunc_sledgehammer'].config.extra.div_chance_denom
-    end
 end
 
 -- Poker hands
