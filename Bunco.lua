@@ -102,13 +102,9 @@ end
 -- Forced messages for evaluation
 
 local function event(config)
-    G.E_MANAGER:add_event(Event({
-        trigger = config.trigger,
-        delay = config.delay,
-        blockable = config.blockable,
-        blocking = config.blocking,
-        func = config.func
-    }))
+    local e = Event(config)
+    G.E_MANAGER:add_event(e)
+    return e
 end
 
 local function big_juice(card)
@@ -587,28 +583,23 @@ create_joker({ -- Dread
             if context.after and G.GAME.current_round.hands_left == 0 and context.scoring_name then
 
                 level_up_hand(card, context.scoring_name, true, 2)
-
-                if card.ability.extra.level_up_list[context.scoring_name] then
-                    card.ability.extra.level_up_list[context.scoring_name] = card.ability.extra.level_up_list[context.scoring_name] + 2
-                else
-                    card.ability.extra.level_up_list[context.scoring_name] = 2
-                end
+                card.ability.extra.level_up_list[context.scoring_name] =
+                    (card.ability.extra.level_up_list[context.scoring_name] or 0) + 2
 
                 event({
-                    trigger = 'after',
+                    trigger = 'before',
                     func = function()
-
                         for i = 1, #card.ability.extra.trash_list do
-
-                            if card.ability.extra.trash_list[i].area.config.type == 'play' then
-                                card.ability.extra.trash_list[i]:start_dissolve(nil, nil, 3)
-                                card.ability.extra.trash_list[i].destroyed = true
+                            -- if this fails, an assumption of Dread is broken
+                            if card.ability.extra.trash_list[i].area == G.play then
+                                sendWarnMessage("Dread destroyed a card not in G.play area", "Dread")
                             end
-
+                            card.ability.extra.trash_list[i]:start_dissolve(nil, nil, 3)
                         end
                         card.ability.extra.trash_list = {}
-
-                return true end })
+                        return true
+                    end
+                })
 
                 return {
                     colour = G.C.RED,
