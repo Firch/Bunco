@@ -236,8 +236,8 @@ return {
             ['name'] = 'Prehistoric Joker',
             ['text'] = {
                 [1] = 'Played cards that share',
-                [2] = 'both rank and suit with an',
-                [3] = 'already-scored card this round',
+                [2] = 'both {C:attention}rank and suit{} with an',
+                [3] = '{C:attention}already-scored card{} this round',
                 [4] = 'give {C:mult}+#1#{} Mult'
             }
         }
@@ -302,9 +302,9 @@ return {
         ['en-us'] = {
             ['name'] = 'Joker Knight',
             ['text'] = {
-                [1] = 'When {C:attention}Blind{} is selected, shuffle all Jokers',
+                [1] = 'When {C:attention}Blind{} is selected, {C:attention}shuffle{} all Jokers',
                 [2] = 'and this Joker gains {C:mult}+#1#{} Mult,',
-                [3] = 'resets when any Joker is rearranged',
+                [3] = '{C:red}resets{} when any Joker is rearranged',
                 [4] = '{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)'
             }
         }
@@ -467,7 +467,7 @@ return {
         ['en-us'] = {
             ['name'] = 'Gameplan',
             ['text'] = {
-                [1] = 'Jokers next to this one',
+                [1] = '{C:attention}Jokers{} next to this Joker',
                 [2] = 'are {C:red}debuffed{} and',
                 [3] = 'give {C:mult}+#1#{} Mult'
             }
@@ -528,7 +528,7 @@ return {
             ['name'] = 'Juggalo',
             ['text'] = {
                 [1] = 'Adds {C:dark_edition}Foil{}, {C:dark_edition}Holographic{},',
-                [2] = '{C:dark_edition}Polychrome{} or {C:dark_edition}Glitter{} edition',
+                [2] = '{C:dark_edition}Polychrome{}, or {C:dark_edition}Glitter{} edition',
                 [3] = 'to a random {C:attention}consumable{}',
                 [4] = 'when {C:attention}Blind{} is selected'
             }
@@ -581,7 +581,7 @@ return {
             ['text'] = {
                 [1] = 'Cards of the {C:attention}lowest{}',
                 [2] = 'rank in your full deck',
-                [3] = 'increase in rank when scored'
+                [3] = '{C:attention}increase in rank{} when scored'
                 -- TODO "when scored" is only accurate
                 -- if the card's rank changes during scoring
             }
@@ -679,7 +679,7 @@ return {
             ['name'] = 'Magic Wand',
             ['text'] = {
                 [1] = 'This Joker gains {X:mult,C:white}X#1#{} Mult',
-                [2] = 'per consecutive played hand',
+                [2] = 'per {C:attention}consecutive{} played hand',
                 [3] = 'containing a {C:attention}Spectrum{}',
                 [4] = '{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)'
             }
@@ -702,7 +702,7 @@ return {
             ['name'] = 'Fondue',
             ['text'] = {
                 [1] = 'Scored cards in the',
-                [2] = 'first hand of round are',
+                [2] = '{C:attention}first hand{} of round are',
                 [3] = 'converted to {C:bunc_fleurons}Fleurons'
             }
         }
@@ -899,7 +899,7 @@ return {
         ['en-us'] = {
             ['name'] = 'Chartreuse Crown',
             ['text'] = {
-                [1] = 'All Spade, Heart, Club and Diamond',
+                [1] = 'All Spade, Heart, Club, and Diamond',
                 [2] = 'base suit cards are debuffed'
             }
         }
