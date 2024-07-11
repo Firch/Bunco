@@ -788,7 +788,7 @@ return {
         ['en-us'] = {
             ['name'] = 'The Miser',
             ['text'] = {
-                [1] = 'Skip the Shop after',
+                [1] = 'Skip the shop after',
                 [2] = 'defeating this blind'
             }
         }
@@ -887,8 +887,7 @@ return {
         ['en-us'] = {
             ['name'] = 'The Cadaver',
             ['text'] = {
-                [1] = 'Must not play',
-                [2] = 'face cards'
+                [1] = 'Must not play face cards'
             }
         }
     },
@@ -908,7 +907,7 @@ return {
         ['en-us'] = {
             ['name'] = 'Vermilion Trident',
             ['text'] = {
-                [1] = 'No Shops this Ante'
+                [1] = 'No shops this Ante'
             }
         }
     },
