@@ -1066,7 +1066,7 @@ create_joker({ -- Zero Shapiro
                 end
 
                 return {
-                    extra = {message = 'X'..card.ability.extra.amount..' '..loc.dictionary.chance, colour = G.C.GREEN},
+                    extra = {message = '+X'..card.ability.extra.bonus..' '..loc.dictionary.chance, colour = G.C.GREEN},
                     card = card
                 }
             end
