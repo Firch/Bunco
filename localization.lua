@@ -400,11 +400,11 @@ return {
         ['en-us'] = {
             ['name'] = 'Zero Shapiro',
             ['text'] = {
-                [1] = 'Played cards with {C:attention}no{}, {C:attention}zero{},',
-                [2] = 'or {C:attention}non-countable{} rank give',
-                [3] = '{C:green}+#1#{} to {C:green,E:1,S:1.1}probabilities{} for',
-                [4] = 'this round when scored',
-                [5] = '{C:inactive}(K, Q, J, 0, Stone)'
+                [1] = 'This Joker gains {X:green,C:white}X#1#{} to',
+                [2] = '{C:green,E:1,S:1.1}probabilities{} {C:attention}this round{} when a',
+                [3] = 'card with {C:attention}no{}, {C:attention}zero{}, or {C:attention}non-count{}',
+                [4] = 'rank scores {C:inactive}(K, Q, J, 0, Stone)',
+                [5] = '{C:inactive}(Currently {X:green,C:white}X#2#{C:inactive} to {C:green,E:1,S:1.1}probabilities{C:inactive})'
                 -- TODO not sure how to word non-countable
             }
         }

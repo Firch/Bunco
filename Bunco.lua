@@ -1050,34 +1050,35 @@ create_joker({ -- Fingerprints
 
 create_joker({ -- Zero Shapiro
     name = 'Zero Shapiro', position = 23,
-    vars = {{bonus = 0.3}, {amount = 0}},
+    vars = {{bonus = 0.3}, {amount = 1}},
     rarity = 'Uncommon', cost = 4,
-    blueprint = true, eternal = true,
+    blueprint = false, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
         if context.individual and context.cardarea == G.play then
-            if context.other_card.config.center == G.P_CENTERS.m_stone or context.other_card:get_id() == 0 or not tonumber(context.other_card.base.value) and context.other_card.base.value ~= 'Ace' then
+            if context.other_card.config.center.key == 'm_stone' or context.other_card:get_id() == 0 or not tonumber(context.other_card.base.value) and context.other_card.base.value ~= 'Ace' then
 
+                local old_amount = card.ability.extra.amount
                 card.ability.extra.amount = card.ability.extra.amount + card.ability.extra.bonus
 
                 for k, v in pairs(G.GAME.probabilities) do
-                    G.GAME.probabilities[k] = v + card.ability.extra.bonus
+                    G.GAME.probabilities[k] = G.GAME.probabilities[k] / old_amount * card.ability.extra.amount
                 end
 
                 return {
-                    extra = {focus = context.other_card, message = '+'..card.ability.extra.bonus..' '..loc.dictionary.chance, colour = G.C.GREEN},
+                    extra = {message = 'X'..card.ability.extra.amount..' '..loc.dictionary.chance, colour = G.C.GREEN},
                     card = card
                 }
             end
         end
 
         if context.end_of_round and not context.other_card then
-            if card.ability.extra.amount ~= 0 then
+            if card.ability.extra.amount ~= 1 then
                 for k, v in pairs(G.GAME.probabilities) do
-                    G.GAME.probabilities[k] = v - (card.ability.extra.amount)
+                    G.GAME.probabilities[k] = v / card.ability.extra.amount
                 end
 
-                card.ability.extra.amount = 0
+                card.ability.extra.amount = 1
 
                 forced_message(localize('k_reset'), card, G.C.GREEN, true)
             end
@@ -1085,10 +1086,10 @@ create_joker({ -- Zero Shapiro
 
         if context.selling_self then
             for k, v in pairs(G.GAME.probabilities) do
-                G.GAME.probabilities[k] = v - (card.ability.extra.amount)
+                G.GAME.probabilities[k] = v / card.ability.extra.amount
             end
 
-            card.ability.extra.amount = 0
+            card.ability.extra.amount = 1
         end
     end
 })
