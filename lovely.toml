@@ -243,6 +243,21 @@ end
 
 '''
 
+# function copy_card (Dread)
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = 'if not strip_edition then'
+position = 'before'
+match_indent = true
+payload = '''
+
+if new_card.ability.name == 'Dread' then
+    new_card.ability.extra.level_up_list = {}
+end
+
+'''
+
 # Joker Knight variables
 [[patches]]
 [patches.pattern]
