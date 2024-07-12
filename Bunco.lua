@@ -102,13 +102,9 @@ end
 -- Forced messages for evaluation
 
 local function event(config)
-    G.E_MANAGER:add_event(Event({
-        trigger = config.trigger,
-        delay = config.delay,
-        blockable = config.blockable,
-        blocking = config.blocking,
-        func = config.func
-    }))
+    local e = Event(config)
+    G.E_MANAGER:add_event(e)
+    return e
 end
 
 local function big_juice(card)
@@ -584,36 +580,38 @@ create_joker({ -- Dread
                 end
             end
 
-            if context.after and G.GAME.current_round.hands_left == 0 and context.scoring_name then
-
-                level_up_hand(card, context.scoring_name, true, 2)
-
-                if card.ability.extra.level_up_list[context.scoring_name] then
-                    card.ability.extra.level_up_list[context.scoring_name] = card.ability.extra.level_up_list[context.scoring_name] + 2
-                else
-                    card.ability.extra.level_up_list[context.scoring_name] = 2
-                end
-
+            if context.after and G.GAME.current_round.hands_left <= 0 and context.scoring_name then
+                ---- Event (1): display message
+                forced_message(localize('k_level_up_ex'), card, G.C.RED, true)
+                ---- Events (2): animate level up
+                -- line copied from planet use
+                update_hand_text({sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3}, {handname=localize(context.scoring_name, 'poker_hands'),chips = G.GAME.hands[context.scoring_name].chips, mult = G.GAME.hands[context.scoring_name].mult, level=G.GAME.hands[context.scoring_name].level})
+                -- Has immediate effects
+                level_up_hand(card, context.scoring_name, false, 2)
+                card.ability.extra.level_up_list[context.scoring_name] =
+                    (card.ability.extra.level_up_list[context.scoring_name] or 0) + 2
+                local trash_list = card.ability.extra.trash_list
+                ---- Event (3): start_dissolve() on every card to trash
+                -- start_dissolve() calls run concurrently with blocking events.
+                -- To treat them as a normal event, wrap them in a 
+                -- 'before' event with delay equal to how long start_dissolve() takes
+                local dissolve_time_fac = 3
                 event({
-                    trigger = 'after',
+                    trigger = 'before',
+                    delay = 0.7*dissolve_time_fac*1.051,
                     func = function()
-
-                        for i = 1, #card.ability.extra.trash_list do
-
-                            if card.ability.extra.trash_list[i].area.config.type == 'play' then
-                                card.ability.extra.trash_list[i]:start_dissolve(nil, nil, 3)
-                                card.ability.extra.trash_list[i].destroyed = true
-                            end
-
+                        for _, card_to_trash in ipairs(trash_list) do
+                            card_to_trash:start_dissolve(nil, nil, dissolve_time_fac)
                         end
-                        card.ability.extra.trash_list = {}
-
-                return true end })
-
-                return {
-                    colour = G.C.RED,
-                    message = localize('k_level_up_ex')
-                }
+                        return true
+                    end
+                })
+                update_hand_text({delay = 0}, {mult = 0, chips = 0, handname = '', level = ''})
+                -- Has immediate effects, so make sure this is set for other mods
+                for _, card_to_trash in ipairs(trash_list) do
+                    card_to_trash.destroyed = true
+                end
+                card.ability.extra.trash_list = {}
             end
         end
     end,
