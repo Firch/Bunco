@@ -580,6 +580,13 @@ create_joker({ -- Dread
                 end
             end
 
+            if (context.after or context.first_hand_drawn) and G.GAME.current_round.hands_left == 1 then -- For shaking the card when there's one hand left
+                event({func = function ()
+                    local eval = function() return G.GAME.current_round.hands_left == nil or G.GAME.current_round.hands_left ~= 0 end
+                    juice_card_until(card, eval, true)
+                return true end})
+            end
+
             if context.after and G.GAME.current_round.hands_left <= 0 and context.scoring_name then
                 ---- Event (1): display message
                 forced_message(localize('k_level_up_ex'), card, G.C.RED, true)
@@ -593,15 +600,23 @@ create_joker({ -- Dread
                 local trash_list = card.ability.extra.trash_list
                 ---- Event (3): start_dissolve() on every card to trash
                 -- start_dissolve() calls run concurrently with blocking events.
-                -- To treat them as a normal event, wrap them in a 
+                -- To treat them as a normal event, wrap them in a
                 -- 'before' event with delay equal to how long start_dissolve() takes
+
+                -- (From Firch) UPD: Trying to make this work with other Dread copies a bit better,
+                -- added an additional check if the cards are already destroyed.
+                -- Without this check a second Dread would cause a destroying sound to play
+                -- despite not having any cards to destroy
                 local dissolve_time_fac = 3
                 event({
                     trigger = 'before',
                     delay = 0.7*dissolve_time_fac*1.051,
                     func = function()
+                        big_juice(card)
                         for _, card_to_trash in ipairs(trash_list) do
-                            card_to_trash:start_dissolve(nil, nil, dissolve_time_fac)
+                            if not card_to_trash.removed then
+                                card_to_trash:start_dissolve(nil, nil, dissolve_time_fac)
+                            end
                         end
                         return true
                     end
