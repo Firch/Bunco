@@ -29,7 +29,7 @@
 -- (done) Remove debuff when fluorescent edition is applied to a debuffed card
 -- (done) Make tarot badges use localization
 -- (done) Pawn and linocut fake suit and rank
--- Check eternal food compat
+-- (done) Check eternal food compat
 
 global_bunco = global_bunco or {loc = {}, vars = {}}
 local bunco = SMODS.current_mod
@@ -1722,6 +1722,51 @@ create_joker({ -- Puzzle Board
                     big_juice(card)
                     cards[math.random(#cards)]:set_edition(edition, true)
                 end
+            end
+        end
+    end
+})
+
+create_joker({ -- Vandalism
+    name = 'Vandalism', position = 42, soul = coordinate(42),
+    vars = {{odds = 4}, {xmult = 2}, {card_list = {}}},
+    custom_vars = function(self, info_queue, card)
+        local vars
+        if G.GAME and G.GAME.probabilities.normal then
+            vars = {G.GAME.probabilities.normal, card.ability.extra.odds, card.ability.extra.xmult}
+        else
+            vars = {1, card.ability.extra.odds, card.ability.extra.xmult}
+        end
+        return {vars = vars}
+    end,
+    rarity = 'Rare', cost = 6,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.stay_flipped and not context.blueprint then
+            big_juice(card)
+        end
+        if context.play_cards then
+            card.ability.extra.card_list = {}
+            for i = 1, #G.hand.highlighted do
+                if G.hand.highlighted[i].facing == 'back' then
+                    table.insert(card.ability.extra.card_list, G.hand.highlighted[i])
+                end
+            end
+        end
+        if context.individual and context.cardarea == G.play and context.other_card then
+            local condition = false
+            for i = 1, #card.ability.extra.card_list do
+                local flipped_card = card.ability.extra.card_list[i]
+                if context.other_card == flipped_card then
+                    condition = true
+                    break
+                end
+            end
+            if condition then return {
+                x_mult = card.ability.extra.xmult,
+                card = card
+            }
             end
         end
     end

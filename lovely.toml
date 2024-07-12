@@ -503,11 +503,91 @@ payload = '''
 
 if G.jokers ~= nil then
     for _, v in ipairs(G.jokers.cards) do
-        if v.ability.name == 'Trigger Finger' and is_higlighted and self.area == G.hand then
+        if v.ability.name == 'Trigger Finger' and not v.debuff and is_higlighted and self.area == G.hand then
             if pseudorandom('trigger_finger'..G.SEED) < G.GAME.probabilities.normal / v.ability.extra.odds then
                 v:calculate_joker({select_card = true})
                 break
             end
+        end
+    end
+end
+
+'''
+
+# function Card:draw (Vandalism 1/5)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''self.children.center.states.hover = self.states.hover'''
+position = 'before'
+match_indent = true
+payload = '''
+
+if _center.name == 'Vandalism' and (_center.discovered or self.bypass_discovery_center) then
+    self.children.center = Sprite(self.T.x, self.T.y, self.T.w, self.T.h, G.ASSET_ATLAS[(G.GAME.viewed_back or G.GAME.selected_back) and ((G.GAME.viewed_back or G.GAME.selected_back)[G.SETTINGS.colourblind_option and 'hc_atlas' or 'lc_atlas'] or (G.GAME.viewed_back or G.GAME.selected_back).atlas) or 'centers'], self.params.bypass_back or (self.playing_card and G.GAME[self.back].pos or G.P_CENTERS['b_red'].pos))
+end
+
+'''
+
+# function Card:draw (Vandalism 2/5)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''self.children.floating_sprite:draw_shader('dissolve',0, nil, nil, self.children.center,scale_mod, rotate_mod,nil, 0.1 + 0.03*math.sin(1.8*G.TIMERS.REAL),nil, 0.6)'''
+position = 'before'
+match_indent = true
+payload = '''
+
+if self.ability.name == 'Vandalism' then
+    self.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, self.children.center, 0, 0)
+else
+
+'''
+
+# function Card:draw (Vandalism 3/5)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''self.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, self.children.center, scale_mod, rotate_mod)'''
+position = 'after'
+match_indent = true
+payload = '''end'''
+
+# function Blind:stay_flipped (Vandalism 4/5)
+[[patches]]
+[patches.pattern]
+target = 'blind.lua'
+pattern = '''if self.name == 'The Wheel' and pseudorandom(pseudoseed('wheel')) < G.GAME.probabilities.normal/7 then'''
+position = 'before'
+match_indent = true
+payload = '''
+
+if G.jokers ~= nil then
+    for _, v in ipairs(G.jokers.cards) do
+        if v.ability.name == 'Vandalism' and not v.debuff then
+            if pseudorandom('vandalism'..G.SEED) < G.GAME.probabilities.normal / v.ability.extra.odds then
+                v:calculate_joker({stay_flipped = true})
+                return true
+            end
+        end
+    end
+end
+
+'''
+
+# G.FUNCS.play_cards_from_highlighted (Vandalism 5/5)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''--check the hand first'''
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.jokers ~= nil then
+    for _, v in ipairs(G.jokers.cards) do
+        if v.ability.name == 'Vandalism' and not v.debuff then
+            v:calculate_joker({play_cards = true})
         end
     end
 end
@@ -1112,7 +1192,7 @@ if G.GAME.Shield == true then
 end
 '''
 
-# Insta-yep for tags, delayless-yep
+# Insta-yep for tags, delayless yep
 [[patches]]
 [patches.pattern]
 target = 'tag.lua'

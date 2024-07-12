@@ -599,6 +599,17 @@ return {
             }
         }
     },
+    vandalism = {
+        ['en-us'] = {
+            ['name'] = 'Vandalism',
+            ['text'] = {
+                [1] = '{C:green}#1# in #2#{} chance for',
+                [2] = 'cards to be drawn face down',
+                [3] = 'Face down cards give',
+                [4] = '{X:mult,C:white}X#3#{} Mult when scored'
+            }
+        }
+    },
 
     -- Exotic
 
