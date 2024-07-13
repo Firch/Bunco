@@ -533,14 +533,16 @@ end
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
-pattern = '''self.children.floating_sprite:draw_shader('dissolve',0, nil, nil, self.children.center,scale_mod, rotate_mod,nil, 0.1 + 0.03*math.sin(1.8*G.TIMERS.REAL),nil, 0.6)'''
-position = 'before'
+pattern = '''self.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, self.children.center, scale_mod, rotate_mod)'''
+position = 'at'
 match_indent = true
 payload = '''
 
 if self.ability.name == 'Vandalism' then
     self.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, self.children.center, 0, 0)
 else
+    self.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, self.children.center, scale_mod, rotate_mod)
+end
 
 '''
 
@@ -548,10 +550,16 @@ else
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
-pattern = '''self.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, self.children.center, scale_mod, rotate_mod)'''
-position = 'after'
+pattern = '''self.children.floating_sprite:draw_shader('dissolve',0, nil, nil, self.children.center,scale_mod, rotate_mod,nil, 0.1 + 0.03*math.sin(1.8*G.TIMERS.REAL),nil, 0.6)'''
+position = 'at'
 match_indent = true
-payload = '''end'''
+payload = '''
+
+if self.ability.name ~= 'Vandalism' then
+    self.children.floating_sprite:draw_shader('dissolve',0, nil, nil, self.children.center,scale_mod, rotate_mod,nil, 0.1 + 0.03*math.sin(1.8*G.TIMERS.REAL),nil, 0.6)
+end
+
+'''
 
 # function Blind:stay_flipped (Vandalism 4/5)
 [[patches]]
