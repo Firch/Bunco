@@ -111,6 +111,10 @@ local function big_juice(card)
     card:juice_up(0.7)
 end
 
+local function extra_juice(card)
+    card:juice_up(0.6, 0.1)
+end
+
 local function forced_message(message, card, color, delay, juice)
     if delay == true then
         delay = 0.7 * 1.25
@@ -1043,7 +1047,7 @@ create_joker({ -- Fingerprints
             -- not needed, but good style to fail fast
             card.ability.extra.scoring_card_set = nil
 
-            forced_message(localize('k_upgrade_ex'), card, G.C.CHIPS)
+            forced_message(localize('k_upgrade_ex'), card, G.C.CHIPS, true)
         end
     end
 })
@@ -1777,6 +1781,49 @@ create_joker({ -- Vandalism
                 x_mult = card.ability.extra.xmult,
                 card = card
             }
+            end
+        end
+    end
+})
+
+create_joker({ -- Cellphone
+    name = 'Cellphone', position = 43,
+    vars = {{chip_mult = 8}, {chips = 0}, {rank = -math.huge}},
+    rarity = 'Common', cost = 4,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.pre_discard then
+            local raised_card = nil
+            for i = 1, #G.hand.highlighted do
+                if not card.debuff and card.ability.extra.rank < G.hand.highlighted[i].base.id and G.hand.cards[i].ability.effect ~= 'Stone Card' then
+                    card.ability.extra.chips = G.hand.highlighted[i].base.nominal * card.ability.extra.chip_mult
+                    card.ability.extra.rank = G.hand.highlighted[i].base.id
+                    raised_card = G.hand.highlighted[i]
+                end
+            end
+            if raised_card then
+                event({delay = 0.7 * 1.25, trigger = 'before', func = function()
+                    play_sound('generic1', nil, 1)
+                    extra_juice(card)
+                    big_juice(raised_card)
+                return true end})
+            end
+        end
+        if context.joker_main then
+            if card.ability.extra.chips ~= 0 then
+                return {
+                    message = localize{type = 'variable', key = 'a_chips', vars = {card.ability.extra.chips}},
+                    chip_mod = card.ability.extra.chips,
+                }
+            end
+        end
+        if context.end_of_round then
+            if card.ability.extra.rank ~= -math.huge then
+                card.ability.extra.rank = -math.huge
+                card.ability.extra.chips = 0
+
+                forced_message(localize('k_reset'), card, G.C.RED, true)
             end
         end
     end

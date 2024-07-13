@@ -610,6 +610,17 @@ return {
             }
         }
     },
+    cellphone = {
+        ['en-us'] = {
+            ['name'] = 'Cellphone',
+            ['text'] = {
+                [1] = 'Adds {C:attention}X#1#{} the rank',
+                [2] = 'of {C:attention}highest{} ranked card',
+                [3] = 'discarded this round to Chips',
+                [4] = '{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)'
+            }
+        }
+    },
 
     -- Exotic
 
