@@ -99,6 +99,10 @@ local function coordinate(position)
     return get_coordinates(position - 1)
 end
 
+-- math.huge replacement
+
+local huge_number = 9999
+
 -- Forced messages for evaluation
 
 local function event(config)
@@ -968,7 +972,7 @@ create_joker({ -- Fiendish
 
 create_joker({ -- Carnival
     name = 'Carnival', position = 19,
-    vars = {{ante = -math.huge}},
+    vars = {{ante = -huge_number}},
     rarity = 'Rare', cost = 10,
     blueprint = false, eternal = true,
     unlocked = true,
@@ -1788,7 +1792,7 @@ create_joker({ -- Vandalism
 
 create_joker({ -- Cellphone
     name = 'Cellphone', position = 43,
-    vars = {{chip_mult = 8}, {chips = 0}, {rank = -math.huge}},
+    vars = {{chip_mult = 8}, {chips = 0}, {rank = -huge_number}},
     rarity = 'Common', cost = 4,
     blueprint = true, eternal = true,
     unlocked = true,
@@ -1796,9 +1800,9 @@ create_joker({ -- Cellphone
         if context.pre_discard then
             local raised_card = nil
             for i = 1, #G.hand.highlighted do
-                if not card.debuff and card.ability.extra.rank < G.hand.highlighted[i].base.id and G.hand.cards[i].ability.effect ~= 'Stone Card' then
+                if not card.debuff and card.ability.extra.rank < G.hand.highlighted[i].base.nominal and G.hand.cards[i].ability.effect ~= 'Stone Card' then
                     card.ability.extra.chips = G.hand.highlighted[i].base.nominal * card.ability.extra.chip_mult
-                    card.ability.extra.rank = G.hand.highlighted[i].base.id
+                    card.ability.extra.rank = G.hand.highlighted[i].base.nominal
                     raised_card = G.hand.highlighted[i]
                 end
             end
@@ -1819,8 +1823,8 @@ create_joker({ -- Cellphone
             end
         end
         if context.end_of_round then
-            if card.ability.extra.rank ~= -math.huge then
-                card.ability.extra.rank = -math.huge
+            if card.ability.extra.rank ~= -huge_number then
+                card.ability.extra.rank = -huge_number
                 card.ability.extra.chips = 0
 
                 forced_message(localize('k_reset'), card, G.C.RED, true)
