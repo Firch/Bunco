@@ -1601,9 +1601,18 @@ create_joker({ -- Trigger Finger
     blueprint = true, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
-        if context.select_card then
+        if context.highlight_card and (G.STATE == G.STATES.SELECTING_HAND or G.STATE == G.STATES.DRAW_TO_HAND) then
+            local cards = {}
+            for i = 1, #G.hand.highlighted do
+                table.insert(cards, G.hand.highlighted[i])
+            end
             event({trigger = 'after', func = function()
-                if #G.hand.highlighted[1] then
+                for i = 1, #cards do
+                    if not cards[i].highlighted then
+                        cards[i]:highlight()
+                    end
+                end
+                if G.hand.highlighted then
                     forced_message(loc.dictionary.pew, card, G.C.RED)
                     G.FUNCS.play_cards_from_highlighted()
                 end

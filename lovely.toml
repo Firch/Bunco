@@ -505,7 +505,7 @@ if G.jokers ~= nil then
     for _, v in ipairs(G.jokers.cards) do
         if v.ability.name == 'Trigger Finger' and not v.debuff and is_higlighted and self.area == G.hand then
             if pseudorandom('trigger_finger'..G.SEED) < G.GAME.probabilities.normal / v.ability.extra.odds then
-                v:calculate_joker({select_card = true})
+                v:calculate_joker({highlight_card = true})
                 break
             end
         end
