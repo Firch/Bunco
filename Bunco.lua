@@ -32,6 +32,7 @@
 -- (done) Check eternal food compat
 -- Reset metallurgist-like bonuses when you lose
 -- Fix the mask giving spectrum hands when they're invisible
+-- Make so enhancement-related Jokers do not appear unless player has respective enhancements
 
 global_bunco = global_bunco or {loc = {}, vars = {}}
 local bunco = SMODS.current_mod
@@ -1489,13 +1490,21 @@ create_joker({ -- Metallurgist
     rarity = 'Common', cost = 6,
     blueprint = false, eternal = true,
     unlocked = true,
-    update = function(self, card)
-        if card.area == G.jokers and not card.debuff then
-            G.P_CENTERS.m_gold.config.h_mult = card.ability.extra.mult
+    add = function(self, card)
+        for _, deck_card in pairs(G.playing_cards) do
+            if deck_card.config.center == G.P_CENTERS.m_gold then
+                deck_card.ability.h_mult = (deck_card.ability.h_mult or 0) + card.ability.extra.mult
+            end
         end
+        G.P_CENTERS.m_gold.config.h_mult = (G.P_CENTERS.m_gold.config.h_mult or 0) + card.ability.extra.mult
     end,
     remove = function(self, card)
-        G.P_CENTERS.m_gold.config.h_x_mult = 0
+        for _, deck_card in pairs(G.playing_cards) do
+            if deck_card.config.center == G.P_CENTERS.m_gold then
+                deck_card.ability.h_mult = deck_card.ability.h_mult - card.ability.extra.mult
+            end
+        end
+        G.P_CENTERS.m_gold.config.h_mult = G.P_CENTERS.m_gold.config.h_mult - card.ability.extra.mult
     end
 })
 
