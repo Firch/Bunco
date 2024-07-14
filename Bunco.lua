@@ -30,6 +30,8 @@
 -- (done) Make tarot badges use localization
 -- (done) Pawn and linocut fake suit and rank
 -- (done) Check eternal food compat
+-- Reset metallurgist-like bonuses when you lose
+-- Fix the mask giving spectrum hands when they're invisible
 
 global_bunco = global_bunco or {loc = {}, vars = {}}
 local bunco = SMODS.current_mod
@@ -1829,6 +1831,42 @@ create_joker({ -- Cellphone
 
                 forced_message(localize('k_reset'), card, G.C.RED, true)
             end
+        end
+    end
+})
+
+create_joker({ -- Doodle
+    name = 'Doodle', position = 44,
+    vars = {{active = true}},
+    rarity = 'Rare', cost = 10,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.end_of_round then
+            if not card.ability.extra.active then
+                card.ability.extra.active = true
+                local eval = function() return card.ability.extra.active end
+                juice_card_until(card, eval, true)
+            end
+        end
+        if context.using_consumeable and card.ability.extra.active then
+            event({func = function ()
+                if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+                    forced_message(localize('k_duplicated_ex'), context.blueprint_card or card, nil, true, copy)
+                    local copy
+                    card.ability.extra.active = false
+                    copy = copy_card(context.consumeable)
+                    copy:add_to_deck()
+                    G.consumeables:emplace(copy)
+                end
+                return true
+            end})
+        end
+    end,
+    add = function(self, card)
+        if card.ability.extra.active then
+            local eval = function() return card.ability.extra.active end
+            juice_card_until(card, eval, true)
         end
     end
 })

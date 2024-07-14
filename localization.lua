@@ -620,6 +620,16 @@ return {
             }
         }
     },
+    doodle = {
+        ['en-us'] = {
+            ['name'] = 'Doodle',
+            ['text'] = {
+                [1] = '{C:attention}Copy{} first consumable',
+                [2] = 'used this round',
+                [3] = '{C:inactive}(Must have room)'
+            }
+        }
+    },
 
     -- Exotic
 
