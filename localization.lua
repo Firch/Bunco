@@ -784,8 +784,8 @@ return {
         ['en-us'] = {
             ['name'] = 'The Paling',
             ['text'] = {
-                [1] = 'Playing or discarding costs',
-                [2] = 'both play and discard'
+                [1] = 'Playing or Discarding costs',
+                [2] = 'both hand and discard'
             }
         }
     },
