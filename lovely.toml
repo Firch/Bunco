@@ -514,7 +514,7 @@ end
 
 '''
 
-# function Card:draw (Vandalism 1/5)
+# function Card:draw (Vandalism 1/7)
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
@@ -529,7 +529,37 @@ end
 
 '''
 
-# function Card:draw (Vandalism 2/5)
+# function Card:draw (Vandalism 2/7)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''if (self.edition and self.edition.negative) or (self.ability.name == 'Antimatter' and (self.config.center.discovered or self.bypass_discovery_center)) then'''
+position = 'before'
+match_indent = true
+payload = '''
+
+if self.ability.name == 'Vandalism' and (self.config.center.discovered or self.bypass_discovery_center) then
+    self.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, self.children.center, 0, 0)
+end
+
+'''
+
+# function Card:draw (Vandalism 3/7)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''self.children.center:draw_shader('negative_shine', nil, self.ARGS.send_to_shader)'''
+position = 'after'
+match_indent = true
+payload = '''
+
+if self.ability.name == 'Vandalism' and (self.config.center.discovered or self.bypass_discovery_center) then
+    self.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, self.children.center, 0, 0)
+end
+
+'''
+
+# function Card:draw (Vandalism 4/7)
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
@@ -538,15 +568,13 @@ position = 'at'
 match_indent = true
 payload = '''
 
-if self.ability.name == 'Vandalism' then
-    self.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, self.children.center, 0, 0)
-else
+if self.ability.name ~= 'Vandalism' then
     self.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, self.children.center, scale_mod, rotate_mod)
 end
 
 '''
 
-# function Card:draw (Vandalism 3/5)
+# function Card:draw (Vandalism 5/7)
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
@@ -561,7 +589,7 @@ end
 
 '''
 
-# function Blind:stay_flipped (Vandalism 4/5)
+# function Blind:stay_flipped (Vandalism 6/7)
 [[patches]]
 [patches.pattern]
 target = 'blind.lua'
@@ -573,7 +601,7 @@ payload = '''
 if G.jokers ~= nil then
     for _, v in ipairs(G.jokers.cards) do
         if v.ability.name == 'Vandalism' and not v.debuff then
-            if pseudorandom('vandalism'..G.SEED) < G.GAME.probabilities.normal / v.ability.extra.odds then
+            if (pseudorandom('vandalism'..G.SEED) < G.GAME.probabilities.normal / v.ability.extra.odds) and (G.STATE == G.STATES.SELECTING_HAND or G.STATE == G.STATES.DRAW_TO_HAND) then
                 v:calculate_joker({stay_flipped = true})
                 return true
             end
@@ -583,7 +611,7 @@ end
 
 '''
 
-# G.FUNCS.play_cards_from_highlighted (Vandalism 5/5)
+# G.FUNCS.play_cards_from_highlighted (Vandalism 7/7)
 [[patches]]
 [patches.pattern]
 target = 'functions/state_events.lua'
