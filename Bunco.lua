@@ -1107,7 +1107,7 @@ create_joker({ -- Zero Shapiro
 
 create_joker({ -- Nil Bill
     name = 'Nil Bill', position = 24,
-    vars = {{bonus = 1}},
+    vars = {{bonus = 5}},
     rarity = 'Uncommon', cost = 4,
     blueprint = true, eternal = true,
     unlocked = true,
