@@ -17,6 +17,7 @@ or text == 'h_bunc_Straight Spectrum'
 or text == 'h_bunc_Spectrum House'
 or text == 'h_bunc_Spectrum Five' then
     enable_exotics()
+    unlock_card(G.P_CENTERS.b_bunc_fairy)
 end
 
 '''
