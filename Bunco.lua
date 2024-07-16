@@ -180,8 +180,8 @@ end
 local original_end_round = end_round
 function end_round()
     for _, v in ipairs(G.playing_cards) do
-        if v.ability.extra and type(v.ability.extra) == 'table' and v.ability.extra.temporary_extra_chips then
-            v.ability.extra.temporary_extra_chips = nil
+        if v.ability and type(v.ability) == 'table' and v.ability.temporary_extra_chips then
+            v.ability.temporary_extra_chips = nil
         end
     end
     original_end_round()
@@ -189,7 +189,7 @@ end
 
 local Card_get_chip_bonus = Card.get_chip_bonus
 function Card:get_chip_bonus()
-    return Card_get_chip_bonus(self) + (self.ability.extra and type(self.ability.extra) == 'table' and not self.debuff and self.ability.extra.temporary_extra_chips or 0)
+    return Card_get_chip_bonus(self) + (self.ability and type(self.ability) == 'table' and not self.debuff and self.ability.temporary_extra_chips or 0)
 end
 
 -- Joker creation setup
@@ -1047,8 +1047,8 @@ create_joker({ -- Fingerprints
         if context.end_of_round and not context.other_card and not context.blueprint then
             for _, v in ipairs(G.playing_cards) do
                 if card.ability.extra.scoring_card_set[v.unique_val] then
-                    v.ability.extra = v.ability.extra or {}
-                    v.ability.extra.temporary_extra_chips = (v.ability.extra.temporary_extra_chips or 0) + card.ability.extra.bonus
+                    v.ability = v.ability or {}
+                    v.ability.temporary_extra_chips = (v.ability.temporary_extra_chips or 0) + card.ability.extra.bonus
                 end
             end
             -- not needed, but good style to fail fast
@@ -1134,13 +1134,9 @@ create_joker({ -- Bierdeckel
                 end
             end
             for _, c in ipairs(G.hand.cards) do
-                if not full_hand_set[c] then
-                    if c.ability.extra and type(c.ability.extra) ~= 'number' then
-                        c.ability.extra = c.ability.extra
-                    else
-                        c.ability.extra = {}
-                    end
-                    c.ability.extra.temporary_extra_chips = (c.ability.extra.temporary_extra_chips or 0) + card.ability.extra.bonus
+                if not full_hand_set[c] and not c.highlighted then
+                    c.ability = c.ability or {}
+                    c.ability.temporary_extra_chips = (c.ability.temporary_extra_chips or 0) + card.ability.extra.bonus
                 end
             end
 
