@@ -1135,7 +1135,11 @@ create_joker({ -- Bierdeckel
             end
             for _, c in ipairs(G.hand.cards) do
                 if not full_hand_set[c] then
-                    c.ability.extra = c.ability.extra or {}
+                    if c.ability.extra and type(c.ability.extra) ~= 'number' then
+                        c.ability.extra = c.ability.extra
+                    else
+                        c.ability.extra = {}
+                    end
                     c.ability.extra.temporary_extra_chips = (c.ability.extra.temporary_extra_chips or 0) + card.ability.extra.bonus
                 end
             end
