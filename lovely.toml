@@ -529,11 +529,26 @@ end
 
 '''
 
-# function Card:draw (Vandalism 2/7)
+# function Card:draw (Vandalism 2/7 - Vanilla)
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
 pattern = '''if (self.edition and self.edition.negative) or (self.ability.name == 'Antimatter' and (self.config.center.discovered or self.bypass_discovery_center)) then'''
+position = 'before'
+match_indent = true
+payload = '''
+
+if self.ability.name == 'Vandalism' and (self.config.center.discovered or self.bypass_discovery_center) then
+    self.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, self.children.center, 0, 0)
+end
+
+'''
+
+# function Card:draw (Vandalism 2/7 - Cryptid Compat)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''if (self.edition and (self.edition.negative or self.edition.cry_oversat)) or (self.ability.name == 'Antimatter' and (self.config.center.discovered or self.bypass_discovery_center)) then'''
 position = 'before'
 match_indent = true
 payload = '''
