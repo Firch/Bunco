@@ -3067,15 +3067,6 @@ SMODS.Blind{ -- The Blade
         self.vars = {loc.dictionary.blade}
     end,
 
-    press_play = function()
-        if not G.GAME.Blade then G.GAME.Blade = {} end
-        G.GAME.Blade.chips = G.GAME.chips
-    end,
-
-    defeat = function()
-        G.GAME.Blade = nil
-    end,
-
     boss_colour = HEX('d92034'),
 
     pos = {y = 12},
