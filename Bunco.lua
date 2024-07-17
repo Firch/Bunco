@@ -3101,7 +3101,7 @@ SMODS.Blind{ -- The Cadaver
     debuff_hand = function(self, cards, hand, handname, check)
         if not G.GAME.blind.disabled then
             for i = 1, #cards do
-                if cards[i]:is_face() then
+                if cards[i]:is_face() and cards[i].facing == 'front' then
                     return true
                 end
             end
