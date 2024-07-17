@@ -860,8 +860,10 @@ if G.GAME.played_ranks ~= nil then
     local max_rank = nil
     local max_count = -1
 
-    for rank, count in pairs(G.GAME.played_ranks) do
-        if count > max_count then
+    for _, rank in ipairs(SMODS.Rank.obj_buffer) do
+        count = G.GAME.played_ranks[rank] or 0
+        -- tiebreak with highest rank
+        if count >= max_count then
             max_count = count
             max_rank = rank
         end
