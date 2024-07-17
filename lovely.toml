@@ -1136,7 +1136,7 @@ end
 
 '''
 
-# G.FUNCS.discard_cards_from_highlighted (Magenta Dagger 1/4)
+# G.FUNCS.discard_cards_from_highlighted (Magenta Dagger 1/5)
 [[patches]]
 [patches.pattern]
 target = 'functions/state_events.lua'
@@ -1147,13 +1147,14 @@ payload = '''
 
 if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_final_dagger' and not G.GAME.blind.disabled then
     G.GAME.blind:wiggle()
-    G.FUNCS.play_cards_from_highlighted({antiscore = true})
+    G.GAME.blind.antiscore = true
+    G.FUNCS.play_cards_from_highlighted()
     return
 end
 
 '''
 
-# G.FUNCS.play_cards_from_highlighted (Magenta Dagger 2/4)
+# G.FUNCS.play_cards_from_highlighted (Magenta Dagger 2/5)
 [[patches]]
 [patches.pattern]
 target = 'functions/state_events.lua'
@@ -1161,6 +1162,7 @@ pattern = "ease_hands_played(-1)"
 position = 'at'
 match_indent = true
 payload = '''
+
 local function calculate_discard()
     for i = 1, #G.hand.cards do
         eval_card(G.hand.cards[i], {pre_discard = true, full_hand = G.hand.highlighted, hook = hook})
@@ -1170,7 +1172,7 @@ local function calculate_discard()
     end
 end
 
-if e and e.antiscore then
+if G.GAME.blind.antiscore then
     ease_discard(-1)
     calculate_discard()
 else
@@ -1179,31 +1181,42 @@ end
 
 '''
 
-# G.FUNCS.play_cards_from_highlighted (Magenta Dagger 3/4)
+# G.FUNCS.play_cards_from_highlighted (Magenta Dagger 3/5)
 [[patches]]
 [patches.pattern]
 target = 'functions/state_events.lua'
 pattern = "G.FUNCS.evaluate_play()"
-position = 'at'
+position = 'after'
 match_indent = true
 payload = '''
 
-if e and e.antiscore then
-    G.FUNCS.evaluate_play(e)
-else
-    G.FUNCS.evaluate_play()
+if G.GAME.blind.antiscore then
+    G.GAME.blind.antiscore = false
 end
 
 '''
 
-# function update_hand_text (Magenta Dagger 4/4)
+# G.FUNCS.play_cards_from_highlighted (Magenta Dagger 4/5)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "G.FUNCS.evaluate_play = function(e)"
+position = 'after'
+match_indent = true
+payload = '''
+
+local antiscore = G.GAME.blind.antiscore
+
+'''
+
+# function update_hand_text (Magenta Dagger 5/5)
 [[patches]]
 [patches.pattern]
 target = 'functions/state_events.lua'
 pattern = "ease_to = G.GAME.chips + math.floor(hand_chips*mult),"
 position = 'at'
 match_indent = true
-payload = '''ease_to = G.GAME.chips + math.floor(hand_chips * mult) * (e and e.antiscore and -1 or 1),'''
+payload = '''ease_to = G.GAME.chips + math.floor(hand_chips * mult) * (antiscore and -1 or 1),'''
 
 # function get_new_boss() (Turquoise Shield 1/2)
 [[patches]]
