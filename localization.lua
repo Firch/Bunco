@@ -189,7 +189,7 @@ return {
         ['en-us'] = {
             ['name'] = 'Crop Circles',
             ['text'] = {
-                [1] = '{C:clubs}Clubs{} give {C:mult}+3{} Mult,',
+                [1] = 'Base suit {C:clubs}Clubs{} give {C:mult}+3{} Mult,',
                 [2] = '{C:attention}8s{} give {C:mult}+2{} Mult,',
                 [3] = '{C:attention}Qs{}, {C:attention}10s{}, {C:attention}9s{}, {C:attention}6s{} give {C:mult}+1{} Mult'
             }
@@ -199,8 +199,8 @@ return {
         ['en-us'] = {
             ['name'] = 'Crop Circles',
             ['text'] = {
-                [1] = '{C:bunc_fleurons}Fleurons{} give {C:mult}+4{} Mult,',
-                [2] = '{C:clubs}Clubs{} give {C:mult}+3{} Mult,',
+                [1] = 'Base suit {C:bunc_fleurons}Fleurons{} give {C:mult}+4{} Mult,',
+                [2] = 'Base suit {C:clubs}Clubs{} give {C:mult}+3{} Mult,',
                 [3] = '{C:attention}8s{} give {C:mult}+2{} Mult,',
                 [4] = '{C:attention}Qs{}, {C:attention}10s{}, {C:attention}9s{}, {C:attention}6s{} give {C:mult}+1{} Mult'
             }
