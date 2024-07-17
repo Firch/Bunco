@@ -259,6 +259,21 @@ end
 
 '''
 
+# function Card:set_cost() (Loan Shark)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'if self.area and self.ability.couponed and (self.area == G.shop_jokers or self.area == G.shop_booster) then self.cost = 0 end'
+position = 'after'
+match_indent = true
+payload = '''
+
+if self.config.center.key == 'j_bunc_loan_shark' and self.added_to_deck then
+    self.sell_cost = self.ability.extra.cost + (self.ability.extra_value or 0)
+end
+
+'''
+
 # Joker Knight variables
 [[patches]]
 [patches.pattern]

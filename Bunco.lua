@@ -748,7 +748,6 @@ create_joker({ -- Loan Shark
     end,
     add = function(self, card)
         ease_dollars(card.ability.extra.dollars)
-        card.ability.extra_value = card.ability.extra.cost - card.sell_cost
         card:set_cost()
     end
 })
