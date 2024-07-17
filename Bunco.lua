@@ -894,6 +894,7 @@ create_joker({ -- Dogs Playing Poker
     rarity = 'Uncommon', cost = 5,
     blueprint = true, eternal = true,
     unlocked = true,
+    purist = false,
     calculate = function(self, card, context)
         if context.joker_main then
 
