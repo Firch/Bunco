@@ -1041,30 +1041,25 @@ payload = '''
 
 if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_blade' and not G.GAME.blind.disabled then
 
-    local overscore = get_blind_amount(G.GAME.round_resets.ante)*G.GAME.blind.mult*G.GAME.starting_params.ante_scaling
-    overscore = overscore * 1.5
+    local overscore = G.GAME.blind.chips * 1.5
 
     if type(hand_chips) == 'table' then overscore = to_big(overscore) end
 
-    if G.GAME.Blade and not G.GAME.Blade.disabled and (overscore < math.floor((hand_chips*mult) + G.GAME.chips)) then
+    if (overscore < math.floor(hand_chips*mult) + G.GAME.chips) then
 
         mult = mod_mult(0)
         hand_chips = mod_chips(0)
 
-        G.GAME.chips = G.GAME.Blade.chips
-
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             func = (function()
-                G.GAME.blind:wiggle()
+                G.GAME.blind:disable()
                 return true
             end)
         }))
 
         local blade_message = global_bunco and global_bunco.loc.exceeded_score or ' '
         play_area_status_text(blade_message)
-
-        G.GAME.Blade.disabled = true
 
     end
 end
