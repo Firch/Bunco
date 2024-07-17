@@ -748,10 +748,18 @@ create_joker({ -- Loan Shark
     end,
     add = function(self, card)
         ease_dollars(card.ability.extra.dollars)
-        card.ability.extra_value = card.ability.extra.cost - card.sell_cost
         card:set_cost()
     end
 })
+
+local Card_set_cost_ref = Card.set_cost
+function Card:set_cost()
+    Card_set_cost_ref(self)
+    if self.config.center.key == 'j_bunc_loan_shark' and self.added_to_deck then
+        self.sell_cost = -100 + (self.ability.extra_value or 0)
+        self.sell_cost_label = self.facing == 'back' and '?' or self.sell_cost
+    end
+end
 
 create_joker({ -- Basement
     name = 'Basement', position = 12,
