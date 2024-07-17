@@ -31,7 +31,7 @@
 -- (done) Pawn and linocut fake suit and rank
 -- (done) Check eternal food compat
 -- Reset metallurgist-like bonuses when you lose
--- Fix the mask giving spectrum hands when they're invisible
+-- (done) Fix the mask giving spectrum hands when they're invisible
 -- Make so enhancement-related Jokers do not appear unless player has respective enhancements
 
 global_bunco = global_bunco or {loc = {}, vars = {}}
