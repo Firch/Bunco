@@ -620,9 +620,9 @@ return {
             }
         }
     },
-    cellphone = {
+    protester = {
         ['en-us'] = {
-            ['name'] = 'Cellphone',
+            ['name'] = 'Protester',
             ['text'] = {
                 [1] = 'Adds {C:attention}#1#X{} the highest rank',
                 [2] = 'discarded this round to Chips',

@@ -33,6 +33,7 @@
 -- Reset metallurgist-like bonuses when you lose
 -- (done) Fix the mask giving spectrum hands when they're invisible
 -- Make so enhancement-related Jokers do not appear unless player has respective enhancements
+-- Custom description for the Disproportionality that isn't just Misprint 2
 
 global_bunco = global_bunco or {loc = {}, vars = {}}
 local bunco = SMODS.current_mod
@@ -1813,8 +1814,8 @@ create_joker({ -- Vandalism
     end
 })
 
-create_joker({ -- Cellphone
-    name = 'Cellphone', position = 43,
+create_joker({ -- Protester
+    name = 'Protester', position = 43,
     vars = {{chip_mult = 8}, {chips = 0}, {rank = -huge_number}},
     rarity = 'Common', cost = 4,
     blueprint = true, eternal = true,
