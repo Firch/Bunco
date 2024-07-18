@@ -648,6 +648,15 @@ return {
             }
         }
     },
+    running_joke = {
+        ['en-us'] = {
+            ['name'] = 'Running Joke',
+            ['text'] = {
+                [1] = 'Create a {C:dark_edition}Negative',
+                [2] = '{C:attention}Joker{} every shop'
+            }
+        }
+    },
 
     -- Exotic
 

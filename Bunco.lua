@@ -1925,6 +1925,27 @@ create_joker({ -- Disproportionality
     end
 })
 
+create_joker({ -- Running Joke
+    name = 'Running Joke', position = 46,
+    custom_vars = function(self, info_queue, card)
+        info_queue[#info_queue+1] = G.P_CENTERS.e_negative
+        info_queue[#info_queue+1] = {set = 'Joker', key = 'j_joker', specific_vars = {G.P_CENTERS['j_joker'].config.mult}}
+    end,
+    rarity = 'Rare', cost = 8,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.enter_shop then
+            big_juice(card)
+            local card = create_card('Joker', G.shop_jokers, false, nil, nil, nil, 'j_joker')
+            card:set_edition({negative = true}, true)
+            create_shop_card_ui(card)
+            card:add_to_deck()
+            G.shop_jokers:emplace(card)
+        end
+    end
+})
+
 -- Exotic Jokers
 
 create_joker({ -- Zealous

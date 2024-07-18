@@ -661,6 +661,25 @@ end
 
 '''
 
+# G.FUNCS.reroll_shop (Running Joke)
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = 'for i = 1, G.GAME.shop.joker_max - #G.shop_jokers.cards do'
+position = 'before'
+match_indent = true
+payload = '''
+
+if G.jokers ~= nil then
+    for _, v in ipairs(G.jokers.cards) do
+        if v.config.center.key == 'j_bunc_running_joke' and not v.debuff then
+            v:calculate_joker({enter_shop = true})
+        end
+    end
+end
+
+'''
+
 # function Card:is_suit (Myopia & Astigmatism)
 [[patches]]
 [patches.pattern]
