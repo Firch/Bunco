@@ -736,6 +736,18 @@ create_joker({ -- Ghost Print
 create_joker({ -- Loan Shark
     name = 'Loan Shark', position = 11,
     vars = {{dollars = 50}, {cost = -100}},
+    process_loc_text = function(self)
+        SMODS.Joker.process_loc_text(self)
+        SMODS.process_loc_text(G.localization.descriptions.Joker, self.key..'_additional', loc.loan_shark_full)
+    end,
+    custom_vars = function(self, info_queue, card)
+        local vars = {card.ability.extra.dollars, card.ability.extra.cost}
+        if card.area and card.area.config.collection then
+            return {key = self.key..'_additional', vars = vars}
+        else
+            return {vars = vars}
+        end
+    end,
     rarity = 'Uncommon', cost = 3,
     blueprint = false, eternal = true,
     unlocked = false,
