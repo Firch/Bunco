@@ -640,6 +640,14 @@ return {
             }
         }
     },
+    disproportionality = {
+        ['en-us'] = {
+            ['name'] = 'Disproportionality',
+            ['text'] = {
+                [1] = ''
+            }
+        }
+    },
 
     -- Exotic
 

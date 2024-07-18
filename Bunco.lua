@@ -1892,6 +1892,39 @@ create_joker({ -- Doodle
     end
 })
 
+create_joker({ -- Disproportionality
+    name = 'Disproportionality', position = 45,
+    vars = {{min = 0}, {max = 100}},
+    custom_vars = function(self, info_queue, card)
+        local r_chips = {}
+        for i = card.ability.extra.min, card.ability.extra.max do
+            r_chips[#r_chips+1] = tostring(i)
+        end
+        local loc_chips = ' '..(loc.dictionary.chips)..' '
+        return {main_start = {
+            {n=G.UIT.T, config={text = '  +',colour = G.C.CHIPS, scale = 0.32}},
+            {n=G.UIT.O, config={object = DynaText({string = r_chips, colours = {G.C.CHIPS}, pop_in_rate = 9999999, silent = true, random_element = true, pop_delay = 0.5, scale = 0.32, min_cycle_time = 0})}},
+            {n=G.UIT.O, config={object = DynaText({string = {
+                {string = 'rand()', colour = G.C.JOKER_GREY},
+                {string = "#@"..(G.deck and G.deck.cards[1] and G.deck.cards[#G.deck.cards].base.id or 11)..(G.deck and G.deck.cards[1] and G.deck.cards[#G.deck.cards].base.suit:sub(1,1) or 'D'), colour = G.C.CHIPS},
+                loc_chips, loc_chips, loc_chips, loc_chips, loc_chips, loc_chips, loc_chips, loc_chips, loc_chips, loc_chips, loc_chips, loc_chips, loc_chips},
+            colours = {G.C.UI.TEXT_DARK},pop_in_rate = 9999999, silent = true, random_element = true, pop_delay = 0.2011, scale = 0.32, min_cycle_time = 0})}},
+        }}
+    end,
+    rarity = 'Common', cost = 4,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            local temp_chips = pseudorandom('misprint', card.ability.extra.min, card.ability.extra.max)
+            return {
+                message = localize{type='variable',key='a_chips',vars={temp_chips}},
+                chip_mod = temp_chips
+            }
+        end
+    end
+})
+
 -- Exotic Jokers
 
 create_joker({ -- Zealous
