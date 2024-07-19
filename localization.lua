@@ -662,7 +662,7 @@ return {
         ['en-us'] = {
             ['name'] = 'On Broadway',
             ['text'] = {
-                [1] = '{C:chips}+#2#{} Chips and {C:mult}+#1#{} Mult if',
+                [1] = '{C:chips}+#1#{} Chips and {C:mult}+#2#{} Mult if',
                 [2] = 'played hand contains a {C:attention}Straight{}',
                 [3] = 'with a scoring {C:attention}face card'
             }
