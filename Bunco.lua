@@ -1996,6 +1996,16 @@ create_joker({ -- On Broadway
     end
 })
 
+create_joker({ -- Rasta
+    name = 'Rasta', position = 47,
+    vars = {{chips = 120}, {mult = 20}},
+    rarity = 'Uncommon', cost = 6,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+    end
+})
+
 -- Exotic Jokers
 
 create_joker({ -- Zealous

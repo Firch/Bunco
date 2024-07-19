@@ -662,9 +662,9 @@ return {
         ['en-us'] = {
             ['name'] = 'On Broadway',
             ['text'] = {
-                [1] = '{C:attention}Straights{} with scoring',
-                [2] = '{C:attention}face cards{} give',
-                [3] = '{C:mult}+#1#{} Mult and {C:chips}+#2#{} Chips'
+                [1] = '{C:chips}+#2#{} Chips and {C:mult}+#1#{} Mult if',
+                [2] = 'played hand contains a {C:attention}Straight{}',
+                [3] = 'with a scoring {C:attention}face card'
             }
         }
     },
