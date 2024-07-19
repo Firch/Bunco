@@ -670,11 +670,22 @@ return {
     },
     rasta = {
         ['en-us'] = {
-            ['name'] = 'Rasta Joker',
+            ['name'] = 'Rasta',
             ['text'] = {
                 [1] = '{C:mult}+#1#{} Mult if no',
                 [2] = '{C:attention}Enhanced cards{}',
                 [3] = 'are scored'
+            }
+        }
+    },
+    critic = {
+        ['en-us'] = {
+            ['name'] = 'Critic',
+            ['text'] = {
+                [1] = "{X:mult,C:white}X#1#{} Mult if played hand's",
+                [2] = "current score is",
+                [3] = '{C:attention}less than 1/#2#{} of',
+                [4] = "blind's required score"
             }
         }
     },

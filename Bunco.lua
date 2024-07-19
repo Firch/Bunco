@@ -1934,7 +1934,7 @@ create_joker({ -- Disproportionality
     unlocked = true,
     calculate = function(self, card, context)
         if context.joker_main then
-            local temp_chips = pseudorandom('misprint', card.ability.extra.min, card.ability.extra.max)
+            local temp_chips = pseudorandom('disproportionality', card.ability.extra.min, card.ability.extra.max)
             return {
                 message = localize{type='variable',key='a_chips',vars={temp_chips}},
                 chip_mod = temp_chips
@@ -2018,6 +2018,28 @@ create_joker({ -- Rasta
                 },
                 mult_mod = card.ability.extra.mult,
                 card = card
+            } end
+        end
+    end
+})
+
+create_joker({ -- Critic
+    name = 'Critic', position = 49,
+    vars = {{xmult = 2}, {fraction = 5}},
+    rarity = 'Common', cost = 6,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            local temp_chips = G.GAME.blind.chips
+            if math.floor(hand_chips * mult) < (temp_chips / card.ability.extra.fraction) then return {
+                Xmult_mod = card.ability.extra.xmult,
+                card = card,
+                message = localize {
+                    type = 'variable',
+                    key = 'a_xmult',
+                    vars = { card.ability.extra.xmult }
+                },
             } end
         end
     end
