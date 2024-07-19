@@ -653,7 +653,8 @@ return {
             ['name'] = 'Running Joke',
             ['text'] = {
                 [1] = 'Create a {C:dark_edition}Negative',
-                [2] = '{C:attention}Joker{} every shop'
+                [2] = '"{C:attention}Joker{}" at the',
+                [3] = 'start of every shop'
             }
         }
     },

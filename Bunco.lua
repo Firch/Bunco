@@ -1956,7 +1956,7 @@ create_joker({ -- Running Joke
         if context.enter_shop then
             big_juice(card)
             local card = create_card('Joker', G.shop_jokers, false, nil, nil, nil, 'j_joker')
-            card:set_edition({negative = true}, true)
+            card:set_edition({negative = true})
             create_shop_card_ui(card)
             card:add_to_deck()
             G.shop_jokers:emplace(card)
