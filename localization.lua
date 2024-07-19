@@ -658,6 +658,16 @@ return {
             }
         }
     },
+    on_broadway = {
+        ['en-us'] = {
+            ['name'] = 'On Broadway',
+            ['text'] = {
+                [1] = '{C:attention}Straights{} with scoring',
+                [2] = '{C:attention}face cards{} give',
+                [3] = '{C:mult}+#1#{} Mult and {C:chips}+#2#{} Chips'
+            }
+        }
+    },
 
     -- Exotic
 
@@ -718,7 +728,7 @@ return {
             ['text'] = {
                 [1] = 'Played cards with',
                 [2] = '{C:bunc_halberds}Halberd{} suit give',
-                [3] = '{C:chips}+#2#{} Chips and {C:mult}+#1#{} Mult',
+                [3] = '{C:chips}+#1#{} Chips and {C:mult}+#2#{} Mult',
                 [4] = "when scored"
             }
         }

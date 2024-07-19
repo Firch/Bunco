@@ -1964,6 +1964,38 @@ create_joker({ -- Running Joke
     end
 })
 
+create_joker({ -- On Broadway
+    name = 'On Broadway', position = 47,
+    vars = {{chips = 120}, {mult = 20}},
+    rarity = 'Uncommon', cost = 6,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.joker_main and context.scoring_hand and context.poker_hands ~= nil and next(context.poker_hands['Straight']) then
+            local face = false
+            for i = 1, #context.scoring_hand do
+                if context.scoring_hand[i]:is_face() then
+                    face = true
+                end
+            end
+            if face then
+                hand_chips = mod_chips(hand_chips + card.ability.extra.chips)
+                update_hand_text({delay = 0}, {chips = hand_chips})
+                forced_message('+'..tostring(card.ability.extra.chips), card, G.C.CHIPS, true)
+                return {
+                    message = localize {
+                        type = 'variable',
+                        key = 'a_mult',
+                        vars = { card.ability.extra.mult }
+                    },
+                    mult_mod = card.ability.extra.mult,
+                    card = card
+                }
+            end
+        end
+    end
+})
+
 -- Exotic Jokers
 
 create_joker({ -- Zealous
@@ -2037,7 +2069,7 @@ create_joker({ -- Wishalloy
 create_joker({ -- Unobtanium
     type = 'Exotic',
     name = 'Unobtanium', position = 6,
-    vars = {{mult = 12}, {chips = 100}},
+    vars = {{chips = 100}, {mult = 12}},
     rarity = 'Uncommon', cost = 7,
     blueprint = true, eternal = true,
     unlocked = true,
