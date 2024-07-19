@@ -1996,6 +1996,33 @@ create_joker({ -- On Broadway
     end
 })
 
+create_joker({ -- Rasta
+    name = 'Rasta', position = 48,
+    vars = {{mult = 20}},
+    rarity = 'Common', cost = 5,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            local enhancement = false
+            for i = 1, #context.scoring_hand do
+                if context.scoring_hand[i].config.center ~= G.P_CENTERS.c_base then
+                    enhancement = true
+                end
+            end
+            if not enhancement then return {
+                message = localize {
+                    type = 'variable',
+                    key = 'a_mult',
+                    vars = { card.ability.extra.mult }
+                },
+                mult_mod = card.ability.extra.mult,
+                card = card
+            } end
+        end
+    end
+})
+
 -- Exotic Jokers
 
 create_joker({ -- Zealous

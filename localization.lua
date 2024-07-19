@@ -668,6 +668,16 @@ return {
             }
         }
     },
+    rasta = {
+        ['en-us'] = {
+            ['name'] = 'Rasta Joker',
+            ['text'] = {
+                [1] = '{C:mult}+#1#{} Mult if no',
+                [2] = '{C:attention}Enhanced cards{}',
+                [3] = 'are scored'
+            }
+        }
+    },
 
     -- Exotic
 
