@@ -33,7 +33,7 @@
 -- Reset metallurgist-like bonuses when you lose
 -- (done) Fix the mask giving spectrum hands when they're invisible
 -- Make so enhancement-related Jokers do not appear unless player has respective enhancements
--- Custom description for the Disproportionality that isn't just Misprint 2
+-- (done) Custom description for the Disproportionality that isn't just Misprint 2
 
 global_bunco = global_bunco or {loc = {}, vars = {}}
 local bunco = SMODS.current_mod
@@ -1895,22 +1895,39 @@ create_joker({ -- Doodle
 
 create_joker({ -- Disproportionality
     name = 'Disproportionality', position = 45,
-    vars = {{min = 0}, {max = 100}},
-    custom_vars = function(self, info_queue, card)
+    vars = {{min = 0}, {max = 200}},
+    custom_vars = function(self, info_queue, card)  
         local r_chips = {}
         for i = card.ability.extra.min, card.ability.extra.max do
-            r_chips[#r_chips+1] = tostring(i)
+            r_chips[#r_chips + 1] = string.format("%03d", i)
         end
         local loc_chips = ' '..(loc.dictionary.chips)..' '
-        return {main_start = {
-            {n=G.UIT.T, config={text = '  +',colour = G.C.CHIPS, scale = 0.32}},
-            {n=G.UIT.O, config={object = DynaText({string = r_chips, colours = {G.C.CHIPS}, pop_in_rate = 9999999, silent = true, random_element = true, pop_delay = 0.5, scale = 0.32, min_cycle_time = 0})}},
-            {n=G.UIT.O, config={object = DynaText({string = {
-                {string = 'rand()', colour = G.C.JOKER_GREY},
-                {string = "#@"..(G.deck and G.deck.cards[1] and G.deck.cards[#G.deck.cards].base.id or 11)..(G.deck and G.deck.cards[1] and G.deck.cards[#G.deck.cards].base.suit:sub(1,1) or 'D'), colour = G.C.CHIPS},
-                loc_chips, loc_chips, loc_chips, loc_chips, loc_chips, loc_chips, loc_chips, loc_chips, loc_chips, loc_chips, loc_chips, loc_chips, loc_chips},
-            colours = {G.C.UI.TEXT_DARK},pop_in_rate = 9999999, silent = true, random_element = true, pop_delay = 0.2011, scale = 0.32, min_cycle_time = 0})}},
-        }}
+        local text = {
+            [1] = "[1] Lua local 'handler'",
+            [2] = "at file 'chip_mod.lua:",
+            [3] = "'",
+            [4] = "ERROR",
+            [5] = "Stack Traceback"
+        }
+        --for i = 1, #r_chips do
+        --    r_chips[i] = text[2]..r_chips[i]..text[3]
+        --end
+        return {main_start =
+        {{n = G.UIT.R, config = {align = "cm"}, nodes = {
+            {n = G.UIT.R, config = {align = "cm", padding = 0.02}, nodes = {
+                {n = G.UIT.O, config = {object = DynaText({string = {
+                    {string = text[1]}, {string = text[1]}, {string = text[1]}, {string = text[1]}, {string = text[1]}, {string = text[1]},
+                    {string = text[4], colour = G.C.JOKER_GREY},
+                    {string = text[5]},
+                }, colours = {G.C.L_BLACK}, random_element = true, pop_in_rate = 9999999, silent = true, pop_delay = 0.2, scale = 0.32, min_cycle_time = 0})}},
+            }},
+            {n = G.UIT.R, config = {align = "cm", padding = 0.02}, nodes = {
+                {n = G.UIT.T, config = {text = text[2], colour = G.C.L_BLACK, scale = 0.32}},
+                {n = G.UIT.O, config = {object = DynaText({string = r_chips, colours = {G.C.CHIPS}, pop_in_rate = 9999999, silent = true, pop_delay = 0.005, scale = 0.32, min_cycle_time = 0})}},
+                {n = G.UIT.T, config = {text = text[3], colour = G.C.L_BLACK, scale = 0.32}}
+            }}
+        }}}
+        }
     end,
     rarity = 'Common', cost = 4,
     blueprint = true, eternal = true,
