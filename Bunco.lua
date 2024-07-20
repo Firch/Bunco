@@ -1690,7 +1690,7 @@ create_joker({ -- Pawn
                 local other_card = context.scoring_hand[i]
                 local rank = math.huge
                 for _, deck_card in ipairs(G.playing_cards) do
-                    if deck_card:get_id() < rank then
+                    if deck_card:get_id() < rank and deck_card.config.center ~= G.P_CENTERS.m_stone then
                         rank = deck_card:get_id()
                     end
                 end
