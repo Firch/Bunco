@@ -271,6 +271,10 @@ return {
             ['text'] = {
                 [1] = 'Gain {C:money}$#1#',
                 [2] = 'when acquired...'
+            },
+            ['unlock'] = {
+                [1] = 'Have less than {E:1,C:attention}$-20',
+                [2] = 'during a single run'
             }
         }
     },
@@ -281,10 +285,6 @@ return {
                 [1] = 'Gain {C:money}$#1#{} when acquired,',
                 [2] = '{C:attention}sell value{} of this',
                 [3] = 'Joker sets to {C:attention}$#2#'
-            },
-            ['unlock'] = {
-                [1] = 'Have less than {E:1,C:attention}$-20',
-                [2] = 'during a single run'
             }
         }
     },
