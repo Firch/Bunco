@@ -3379,7 +3379,7 @@ SMODS.Blind{ -- Turquoise Shield
             G.GAME.blind.original_chips = G.GAME.blind.chips
         end
         if not reset and not G.GAME.blind.disabled and G.GAME.overscore and G.GAME.overscore ~= 0 then
-            local final_chips = (G.GAME.blind.chips / G.GAME.blind.mult) + (G.GAME.overscore or 0)
+            local final_chips = (G.GAME.blind.chips) + (G.GAME.overscore or 0)
             local chip_mod -- iterate over ~120 ticks
             if type(G.GAME.blind.chips) ~= 'table' then
                 chip_mod = math.ceil((final_chips - G.GAME.blind.chips) / 120)
