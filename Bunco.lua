@@ -658,7 +658,9 @@ create_joker({ -- Prehistoric
     calculate = function(self, card, context)
         if context.individual and context.cardarea == G.play then
             for k, v in pairs(card.ability.extra.card_list) do
-                if (v == context.other_card.base.id .. context.other_card.base.suit) and context.other_card.config.center ~= G.P_CENTERS.m_stone then
+                if (v:get_id() == context.other_card:get_id())
+                and (v:is_suit(context.other_card.base.suit) or context.other_card.config.center == G.P_CENTERS.m_wild)
+                and context.other_card.config.center ~= G.P_CENTERS.m_stone then
                     return {
                         message = localize {
                             type = 'variable',
@@ -673,7 +675,7 @@ create_joker({ -- Prehistoric
 
             if not context.blueprint then
                 if context.other_card.config.center ~= G.P_CENTERS.m_stone then
-                    table.insert(card.ability.extra.card_list, context.other_card.base.id .. context.other_card.base.suit) -- Add the card to the list
+                    table.insert(card.ability.extra.card_list, context.other_card) -- Add the card to the list
                 end
             end
 
