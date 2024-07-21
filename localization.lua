@@ -9,6 +9,8 @@ return {
             word_and = 'and',
             debuffed = 'Debuffed!',
             pew = 'Pew!',
+            declined = 'Declined...',
+            accepted = 'Accepted!',
             mysterious_tarot = 'Tarot?',
             most_played_rank = '(most played rank)',
             least_played_hand = '(least played hand)',
@@ -685,6 +687,16 @@ return {
                 [2] = "current score is",
                 [3] = '{C:attention}less than 1/#2#{} of',
                 [4] = "blind's required score"
+            }
+        }
+    },
+    cellphone = {
+        ['en-us'] = {
+            ['name'] = 'Cellphone',
+            ['text'] = {
+                [1] = '{C:attention}Return{} scored cards to hand',
+                [2] = 'after first play of round',
+                [3] = 'if no discards were used'
             }
         }
     },

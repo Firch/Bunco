@@ -680,6 +680,66 @@ end
 
 '''
 
+# G.FUNCS.draw_from_play_to_discard (Cellphone 1/2)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "draw_card(G.play,G.discard, it*100/play_count,'down', false, v)"
+position = 'at'
+match_indent = true
+payload = '''
+
+local cards_to_hand = {}
+
+if G.jokers ~= nil then
+    for _, joker in ipairs(G.jokers.cards) do
+        if joker.config.center.key == 'j_bunc_cellphone' and joker.ability.extra.active and not joker.debuff then
+            for __, card in ipairs(joker.ability.extra.cards_to_hand) do
+                table.insert(cards_to_hand, card)
+            end
+            break
+        end
+    end
+end
+
+if cards_to_hand ~= {} then
+    local condition = false
+    for _, card_to_hand in ipairs(cards_to_hand) do
+        if v == card_to_hand then
+            condition = true
+        end
+    end
+    if condition then
+        draw_card(G.play,G.hand, it*100/play_count,'up', true, v)
+    else
+        draw_card(G.play,G.discard, it*100/play_count,'down', false, v)
+    end
+else
+    draw_card(G.play,G.discard, it*100/play_count,'down', false, v)
+end
+
+'''
+
+# G.FUNCS.play_cards_from_highlighted() (Cellphone 2/2)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "inc_career_stat('c_hands_played', 1)"
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.jokers ~= nil then
+    for _, v in ipairs(G.jokers.cards) do
+        if v.config.center.key == 'j_bunc_cellphone' and v.ability.extra.active and not v.debuff then
+            v:calculate_joker({press_play = true})
+            break
+        end
+    end
+end
+
+'''
+
 # function Card:is_suit (Myopia & Astigmatism)
 [[patches]]
 [patches.pattern]

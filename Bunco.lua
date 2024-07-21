@@ -2047,6 +2047,37 @@ create_joker({ -- Critic
     end
 })
 
+create_joker({ -- Cellphone
+    name = 'Cellphone', position = 50,
+    vars = {{active = true}, {cards_to_hand = {}}},
+    rarity = 'Uncommon', cost = 6,
+    blueprint = false, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.first_hand_drawn then
+            card.ability.extra.active = true
+            local eval = function() return G.GAME.current_round.hands_played == 0 and G.GAME.current_round.discards_used == 0 end
+            juice_card_until(card, eval, true)
+        end
+        if context.joker_main and context.scoring_hand then
+            card.ability.extra.cards_to_hand = context.scoring_hand
+        end
+        if context.press_play and card.ability.extra.active and G.GAME.current_round.hands_played == 0 then
+            forced_message(loc.dictionary.accepted, card, G.C.GREEN)
+        end
+        if context.after and G.GAME.current_round.hands_played == 0 then
+            event({func = function ()
+                card.ability.extra.active = false
+                return true
+            end})
+        end
+        if context.pre_discard and card.ability.extra.active then
+            card.ability.extra.active = false
+            forced_message(loc.dictionary.declined, card, G.C.RED, true)
+        end
+    end
+})
+
 -- Exotic Jokers
 
 create_joker({ -- Zealous
