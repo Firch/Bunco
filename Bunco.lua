@@ -753,14 +753,7 @@ create_joker({ -- Loan Shark
     end,
     rarity = 'Uncommon', cost = 3,
     blueprint = false, eternal = true,
-    unlocked = false,
-    check_for_unlock = function(self, args)
-        if args.type == 'money' then
-            if G.GAME.dollars < -20 then
-                unlock_card(self)
-            end
-        end
-    end,
+    unlocked = true,
     add = function(self, card)
         ease_dollars(card.ability.extra.dollars)
         card:set_cost()
@@ -2074,6 +2067,85 @@ create_joker({ -- Cellphone
         if context.pre_discard and card.ability.extra.active then
             card.ability.extra.active = false
             forced_message(loc.dictionary.declined, card, G.C.RED, true)
+        end
+    end
+})
+
+create_joker({ -- Red Wine
+    name = 'Red Wine', position = 51,
+    vars = {{chips = 12}},
+    rarity = 'Common', cost = 5,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.individual and context.cardarea == G.play then
+
+            local other_card = context.other_card
+
+            if context.other_card:is_suit('Hearts') or context.other_card:is_suit('Diamonds') then
+                return {
+                    chips = card.ability.extra.chips,
+                    card = card
+                }
+            end
+        end
+    end
+})
+
+create_joker({ -- Bounty Hunter
+    name = 'Bounty Hunter', position = 52,
+    vars = {{mult = 5}},
+    rarity = 'Common', cost = 5,
+    blueprint = true, eternal = true,
+    unlocked = false,
+    check_for_unlock = function(self, args)
+        if args.type == 'money' then
+            if G.GAME.dollars < -20 then
+                unlock_card(self)
+            end
+        end
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            if G.GAME.dollars < 0 then return {
+                message = localize {
+                    type = 'variable',
+                    key = 'a_mult',
+                    vars = {card.ability.extra.mult * math.abs(G.GAME.dollars)}
+                },
+                mult_mod = card.ability.extra.mult * math.abs(G.GAME.dollars),
+                card = card
+            } end
+        end
+    end
+})
+
+create_joker({ -- Mousetrap
+    name = 'Mousetrap', position = 53,
+    vars = {{chips = 120}, {odds = 3}},
+    custom_vars = function(self, info_queue, card)
+        local vars
+        if G.GAME and G.GAME.probabilities.normal then
+            vars = {card.ability.extra.chips, G.GAME.probabilities.normal, card.ability.extra.odds}
+        else
+            vars = {card.ability.extra.chips, 1, card.ability.extra.odds}
+        end
+        return {vars = vars}
+    end,
+    rarity = 'Uncommon', cost = 6,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            if pseudorandom('mousetrap'..G.SEED) < G.GAME.probabilities.normal / card.ability.extra.odds then
+                if G.GAME.current_round.hands_left ~= 0 then ease_hands_played(-1) end
+                forced_message(loc.dictionary.ouch, card, G.C.RED, true)
+            else
+                return {
+                    message = localize{type='variable', key='a_chips', vars={card.ability.extra.chips}},
+                    chip_mod = card.ability.extra.chips,
+                }
+            end
         end
     end
 })
