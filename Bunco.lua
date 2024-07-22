@@ -364,7 +364,7 @@ end
 
 create_joker({ -- Cassette
     name = 'Cassette', position = 1,
-    vars = {{ chips = 45 }, { mult = 6 }, { side = 'A' }},
+    vars = {{chips = 45}, {mult = 6}, {side = 'A'}},
     rarity = 'Uncommon', cost = 5,
     blueprint = true, eternal = true,
     unlocked = true,
@@ -417,7 +417,7 @@ create_joker({ -- Cassette
 
 create_joker({ -- Mosaic
     name = 'Mosaic', position = 3,
-    vars = {{ mult = 6 }},
+    vars = {{mult = 6}},
     rarity = 'Uncommon', cost = 4,
     blueprint = true, eternal = true,
     unlocked = true,
@@ -934,7 +934,6 @@ create_joker({ -- Dogs Playing Poker
 
 create_joker({ -- Righthook
     name = 'Righthook', position = 17,
-    vars = {},
     rarity = 'Rare', cost = 8,
     blueprint = true, eternal = true,
     unlocked = false,
@@ -1945,7 +1944,7 @@ create_joker({ -- Running Joke
         info_queue[#info_queue+1] = {set = 'Joker', key = 'j_joker', specific_vars = {G.P_CENTERS['j_joker'].config.mult}}
     end,
     rarity = 'Rare', cost = 8,
-    blueprint = true, eternal = true,
+    blueprint = false, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
         if context.enter_shop then
@@ -2071,8 +2070,8 @@ create_joker({ -- Cellphone
     end
 })
 
-create_joker({ -- Red Wine
-    name = 'Red Wine', position = 51,
+create_joker({ -- Alcoholic
+    name = 'Alcoholic', position = 51,
     vars = {{chips = 12}},
     rarity = 'Common', cost = 5,
     blueprint = true, eternal = true,
@@ -2122,7 +2121,7 @@ create_joker({ -- Bounty Hunter
 
 create_joker({ -- Mousetrap
     name = 'Mousetrap', position = 53,
-    vars = {{chips = 120}, {odds = 3}},
+    vars = {{chips = 300}, {odds = 3}},
     custom_vars = function(self, info_queue, card)
         local vars
         if G.GAME and G.GAME.probabilities.normal then

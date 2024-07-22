@@ -681,7 +681,7 @@ return {
             ['name'] = 'Critic',
             ['text'] = {
                 [1] = "{X:mult,C:white}X#1#{} Mult if played hand's",
-                [2] = "current score is",
+                [2] = 'current score is',
                 [3] = '{C:attention}less than 1/#2#{} of',
                 [4] = "blind's required score"
             }
@@ -699,7 +699,7 @@ return {
     },
     red_wine = {
         ['en-us'] = {
-            ['name'] = 'Red Wine Joker',
+            ['name'] = 'Alcoholic',
             ['text'] = {
                 [1] = 'Played cards with',
                 [2] = '{C:hearts}Heart{} and {C:diamonds}Diamond{} suit',
