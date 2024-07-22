@@ -697,9 +697,9 @@ return {
             }
         }
     },
-    alcoholic = {
+    wino = {
         ['en-us'] = {
-            ['name'] = 'Alcoholic',
+            ['name'] = 'Wino',
             ['text'] = {
                 [1] = 'Played cards with',
                 [2] = '{C:hearts}Heart{} and {C:diamonds}Diamond{} suit',

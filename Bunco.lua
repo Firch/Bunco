@@ -2070,8 +2070,8 @@ create_joker({ -- Cellphone
     end
 })
 
-create_joker({ -- Alcoholic
-    name = 'Alcoholic', position = 51,
+create_joker({ -- Wino
+    name = 'Wino', position = 51,
     vars = {{chips = 12}},
     rarity = 'Common', cost = 5,
     blueprint = true, eternal = true,
