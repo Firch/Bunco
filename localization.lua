@@ -697,7 +697,7 @@ return {
             }
         }
     },
-    red_wine = {
+    alcoholic = {
         ['en-us'] = {
             ['name'] = 'Alcoholic',
             ['text'] = {
