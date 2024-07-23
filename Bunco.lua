@@ -1949,11 +1949,11 @@ create_joker({ -- Running Joke
     calculate = function(self, card, context)
         if context.enter_shop then
             big_juice(card)
-            local card = create_card('Joker', G.shop_jokers, false, nil, nil, nil, 'j_joker')
-            card:set_edition({negative = true})
-            create_shop_card_ui(card)
-            card:add_to_deck()
-            G.shop_jokers:emplace(card)
+            local shop_card = create_card('Joker', G.shop_jokers, false, nil, nil, nil, 'j_joker')
+            shop_card:set_edition({negative = true})
+            create_shop_card_ui(shop_card)
+            shop_card:add_to_deck()
+            G.shop_jokers:emplace(shop_card)
         end
     end
 })
