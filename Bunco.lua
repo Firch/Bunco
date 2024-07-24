@@ -31,6 +31,7 @@
 -- (done) Pawn and linocut fake suit and rank
 -- (done) Check eternal food compat
 -- Reset metallurgist-like bonuses when you lose
+-- Reset metallurgist-like bonuses when Joker is debuffed
 -- (done) Fix the mask giving spectrum hands when they're invisible
 -- Make so enhancement-related Jokers do not appear unless player has respective enhancements
 -- (done) Custom description for the Disproportionality that isn't just Misprint 2
@@ -1447,15 +1448,25 @@ create_joker({ -- Dwarven
     rarity = 'Uncommon', cost = 8,
     blueprint = false, eternal = true,
     unlocked = true,
-    update = function(self, card)
-        if card.area == G.jokers and not card.debuff then
-            G.P_CENTERS.m_stone.config.h_x_mult = G.P_CENTERS.m_steel.config.h_x_mult
-            G.P_CENTERS.m_stone.config.h_dollars = G.P_CENTERS.m_gold.config.h_dollars
+    add = function(self, card)
+        for _, deck_card in pairs(G.playing_cards) do
+            if deck_card.config.center == G.P_CENTERS.m_stone then
+                deck_card.ability.h_x_mult = (deck_card.ability.h_x_mult or 0) + G.P_CENTERS.m_steel.config.h_x_mult
+                deck_card.ability.h_dollars = (deck_card.ability.h_dollars or 0) + G.P_CENTERS.m_gold.config.h_dollars
+            end
         end
+        G.P_CENTERS.m_stone.config.h_x_mult = (G.P_CENTERS.m_stone.config.h_x_mult or 0) + G.P_CENTERS.m_steel.config.h_x_mult
+        G.P_CENTERS.m_stone.config.h_dollars = (G.P_CENTERS.m_stone.config.h_dollars or 0) + G.P_CENTERS.m_gold.config.h_dollars
     end,
     remove = function(self, card)
-        G.P_CENTERS.m_stone.config.h_x_mult = nil
-        G.P_CENTERS.m_stone.config.h_dollars = nil
+        for _, deck_card in pairs(G.playing_cards) do
+            if deck_card.config.center == G.P_CENTERS.m_stone then
+                deck_card.ability.h_x_mult = deck_card.ability.h_x_mult - G.P_CENTERS.m_steel.config.h_x_mult
+                deck_card.ability.h_dollars = deck_card.ability.h_dollars - G.P_CENTERS.m_gold.config.h_dollars
+            end
+        end
+        G.P_CENTERS.m_stone.config.h_x_mult = G.P_CENTERS.m_stone.config.h_x_mult - G.P_CENTERS.m_steel.config.h_x_mult
+        G.P_CENTERS.m_stone.config.h_dollars = G.P_CENTERS.m_stone.config.h_dollars - G.P_CENTERS.m_gold.config.h_dollars
     end
 })
 
