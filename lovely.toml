@@ -236,8 +236,8 @@ payload = '''
 
 if G.jokers ~= nil and self == G.hand then
     for _, v in ipairs(G.jokers.cards) do
-        if v.ability.name == 'Xray' then
-            v:calculate_joker({ emplaced_card = card })
+        if v.config.center.key == 'j_bunc_xray' then
+            v:calculate_joker({emplaced_card = card})
         end
     end
 end
@@ -253,7 +253,7 @@ position = 'before'
 match_indent = true
 payload = '''
 
-if new_card.ability.name == 'Dread' then
+if new_card.config.center.key == 'j_bunc_dread' then
     new_card.ability.extra.level_up_list = {}
 end
 
@@ -298,7 +298,7 @@ payload = '''
 
 if G.jokers ~= nil then
     for _, v in ipairs(G.jokers.cards) do
-        if v.ability.name == 'Knight' and not v.debuff then
+        if v.config.center.key == 'j_bunc_knight' and not v.debuff then
             if break_table.before == nil then
 
                 break_table.before = {}
@@ -327,7 +327,7 @@ payload = '''
 
 if G.jokers ~= nil then
     for _, v in ipairs(G.jokers.cards) do
-        if v.ability.name == 'Knight' and not v.debuff then
+        if v.config.center.key == 'j_bunc_knight' and not v.debuff then
             function do_tables_match(a, b)
                 return table.concat(a) == table.concat(b)
             end
@@ -373,7 +373,7 @@ payload = '''
 
 if G.jokers ~= nil then
     for _, v in ipairs(G.jokers.cards) do
-        if v.ability.name == 'Fiendish' and not v.debuff then
+        if v.config.center.key == 'j_bunc_fiendish' and not v.debuff then
             if mod > 0 then
                 if pseudorandom('fiendish'..G.SEED) < G.GAME.probabilities.normal / v.ability.extra.odds then
                     mod = 1
@@ -408,7 +408,7 @@ payload = '''
 
 if G.jokers ~= nil then
     for _, v in ipairs(G.jokers.cards) do
-        if v.ability.name == 'Doorhanger' and not v.debuff then
+        if v.config.center.key == 'j_bunc_doorhanger' and not v.debuff then
             if _rarity == nil or _rarity < 0.9 then
 
                 _rarity = 0.9
@@ -434,7 +434,7 @@ payload = '''
 
 if G.jokers ~= nil then
     for _, v in ipairs(G.jokers.cards) do
-        if (v.ability.name == 'Nil Bill' or v.ability.name == 'Neon') and not v.debuff then
+        if (v.config.center.key == 'j_bunc_nil_bill' or v.config.center.key == 'j_bunc_neon') and not v.debuff then
             v:calculate_joker({debuffed_card = scoring_hand[i]})
         end
     end
@@ -490,7 +490,7 @@ payload = '''
 
 if G.jokers ~= nil then
     for _, v in ipairs(G.jokers.cards) do
-        if v.ability.name == 'Head in the Clouds' and not v.debuff then
+        if v.config.center.key == 'j_bunc_head_in_the_clouds' and not v.debuff then
             v:calculate_joker({level_up_hand = hand})
         end
     end
@@ -511,7 +511,7 @@ payload = '''
 
 if G.jokers ~= nil then
     for _, v in ipairs(G.jokers.cards) do
-        if v.ability.name == 'Trigger Finger' and not v.debuff and is_higlighted and self.area == G.hand then
+        if v.config.center.key == 'j_bunc_trigger_finger' and not v.debuff and is_higlighted and self.area == G.hand then
             if pseudorandom('trigger_finger'..G.SEED) < G.GAME.probabilities.normal / v.ability.extra.odds then
                 v:calculate_joker({highlight_card = true})
                 break
@@ -546,7 +546,7 @@ position = 'before'
 match_indent = true
 payload = '''
 
-if self.ability.name == 'Vandalism' and (self.config.center.discovered or self.bypass_discovery_center) then
+if self.config.center.key == 'j_bunc_vandalism' and (self.config.center.discovered or self.bypass_discovery_center) then
     self.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, self.children.center, 0, 0)
 end
 
@@ -561,7 +561,7 @@ position = 'before'
 match_indent = true
 payload = '''
 
-if self.ability.name == 'Vandalism' and (self.config.center.discovered or self.bypass_discovery_center) then
+if self.config.center.key == 'j_bunc_vandalism' and (self.config.center.discovered or self.bypass_discovery_center) then
     self.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, self.children.center, 0, 0)
 end
 
@@ -576,7 +576,7 @@ position = 'after'
 match_indent = true
 payload = '''
 
-if self.ability.name == 'Vandalism' and (self.config.center.discovered or self.bypass_discovery_center) then
+if self.config.center.key == 'j_bunc_vandalism' and (self.config.center.discovered or self.bypass_discovery_center) then
     self.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, self.children.center, 0, 0)
 end
 
@@ -623,7 +623,7 @@ payload = '''
 
 if G.jokers ~= nil then
     for _, v in ipairs(G.jokers.cards) do
-        if v.ability.name == 'Vandalism' and not v.debuff then
+        if v.config.center.key == 'j_bunc_vandalism' and not v.debuff then
             if (pseudorandom('vandalism'..G.SEED) < G.GAME.probabilities.normal / v.ability.extra.odds) and (G.STATE == G.STATES.SELECTING_HAND or G.STATE == G.STATES.DRAW_TO_HAND) then
                 v:calculate_joker({stay_flipped = true})
                 return true
@@ -645,7 +645,7 @@ payload = '''
 
 if G.jokers ~= nil then
     for _, v in ipairs(G.jokers.cards) do
-        if v.ability.name == 'Vandalism' and not v.debuff then
+        if v.config.center.key == 'j_bunc_vandalism' and not v.debuff then
             v:calculate_joker({play_cards = true})
         end
     end
@@ -743,7 +743,7 @@ payload = '''
 
 if G.jokers ~= nil then
     for _, v in ipairs(G.jokers.cards) do
-        if v.ability.name == 'Myopia' and not v.debuff then
+        if v.config.center.key == 'j_bunc_myopia' and not v.debuff then
             if self.base.suit == 'Spades' and (self.base.suit == 'Spades') == (suit == 'Spades' or suit == 'bunc_Halberds') then
                 return true
             end
@@ -756,7 +756,7 @@ end
 
 if G.jokers ~= nil then
     for _, v in ipairs(G.jokers.cards) do
-        if v.ability.name == 'Astigmatism' and not v.debuff then
+        if v.config.center.key == 'j_bunc_astigmatism' and not v.debuff then
             if self.base.suit == 'Hearts' and (self.base.suit == 'Hearts') == (suit == 'Hearts' or suit == 'bunc_Fleurons') then
                 return true
             end
