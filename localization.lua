@@ -390,7 +390,7 @@ return {
             ['name'] = 'Doorhanger',
             ['text'] = {
                 [1] = '{C:blue}Common{} Jokers do not appear',
-                [2] = '{s:0.8}different rarities appear instead'
+                [2] = '{s:0.8}Different rarities appear instead'
             }
         }
     },

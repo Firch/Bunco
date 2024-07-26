@@ -12,7 +12,7 @@
 -- (done) Polychrome desc on roy g biv
 -- (?) Debuff registration plate level with shader if possible
 -- (done) Nan morgan or make zero shapiro count letter rank cards
--- Unlocks
+-- (done/WIP) Unlocks
 -- Check whats up with joker knight
 -- (done) Add purist config
 -- (skip: waiting for steamodded) Card sizes
@@ -30,8 +30,8 @@
 -- (done) Make tarot badges use localization
 -- (done) Pawn and linocut fake suit and rank
 -- (done) Check eternal food compat
--- Reset metallurgist-like bonuses when you lose
--- Reset metallurgist-like bonuses when Joker is debuffed
+-- (done) Reset metallurgist-like bonuses when you lose
+-- (done) Reset metallurgist-like bonuses when Joker is debuffed
 -- (done) Fix the mask giving spectrum hands when they're invisible
 -- Make so enhancement-related Jokers do not appear unless player has respective enhancements
 -- (done) Custom description for the Disproportionality that isn't just Misprint 2
