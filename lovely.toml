@@ -360,15 +360,7 @@ target = 'functions/common_events.lua'
 pattern = 'card:set_edition(edition)'
 position = 'before'
 match_indent = true
-payload = '''
-
-if card.ability.name == 'JMJB' then
-    if card:get_edition() == nil then
-        edition = poll_edition('aura', nil, true, true)
-    end
-end
-
-'''
+payload = '''if card.config.center.key == 'j_bunc_jmjb' then edition = poll_edition(nil, nil, true, true) end'''
 
 # function ease_dollars() (Fiendish)
 [[patches]]
