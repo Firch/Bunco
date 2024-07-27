@@ -282,7 +282,7 @@ return {
             ['name'] = 'Loan Shark',
             ['text'] = {
                 [1] = 'Gain {C:money}$#1#{} when acquired,',
-                [2] = 'set sell price to {C:money}$-100"'
+                [2] = 'set sell price to {C:money}$-100'
             }
         }
     },

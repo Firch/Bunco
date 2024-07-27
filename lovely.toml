@@ -491,7 +491,9 @@ payload = '''
 if G.jokers ~= nil then
     for _, v in ipairs(G.jokers.cards) do
         if v.config.center.key == 'j_bunc_head_in_the_clouds' and not v.debuff then
-            v:calculate_joker({level_up_hand = hand})
+            if (amount == nil) or not (amount <= 0) then
+                v:calculate_joker({level_up_hand = hand})
+            end
         end
     end
 end
