@@ -190,6 +190,11 @@ return {
                 [1] = '{X:mult,C:white}X#1#{} Mult, {X:mult,C:white}-X#2#{} Mult for each',
                 [2] = '{C:attention}Enhanced card{} in your {C:attention}full deck{}',
                 [3] = '{C:inactive}(Currently {X:mult,C:white}X#3#{C:inactive} Mult)'
+            },
+            ['unlock'] = {
+                [1] = 'Have at least {C:attention}10',
+                [2] = '{E:1,C:attention}Enhanced{} cards in',
+                [3] = 'your deck'
             }
         }
     },

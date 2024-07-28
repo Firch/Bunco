@@ -453,7 +453,19 @@ create_joker({ -- Voxel
     vars = {{base = 3}, {bonus = 0.1}, {xmult = 3}, {tally = 0}},
     rarity = 'Uncommon', cost = 5,
     blueprint = true, eternal = true,
-    unlocked = true,
+    unlocked = false,
+    check_for_unlock = function(self, args)
+        if args.type == 'modify_deck' then
+            local count = 0
+            for _, v in pairs(G.playing_cards) do
+                if v.config.center ~= G.P_CENTERS.c_base then count = count + 1 end
+            end
+            if count >= 10 then
+                ret = true
+                unlock_card(self)
+            end
+        end
+    end,
     calculate = function(self, card, context)
         if context.joker_main then
             if card.ability.extra.xmult ~= 1 then
