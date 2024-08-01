@@ -3876,7 +3876,8 @@ SMODS.Edition{
     shader = 'fluorescent'
 }
 
--- JokerDisplay Mod Support
+-- Mod compatibility
+
 if _G["JokerDisplay"] then
-    filesystem.load(bunco.path .. "jokerdisplay_definitions.lua")()
+    filesystem.load(bunco.path..'compat/jokerdisplay.lua')()
 end
