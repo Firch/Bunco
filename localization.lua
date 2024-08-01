@@ -515,6 +515,10 @@ return {
                 [1] = '{C:chips}+#1#{} Chips,',
                 [2] = '{C:red}debuffs{} random Joker',
                 [3] = 'when {C:attention}Blind{} is selected'
+            },
+            ['unlock'] = {
+                [1] = 'Defeat {E:1,C:attention}Crimson Heart',
+                [2] = 'without disabling it'
             }
         }
     },
