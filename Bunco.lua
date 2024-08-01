@@ -1691,7 +1691,12 @@ create_joker({ -- Trigger Finger
     end,
     rarity = 'Rare', cost = 8,
     blueprint = true, eternal = true,
-    unlocked = true,
+    unlocked = false,
+    check_for_unlock = function(self, args)
+        if args.type == 'defeat_blind' and args.blind.name == 'Cerulean Bell' then
+            unlock_card(self)
+        end
+    end,
     calculate = function(self, card, context)
         if context.highlight_card and (G.STATE == G.STATES.SELECTING_HAND or G.STATE == G.STATES.DRAW_TO_HAND) then
             local cards = {}

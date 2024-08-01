@@ -601,6 +601,10 @@ return {
                 [2] = '{C:attention}selecting{} a card has',
                 [3] = 'a {C:green}#2# in #3#{} chance to',
                 [4] = 'play selected cards'
+            },
+            ['unlock'] = {
+                [1] = 'Defeat {E:1,C:attention}Cerulean Bell',
+                [2] = 'without disabling it'
             }
         }
     },
