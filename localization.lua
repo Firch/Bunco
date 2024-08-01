@@ -293,6 +293,10 @@ return {
             ['text'] = {
                 [1] = 'Gain {C:money}$#1#',
                 [2] = 'when acquired...'
+            },
+            ['unlock'] = {
+                [1] = 'Spend at least {E:1,C:attention}$100',
+                [2] = 'during a single round'
             }
         }
     },

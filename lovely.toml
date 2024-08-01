@@ -846,6 +846,7 @@ pattern = 'G.GAME.current_round.discards_left = math.max(0, G.GAME.round_resets.
 position = 'before'
 match_indent = true
 payload = '''
+
 local deck_size = 0
 
 G.GAME.last_deck_size = G.GAME.last_deck_size
@@ -879,6 +880,7 @@ pattern = 'self.HUD:recalculate()'
 position = 'after'
 match_indent = true
 payload = '''
+
 local deck_size = 0
 
 for k, v in pairs(G.playing_cards) do
@@ -889,6 +891,40 @@ G.GAME.last_deck_size = deck_size
 
 '''
 
+# Money spending unlocking (1/2)
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = 'function ease_dollars(mod, instant)'
+position = 'after'
+match_indent = true
+payload = '''
+
+G.GAME.money_spend_this_round = G.GAME.money_spend_this_round or 0
+
+if mod < 0 then
+    G.GAME.money_spend_this_round = G.GAME.money_spend_this_round - mod
+
+    local locked_card
+
+    for i = 1, #G.P_LOCKED do
+        locked_card = G.P_LOCKED[i]
+
+        if not locked_card.unlocked and locked_card.check_for_unlock and type(locked_card.check_for_unlock) == 'function' then
+            locked_card:check_for_unlock({type = 'round_spend_money', round_spend_money = G.GAME.money_spend_this_round})
+        end
+    end
+end
+'''
+
+# Money spending unlocking (2/2)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = 'G.GAME.current_round.discards_left = math.max(0, G.GAME.round_resets.discards + G.GAME.round_bonus.discards)'
+position = 'before'
+match_indent = true
+payload = '''G.GAME.money_spend_this_round = 0'''
 
 # G.FUNCS.discard_cards_from_highlighted() (The Paling 1/2)
 [[patches]]

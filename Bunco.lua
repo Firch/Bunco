@@ -794,7 +794,12 @@ create_joker({ -- Loan Shark
     end,
     rarity = 'Uncommon', cost = 3,
     blueprint = false, eternal = true,
-    unlocked = true,
+    unlocked = false,
+    check_for_unlock = function(self, args)
+        if args.type == 'round_spend_money' and args.round_spend_money >= 100 then
+            unlock_card(self)
+        end
+    end,
     add = function(self, card)
         ease_dollars(card.ability.extra.dollars)
         card:set_cost()
