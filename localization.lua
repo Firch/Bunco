@@ -350,6 +350,10 @@ return {
             ['text'] = {
                 [1] = '{C:attention}Standard Packs{} contain',
                 [2] = 'only {C:attention}Enhanced cards{}'
+            },
+            ['unlock'] = {
+                [1] = 'Open {E:1,C:attention}50',
+                [2] = 'Booster Packs'
             }
         }
     },

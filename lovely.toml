@@ -949,6 +949,31 @@ end
 
 '''
 
+# Booster pack unlocking
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''if self.ability.set == "Booster" then'''
+position = 'after'
+match_indent = true
+payload = '''
+
+G.PROFILES[G.SETTINGS.profile].booster_packs_opened = (G.PROFILES[G.SETTINGS.profile].booster_packs_opened or 0) + 1
+if G.PROFILES[G.SETTINGS.profile].booster_packs_opened then
+    local locked_card
+
+    sendDebugMessage(G.PROFILES[G.SETTINGS.profile].booster_packs_opened)
+
+    for i = 1, #G.P_LOCKED do
+        locked_card = G.P_LOCKED[i]
+
+        if not locked_card.unlocked and locked_card.check_for_unlock and type(locked_card.check_for_unlock) == 'function' then
+            locked_card:check_for_unlock({type = 'open_pack', packs_total = G.PROFILES[G.SETTINGS.profile].booster_packs_opened})
+        end
+    end
+end
+'''
+
 # G.FUNCS.discard_cards_from_highlighted() (The Paling 1/2)
 [[patches]]
 [patches.pattern]

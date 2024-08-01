@@ -915,7 +915,12 @@ create_joker({ -- JMJB
     name = 'JMJB', position = 15,
     rarity = 'Rare', cost = 5,
     blueprint = false, eternal = true,
-    unlocked = true,
+    unlocked = false,
+    check_for_unlock = function(self, args)
+        if args.type == 'open_pack' and args.packs_total >= 50 then
+            unlock_card(self)
+        end
+    end,
     purist = false,
     calculate = function(self, card, context)
         if context.open_booster and context.card.ability.name then
