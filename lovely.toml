@@ -962,8 +962,6 @@ G.PROFILES[G.SETTINGS.profile].booster_packs_opened = (G.PROFILES[G.SETTINGS.pro
 if G.PROFILES[G.SETTINGS.profile].booster_packs_opened then
     local locked_card
 
-    sendDebugMessage(G.PROFILES[G.SETTINGS.profile].booster_packs_opened)
-
     for i = 1, #G.P_LOCKED do
         locked_card = G.P_LOCKED[i]
 
