@@ -864,7 +864,12 @@ create_joker({ -- Knight
     vars = {{bonus = 6}, {mult = 0}},
     rarity = 'Uncommon', cost = 6,
     blueprint = true, eternal = true,
-    unlocked = true,
+    unlocked = false,
+    check_for_unlock = function(self, args)
+        if args.type == 'defeat_blind' and args.blind.name == 'Amber Acorn' then
+            unlock_card(self)
+        end
+    end,
     purist = false,
     calculate = function(self, card, context)
         if context.setting_blind and not card.getting_sliced and not context.blueprint then

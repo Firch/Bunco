@@ -926,6 +926,29 @@ position = 'before'
 match_indent = true
 payload = '''G.GAME.money_spend_this_round = 0'''
 
+# Blind defeat unlocking
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''function end_round()'''
+position = 'after'
+match_indent = true
+payload = '''
+
+if not G.GAME.blind.disabled then
+    local locked_card
+
+    for i = 1, #G.P_LOCKED do
+        locked_card = G.P_LOCKED[i]
+
+        if not locked_card.unlocked and locked_card.check_for_unlock and type(locked_card.check_for_unlock) == 'function' then
+            locked_card:check_for_unlock({type = 'defeat_blind', blind = G.GAME.blind})
+        end
+    end
+end
+
+'''
+
 # G.FUNCS.discard_cards_from_highlighted() (The Paling 1/2)
 [[patches]]
 [patches.pattern]

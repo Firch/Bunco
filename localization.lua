@@ -337,6 +337,10 @@ return {
                 [2] = 'and this Joker gains {C:mult}+#1#{} Mult,',
                 [3] = '{C:red}resets{} when any Joker is rearranged',
                 [4] = '{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)'
+            },
+            ['unlock'] = {
+                [1] = 'Defeat {E:1,C:attention}Amber Acorn',
+                [2] = 'without disabling it'
             }
         }
     },
