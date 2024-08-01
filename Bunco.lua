@@ -686,7 +686,16 @@ create_joker({ -- Prehistoric
     vars = {{mult = 16}, {card_list = { }}},
     rarity = 'Uncommon', cost = 5,
     blueprint = true, eternal = true,
-    unlocked = true,
+    unlocked = false,
+    check_for_unlock = function(self, args)
+        if args.type == 'hand_contents' then
+            local eval = evaluate_poker_hand(args.cards)
+            if next(eval['Flush Five']) then
+                ret = true
+                unlock_card(self)
+            end
+        end
+    end,
     calculate = function(self, card, context)
         if context.individual and context.cardarea == G.play then
             for k, v in pairs(card.ability.extra.card_list) do

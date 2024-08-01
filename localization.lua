@@ -257,6 +257,10 @@ return {
                 [2] = 'both {C:attention}rank and suit{} with an',
                 [3] = '{C:attention}already-scored card{} this round',
                 [4] = 'give {C:mult}+#1#{} Mult'
+            },
+            ['unlock'] = {
+                [1] = 'Play a',
+                [2] = '{E:1,C:attention}Flush Five'
             }
         }
     },
