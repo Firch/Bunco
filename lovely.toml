@@ -838,6 +838,57 @@ end
 
 '''
 
+# Deck size unlocking (1/2)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = 'G.GAME.current_round.discards_left = math.max(0, G.GAME.round_resets.discards + G.GAME.round_bonus.discards)'
+position = 'before'
+match_indent = true
+payload = '''
+local deck_size = 0
+
+G.GAME.last_deck_size = G.GAME.last_deck_size
+
+for k, v in pairs(G.playing_cards) do
+    deck_size = deck_size + 1
+end
+
+if G.GAME.last_deck_size ~= deck_size then
+    local locked_card
+    local difference = deck_size - G.GAME.last_deck_size
+
+    for i = 1, #G.P_LOCKED do
+        locked_card = G.P_LOCKED[i]
+
+        if not locked_card.unlocked and locked_card.check_for_unlock and type(locked_card.check_for_unlock) == 'function' then
+            locked_card:check_for_unlock({type = 'round_deck_size', round_deck_size_diff = difference})
+        end
+    end
+end
+
+G.GAME.last_deck_size = deck_size
+
+'''
+
+# Deck size unlocking (2/2)
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = 'self.HUD:recalculate()'
+position = 'after'
+match_indent = true
+payload = '''
+local deck_size = 0
+
+for k, v in pairs(G.playing_cards) do
+    deck_size = deck_size + 1
+end
+
+G.GAME.last_deck_size = deck_size
+
+'''
+
 
 # G.FUNCS.discard_cards_from_highlighted() (The Paling 1/2)
 [[patches]]

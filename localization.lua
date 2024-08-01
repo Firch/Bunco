@@ -241,6 +241,11 @@ return {
                 [2] = 'upgrade it by {C:attention}2 levels{}',
                 [3] = 'and {C:attention}destroy{} scored cards',
                 [4] = '{C:red}Lose{} all {C:attention}gained levels{} if you remove this Joker'
+            },
+            ['unlock'] = {
+                [1] = 'Reduce your deck',
+                [2] = 'by at least {E:1,C:attention}10{} cards',
+                [3] = 'in one round'
             }
         }
     },

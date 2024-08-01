@@ -609,7 +609,12 @@ create_joker({ -- Dread
     vars = {{trash_list = {}}, {level_up_list = {}}},
     rarity = 'Rare', cost = 8,
     blueprint = false, eternal = true,
-    unlocked = true,
+    unlocked = false,
+    check_for_unlock = function(self, args)
+        if args.type == 'round_deck_size' and args.round_deck_size_diff <= -10 then
+            unlock_card(self)
+        end
+    end,
     calculate = function(self, card, context)
         if not context.blueprint then
             if context.full_hand and not context.other_card then
