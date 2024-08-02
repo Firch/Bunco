@@ -518,6 +518,11 @@ return {
                 [1] = 'This Joker gains {X:mult,C:white}X#1#{} Mult',
                 [2] = 'per {C:red}debuffed{} card scored',
                 [3] = '{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)'
+            },
+            ['unlock'] = {
+                [1] = 'Play a 5 card hand',
+                [2] = 'that contains only',
+                [3] = '{C:attention,E:1}Debuffed{} cards'
             }
         }
     },

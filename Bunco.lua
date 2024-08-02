@@ -1339,7 +1339,21 @@ create_joker({ -- Neon
     vars = {{bonus = 0.2}, {xmult = 1}},
     rarity = 'Uncommon', cost = 5,
     blueprint = true, eternal = true,
-    unlocked = true,
+    unlocked = false,
+    check_for_unlock = function(self, args)
+        if args.type == 'hand_contents' then
+            local tally = 0
+            for j = 1, #args.cards do
+                if args.cards[j].debuff then
+                    tally = tally + 1
+                end
+            end
+            if tally >= 5 then
+                ret = true
+                unlock_card(self)
+            end
+        end
+    end,
     calculate = function(self, card, context)
         if context.debuffed_card then
             card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.bonus
