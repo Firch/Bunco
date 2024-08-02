@@ -1718,7 +1718,21 @@ create_joker({ -- Head in the Clouds
     end,
     rarity = 'Uncommon', cost = 6,
     blueprint = true, eternal = true,
-    unlocked = true,
+    unlocked = false,
+    check_for_unlock = function(self, args)
+        if args.type == 'win_custom' then
+            local handname, level, order = 'High Card', -1, 100
+            for k, v in pairs(G.GAME.hands) do
+                if v.level > level or (v.level == level and order > v.order) then
+                    level = v.level
+                    handname = k
+                end
+            end
+            if handname == 'High Card' and level > 0 then
+                unlock_card(self)
+            end
+        end
+    end,
     calculate = function(self, card, context)
         if context.level_up_hand and context.level_up_hand ~= self.name then
             if pseudorandom('head_in_the_clouds'..G.SEED) < G.GAME.probabilities.normal / card.ability.extra.odds then

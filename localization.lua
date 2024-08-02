@@ -626,6 +626,11 @@ return {
                 [1] = '{C:green}#1# in #2#{} chance to upgrade',
                 [2] = '{C:attention}High Card{} when you',
                 [3] = 'upgrade any {C:attention}poker hand'
+            },
+            ['unlock'] = {
+                [1] = 'Win a run with',
+                [2] = '{C:attention,E:1}High Card{} being the',
+                [3] = 'most leveled poker hand'
             }
         }
     },
