@@ -1949,7 +1949,12 @@ create_joker({ -- Vandalism
     end,
     rarity = 'Rare', cost = 6,
     blueprint = true, eternal = true,
-    unlocked = true,
+    unlocked = false,
+    check_for_unlock = function(self, args)
+        if args.type == 'play_all_flipped' then
+            unlock_card(self)
+        end
+    end,
     calculate = function(self, card, context)
         if context.stay_flipped and not context.blueprint then
             big_juice(card)

@@ -1073,6 +1073,39 @@ end
 
 '''
 
+# Flipped cards in hand unlocking
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''--check the hand first'''
+position = 'after'
+match_indent = true
+payload = '''
+
+local unlock_all_flipped = true
+
+for i = 1, #G.hand.highlighted do
+    if G.hand.highlighted[i].facing ~= 'back' then
+        unlock_all_flipped = false
+    end
+end
+
+if (not G.hand.highlighted) or (#G.hand.highlighted == 0) then unlock_all_flipped = false end
+
+if unlock_all_flipped and #G.hand.highlighted >= 5 then
+    local locked_card
+
+    for i = 1, #G.P_LOCKED do
+        locked_card = G.P_LOCKED[i]
+
+        if not locked_card.unlocked and locked_card.check_for_unlock and type(locked_card.check_for_unlock) == 'function' then
+            locked_card:check_for_unlock({type = 'play_all_flipped'})
+        end
+    end
+end
+
+'''
+
 # G.FUNCS.discard_cards_from_highlighted() (The Paling 1/2)
 [[patches]]
 [patches.pattern]

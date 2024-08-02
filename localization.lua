@@ -701,6 +701,11 @@ return {
                 [2] = 'cards to be drawn face down',
                 [3] = 'Face down cards give',
                 [4] = '{X:mult,C:white}X#3#{} Mult when scored'
+            },
+            ['unlock'] = {
+                [1] = 'Play a 5 card hand',
+                [2] = 'that contains only',
+                [3] = '{C:attention,E:1}Flipped{} cards'
             }
         }
     },
