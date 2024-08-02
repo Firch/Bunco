@@ -726,6 +726,9 @@ return {
                 [1] = '{C:attention}Copy{} first consumable',
                 [2] = 'used this round',
                 [3] = '{C:inactive}(Must have room)'
+            },
+            ['unlock'] = {
+                [1] = 'Win {C:attention,E:1}10{} runs'
             }
         }
     },

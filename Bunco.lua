@@ -2033,7 +2033,12 @@ create_joker({ -- Doodle
     vars = {{active = true}},
     rarity = 'Rare', cost = 10,
     blueprint = true, eternal = true,
-    unlocked = true,
+    unlocked = false,
+    check_for_unlock = function(self, args)
+        if args.type == 'win_custom' and (G.PROFILES[G.SETTINGS.profile].career_stats.c_wins + 1) >= 10 then
+            unlock_card(self)
+        end
+    end,
     calculate = function(self, card, context)
         if context.end_of_round then
             if not card.ability.extra.active then
