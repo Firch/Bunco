@@ -431,7 +431,6 @@ create_joker({ -- Mosaic
                 end
             end
             if tally >= 5 then 
-                ret = true
                 unlock_card(self)
             end
         end
@@ -461,7 +460,6 @@ create_joker({ -- Voxel
                 if v.config.center ~= G.P_CENTERS.c_base then count = count + 1 end
             end
             if count >= 10 then
-                ret = true
                 unlock_card(self)
             end
         end
@@ -691,7 +689,6 @@ create_joker({ -- Prehistoric
         if args.type == 'hand_contents' then
             local eval = evaluate_poker_hand(args.cards)
             if next(eval['Flush Five']) then
-                ret = true
                 unlock_card(self)
             end
         end
@@ -1086,7 +1083,6 @@ create_joker({ -- Sledgehammer
                 end
             end
             if tally >= 5 then
-                ret = true
                 unlock_card(self)
             end
         end
@@ -1317,7 +1313,6 @@ create_joker({ -- Slothful
                 end
             end
             if tally >= 5 then
-                ret = true
                 unlock_card(self)
             end
         end
@@ -1349,7 +1344,6 @@ create_joker({ -- Neon
                 end
             end
             if tally >= 5 then
-                ret = true
                 unlock_card(self)
             end
         end
