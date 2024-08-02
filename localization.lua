@@ -573,6 +573,11 @@ return {
                 [1] = '{C:attention}Stone Cards{} held in hand',
                 [2] = 'have the abilities of',
                 [3] = '{C:attention}Steel{} and {C:attention}Gold Cards'
+            },
+            ['unlock'] = {
+                [1] = 'Play a hand that',
+                [2] = 'contains {E:1,C:attention}Stone{}, {E:1,C:attention}Steel,',
+                [3] = 'and {E:1,C:attention}Gold{} cards'
             }
         }
     },

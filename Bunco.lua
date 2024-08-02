@@ -35,6 +35,7 @@
 -- (done) Fix the mask giving spectrum hands when they're invisible
 -- Make so enhancement-related Jokers do not appear unless player has respective enhancements
 -- (done) Custom description for the Disproportionality that isn't just Misprint 2
+-- Doorhanger doesn't shake when unlocked for some reason?
 
 global_bunco = global_bunco or {loc = {}, vars = {}}
 local bunco = SMODS.current_mod
@@ -1558,7 +1559,26 @@ create_joker({ -- Dwarven
     end,
     rarity = 'Uncommon', cost = 8,
     blueprint = false, eternal = true,
-    unlocked = true,
+    unlocked = false,
+    check_for_unlock = function(self, args)
+        if args.type == 'hand_contents' then
+            local stone, steel, gold = false, false, false
+            for j = 1, #args.cards do
+                if args.cards[j].config.center == G.P_CENTERS.m_stone then
+                    stone = true
+                end
+                if args.cards[j].config.center == G.P_CENTERS.m_steel then
+                    steel = true
+                end
+                if args.cards[j].config.center == G.P_CENTERS.m_gold then
+                    gold = true
+                end
+            end
+            if stone and steel and gold then
+                unlock_card(self)
+            end
+        end
+    end,
     add = function(self, card)
         for _, deck_card in pairs(G.playing_cards) do
             if deck_card.config.center == G.P_CENTERS.m_stone then
