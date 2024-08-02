@@ -950,7 +950,7 @@ end
 
 '''
 
-# Booster pack unlocking
+# Booster pack unlocking - Per profile
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
@@ -971,6 +971,29 @@ if G.PROFILES[G.SETTINGS.profile].booster_packs_opened then
         end
     end
 end
+
+'''
+
+# Booster pack unlocking - Per game (1/2)
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = 'hands_played = 0,'
+position = 'after'
+match_indent = true
+payload = '''booster_packs_opened = 0,'''
+
+# Booster pack unlocking - Per game (2/2)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''if self.ability.set == "Booster" then'''
+position = 'after'
+match_indent = true
+payload = '''
+
+G.GAME.booster_packs_opened = G.GAME.booster_packs_opened + 1
+
 '''
 
 # Ante down unlocking

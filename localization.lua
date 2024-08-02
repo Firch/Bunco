@@ -587,6 +587,11 @@ return {
             ['text'] = {
                 [1] = 'Choose an extra card',
                 [2] = 'from {C:attention}Booster Packs'
+            },
+            ['unlock'] = {
+                [1] = 'Win a run without',
+                [2] = 'ever opening',
+                [3] = '{C:attention,E:1}Booster Packs'
             }
         }
     },

@@ -1605,7 +1605,12 @@ create_joker({ -- Aristocrat
     name = 'Aristocrat', position = 33,
     rarity = 'Uncommon', cost = 6,
     blueprint = true, eternal = true,
-    unlocked = true,
+    unlocked = false,
+    check_for_unlock = function(self, args)
+        if args.type == 'win_custom' and G.GAME.booster_packs_opened == 0 then
+            unlock_card(self)
+        end
+    end,
     calculate = function(self, card, context)
         if context.open_booster and context.card.ability.name then
             event({
