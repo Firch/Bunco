@@ -1106,6 +1106,31 @@ end
 
 '''
 
+# Enhancement usage detection unlocking (1/2)
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = 'bosses_used = bosses_used,'
+position = 'after'
+match_indent = true
+payload = '''enhancements_used = false,'''
+
+# Enhancement usage detection unlocking (2/2)
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = '''if args.type == 'modify_deck' then'''
+position = 'after'
+match_indent = true
+payload = '''
+
+local enhancement_count = 0
+for _, v in pairs(G.playing_cards) do
+    if v.config.center ~= G.P_CENTERS.c_base then G.GAME.enhancements_used = true break end
+end
+
+'''
+
 # G.FUNCS.discard_cards_from_highlighted() (The Paling 1/2)
 [[patches]]
 [patches.pattern]

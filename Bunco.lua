@@ -2177,7 +2177,12 @@ create_joker({ -- Rasta
     vars = {{mult = 20}},
     rarity = 'Common', cost = 5,
     blueprint = true, eternal = true,
-    unlocked = true,
+    unlocked = false,
+    check_for_unlock = function(self, args)
+        if args.type == 'win_custom' and not G.GAME.enhancements_used then
+            unlock_card(self)
+        end
+    end,
     calculate = function(self, card, context)
         if context.joker_main then
             local enhancement = false
