@@ -533,6 +533,10 @@ return {
                 [1] = '{C:attention}Jokers{} next to this Joker',
                 [2] = 'are {C:red}debuffed{} and',
                 [3] = 'give {C:mult}+#1#{} Mult'
+            },
+            ['unlock'] = {
+                [1] = 'Defeat {E:1,C:attention}Verdant Leaf',
+                [2] = 'without disabling it'
             }
         }
     },

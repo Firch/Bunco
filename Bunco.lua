@@ -1375,7 +1375,12 @@ create_joker({ -- Gameplan
     vars = {{mult = 20}},
     rarity = 'Uncommon', cost = 5,
     blueprint = false, eternal = true,
-    unlocked = true,
+    unlocked = false,
+    check_for_unlock = function(self, args)
+        if args.type == 'defeat_blind' and args.blind.name == 'Verdant Leaf' then
+            unlock_card(self)
+        end
+    end,
     update = function(self, card)
         if G.jokers then
             for i = 1, #G.jokers.cards do
