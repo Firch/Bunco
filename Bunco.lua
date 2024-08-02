@@ -1076,7 +1076,21 @@ create_joker({ -- Sledgehammer
     vars = {{plus_xmult = 1}, {div_chance_denom = 4}},
     rarity = 'Uncommon', cost = 5,
     blueprint = false, eternal = true,
-    unlocked = true,
+    unlocked = false,
+    check_for_unlock = function(self, args)
+        if args.type == 'hand_contents' then
+            local tally = 0
+            for j = 1, #args.cards do
+                if args.cards[j].config.center == G.P_CENTERS.m_glass then
+                    tally = tally + 1
+                end
+            end
+            if tally >= 5 then
+                ret = true
+                unlock_card(self)
+            end
+        end
+    end,
     add = function(self, card)
         G.P_CENTERS.m_glass.config.Xmult = G.P_CENTERS.m_glass.config.Xmult + card.ability.extra.plus_xmult
         if #SMODS.find_card('j_bunc_sledgehammer') == 1 then

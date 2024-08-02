@@ -415,8 +415,13 @@ return {
         ['en-us'] = {
             ['name'] = 'Sledgehammer',
             ['text'] = {
-                [1] = '{C:attention}Glass Cards{} give {X:mult,C:white}+X#1#{} Mult',
+                [1] = '{C:attention}Glass Cards{} give +{X:mult,C:white}X#1#{} Mult',
                 [2] = 'but are guaranteed to break'
+            },
+            ['unlock'] = {
+                [1] = 'Play a 5 card hand',
+                [2] = 'that contains only',
+                [3] = '{C:attention,E:1}Glass{} cards'
             }
         }
     },
