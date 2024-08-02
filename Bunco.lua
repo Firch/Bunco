@@ -1109,7 +1109,12 @@ create_joker({ -- Doorhanger
     name = 'Doorhanger', position = 21,
     rarity = 'Rare', cost = 10,
     blueprint = false, eternal = true,
-    unlocked = true
+    unlocked = false,
+    check_for_unlock = function(self, args)
+        if args.type == 'win_custom' and G.GAME.max_common_jokers == 0 then
+            unlock_card(self)
+        end
+    end,
 })
 
 create_joker({ -- Fingerprints

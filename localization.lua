@@ -431,6 +431,11 @@ return {
             ['text'] = {
                 [1] = '{C:blue}Common{} Jokers do not appear',
                 [2] = '{s:0.8}Different rarities appear instead'
+            },
+            ['unlock'] = {
+                [1] = 'Win a run without',
+                [2] = 'ever having',
+                [3] = '{C:attention,E:1}Common{} Jokers'
             }
         }
     },
