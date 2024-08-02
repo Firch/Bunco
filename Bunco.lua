@@ -36,6 +36,7 @@
 -- Make so enhancement-related Jokers do not appear unless player has respective enhancements
 -- (done) Custom description for the Disproportionality that isn't just Misprint 2
 -- Doorhanger doesn't shake when unlocked for some reason?
+-- Make so unlocks actually count things
 
 global_bunco = global_bunco or {loc = {}, vars = {}}
 local bunco = SMODS.current_mod
@@ -1673,7 +1674,12 @@ create_joker({ -- Juggalo
     end,
     rarity = 'Rare', cost = 8,
     blueprint = true, eternal = true,
-    unlocked = true,
+    unlocked = false,
+    check_for_unlock = function(self, args)
+        if args.type == 'use_consumable_with_edition' and args.used_total >= 5 then
+            unlock_card(self)
+        end
+    end,
     calculate = function(self, card, context)
         if context.setting_blind then
             if G.consumeables.cards[1] then

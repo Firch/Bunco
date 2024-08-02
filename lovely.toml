@@ -1047,6 +1047,32 @@ if common_joker_tally > G.GAME.max_common_jokers then G.GAME.max_common_jokers =
 
 '''
 
+# Consumables with edition unlocking
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'local used_tarot = copier or self'
+position = 'after'
+match_indent = true
+payload = '''
+
+if used_tarot.edition then
+    G.PROFILES[G.SETTINGS.profile].consumables_with_edition_used = (G.PROFILES[G.SETTINGS.profile].consumables_with_edition_used or 0) + 1
+    if G.PROFILES[G.SETTINGS.profile].consumables_with_edition_used then
+        local locked_card
+
+        for i = 1, #G.P_LOCKED do
+            locked_card = G.P_LOCKED[i]
+
+            if not locked_card.unlocked and locked_card.check_for_unlock and type(locked_card.check_for_unlock) == 'function' then
+                locked_card:check_for_unlock({type = 'use_consumable_with_edition', used_total = G.PROFILES[G.SETTINGS.profile].consumables_with_edition_used})
+            end
+        end
+    end
+end
+
+'''
+
 # G.FUNCS.discard_cards_from_highlighted() (The Paling 1/2)
 [[patches]]
 [patches.pattern]

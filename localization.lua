@@ -612,6 +612,10 @@ return {
                 [2] = '{C:dark_edition}Polychrome{}, or {C:dark_edition}Glitter{} edition',
                 [3] = 'to a random {C:attention}consumable{}',
                 [4] = 'when {C:attention}Blind{} is selected'
+            },
+            ['unlock'] = {
+                [1] = 'Use {C:attention,E:1}5{} consumables',
+                [2] = 'with {C:attention,E:1}Editions'
             }
         }
     },
