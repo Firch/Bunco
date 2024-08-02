@@ -404,6 +404,10 @@ return {
                 [3] = 'go one Ante back, next time',
                 [4] = 'works only on a greater Ante'
                 -- TODO needs a line for whether it's active / ante it will be active
+            },
+            ['unlock'] = {
+                [1] = 'Reach Ante',
+                [2] = 'level {E:1,C:attention}0'
             }
         }
     },

@@ -1041,7 +1041,12 @@ create_joker({ -- Carnival
     vars = {{ante = -huge_number}},
     rarity = 'Rare', cost = 10,
     blueprint = false, eternal = true,
-    unlocked = true,
+    unlocked = false,
+    check_for_unlock = function(self, args)
+        if args.type == 'ante_down' and args.ante == 0 then
+            unlock_card(self)
+        end
+    end,
     purist = false,
     calculate = function(self, card, context)
         if context.end_of_round and G.GAME.blind.boss and not context.other_card and not context.blueprint then

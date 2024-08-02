@@ -915,6 +915,7 @@ if mod < 0 then
         end
     end
 end
+
 '''
 
 # Money spending unlocking (2/2)
@@ -970,6 +971,31 @@ if G.PROFILES[G.SETTINGS.profile].booster_packs_opened then
         end
     end
 end
+'''
+
+# Ante down unlocking
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = 'G.GAME.round_resets.ante = G.GAME.round_resets.ante + mod'
+position = 'after'
+match_indent = true
+payload = '''
+
+if mod < 0 then
+    G.GAME.money_spend_this_round = G.GAME.money_spend_this_round - mod
+
+    local locked_card
+
+    for i = 1, #G.P_LOCKED do
+        locked_card = G.P_LOCKED[i]
+
+        if not locked_card.unlocked and locked_card.check_for_unlock and type(locked_card.check_for_unlock) == 'function' then
+            locked_card:check_for_unlock({type = 'ante_down', ante = G.GAME.round_resets.ante})
+        end
+    end
+end
+
 '''
 
 # G.FUNCS.discard_cards_from_highlighted() (The Paling 1/2)
