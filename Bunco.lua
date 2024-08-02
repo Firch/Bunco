@@ -1307,7 +1307,21 @@ create_joker({ -- Slothful
     vars = {{mult = 9}},
     rarity = 'Uncommon', cost = 5,
     blueprint = true, eternal = true,
-    unlocked = true,
+    unlocked = false,
+    check_for_unlock = function(self, args)
+        if args.type == 'hand_contents' then
+            local tally = 0
+            for j = 1, #args.cards do
+                if args.cards[j].config.center == G.P_CENTERS.m_wild then
+                    tally = tally + 1
+                end
+            end
+            if tally >= 5 then
+                ret = true
+                unlock_card(self)
+            end
+        end
+    end,
     calculate = function(self, card, context)
         if context.individual and context.cardarea == G.play then
             if context.other_card.config.center == G.P_CENTERS.m_wild then

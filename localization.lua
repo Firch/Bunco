@@ -503,6 +503,11 @@ return {
                 [1] = 'Played {C:attention}Wild Cards',
                 [2] = 'give {C:mult}+#1#{} Mult',
                 [3] = 'when scored'
+            },
+            ['unlock'] = {
+                [1] = 'Play a 5 card hand',
+                [2] = 'that contains only',
+                [3] = '{C:attention,E:1}Wild{} cards'
             }
         }
     },
