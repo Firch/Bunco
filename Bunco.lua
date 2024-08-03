@@ -1332,6 +1332,13 @@ create_joker({ -- Slothful
             end
         end
     end,
+    custom_in_pool = function()
+        local condition = false
+        for k, v in pairs(G.playing_cards) do
+            if v.config.center == G.P_CENTERS.m_wild then condition = true break end
+        end
+        return condition
+    end,
     calculate = function(self, card, context)
         if context.individual and context.cardarea == G.play then
             if context.other_card.config.center == G.P_CENTERS.m_wild then
