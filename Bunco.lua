@@ -33,7 +33,7 @@
 -- (done) Reset metallurgist-like bonuses when you lose
 -- (done) Reset metallurgist-like bonuses when Joker is debuffed
 -- (done) Fix the mask giving spectrum hands when they're invisible
--- Make so enhancement-related Jokers do not appear unless player has respective enhancements
+-- (done) Make so enhancement-related Jokers do not appear unless player has respective enhancements
 -- (done) Custom description for the Disproportionality that isn't just Misprint 2
 -- Doorhanger doesn't shake when unlocked for some reason?
 -- Make so unlocks actually count things
@@ -441,8 +441,10 @@ create_joker({ -- Mosaic
     end,
     custom_in_pool = function()
         local condition = false
-        for k, v in pairs(G.playing_cards) do
-            if v.config.center == G.P_CENTERS.m_stone then condition = true break end
+        if G.playing_cards then
+            for k, v in pairs(G.playing_cards) do
+                if v.config.center == G.P_CENTERS.m_stone then condition = true break end
+            end
         end
         return condition
     end,
@@ -1099,8 +1101,10 @@ create_joker({ -- Sledgehammer
     end,
     custom_in_pool = function()
         local condition = false
-        for k, v in pairs(G.playing_cards) do
-            if v.config.center == G.P_CENTERS.m_glass then condition = true break end
+        if G.playing_cards then
+            for k, v in pairs(G.playing_cards) do
+                if v.config.center == G.P_CENTERS.m_glass then condition = true break end
+            end
         end
         return condition
     end,
@@ -1336,8 +1340,10 @@ create_joker({ -- Slothful
     end,
     custom_in_pool = function()
         local condition = false
-        for k, v in pairs(G.playing_cards) do
-            if v.config.center == G.P_CENTERS.m_wild then condition = true break end
+        if G.playing_cards then
+            for k, v in pairs(G.playing_cards) do
+                if v.config.center == G.P_CENTERS.m_wild then condition = true break end
+            end
         end
         return condition
     end,
@@ -1604,8 +1610,10 @@ create_joker({ -- Dwarven
     end,
     custom_in_pool = function()
         local condition = false
-        for k, v in pairs(G.playing_cards) do
-            if v.config.center == G.P_CENTERS.m_stone then condition = true break end
+        if G.playing_cards then
+            for k, v in pairs(G.playing_cards) do
+                if v.config.center == G.P_CENTERS.m_stone then condition = true break end
+            end
         end
         return condition
     end,
@@ -1676,8 +1684,10 @@ create_joker({ -- Metallurgist
     unlocked = true,
     custom_in_pool = function()
         local condition = false
-        for k, v in pairs(G.playing_cards) do
-            if v.config.center == G.P_CENTERS.m_gold then condition = true break end
+        if G.playing_cards then
+            for k, v in pairs(G.playing_cards) do
+                if v.config.center == G.P_CENTERS.m_gold then condition = true break end
+            end
         end
         return condition
     end,
@@ -1771,7 +1781,9 @@ create_joker({ -- Head in the Clouds
     end,
     custom_in_pool = function()
         local condition = false
-        if G.GAME.hands['High Card'].level > 1 then condition = true end
+        if G.GAME and G.GAME.hands then
+            if G.GAME.hands['High Card'].level > 1 then condition = true end
+        end
         return condition
     end,
     calculate = function(self, card, context)
