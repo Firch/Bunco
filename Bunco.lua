@@ -1396,7 +1396,7 @@ create_joker({ -- Gameplan
     name = 'Gameplan', position = 29,
     vars = {{mult = 20}},
     rarity = 'Uncommon', cost = 5,
-    blueprint = false, eternal = true,
+    blueprint = true, eternal = true,
     unlocked = false,
     check_for_unlock = function(self, args)
         if args.type == 'defeat_blind' and args.blind.name == 'Verdant Leaf' then
@@ -1447,7 +1447,7 @@ create_joker({ -- Conquest
     name = 'Conquest', position = 30,
     vars = {{chips = 200}, {joker = 0}},
     rarity = 'Uncommon', cost = 5,
-    blueprint = false, eternal = true,
+    blueprint = true, eternal = true,
     unlocked = false,
     check_for_unlock = function(self, args)
         if args.type == 'defeat_blind' and args.blind.name == 'Crimson Heart' then
@@ -1469,7 +1469,7 @@ create_joker({ -- Conquest
         end
     end,
     calculate = function(self, card, context)
-        if context.setting_blind then
+        if context.setting_blind and not context.blueprint then
             local my_pos = nil
             for i = 1, #G.jokers.cards do
                 if G.jokers.cards[i] == card then my_pos = i; break end
@@ -1496,7 +1496,7 @@ create_joker({ -- Conquest
                     vars = { card.ability.extra.chips }
                 },
                 chip_mod = card.ability.extra.chips,
-                card = card
+                card = context.blueprint_card or card
             }
         end
     end
