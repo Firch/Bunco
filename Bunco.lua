@@ -309,7 +309,7 @@ local function create_joker(joker)
         remove_from_deck = joker.remove,
         add_to_deck = joker.add,
         set_ability = joker.set_ability,
-        in_pool = pool,
+        in_pool = joker.custom_in_pool or pool,
 
         effect = joker.effect
         }
@@ -432,10 +432,17 @@ create_joker({ -- Mosaic
                     tally = tally + 1
                 end
             end
-            if tally >= 5 then 
+            if tally >= 5 then
                 unlock_card(self)
             end
         end
+    end,
+    custom_in_pool = function()
+        local condition = false
+        for k, v in pairs(G.playing_cards) do
+            if v.config.center == G.P_CENTERS.m_stone then condition = true break end
+        end
+        return condition
     end,
     calculate = function(self, card, context)
         if context.individual and context.cardarea == G.play then
