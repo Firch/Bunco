@@ -1095,6 +1095,13 @@ create_joker({ -- Sledgehammer
             end
         end
     end,
+    custom_in_pool = function()
+        local condition = false
+        for k, v in pairs(G.playing_cards) do
+            if v.config.center == G.P_CENTERS.m_glass then condition = true break end
+        end
+        return condition
+    end,
     add = function(self, card)
         G.P_CENTERS.m_glass.config.Xmult = G.P_CENTERS.m_glass.config.Xmult + card.ability.extra.plus_xmult
         if #SMODS.find_card('j_bunc_sledgehammer') == 1 then
