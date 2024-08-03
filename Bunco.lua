@@ -373,14 +373,15 @@ create_joker({ -- Cassette
     unlocked = true,
     calculate = function(self, card, context)
         if context.pre_discard then
+            card:flip()
+        end
 
+        if context.flip then
             if card.ability.extra.side == 'A' then
                 card.ability.extra.side = 'B'
             else
                 card.ability.extra.side = 'A'
             end
-
-            card:flip() card:flip() -- Double flip plays the animation but doesn't flip the card, awesome!
         end
 
         if context.individual and context.cardarea == G.play then

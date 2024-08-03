@@ -225,6 +225,22 @@ if (_c.set == 'Default' or _c.set == 'Enhanced') and card and card.ability and t
     localize{type = 'other', key = 'temporary_extra_chips', nodes = desc_nodes, vars = {card.ability.temporary_extra_chips}}
 end"""
 
+# function Card:flip() (Cassette)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "self.facing='back'"
+position = 'after'
+match_indent = true
+payload = '''
+
+if self.config.center.key == 'j_bunc_cassette' then
+    self:flip()
+    self:calculate_joker({flip = true})
+end
+
+'''
+
 # function CardArea:emplace() (X-Ray)
 [[patches]]
 [patches.pattern]
