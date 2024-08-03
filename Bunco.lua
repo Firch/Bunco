@@ -1672,6 +1672,13 @@ create_joker({ -- Metallurgist
     rarity = 'Common', cost = 6,
     blueprint = false, eternal = true,
     unlocked = true,
+    custom_in_pool = function()
+        local condition = false
+        for k, v in pairs(G.playing_cards) do
+            if v.config.center == G.P_CENTERS.m_gold then condition = true break end
+        end
+        return condition
+    end,
     add = function(self, card)
         for _, deck_card in pairs(G.playing_cards) do
             if deck_card.config.center == G.P_CENTERS.m_gold then
