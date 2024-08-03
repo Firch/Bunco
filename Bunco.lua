@@ -1767,6 +1767,11 @@ create_joker({ -- Head in the Clouds
             end
         end
     end,
+    custom_in_pool = function()
+        local condition = false
+        if G.GAME.hands['High Card'].level > 1 then condition = true end
+        return condition
+    end,
     calculate = function(self, card, context)
         if context.level_up_hand and context.level_up_hand ~= self.name then
             if pseudorandom('head_in_the_clouds'..G.SEED) < G.GAME.probabilities.normal / card.ability.extra.odds then
