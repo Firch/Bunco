@@ -1221,10 +1221,10 @@ create_joker({ -- Bierdeckel
     name = 'Bierdeckel', position = 25,
     vars = {{bonus = 10}},
     rarity = 'Uncommon', cost = 4,
-    blueprint = false, eternal = true,
+    blueprint = true, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
-        if (context.after or context.discard and context.other_card == context.full_hand[#context.full_hand]) and not context.blueprint then
+        if (context.after or context.discard and context.other_card == context.full_hand[#context.full_hand]) then
             local full_hand_set = {}
             if context.discard then
                 for _, c in ipairs(context.full_hand) do
@@ -1239,7 +1239,7 @@ create_joker({ -- Bierdeckel
             end
 
             -- maybe juice all held cards, that'd be fun
-            forced_message(localize('k_upgrade_ex'), card, G.C.CHIPS, true)
+            forced_message(localize('k_upgrade_ex'), context.blueprint_card or card, G.C.CHIPS, true)
         end
     end
 })
