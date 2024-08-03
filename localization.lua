@@ -972,6 +972,9 @@ return {
                 [1] = '{X:mult,C:white}X#1#{} Mult per {C:bunco_exotic}Exotic card{}',
                 [2] = 'in your {C:attention}full deck',
                 [3] = '{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)'
+            },
+            ['unlock'] = {
+                [1] = '{E:1,s:1.3}?????'
             }
         }
     },

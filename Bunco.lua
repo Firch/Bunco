@@ -279,6 +279,7 @@ local function create_joker(joker)
 
         unlocked = joker.unlocked,
         check_for_unlock = joker.check_for_unlock,
+        unlock_condition = joker.unlock_condition,
         discovered = false,
 
         blueprint_compat = joker.blueprint,
@@ -2655,7 +2656,8 @@ create_joker({ -- Rigoletto
     end,
     rarity = 'Legendary', cost = 20,
     blueprint = true, eternal = true,
-    unlocked = true,
+    unlocked = false,
+    unlock_condition = {hidden = true},
     calculate = function(self, card, context)
         if context.joker_main then
             if card.ability.extra.xmult ~= 1 then
