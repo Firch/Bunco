@@ -2381,7 +2381,7 @@ create_joker({ -- Zealous
     type = 'Exotic',
     name = 'Zealous', position = 1,
     custom_vars = function(self, info_queue, card) return {vars = {card.ability.t_mult}} end,
-    custom_config = {t_mult = 30, type = 'h_bunc_Spectrum'},
+    custom_config = {t_mult = 16, type = 'h_bunc_Spectrum'},
     rarity = 'Common', cost = 3,
     blueprint = true, eternal = true,
     unlocked = true
@@ -2400,7 +2400,7 @@ create_joker({ -- Lurid
 create_joker({ -- Envious
     type = 'Exotic',
     name = 'Envious', position = 3,
-    vars = {{s_mult = 12}, {suit = 'bunc_Fleurons'}},
+    vars = {{s_mult = 6}, {suit = 'bunc_Fleurons'}},
     rarity = 'Common', cost = 5,
     blueprint = true, eternal = true,
     unlocked = true,
@@ -2410,8 +2410,7 @@ create_joker({ -- Envious
 create_joker({ -- Proud
     type = 'Exotic',
     name = 'Proud', position = 4,
-    custom_vars = function(self, info_queue, card) return {vars = {card.ability.extra.s_mult}} end,
-    custom_config = {extra = {s_mult = 12, suit = 'bunc_Halberds'}},
+    vars = {{s_mult = 6}, {suit = 'bunc_Halberds'}},
     rarity = 'Common', cost = 5,
     blueprint = true, eternal = true,
     unlocked = true,
@@ -2448,7 +2447,7 @@ create_joker({ -- Wishalloy
 create_joker({ -- Unobtanium
     type = 'Exotic',
     name = 'Unobtanium', position = 6,
-    vars = {{chips = 100}, {mult = 12}},
+    vars = {{chips = 30}, {mult = 6}},
     rarity = 'Uncommon', cost = 7,
     blueprint = true, eternal = true,
     unlocked = true,
