@@ -3778,12 +3778,15 @@ SMODS.Back{ -- Fairy
                     end
 
                     local suits = {'bunc_FLEURON', 'bunc_HALBERD'}
+                    local cards = {}
 
                     for i = 1, self.config.amount do
                         local rank = pseudorandom_element(numbers, pseudoseed('fairy'..G.SEED))
                         local suit = pseudorandom_element(suits, pseudoseed('fairy'..G.SEED))
-                        create_playing_card({front = G.P_CARDS[suit .. '_' .. rank]}, G.deck, false, false, {G.C.BUNCO_EXOTIC})
+                        table.insert(cards, create_playing_card({front = G.P_CARDS[suit .. '_' .. rank]}, G.deck, false, false, {G.C.BUNCO_EXOTIC}))
                     end
+
+                    playing_card_joker_effects(cards)
 
                     return true
                 end)
