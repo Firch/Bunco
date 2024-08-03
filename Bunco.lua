@@ -1226,7 +1226,7 @@ create_joker({ -- Bierdeckel
     blueprint = true, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
-        if (context.after or context.discard and context.other_card == context.full_hand[#context.full_hand]) then
+        if (context.after or context.discard and context.other_card == context.full_hand[1]) then
             local full_hand_set = {}
             if context.discard then
                 for _, c in ipairs(context.full_hand) do
