@@ -1792,7 +1792,20 @@ position = 'at'
 match_indent = true
 payload = '''for i=1, #G.jokers.cards + (global_bunco and global_bunco.vars and global_bunco.vars.jokerlike_consumable_editions and #G.consumeables.cards or 0) do'''
 
-# Editions in boosters 1/5
+# Editions in boosters 1/6
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'local card = nil'
+position = 'after'
+match_indent = true
+payload = '''
+
+local consumable_edition = {rate = G.GAME.used_vouchers['v_bunc_lamination'] and 2 or 0, forced = G.GAME.used_vouchers['v_bunc_supercoating']}
+
+'''
+
+# Editions in boosters 2/6
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
@@ -1801,14 +1814,13 @@ position = 'after'
 match_indent = true
 payload = '''
 
-local edition_rate = 2
-local edition = poll_edition('standard_edition'..G.GAME.round_resets.ante, edition_rate, true, false,
+local edition = poll_edition('standard_edition'..G.GAME.round_resets.ante, consumable_edition.rate, true, consumable_edition.forced,
 {'e_holo', 'e_foil', 'e_polychrome', 'e_bunc_glitter'})
 card:set_edition(edition)
 
 '''
 
-# Editions in boosters 2/5
+# Editions in boosters 3/6
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
@@ -1817,14 +1829,13 @@ position = 'after'
 match_indent = true
 payload = '''
 
-local edition_rate = 2
-local edition = poll_edition('standard_edition'..G.GAME.round_resets.ante, edition_rate, true, false,
+local edition = poll_edition('standard_edition'..G.GAME.round_resets.ante, consumable_edition.rate, true, consumable_edition.forced,
 {'e_holo', 'e_foil', 'e_polychrome', 'e_bunc_glitter'})
 card:set_edition(edition)
 
 '''
 
-# Editions in boosters 3/5
+# Editions in boosters 4/6
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
@@ -1833,14 +1844,13 @@ position = 'after'
 match_indent = true
 payload = '''
 
-local edition_rate = 2
-local edition = poll_edition('standard_edition'..G.GAME.round_resets.ante, edition_rate, true, false,
+local edition = poll_edition('standard_edition'..G.GAME.round_resets.ante, consumable_edition.rate, true, consumable_edition.forced,
 {'e_holo', 'e_foil', 'e_polychrome', 'e_bunc_glitter'})
 card:set_edition(edition)
 
 '''
 
-# Editions in boosters 4/5
+# Editions in boosters 5/6
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
@@ -1849,14 +1859,13 @@ position = 'after'
 match_indent = true
 payload = '''
 
-local edition_rate = 2
-local edition = poll_edition('standard_edition'..G.GAME.round_resets.ante, edition_rate, true, false,
+local edition = poll_edition('standard_edition'..G.GAME.round_resets.ante, consumable_edition.rate, true, consumable_edition.forced,
 {'e_holo', 'e_foil', 'e_polychrome', 'e_bunc_glitter'})
 card:set_edition(edition)
 
 '''
 
-# Editions in boosters 5/5
+# Editions in boosters 6/6
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
@@ -1865,14 +1874,13 @@ position = 'after'
 match_indent = true
 payload = '''
 
-local edition_rate = 2
-local edition = poll_edition('standard_edition'..G.GAME.round_resets.ante, edition_rate, true, false,
+local edition = poll_edition('standard_edition'..G.GAME.round_resets.ante, consumable_edition.rate, true, consumable_edition.forced,
 {'e_holo', 'e_foil', 'e_polychrome', 'e_bunc_glitter'})
 card:set_edition(edition)
 
 '''
 
-# # Info queue for consumables 1/??? (WIP)
+# # Info queue for consumables 1/??? (Doesn't want to work because of lovely not allowing the injections here)
 # [[patches]]
 # [patches.pattern]
 # target = 'functions/common_events.lua'

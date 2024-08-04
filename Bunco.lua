@@ -35,7 +35,7 @@
 -- (done) Fix the mask giving spectrum hands when they're invisible
 -- (done) Make so enhancement-related Jokers do not appear unless player has respective enhancements
 -- (done) Custom description for the Disproportionality that isn't just Misprint 2
--- Doorhanger doesn't shake when unlocked for some reason?
+-- (lame fix) Doorhanger doesn't shake when unlocked for some reason?
 -- Make so unlocks actually count things
 
 global_bunco = global_bunco or {loc = {}, vars = {}}
@@ -4080,6 +4080,30 @@ SMODS.Edition{
     end,
 
     shader = 'fluorescent'
+}
+
+-- Vouchers
+
+SMODS.Atlas({key = 'bunco_vouchers', path = 'Vouchers/Vouchers.png', px = 71, py = 95})
+
+SMODS.Voucher{
+    key = 'lamination', loc_txt = loc.lamination,
+
+    unlocked = true,
+
+    pos = coordinate(1),
+    atlas = 'bunco_vouchers'
+}
+
+SMODS.Voucher{
+    key = 'supercoating', loc_txt = loc.supercoating,
+
+    requires = {'v_bunc_lamination'},
+
+    unlocked = true,
+
+    pos = coordinate(2),
+    atlas = 'bunco_vouchers'
 }
 
 -- Mod compatibility

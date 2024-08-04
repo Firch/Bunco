@@ -1273,5 +1273,28 @@ return {
                 [2] = 'or forced to be selected'
             }
         }
+    },
+
+    -- Vouchers
+
+    lamination = {
+        ['en-us'] = {
+            ['name'] = 'Lamination',
+            ['text'] = {
+                [1] = 'Consumables in',
+                [2] = '{C:attention}Booster Packs{} may',
+                [3] = 'appear with {C:dark_edition}Edition'
+            }
+        }
+    },
+    supercoating = {
+        ['en-us'] = {
+            ['name'] = 'Supercoating',
+            ['text'] = {
+                [1] = 'All consumables in',
+                [2] = '{C:attention}Booster Packs{} will',
+                [3] = 'appear with {C:dark_edition}Edition'
+            }
+        }
     }
 }
