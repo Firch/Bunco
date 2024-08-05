@@ -1123,6 +1123,15 @@ return {
             }
         }
     },
+    wind = {
+        ['en-us'] = {
+            ['name'] = 'The Wind',
+            ['text'] = {
+                [1] = 'Leftmost Joker',
+                [2] = 'is debuffed'
+            }
+        }
+    },
 
     -- Finishers
 

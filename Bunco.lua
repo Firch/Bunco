@@ -196,6 +196,75 @@ function Card:get_chip_bonus()
     return Card_get_chip_bonus(self) + (self.ability and type(self.ability) == 'table' and not self.debuff and self.ability.temporary_extra_chips or 0)
 end
 
+-- Miscellaneous stuff
+
+local original_game_update = Game.update
+
+function Game:update(dt)
+    if G.GAME and G.GAME.blind and G.GAME.blind.name == 'bl_bunc_wind' and G.GAME.blind.enabled and not G.GAME.blind.disabled then
+        if G.jokers then
+            for i = 1, #G.jokers.cards do
+                G.GAME.blind:debuff_card(G.jokers.cards[i])
+            end
+        end
+    end
+    original_game_update(self, dt)
+end
+
+function bunco.set_debuff(card)
+
+    -- Fluorescent edition
+    if card.edition and card.edition.bunc_fluorescent then
+        return 'prevent_debuff'
+    end
+
+    -- Joker position
+
+    local my_pos = nil
+    for i = 1, #G.jokers.cards do
+        if G.jokers.cards[i] == card then my_pos = i; break end
+    end
+
+    -- The Wind
+
+    if G.GAME.blind.name == 'bl_bunc_wind' and G.GAME.blind.enabled and not G.GAME.blind.disabled and my_pos == 1 then
+        return true
+    end
+
+    -- Gameplan
+
+    if my_pos then
+        if G.jokers.cards[my_pos - 1] and G.jokers.cards[my_pos - 1].config.center.key == 'j_bunc_gameplan' and not G.jokers.cards[my_pos - 1].debuff then return true end
+        if G.jokers.cards[my_pos + 1] and G.jokers.cards[my_pos + 1].config.center.key == 'j_bunc_gameplan' and not G.jokers.cards[my_pos + 1].debuff then return true end
+    end
+
+    -- Conquest
+
+    for i = 1, #G.jokers.cards do
+        if G.jokers.cards[i].config.center.key == 'j_bunc_conquest' then
+            if G.jokers.cards[i].ability.extra.joker ~= 0 and card == G.jokers.cards[i].ability.extra.joker then
+                return true
+            end
+        end
+    end
+
+    return false
+end
+
+local original_start_run = Game.start_run
+
+function Game:start_run(args)
+    original_start_run(self, args)
+
+    local sledgehammers = SMODS.find_card('j_bunc_sledgehammer')
+    for _, card in ipairs(sledgehammers) do
+        G.P_CENTERS.m_glass.config.Xmult = G.P_CENTERS.m_glass.config.Xmult + card.ability.extra.plus_xmult
+    end
+    if #sledgehammers >= 1 then
+        G.P_CENTERS.m_glass.config.extra = G.P_CENTERS.m_glass.config.extra / SMODS.Jokers['j_bunc_sledgehammer'].config.extra.div_chance_denom
+    end
+end
+
 -- Joker creation setup
 
 SMODS.Atlas({key = 'bunco_jokers', path = 'Jokers/Jokers.png', px = 71, py = 95})
@@ -318,53 +387,6 @@ local function create_joker(joker)
 end
 
 -- Jokers
-
-function bunco.set_debuff(card)
-    -- Fluorescent edition
-    if card.edition and card.edition.bunc_fluorescent then
-        return 'prevent_debuff'
-    end
-
-    -- Jokers
-
-    local my_pos = nil
-    for i = 1, #G.jokers.cards do
-        if G.jokers.cards[i] == card then my_pos = i; break end
-    end
-
-    -- Gameplan
-
-    if my_pos then
-        if G.jokers.cards[my_pos - 1] and G.jokers.cards[my_pos - 1].config.center.key == 'j_bunc_gameplan' and not G.jokers.cards[my_pos - 1].debuff then return true end
-        if G.jokers.cards[my_pos + 1] and G.jokers.cards[my_pos + 1].config.center.key == 'j_bunc_gameplan' and not G.jokers.cards[my_pos + 1].debuff then return true end
-    end
-
-    -- Conquest
-
-    for i = 1, #G.jokers.cards do
-        if G.jokers.cards[i].config.center.key == 'j_bunc_conquest' then
-            if G.jokers.cards[i].ability.extra.joker ~= 0 and card == G.jokers.cards[i].ability.extra.joker then
-                return true
-            end
-        end
-    end
-
-    return false
-end
-
-local original_start_run = Game.start_run
-
-function Game:start_run(args)
-    original_start_run(self, args)
-
-    local sledgehammers = SMODS.find_card('j_bunc_sledgehammer')
-    for _, card in ipairs(sledgehammers) do
-        G.P_CENTERS.m_glass.config.Xmult = G.P_CENTERS.m_glass.config.Xmult + card.ability.extra.plus_xmult
-    end
-    if #sledgehammers >= 1 then
-        G.P_CENTERS.m_glass.config.extra = G.P_CENTERS.m_glass.config.extra / SMODS.Jokers['j_bunc_sledgehammer'].config.extra.div_chance_denom
-    end
-end
 
 create_joker({ -- Cassette
     name = 'Cassette', position = 1,
@@ -3620,6 +3642,22 @@ SMODS.Blind{ -- The Cadaver
     boss_colour = HEX('a132d5'),
 
     pos = {y = 15},
+    atlas = 'bunco_blinds'
+}
+
+SMODS.Blind{ -- The Wind
+    key = 'wind', loc_txt = loc.wind,
+    boss = {min = 6},
+
+    drawn_to_hand = function(self)
+        G.GAME.blind.enabled = true
+        if G.jokers and G.jokers.cards[1] then big_juice(G.jokers.cards[1]) end
+        G.GAME.blind:wiggle()
+    end,
+
+    boss_colour = HEX('a6cdef'),
+
+    pos = {y = 16},
     atlas = 'bunco_blinds'
 }
 
