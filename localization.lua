@@ -1132,6 +1132,15 @@ return {
             }
         }
     },
+    prince = {
+        ['en-us'] = {
+            ['name'] = 'The Prince',
+            ['text'] = {
+                [1] = 'All Jokers are debuffed',
+                [2] = 'until first hand is played'
+            }
+        }
+    },
 
     -- Finishers
 

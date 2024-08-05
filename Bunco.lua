@@ -201,24 +201,29 @@ end
 local original_game_update = Game.update
 
 function Game:update(dt)
-    if G.GAME and G.GAME.blind and G.GAME.blind.name == 'bl_bunc_wind' and G.GAME.blind.enabled and not G.GAME.blind.disabled then
+
+    -- The Wind
+
+    if G.GAME and G.GAME.blind and G.GAME.blind.name == 'bl_bunc_wind' and G.GAME.blind.ready and not G.GAME.blind.disabled then
         if G.jokers then
             for i = 1, #G.jokers.cards do
                 G.GAME.blind:debuff_card(G.jokers.cards[i])
             end
         end
     end
+
     original_game_update(self, dt)
 end
 
 function bunco.set_debuff(card)
 
     -- Fluorescent edition
+
     if card.edition and card.edition.bunc_fluorescent then
         return 'prevent_debuff'
     end
 
-    -- Joker position
+    -- Card position
 
     local my_pos = nil
     for i = 1, #G.jokers.cards do
@@ -227,7 +232,13 @@ function bunco.set_debuff(card)
 
     -- The Wind
 
-    if G.GAME.blind.name == 'bl_bunc_wind' and G.GAME.blind.enabled and not G.GAME.blind.disabled and my_pos == 1 then
+    if G.GAME.blind.name == 'bl_bunc_wind' and G.GAME.blind.ready and not G.GAME.blind.disabled and my_pos == 1 then
+        return true
+    end
+
+    -- The Prince
+
+    if G.GAME.blind.name == 'bl_bunc_prince' and G.GAME.blind.ready and not G.GAME.blind.disabled and card.area == G.jokers then
         return true
     end
 
@@ -3650,14 +3661,42 @@ SMODS.Blind{ -- The Wind
     boss = {min = 6},
 
     drawn_to_hand = function(self)
-        G.GAME.blind.enabled = true
-        if G.jokers and G.jokers.cards[1] then big_juice(G.jokers.cards[1]) end
-        G.GAME.blind:wiggle()
+        if not G.GAME.blind.disabled then
+            G.GAME.blind.ready = true
+            if G.jokers and G.jokers.cards[1] then big_juice(G.jokers.cards[1]) end
+            G.GAME.blind:wiggle()
+        end
     end,
 
     boss_colour = HEX('a6cdef'),
 
     pos = {y = 16},
+    atlas = 'bunco_blinds'
+}
+
+SMODS.Blind{ -- The Prince
+    key = 'prince', loc_txt = loc.prince,
+    boss = {min = 6},
+
+    drawn_to_hand = function(self)
+        if not G.GAME.blind.disabled then
+            G.GAME.blind.ready = true
+            if G.jokers and G.jokers.cards then
+                for i = 1, #G.jokers.cards do
+                    G.GAME.blind:debuff_card(G.jokers.cards[i])
+                    big_juice(G.jokers.cards[i])
+                end
+            end
+            G.GAME.blind:wiggle()
+        end
+        if not G.GAME.blind.disabled and G.GAME.current_round.hands_played > 0 then
+            G.GAME.blind:disable()
+        end
+    end,
+
+    boss_colour = HEX('f31745'),
+
+    pos = {y = 17},
     atlas = 'bunco_blinds'
 }
 
