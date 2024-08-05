@@ -516,7 +516,7 @@ return {
             ['name'] = 'Neon Joker',
             ['text'] = {
                 [1] = 'This Joker gains {X:mult,C:white}X#1#{} Mult',
-                [2] = 'per {C:red}debuffed{} card scored',
+                [2] = 'per {C:attention}debuffed{} card scored',
                 [3] = '{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)'
             },
             ['unlock'] = {
@@ -1141,6 +1141,15 @@ return {
             }
         }
     },
+    depths = {
+        ['en-us'] = {
+            ['name'] = 'The Depths',
+            ['text'] = {
+                [1] = 'After Play, gain Eternal,',
+                [2] = 'Perishable, or Rental tag'
+            }
+        }
+    },
 
     -- Finishers
 
@@ -1267,6 +1276,33 @@ return {
             ['text'] = {
                 [1] = 'Next {C:attention}Standard Pack{} opened',
                 [2] = 'has only {C:bunco_exotic}Exotic cards'
+            }
+        }
+    },
+    eternal = {
+        ['en-us'] = {
+            ['name'] = 'Eternal Tag',
+            ['text'] = {
+                [1] = 'Next shop Joker',
+                [2] = 'will gain {C:attention}Eternal{} sticker'
+            }
+        }
+    },
+    perishable = {
+        ['en-us'] = {
+            ['name'] = 'Perishable Tag',
+            ['text'] = {
+                [1] = 'Next shop Joker',
+                [2] = 'will gain {C:attention}Perishable{} sticker'
+            }
+        }
+    },
+    rental = {
+        ['en-us'] = {
+            ['name'] = 'Rental Tag',
+            ['text'] = {
+                [1] = 'Next shop Joker',
+                [2] = 'will gain {C:attention}Perishable{} sticker'
             }
         }
     },

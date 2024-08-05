@@ -3460,6 +3460,7 @@ SMODS.Blind{ -- The Bulwark
                         end
                         G.hand.config.highlighted_limit = original_limit or 5
                         G.FUNCS.discard_cards_from_highlighted(nil, true)
+                        G.GAME.blind:wiggle()
                     end
                 return true end })
                 G.GAME.blind.triggered = true
@@ -3700,6 +3701,36 @@ SMODS.Blind{ -- The Prince
     atlas = 'bunco_blinds'
 }
 
+SMODS.Blind{ -- The Depths
+    key = 'depths', loc_txt = loc.depths,
+    boss = {min = 4},
+
+    press_play = function(self)
+        if not G.GAME.blind.disabled then
+            local stickers = {'tag_bunc_eternal', 'tag_bunc_perishable', 'tag_bunc_rental'}
+
+            add_tag(Tag(stickers[math.random(#stickers)]))
+
+            G.GAME.blind:wiggle()
+            G.GAME.blind.triggered = true
+            delay(0.7)
+        end
+    end,
+
+    in_pool = function()
+        if G.GAME.round_resets.ante < 3 or get_deck_win_stake() < 7 then
+            return false
+        else
+            return true
+        end
+    end,
+
+    boss_colour = HEX('282828'),
+
+    pos = {y = 18},
+    atlas = 'bunco_blinds'
+}
+
 -- Finishers
 
 SMODS.Blind{ -- Chartreuse Crown
@@ -3909,7 +3940,7 @@ SMODS.Tag{ -- Glitter
                 G.CONTROLLER.locks[lock] = true
 
                 context.card.temp_edition = true
-                tag:yep('+', G.C.DARK_EDITION,function()
+                tag:yep('+', G.C.DARK_EDITION, function()
                     context.card:set_edition({bunc_glitter = true}, true)
                     context.card.ability.couponed = true
                     context.card:set_cost()
@@ -3946,7 +3977,7 @@ SMODS.Tag{ -- Fluorescent
                 G.CONTROLLER.locks[lock] = true
 
                 context.card.temp_edition = true
-                tag:yep('+', G.C.DARK_EDITION,function()
+                tag:yep('+', G.C.DARK_EDITION, function()
                     context.card:set_edition({bunc_fluorescent = true}, true)
                     context.card.ability.couponed = true
                     context.card:set_cost()
@@ -4118,6 +4149,114 @@ SMODS.Tag{ -- Filigree
     atlas = 'bunco_tags',
 
     in_pool = exotic_in_pool
+}
+
+SMODS.Tag{ -- Eternal
+    key = 'eternal', loc_txt = loc.eternal,
+
+    config = {type = 'store_joker_modify'},
+    loc_vars = function(self, info_queue)
+        info_queue[#info_queue + 1] = {key = 'eternal', set = 'Other'}
+        return {}
+    end,
+
+    apply = function(tag, context)
+        if context.type == 'store_joker_modify' then
+            local applied = nil
+            if not context.card.ability.eternal and not context.card.ability.perishable and context.card.ability.set == 'Joker' then
+                local lock = tag.ID
+                G.CONTROLLER.locks[lock] = true
+                tag:yep('+', G.C.RED, function()
+                    context.card:set_eternal(true)
+                    big_juice(context.card)
+                    context.card:set_cost()
+                    G.CONTROLLER.locks[lock] = nil
+                    return true
+                end)
+                applied = true
+
+                tag.triggered = true
+            end
+            return applied
+        end
+    end,
+
+    pos = coordinate(8),
+    atlas = 'bunco_tags',
+
+    in_pool = function() return false end
+}
+
+SMODS.Tag{ -- Perishable
+    key = 'perishable', loc_txt = loc.perishable,
+
+    config = {type = 'store_joker_modify'},
+    loc_vars = function(self, info_queue)
+        info_queue[#info_queue + 1] = {key = 'perishable', set = 'Other', vars = {G.GAME.perishable_rounds or 1, G.GAME.perishable_rounds or G.GAME.perishable_rounds}}
+        return {}
+    end,
+
+    apply = function(tag, context)
+        if context.type == 'store_joker_modify' then
+            local applied = nil
+            if not context.card.ability.perishable and not context.card.ability.eternal and context.card.ability.set == 'Joker' then
+                local lock = tag.ID
+                G.CONTROLLER.locks[lock] = true
+                tag:yep('+', G.C.RED, function()
+                    context.card:set_perishable(true)
+                    big_juice(context.card)
+                    context.card:set_cost()
+                    G.CONTROLLER.locks[lock] = nil
+                    return true
+                end)
+                applied = true
+
+                tag.triggered = true
+            end
+            return applied
+        end
+    end,
+
+    pos = coordinate(9),
+    atlas = 'bunco_tags',
+
+    in_pool = function() return false end
+}
+
+SMODS.Tag{ -- Rental
+    key = 'rental', loc_txt = loc.rental,
+
+    config = {type = 'store_joker_modify'},
+    loc_vars = function(self, info_queue)
+        info_queue[#info_queue+1] = {key = 'rental', set = 'Other', vars = {G.GAME.rental_rate or 1}}
+        return {}
+    end,
+
+    apply = function(tag, context)
+        if context.type == 'store_joker_modify' then
+            local applied = nil
+            if not context.card.ability.rental and context.card.ability.set == 'Joker' then
+                local lock = tag.ID
+                G.CONTROLLER.locks[lock] = true
+                tag:yep('+', G.C.RED, function()
+                    context.card:set_rental(true)
+                    big_juice(context.card)
+                    context.card:set_cost()
+                    G.CONTROLLER.locks[lock] = nil
+                    return true
+                end)
+                applied = true
+
+                tag.triggered = true
+            end
+            return applied
+        end
+    end,
+
+    pos = coordinate(10),
+    atlas = 'bunco_tags',
+
+    in_pool = function() return false end
 }
 
 -- Editions
