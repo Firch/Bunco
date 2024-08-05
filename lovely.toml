@@ -1816,7 +1816,9 @@ payload = '''
 
 local edition = poll_edition('standard_edition'..G.GAME.round_resets.ante, consumable_edition.rate, true, consumable_edition.forced,
 {'e_holo', 'e_foil', 'e_polychrome', 'e_bunc_glitter'})
-card:set_edition(edition)
+if not card.edition then
+    card:set_edition(edition)
+end
 
 '''
 
@@ -1831,7 +1833,9 @@ payload = '''
 
 local edition = poll_edition('standard_edition'..G.GAME.round_resets.ante, consumable_edition.rate, true, consumable_edition.forced,
 {'e_holo', 'e_foil', 'e_polychrome', 'e_bunc_glitter'})
-card:set_edition(edition)
+if not card.edition then
+    card:set_edition(edition)
+end
 
 '''
 
@@ -1846,7 +1850,9 @@ payload = '''
 
 local edition = poll_edition('standard_edition'..G.GAME.round_resets.ante, consumable_edition.rate, true, consumable_edition.forced,
 {'e_holo', 'e_foil', 'e_polychrome', 'e_bunc_glitter'})
-card:set_edition(edition)
+if not card.edition then
+    card:set_edition(edition)
+end
 
 '''
 
@@ -1861,7 +1867,9 @@ payload = '''
 
 local edition = poll_edition('standard_edition'..G.GAME.round_resets.ante, consumable_edition.rate, true, consumable_edition.forced,
 {'e_holo', 'e_foil', 'e_polychrome', 'e_bunc_glitter'})
-card:set_edition(edition)
+if not card.edition then
+    card:set_edition(edition)
+end
 
 '''
 
@@ -1876,7 +1884,9 @@ payload = '''
 
 local edition = poll_edition('standard_edition'..G.GAME.round_resets.ante, consumable_edition.rate, true, consumable_edition.forced,
 {'e_holo', 'e_foil', 'e_polychrome', 'e_bunc_glitter'})
-card:set_edition(edition)
+if not card.edition then
+    card:set_edition(edition)
+end
 
 '''
 
