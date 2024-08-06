@@ -1370,6 +1370,11 @@ return {
             ['text'] = {
                 [1] = 'All required scores',
                 [2] = 'reduced by {C:attention}#1#%{}'
+            },
+            ['unlock'] = {
+                [1] = "Reduce blind's score using",
+                [2] = 'Hedge Trimmer',
+                [3] = 'a total of {C:attention,E:1}20{} times'
             }
         }
     }

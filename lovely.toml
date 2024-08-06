@@ -2055,6 +2055,18 @@ if G.GAME.used_vouchers['v_bunc_hedge_trimmer'] then
             return true
         end
     end}))
+
+    G.PROFILES[G.SETTINGS.profile].hedge_trimmer_usage = (G.PROFILES[G.SETTINGS.profile].hedge_trimmer_usage or 0) + 1
+
+    local locked_card
+
+    for i = 1, #G.P_LOCKED do
+        locked_card = G.P_LOCKED[i]
+
+        if not locked_card.unlocked and locked_card.check_for_unlock and type(locked_card.check_for_unlock) == 'function' then
+            locked_card:check_for_unlock({type = 'hedge_trimmer_used', used_total = G.PROFILES[G.SETTINGS.profile].hedge_trimmer_usage})
+        end
+    end
 end
 
 '''

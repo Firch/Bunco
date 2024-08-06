@@ -4356,7 +4356,13 @@ SMODS.Voucher{ -- Chainsaw
         G.GAME.starting_params.ante_scaling = (G.GAME.starting_params.ante_scaling / 100) * (100 - self.config.percent)
     end,
 
-    unlocked = true,
+    unlocked = false,
+
+    check_for_unlock = function(self, args)
+        if args.type == 'hedge_trimmer_used' and args.used_total >= 20 then
+            unlock_card(self)
+        end
+    end,
 
     pos = coordinate(4),
     atlas = 'bunco_vouchers'
