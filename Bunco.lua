@@ -3662,7 +3662,7 @@ SMODS.Blind{ -- The Wind
     boss = {min = 6},
 
     drawn_to_hand = function(self)
-        if not G.GAME.blind.disabled then
+        if not G.GAME.blind.disabled and G.GAME.current_round.hands_played == 0 and G.GAME.current_round.discards_used == 0 then
             G.GAME.blind.ready = true
             if G.jokers and G.jokers.cards[1] then big_juice(G.jokers.cards[1]) end
             G.GAME.blind:wiggle()
@@ -3680,7 +3680,7 @@ SMODS.Blind{ -- The Prince
     boss = {min = 6},
 
     drawn_to_hand = function(self)
-        if not G.GAME.blind.disabled then
+        if not G.GAME.blind.disabled and G.GAME.current_round.hands_played == 0 and G.GAME.current_round.discards_used == 0 then
             G.GAME.blind.ready = true
             if G.jokers and G.jokers.cards then
                 for i = 1, #G.jokers.cards do
