@@ -2033,8 +2033,28 @@ match_indent = true
 payload = '''
 
 if G.GAME.used_vouchers['v_bunc_hedge_trimmer'] then
-    G.GAME.blind.chips = (G.GAME.blind.chips / 100) * (100 - SMODS.Centers['v_bunc_hedge_trimmer'].config.percent)
-    G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+    local final_chips = (G.GAME.blind.chips / 100) * (100 - SMODS.Centers['v_bunc_hedge_trimmer'].config.percent)
+    local chip_mod -- iterate over ~120 ticks
+    if type(G.GAME.blind.chips) ~= 'table' then
+        chip_mod = math.ceil((G.GAME.blind.chips - final_chips) / 120)
+    else
+        chip_mod = ((G.GAME.blind.chips - final_chips) / 120):ceil()
+    end
+    local step = 0
+    G.E_MANAGER:add_event(Event({trigger = 'after', blocking = true, func = function()
+        G.GAME.blind.chips = G.GAME.blind.chips - G.SETTINGS.GAMESPEED * chip_mod
+        if G.GAME.blind.chips > final_chips then
+            G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+            if step % 5 == 0 then
+                play_sound('chips1', 1.0 - (step * 0.005))
+            end
+            step = step + 1
+        else
+            G.GAME.blind.chips = final_chips
+            G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+            return true
+        end
+    end}))
 end
 
 '''
