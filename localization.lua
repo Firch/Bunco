@@ -1350,5 +1350,23 @@ return {
                 [3] = 'appear with {C:dark_edition}Edition'
             }
         }
+    },
+    hedge_trimmer = {
+        ['en-us'] = {
+            ['name'] = 'Hedge Trimmer',
+            ['text'] = {
+                [1] = "Reduce blind's score",
+                [2] = 'by {C:attention}#1#%{} every hand played'
+            }
+        }
+    },
+    chainsaw = {
+        ['en-us'] = {
+            ['name'] = 'Chainsaw',
+            ['text'] = {
+                [1] = 'All required scores',
+                [2] = 'reduced by {C:attention}#1#%{}'
+            }
+        }
     }
 }

@@ -4302,7 +4302,7 @@ SMODS.Edition{
 
 SMODS.Atlas({key = 'bunco_vouchers', path = 'Vouchers/Vouchers.png', px = 71, py = 95})
 
-SMODS.Voucher{
+SMODS.Voucher{ -- Lamination
     key = 'lamination', loc_txt = loc.lamination,
 
     unlocked = true,
@@ -4311,7 +4311,7 @@ SMODS.Voucher{
     atlas = 'bunco_vouchers'
 }
 
-SMODS.Voucher{
+SMODS.Voucher{ -- Supercoating
     key = 'supercoating', loc_txt = loc.supercoating,
 
     requires = {'v_bunc_lamination'},
@@ -4319,6 +4319,40 @@ SMODS.Voucher{
     unlocked = true,
 
     pos = coordinate(2),
+    atlas = 'bunco_vouchers'
+}
+
+SMODS.Voucher{ -- Hedge Trimmer
+    key = 'hedge_trimmer', loc_txt = loc.hedge_trimmer,
+
+    config = {percent = 5},
+    loc_vars = function(self, info_queue)
+        return {vars = {self.config.percent}}
+    end,
+
+    unlocked = true,
+
+    pos = coordinate(3),
+    atlas = 'bunco_vouchers'
+}
+
+SMODS.Voucher{ -- Chainsaw
+    key = 'chainsaw', loc_txt = loc.chainsaw,
+
+    config = {percent = 10},
+    loc_vars = function(self, info_queue)
+        return {vars = {self.config.percent}}
+    end,
+
+    requires = {'v_bunc_hedge_trimmer'},
+
+    redeem = function()
+        G.GAME.starting_params.ante_scaling = (G.GAME.starting_params.ante_scaling / 100) * (100 - self.config.percent)
+    end,
+
+    unlocked = true,
+
+    pos = coordinate(4),
     atlas = 'bunco_vouchers'
 }
 

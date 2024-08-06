@@ -2022,3 +2022,19 @@ if self.edition and self.edition.bunc_fluorescent then
 end
 
 '''
+
+# function Blind:press_play() (Hedge Trimmer)
+[[patches]]
+[patches.pattern]
+target = 'blind.lua'
+pattern = 'function Blind:press_play()'
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.GAME.used_vouchers['v_bunc_hedge_trimmer'] then
+    G.GAME.blind.chips = (G.GAME.blind.chips / 100) * (100 - SMODS.Centers['v_bunc_hedge_trimmer'].config.percent)
+    G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+end
+
+'''
