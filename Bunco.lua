@@ -4339,14 +4339,14 @@ SMODS.Voucher{ -- Hedge Trimmer
 SMODS.Voucher{ -- Chainsaw
     key = 'chainsaw', loc_txt = loc.chainsaw,
 
-    config = {percent = 10},
+    config = {percent = 20},
     loc_vars = function(self, info_queue)
         return {vars = {self.config.percent}}
     end,
 
     requires = {'v_bunc_hedge_trimmer'},
 
-    redeem = function()
+    redeem = function(self)
         G.GAME.starting_params.ante_scaling = (G.GAME.starting_params.ante_scaling / 100) * (100 - self.config.percent)
     end,
 
