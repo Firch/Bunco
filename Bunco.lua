@@ -3725,7 +3725,7 @@ SMODS.Blind{ -- The Depths
         end
     end,
 
-    boss_colour = HEX('282828'),
+    boss_colour = HEX('3f3f3f'),
 
     pos = {y = 18},
     atlas = 'bunco_blinds'
