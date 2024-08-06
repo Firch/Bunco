@@ -614,7 +614,7 @@ return {
                 [4] = 'when {C:attention}Blind{} is selected'
             },
             ['unlock'] = {
-                [1] = 'Use {C:attention,E:1}5{} consumables',
+                [1] = 'Use {C:attention,E:1}10{} consumables',
                 [2] = 'with {C:attention,E:1}Editions'
             }
         }
@@ -1348,6 +1348,10 @@ return {
                 [1] = 'All consumables in',
                 [2] = '{C:attention}Booster Packs{} will',
                 [3] = 'appear with {C:dark_edition}Edition'
+            },
+            ['unlock'] = {
+                [1] = 'Use {C:attention,E:1}5{} consumables',
+                [2] = 'with {C:attention,E:1}Editions'
             }
         }
     },

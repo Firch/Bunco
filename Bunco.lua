@@ -1755,7 +1755,7 @@ create_joker({ -- Juggalo
     blueprint = true, eternal = true,
     unlocked = false,
     check_for_unlock = function(self, args)
-        if args.type == 'use_consumable_with_edition' and args.used_total >= 5 then
+        if args.type == 'use_consumable_with_edition' and args.used_total >= 10 then
             unlock_card(self)
         end
     end,
@@ -4316,7 +4316,13 @@ SMODS.Voucher{ -- Supercoating
 
     requires = {'v_bunc_lamination'},
 
-    unlocked = true,
+    unlocked = false,
+
+    check_for_unlock = function(self, args)
+        if args.type == 'use_consumable_with_edition' and args.used_total >= 5 then
+            unlock_card(self)
+        end
+    end,
 
     pos = coordinate(2),
     atlas = 'bunco_vouchers'
