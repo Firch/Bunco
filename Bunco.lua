@@ -777,7 +777,7 @@ create_joker({ -- Linocut
     blueprint = false, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
-        if context.after and context.scoring_hand ~= nil and #context.scoring_hand == 2 and not context.blueprint then
+        if context.after and context.scoring_hand and #context.scoring_hand == 2 and not context.blueprint then
             if context.poker_hands and next(context.poker_hands['Pair']) then
                 event({trigger = 'after', delay = 0.15, func = function() context.scoring_hand[1]:flip(); play_sound('card1', 1); context.scoring_hand[1]:juice_up(0.3, 0.3); return true end })
                 event({trigger = 'after', delay = 0.1,  func = function() context.scoring_hand[1]:change_suit(context.scoring_hand[2].config.card.suit); return true end })
@@ -1005,7 +1005,7 @@ create_joker({ -- Dogs Playing Poker
 
             local condition = true
 
-            if context.scoring_hand ~= nil then
+            if context.scoring_hand then
                 for i = 1, #context.scoring_hand do
                     if (context.scoring_hand[i]:get_id() >= 6 or
                     context.scoring_hand[i]:get_id() < 2) and
@@ -1041,7 +1041,7 @@ create_joker({ -- Righthook
         end
     end,
     calculate = function(self, card, context)
-        if context.repetition and context.cardarea == G.play and context.scoring_hand ~= nil and context.other_card == context.scoring_hand[#context.scoring_hand] then
+        if context.repetition and context.cardarea == G.play and context.scoring_hand and context.other_card == context.scoring_hand[#context.scoring_hand] then
 
             local repetitions = G.GAME.current_round.hands_left
 
@@ -1174,7 +1174,7 @@ create_joker({ -- Fingerprints
     blueprint = false, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
-        if context.after and context.scoring_name ~= nil and context.scoring_hand ~= nil and not context.blueprint then
+        if context.after and context.scoring_name ~= nil and context.scoring_hand and not context.blueprint then
             card.ability.extra.scoring_card_set = {}
             for i = 1, #context.scoring_hand do
                 card.ability.extra.scoring_card_set[context.scoring_hand[i].unique_val] = true
@@ -1936,7 +1936,7 @@ create_joker({ -- Pawn
     blueprint = false, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
-        if context.after and context.scoring_hand ~= nil and not context.blueprint then
+        if context.after and context.scoring_hand and not context.blueprint then
             for i = 1, #context.scoring_hand do
                 local condition = false
                 local other_card = context.scoring_hand[i]
@@ -2270,7 +2270,7 @@ create_joker({ -- Rasta
         end
     end,
     calculate = function(self, card, context)
-        if context.joker_main then
+        if context.joker_main and context.scoring_hand then
             local enhancement = false
             for i = 1, #context.scoring_hand do
                 if context.scoring_hand[i].config.center ~= G.P_CENTERS.c_base then
@@ -2286,6 +2286,17 @@ create_joker({ -- Rasta
                 mult_mod = card.ability.extra.mult,
                 card = card
             } end
+        end
+        if context.joker_main and not context.scoring_hand then
+            return {
+                message = localize {
+                    type = 'variable',
+                    key = 'a_mult',
+                    vars = { card.ability.extra.mult }
+                },
+                mult_mod = card.ability.extra.mult,
+                card = card
+            }
         end
     end
 })
@@ -2611,7 +2622,7 @@ create_joker({ -- Fondue
     blueprint = false, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
-        if context.after and G.GAME.current_round.hands_played == 0 and not context.blueprint then
+        if context.after and G.GAME.current_round.hands_played == 0 and context.scoring_hand and not context.blueprint then
             enable_exotics()
 
             for i = 1, #context.scoring_hand do
@@ -2667,7 +2678,7 @@ create_joker({ -- ROYGBIV
     blueprint = true, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
-        if context.before and context.poker_hands ~= nil and next(context.poker_hands['h_bunc_Spectrum']) and not context.blueprint then
+        if context.before and context.poker_hands ~= nil and next(context.poker_hands['h_bunc_Spectrum']) and context.scoring_hand and not context.blueprint then
             if pseudorandom('roygbiv'..G.SEED) < G.GAME.probabilities.normal / card.ability.extra.odds then
                 if context.scoring_hand then
 
