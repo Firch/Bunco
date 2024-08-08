@@ -2439,7 +2439,7 @@ create_joker({ -- Zealous
     type = 'Exotic',
     name = 'Zealous', position = 1,
     custom_vars = function(self, info_queue, card) return {vars = {card.ability.t_mult}} end,
-    custom_config = {t_mult = 16, type = 'h_bunc_Spectrum'},
+    custom_config = {t_mult = 16, type = 'bunc_Spectrum'},
     rarity = 'Common', cost = 3,
     blueprint = true, eternal = true,
     unlocked = true
@@ -2449,7 +2449,7 @@ create_joker({ -- Lurid
     type = 'Exotic',
     name = 'Lurid', position = 2,
     custom_vars = function(self, info_queue, card) return {vars = {card.ability.t_chips}} end,
-    custom_config = {t_chips = 120, type = 'h_bunc_Spectrum'},
+    custom_config = {t_chips = 120, type = 'bunc_Spectrum'},
     rarity = 'Common', cost = 3,
     blueprint = true, eternal = true,
     unlocked = true
@@ -2529,7 +2529,7 @@ create_joker({ -- Dynasty
     type = 'Exotic',
     name = 'Dynasty', position = 7,
     custom_vars = function(self, info_queue, card) return {vars = {card.ability.x_mult}} end,
-    custom_config = {Xmult = 5, type = 'h_bunc_Spectrum'},
+    custom_config = {Xmult = 5, type = 'bunc_Spectrum'},
     rarity = 'Rare', cost = 8,
     blueprint = true, eternal = true,
     unlocked = true
@@ -2543,9 +2543,9 @@ create_joker({ -- Magic Wand
     blueprint = true, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
-        if context.before and context.poker_hands ~= nil and next(context.poker_hands['h_bunc_Spectrum']) and not context.blueprint then
+        if context.before and context.poker_hands ~= nil and next(context.poker_hands['bunc_Spectrum']) and not context.blueprint then
             card.ability.extra.xmult = card.ability.extra.xmult + 0.3
-        elseif context.after and context.poker_hands ~= nil and not next(context.poker_hands['h_bunc_Spectrum']) and not context.blueprint then
+        elseif context.after and context.poker_hands ~= nil and not next(context.poker_hands['bunc_Spectrum']) and not context.blueprint then
             if card.ability.extra.xmult ~= 1 then
                 card.ability.extra.xmult = 1
 
@@ -2586,7 +2586,7 @@ create_joker({ -- Starfruit
     blueprint = false, eternal = false,
     unlocked = true,
     calculate = function(self, card, context)
-        if context.before and context.poker_hands ~= nil and next(context.poker_hands['h_bunc_Spectrum']) and not context.blueprint then
+        if context.before and context.poker_hands ~= nil and next(context.poker_hands['bunc_Spectrum']) and not context.blueprint then
             if pseudorandom('starfruit'..G.SEED) < G.GAME.probabilities.normal / card.ability.extra.level_odds then
 
                 forced_message(localize('k_level_up_ex'), card, G.C.RED, true)
@@ -2678,7 +2678,7 @@ create_joker({ -- ROYGBIV
     blueprint = true, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
-        if context.before and context.poker_hands ~= nil and next(context.poker_hands['h_bunc_Spectrum']) and context.scoring_hand and not context.blueprint then
+        if context.before and context.poker_hands ~= nil and next(context.poker_hands['bunc_Spectrum']) and context.scoring_hand and not context.blueprint then
             if pseudorandom('roygbiv'..G.SEED) < G.GAME.probabilities.normal / card.ability.extra.odds then
                 if context.scoring_hand then
 
@@ -2841,7 +2841,7 @@ SMODS.Consumable{ -- Quaoar
         badges[1] = create_badge('Planet?', get_type_colour(self or card.config, card), nil, 1.2)
     end,
 
-    config = {hand_type = 'h_bunc_Spectrum', softlock = true},
+    config = {hand_type = 'bunc_Spectrum', softlock = true},
     pos = coordinate(1),
 
     generate_ui = 0,
@@ -2859,7 +2859,7 @@ SMODS.Consumable{ -- Haumea
         badges[1] = create_badge('Planet?', get_type_colour(self or card.config, card), nil, 1.2)
     end,
 
-    config = {hand_type = 'h_bunc_Straight Spectrum', softlock = true},
+    config = {hand_type = 'bunc_Straight Spectrum', softlock = true},
     pos = coordinate(2),
 
     generate_ui = 0,
@@ -2877,7 +2877,7 @@ SMODS.Consumable{ -- Sedna
         badges[1] = create_badge('Planet?', get_type_colour(self or card.config, card), nil, 1.2)
     end,
 
-    config = {hand_type = 'h_bunc_Spectrum House', softlock = true},
+    config = {hand_type = 'bunc_Spectrum House', softlock = true},
     pos = coordinate(3),
 
     generate_ui = 0,
@@ -2895,7 +2895,7 @@ SMODS.Consumable{ -- Makemake
         badges[1] = create_badge('Planet?', get_type_colour(self or card.config, card), nil, 1.2)
     end,
 
-    config = {hand_type = 'h_bunc_Spectrum Five', softlock = true},
+    config = {hand_type = 'bunc_Spectrum Five', softlock = true},
     pos = coordinate(4),
 
     generate_ui = 0,
@@ -3056,7 +3056,6 @@ SMODS.PokerHandPart{ -- Spectrum base (Referenced from SixSuits)
         return (num_suits >= 5) and {hand} or {}
     end
 }
-
 
 SMODS.PokerHand{ -- Spectrum (Referenced from SixSuits)
     key = 'Spectrum',
