@@ -3023,23 +3023,9 @@ end
 
 -- Poker hands
 
-SMODS.PokerHand{ -- Spectrum (Referenced from SixSuits)
-    key = 'Spectrum',
-    above_hand = 'Full House',
-    visible = false,
-    chips = 50,
-    mult = 6,
-    l_chips = 25,
-    l_mult = 3,
-    example = {
-        { 'S_2',    true },
-        { 'D_7',    true },
-        { 'C_3', true },
-        { 'bunc_FLEURON_5', true },
-        { 'D_K',    true },
-    },
-    loc_txt = loc.spectrum,
-    atomic_part = function(hand)
+SMODS.PokerHandPart{ -- Spectrum base (Referenced from SixSuits)
+    key = 'spectrum',
+    func = function(hand)
         local suits = {}
         for _, v in ipairs(SMODS.Suit.obj_buffer) do
             suits[v] = 0
@@ -3067,13 +3053,33 @@ SMODS.PokerHand{ -- Spectrum (Referenced from SixSuits)
         for _, v in pairs(suits) do
             if v > 0 then num_suits = num_suits + 1 end
         end
-        return (num_suits >= 5) and { hand } or {}
+        return (num_suits >= 5) and {hand} or {}
+    end
+}
+
+
+SMODS.PokerHand{ -- Spectrum (Referenced from SixSuits)
+    key = 'Spectrum',
+    visible = false,
+    chips = 50,
+    mult = 6,
+    l_chips = 25,
+    l_mult = 3,
+    example = {
+        { 'S_2',    true },
+        { 'D_7',    true },
+        { 'C_3', true },
+        { 'bunc_FLEURON_5', true },
+        { 'D_K',    true },
+    },
+    loc_txt = loc.spectrum,
+    evaluate = function(parts)
+        return parts.bunc_spectrum
     end
 }
 
 SMODS.PokerHand{ -- Straight Spectrum (Referenced from SixSuits)
     key = 'Straight Spectrum',
-    above_hand = 'Straight Flush',
     visible = false,
     chips = 120,
     mult = 10,
@@ -3091,24 +3097,9 @@ SMODS.PokerHand{ -- Straight Spectrum (Referenced from SixSuits)
         SMODS.PokerHand.process_loc_text(self)
         SMODS.process_loc_text(G.localization.misc.poker_hands, self.key..'_2', self.loc_txt, 'extra')
     end,
-    composite = function(parts)
-        local str, spec = parts._straight, parts['h_bunc_Spectrum']
-        local ret = {}
-        if next(str) and next(spec) then
-            local hand = {}
-            for _, v in ipairs(spec[1]) do
-                hand[#hand + 1] = v
-            end
-            for _, v in ipairs(str[1]) do
-                local in_straight = nil
-                for _, vv in ipairs(spec[1]) do
-                    if vv == v then in_straight = true end
-                end
-                if not in_straight then hand[#hand + 1] = v end
-            end
-            table.insert(ret, hand)
-        end
-        return ret
+    evaluate = function(parts)
+        if not next(parts.bunc_spectrum) or not next(parts._straight) then return {} end
+        return { SMODS.merge_lists (parts.bunc_spectrum, parts._straight) }
     end,
     modify_display_text = function(self, _cards, scoring_hand)
         local royal = true
@@ -3138,21 +3129,9 @@ SMODS.PokerHand{ -- Spectrum House (Referenced from SixSuits)
         { 'H_8',    true }
     },
     loc_txt = loc.spectrum_house,
-    composite = function(parts)
-        local ret = {}
-        if next(parts._3) and next(parts._2) and next(parts['h_bunc_Spectrum']) then
-            local fh_hand = {}
-            local fh_3 = parts._3[1]
-            local fh_2 = parts._2[1]
-            for i = 1, #fh_3 do
-                fh_hand[#fh_hand + 1] = fh_3[i]
-            end
-            for i = 1, #fh_2 do
-                fh_hand[#fh_hand + 1] = fh_2[i]
-            end
-            table.insert(ret, fh_hand)
-        end
-        return ret
+    evaluate = function(parts)
+        if #parts._3 < 1 or #parts._2 < 2 or not next(parts.bunc_spectrum) then return {} end
+        return {SMODS.merge_lists (parts._all_pairs, parts.bunc_spectrum)}
     end
 }
 
@@ -3172,26 +3151,15 @@ SMODS.PokerHand{ -- Spectrum Five (Referenced from SixSuits)
         { 'C_7',    true }
     },
     loc_txt = loc.spectrum_five,
-    composite = function(parts)
-        local ret = {}
-        if next(parts._5) and next(parts['h_bunc_Spectrum']) then
-            ret = parts._5
-        end
-        return ret
+    evaluate = function(parts)
+        if not next(parts._5) or not next(parts.bunc_spectrum) then return {} end
+        return {SMODS.merge_lists (parts._5, parts.bunc_spectrum)}
     end
 }
 
-SMODS.PokerHand{ -- Deal
-    key = 'Deal',
-    above_hand = 'Flush Five',
-    visible = false,
-    chips = 0,
-    mult = 0,
-    l_chips = 0,
-    l_mult = 0,
-    example = {},
-    loc_txt = loc.deal,
-    atomic_part = function(hand)
+SMODS.PokerHandPart{ -- Deal base
+    key = 'deal',
+    func = function(hand)
         local current_ranks = {}
         local deals = {}
         for i = 1, #hand do
@@ -3243,7 +3211,7 @@ SMODS.PokerHand{ -- Deal
             end
 
             if equal then
-                local self = G.GAME.hands['h_bunc_Deal']
+                local self = G.GAME.hands['bunc_Deal']
 
                 self.chips = 0
                 self.mult = 0
@@ -3259,6 +3227,21 @@ SMODS.PokerHand{ -- Deal
             end
         end
         return {}
+    end
+}
+
+SMODS.PokerHand{ -- Deal
+    key = 'Deal',
+    above_hand = 'Flush Five',
+    visible = false,
+    chips = 0,
+    mult = 0,
+    l_chips = 0,
+    l_mult = 0,
+    example = {},
+    loc_txt = loc.deal,
+    evaluate = function(parts)
+        return parts.bunc_deal
     end
 }
 
