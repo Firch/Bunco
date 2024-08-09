@@ -2141,7 +2141,7 @@ UIBox_button({label = {localize('k_reroll')}, minh = 0.6, minw = 1.8, r = 0.15, 
 
 '''
 
-# Shell Game (2/)
+# Shell Game (2/9)
 [[patches]]
 [patches.pattern]
 target = 'functions/button_callbacks.lua'
@@ -2151,8 +2151,8 @@ match_indent = true
 payload = '''
 
 G.FUNCS.reroll_booster_pack_button = function(e)
-    if not G.GAME.rerolled_pack and G.GAME.used_vouchers['v_bunc_shell_game'] and G.pack_cards and
-    G.STATE == G.STATES.SMODS_BOOSTER_OPENED or (G.STATE == G.STATES.PLANET_PACK or G.STATE == G.STATES.STANDARD_PACK or G.STATE == G.STATES.BUFFOON_PACK or (G.hand and (G.hand.cards[1] or (G.hand.config.card_limit <= 0)))) then
+    if (not G.GAME.rerolled_pack) and G.GAME.used_vouchers['v_bunc_shell_game'] and (G.pack_cards and
+    G.STATE == G.STATES.SMODS_BOOSTER_OPENED or (G.STATE == G.STATES.PLANET_PACK or G.STATE == G.STATES.STANDARD_PACK or G.STATE == G.STATES.BUFFOON_PACK or (G.hand and (G.hand.cards[1] or (G.hand.config.card_limit <= 0))))) then
         e.config.colour = G.C.GREEN
         e.config.button = 'reroll_booster_pack'
         e.children[1].children[1].config.shadow = true
@@ -2168,37 +2168,29 @@ end
 G.FUNCS.reroll_booster_pack = function(e)
     if G.pack_cards and
     G.STATE == G.STATES.SMODS_BOOSTER_OPENED or (G.STATE == G.STATES.PLANET_PACK or G.STATE == G.STATES.STANDARD_PACK or G.STATE == G.STATES.BUFFOON_PACK or (G.hand and (G.hand.cards[1] or (G.hand.config.card_limit <= 0)))) then
-        G.GAME.currently_rerolling_pack = true
-        G.FUNCS.skip_booster()
+        stop_use()
+
         local last_pack = G.GAME.last_booster_pack
         last_pack.cost = 0
         last_pack.rerolled = true
+
+        for i = #G.pack_cards.cards, 1, -1 do
+            local c = G.pack_cards:remove_card(G.pack_cards.cards[i])
+            c:remove()
+            c = nil
+        end
+
         G.E_MANAGER:add_event(Event({blocking = false, trigger = 'after', func = function()
-            if not (G.STATE == G.STATES.SMODS_BOOSTER_OPENED or (G.STATE == G.STATES.PLANET_PACK or G.STATE == G.STATES.STANDARD_PACK or G.STATE == G.STATES.BUFFOON_PACK)) then
-                G.FUNCS.use_card({config = {ref_table = last_pack}})
-                return true
-            end
+            play_sound('other1')
+            last_pack:open()
+            return true
         end}))
     end
 end
 
 '''
 
-# Shell Game (3/)
-[[patches]]
-[patches.pattern]
-target = 'functions/button_callbacks.lua'
-pattern = 'function Card:open()'
-position = 'after'
-match_indent = true
-payload = '''
-
-G.GAME.last_booster_pack = self
-G.GAME.rerolled_pack = self.rerolled
-
-'''
-
-# Shell Game (4/)
+# Shell Game (3/9)
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
@@ -2209,5 +2201,68 @@ payload = '''
 
 G.GAME.last_booster_pack = self
 G.GAME.rerolled_pack = self.rerolled
+
+'''
+
+# Shell Game (4/9)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'if self.ability.set == "Booster" then'
+position = 'after'
+match_indent = true
+payload = '''if not G.GAME.rerolled_pack then'''
+
+# Shell Game (5/9) (UNSTABLE)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'G.GAME.pack_choices = self.config.center.config.choose or 1'
+position = 'after'
+match_indent = true
+payload = '''end local skip_animation = G.GAME.rerolled_pack and 0 or nil'''
+
+# Shell Game (6/9) (UNSTABLE)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.4, func = function()'''
+position = 'at'
+match_indent = true
+payload = '''G.E_MANAGER:add_event(Event({trigger = 'after', delay = skip_animation or 0.4, func = function()'''
+
+
+# Shell Game (7/9)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''self:explode()'''
+position = 'at'
+match_indent = true
+payload = '''if not G.GAME.rerolled_pack then self:explode() end'''
+
+# Shell Game (8/9) (UNSTABLE)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''G.E_MANAGER:add_event(Event({trigger = 'after', delay = 1.3*math.sqrt(G.SETTINGS.GAMESPEED), blockable = false, blocking = false, func = function()'''
+position = 'at'
+match_indent = true
+payload = '''G.E_MANAGER:add_event(Event({trigger = 'after', delay = skip_animation or (1.3*math.sqrt(G.SETTINGS.GAMESPEED)), blockable = false, blocking = false, func = function()'''
+
+# Shell Game (9/9)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'card:start_materialize({G.C.WHITE, G.C.WHITE}, nil, 1.5*G.SETTINGS.GAMESPEED)'
+position = 'at'
+match_indent = true
+payload = '''
+
+if not G.GAME.rerolled_pack then
+    card:start_materialize({G.C.WHITE, G.C.WHITE}, nil, 1.5*G.SETTINGS.GAMESPEED)
+else
+    card:juice_up()
+end
 
 '''
