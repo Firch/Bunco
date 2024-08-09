@@ -1377,5 +1377,24 @@ return {
                 [3] = 'a total of {C:attention,E:1}20{} times'
             }
         }
+    },
+    cups_n_balls = {
+        ['en-us'] = {
+            ['name'] = "Cups 'n' Balls",
+            ['text'] = {
+                [1] = '{C:attention}+1{} Booster Pack',
+                [2] = 'slot available in shop'
+            }
+        }
+    },
+    shell_game = {
+        ['en-us'] = {
+            ['name'] = 'Shell Game',
+            ['text'] = {
+                [1] = 'Reroll {C:attention}contents',
+                [2] = 'of Booster Packs',
+                [3] = '{C:attention}1{} time per pack'
+            }
+        }
     }
 }

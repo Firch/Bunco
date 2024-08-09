@@ -4361,6 +4361,28 @@ SMODS.Voucher{ -- Chainsaw
     atlas = 'bunco_vouchers'
 }
 
+SMODS.Voucher{ -- Cups 'n' Balls
+    key = 'cups_n_balls', loc_txt = loc.cups_n_balls,
+
+    redeem = function(self)
+        change_booster_amount(1)
+    end,
+
+    unlocked = true,
+
+    pos = coordinate(5),
+    atlas = 'bunco_vouchers'
+}
+
+SMODS.Voucher{ -- Shell Game
+    key = 'shell_game', loc_txt = loc.shell_game,
+
+    unlocked = true,
+
+    pos = coordinate(6),
+    atlas = 'bunco_vouchers'
+}
+
 -- Mod compatibility
 
 if _G["JokerDisplay"] then
