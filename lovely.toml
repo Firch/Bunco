@@ -1206,10 +1206,10 @@ match_indent = true
 payload = '''
 
 if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_umbrella' and not G.GAME.blind.disabled then
-    G.E_MANAGER:add_event(Event({ func = function()
+    G.E_MANAGER:add_event(Event({func = function()
 
         for k, v in ipairs(G.hand.cards) do
-            if v.facing == 'front' then
+            if v.facing == 'front' and not v.highlighted then
                 v:flip()
             end
         end
@@ -2127,17 +2127,19 @@ position = 'at'
 match_indent = true
 payload = '''for i = 1, G.GAME.shop.booster_max - #G.shop_booster.cards do'''
 
-# Shell Game (1/)
+# Shell Game (1/9)
 [[patches]]
 [patches.pattern]
 target = 'functions/UI_definitions.lua'
 pattern = '''{n=G.UIT.R,config={align = "tm",padding = 0.2, minh = 1.2, minw = 1.8, r=0.15,colour = G.C.GREY, one_press = true, button = 'skip_booster', hover = true,shadow = true, func = 'can_skip_booster'}, nodes = {'''
-position = 'before'
+position = 'at'
 match_indent = true
 payload = '''
 
 (G.GAME.used_vouchers['v_bunc_shell_game'] and not G.GAME.rerolled_pack and
-UIBox_button({label = {localize('k_reroll')}, minh = 0.6, minw = 1.8, r = 0.15, button = 'reroll_booster_pack', func = 'reroll_booster_pack_button'}) or nil),
+UIBox_button({label = {localize('k_reroll')}, padding = 0.07, minh = 0.7, minw = 1.8, r = 0.15, one_press = true, button = 'reroll_booster_pack', func = 'reroll_booster_pack_button'}) or nil),
+G.GAME.used_vouchers['v_bunc_shell_game'] and {n=G.UIT.R,config = {minh = 0.07}, nodes={}},
+{n=G.UIT.R, config = {align = G.GAME.used_vouchers['v_bunc_shell_game'] and 'cm' or 'tm', padding = G.GAME.used_vouchers['v_bunc_shell_game'] and 0.07 or 0.2, minh = G.GAME.used_vouchers['v_bunc_shell_game'] and 0.7 or 1.2, minw = 1.8, r = 0.15, colour = G.C.GREY, one_press = true, button = 'skip_booster', hover = true, shadow = true, func = 'can_skip_booster'}, nodes = {
 
 '''
 

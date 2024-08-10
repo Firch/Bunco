@@ -37,6 +37,8 @@
 -- (done) Custom description for the Disproportionality that isn't just Misprint 2
 -- (lame fix) Doorhanger doesn't shake when unlocked for some reason?
 -- Make so unlocks actually count things
+-- (done) Check blind flips beforehand (The Umbrella)
+-- (done) Running joke gives negative while the joker in shop
 
 global_bunco = global_bunco or {loc = {}, vars = {}}
 local bunco = SMODS.current_mod
@@ -2217,10 +2219,14 @@ create_joker({ -- Running Joke
     calculate = function(self, card, context)
         if context.enter_shop then
             big_juice(card)
-            local shop_card = create_card('Joker', G.shop_jokers, false, nil, nil, nil, 'j_joker')
+            local area = G.shop_jokers
+            local shop_card = Card(area.T.x + area.T.w/2, area.T.y, G.CARD_W, G.CARD_H, nil, G.P_CENTERS['j_joker'],
+            {bypass_discovery_center = area == G.shop_jokers,
+            bypass_discovery_ui = area == G.shop_jokers,
+            discover = area == G.shop_jokers,
+            bypass_back = G.GAME.selected_back.pos})
             shop_card:set_edition({negative = true})
             create_shop_card_ui(shop_card)
-            shop_card:add_to_deck()
             G.shop_jokers:emplace(shop_card)
         end
     end
@@ -4376,6 +4382,8 @@ SMODS.Voucher{ -- Cups 'n' Balls
 
 SMODS.Voucher{ -- Shell Game
     key = 'shell_game', loc_txt = loc.shell_game,
+
+    requires = {'v_bunc_cups_n_balls'},
 
     unlocked = true,
 
