@@ -2383,7 +2383,11 @@ create_joker({ -- Wino
 
 create_joker({ -- Bounty Hunter
     name = 'Bounty Hunter', position = 52,
-    vars = {{mult = 5}},
+    vars = {{bonus = 5}},
+    custom_vars = function(self, info_queue, card)
+        local mult = math.abs(math.min(0, G.GAME.dollars)) * card.ability.extra.bonus
+        return {vars = {card.ability.extra.bonus, mult}}
+    end,
     rarity = 'Common', cost = 5,
     blueprint = true, eternal = true,
     unlocked = false,
@@ -2400,9 +2404,9 @@ create_joker({ -- Bounty Hunter
                 message = localize {
                     type = 'variable',
                     key = 'a_mult',
-                    vars = {card.ability.extra.mult * math.abs(G.GAME.dollars)}
+                    vars = {card.ability.extra.bonus * math.abs(G.GAME.dollars)}
                 },
-                mult_mod = card.ability.extra.mult * math.abs(G.GAME.dollars),
+                mult_mod = card.ability.extra.bonus * math.abs(G.GAME.dollars),
                 card = card
             } end
         end

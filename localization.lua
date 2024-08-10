@@ -809,8 +809,9 @@ return {
         ['en-us'] = {
             ['name'] = 'Bounty Hunter',
             ['text'] = {
-                [1] = '{C:mult}+#1#{} Mult for every {C:money}$',
-                [2] = 'below {C:money}$0'
+                [1] = '{C:mult}+#1#{} Mult for',
+                [2] = 'each {C:money}$1{} below {C:money}$0',
+                [3] = '{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)'
             },
             ['unlock'] = {
                 [1] = 'Have less than {E:1,C:attention}$-20',
