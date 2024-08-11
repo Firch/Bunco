@@ -1,6 +1,16 @@
 return {
     dictionary = {
         ['en-us'] = {
+
+            -- Config values
+
+            colorful_finishers = 'Colorful Final Blinds',
+            high_quality_shaders = 'High Quality Shaders',
+            double_lovers = 'Double Lovers',
+            jokerlike_consumable_editions = 'Editions in Consumables Slot',
+
+            -- Miscellaneous
+
             copied = 'Copied!',
             nothing = 'Nothing',
             chips = 'Chips',

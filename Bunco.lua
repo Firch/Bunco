@@ -45,7 +45,7 @@ local bunco = SMODS.current_mod
 local filesystem = NFS or love.filesystem
 
 local loc = filesystem.load(bunco.path..'localization.lua')()
-local config = filesystem.load(bunco.path..'config.lua')()
+local config = bunco.config
 
 -- Shaders
 
@@ -58,38 +58,15 @@ if config.high_quality_shaders then
     G.SHADERS['flame'] = love.graphics.newShader(flame_shader)
 end
 
--- Custom high contrast
-
-if config.high_contrast then
-    SMODS.Atlas({key = 'cards_2', path = 'Resprites/EnhancedContrast.png', px = 71, py = 95})
-    SMODS.Atlas({key = 'ui_2', path = 'Resprites/EnhancedUIContrast.png', px = 18, py = 18})
-
-    local Game_start_up = Game.start_up
-    function Game:start_up()
-        Game_start_up(self)
-        G.C["SO_2"] = {
-            Hearts = HEX('ee151b'),
-            Diamonds = HEX('e56b10'),
-            Spades = HEX("5d55a6"),
-            Clubs = HEX("197f77"),
-        }
-    end
-
-    local new_colour_proto = G.C["SO_"..(G.SETTINGS.colourblind_option and 2 or 1)]
-    G.C.SUITS.Hearts = new_colour_proto.Hearts
-    G.C.SUITS.Diamonds = new_colour_proto.Diamonds
-    G.C.SUITS.Spades = new_colour_proto.Spades
-    G.C.SUITS.Clubs = new_colour_proto.Clubs
-    for k, v in pairs(G.I.SPRITE) do
-        if v.atlas and string.find(v.atlas.name, 'cards_') then
-            v.atlas = G.ASSET_ATLAS["cards_"..(G.SETTINGS.colourblind_option and 2 or 1)]
-        end
-    end
-end
-
 -- Colorful Finishers
 
 if config.colorful_finishers then bunco_colorful_finishers = true end
+
+-- Double lovers
+
+if config.double_lovers then
+    G.P_CENTERS.c_lovers.config.max_highlighted = 2
+end
 
 -- Debug message
 
@@ -175,10 +152,19 @@ end
 
 global_bunco.vars.jokerlike_consumable_editions = config.jokerlike_consumable_editions
 
--- Double lovers
+-- Config options
 
-if config.double_lovers then
-    G.P_CENTERS.c_lovers.config.max_highlighted = 2
+function bunco.save_config(self)
+    SMODS.save_mod_config(self)
+end
+
+function bunco.config_tab()
+    return {n = G.UIT.ROOT, config = {r = 0.1, minw = 4, align = "tm", padding = 0.2, colour = G.C.BLACK}, nodes = {
+        create_toggle({label = loc.dictionary.colorful_finishers, ref_table = bunco.config, ref_value = 'colorful_finishers', callback = function() bunco:save_config() end}),
+        create_toggle({label = loc.dictionary.high_quality_shaders, ref_table = bunco.config, ref_value = 'high_quality_shaders', callback = function() bunco:save_config() end}),
+        create_toggle({label = loc.dictionary.double_lovers, ref_table = bunco.config, ref_value = 'double_lovers', callback = function() bunco:save_config() end}),
+        create_toggle({label = loc.dictionary.jokerlike_consumable_editions, ref_table = bunco.config, ref_value = 'jokerlike_consumable_editions', callback = function() bunco:save_config() end})
+    }}
 end
 
 -- Temporary extra chips

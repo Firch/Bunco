@@ -6,9 +6,6 @@ return {
         high_quality_shaders = true; -- Makes some things like the background render at a higher quality
         -- Values: true/false (default: true)
 
-        high_contrast = true; -- Makes the high contrast be different from the base game (LunaAstraCassiopeia's high contrast sprites from Enhanced Enhancements) for consistency
-        -- Values: true/false (default: true)
-
         double_lovers = true; -- Makes "The Lovers" tarot card take 2 cards instead of just one
         -- Values: true/false (default: true)
 
