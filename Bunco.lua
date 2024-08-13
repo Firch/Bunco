@@ -39,6 +39,7 @@
 -- Make so unlocks actually count things
 -- (done) Check blind flips beforehand (The Umbrella)
 -- (done) Running joke gives negative while the joker in shop
+-- Make configs apply immediately
 
 global_bunco = global_bunco or {loc = {}, vars = {}}
 local bunco = SMODS.current_mod
@@ -46,27 +47,6 @@ local filesystem = NFS or love.filesystem
 
 local loc = filesystem.load(bunco.path..'localization.lua')()
 local config = bunco.config
-
--- Shaders
-
-if config.high_quality_shaders then
-    local background_shader = NFS.read(bunco.path..'assets/shaders/background.fs')
-    local splash_shader = NFS.read(bunco.path..'assets/shaders/splash.fs')
-    local flame_shader = NFS.read(bunco.path..'assets/shaders/flame.fs')
-    G.SHADERS['background'] = love.graphics.newShader(background_shader)
-    G.SHADERS['splash'] = love.graphics.newShader(splash_shader)
-    G.SHADERS['flame'] = love.graphics.newShader(flame_shader)
-end
-
--- Colorful Finishers
-
-if config.colorful_finishers then bunco_colorful_finishers = true end
-
--- Double lovers
-
-if config.double_lovers then
-    G.P_CENTERS.c_lovers.config.max_highlighted = 2
-end
 
 -- Debug message
 
@@ -165,6 +145,27 @@ function bunco.config_tab()
         create_toggle({label = loc.dictionary.double_lovers, ref_table = bunco.config, ref_value = 'double_lovers', callback = function() bunco:save_config() end}),
         create_toggle({label = loc.dictionary.jokerlike_consumable_editions, ref_table = bunco.config, ref_value = 'jokerlike_consumable_editions', callback = function() bunco:save_config() end})
     }}
+end
+
+-- Shaders
+
+if config.high_quality_shaders then
+    local background_shader = NFS.read(bunco.path..'assets/shaders/background.fs')
+    local splash_shader = NFS.read(bunco.path..'assets/shaders/splash.fs')
+    local flame_shader = NFS.read(bunco.path..'assets/shaders/flame.fs')
+    G.SHADERS['background'] = love.graphics.newShader(background_shader)
+    G.SHADERS['splash'] = love.graphics.newShader(splash_shader)
+    G.SHADERS['flame'] = love.graphics.newShader(flame_shader)
+end
+
+-- Colorful Finishers
+
+if config.colorful_finishers then bunco_colorful_finishers = true end
+
+-- Double lovers
+
+if config.double_lovers then
+    G.P_CENTERS.c_lovers.config.max_highlighted = 2
 end
 
 -- Temporary extra chips
@@ -3591,7 +3592,6 @@ SMODS.Blind{ -- The Blade
     loc_vars = function(self)
         local overscore = get_blind_amount(G.GAME.round_resets.ante)*G.P_BLINDS.bl_bunc_blade.mult*G.GAME.starting_params.ante_scaling
         overscore = number_format(overscore * 1.5)
-        say(G.GAME.round_resets.ante..' '..G.GAME.blind.mult..' '..G.GAME.starting_params.ante_scaling..' '..overscore)
         return {vars = {overscore}}
     end,
     process_loc_text = function(self)
