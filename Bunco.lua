@@ -1094,7 +1094,7 @@ create_joker({ -- Carnival
                 end
                 local joker_to_destroy = #destructable_jokers > 0 and pseudorandom_element(destructable_jokers, pseudoseed('carnival')) or nil
 
-                if joker_to_destroy and not card.getting_sliced then 
+                if joker_to_destroy and not card.getting_sliced then
                     joker_to_destroy.getting_sliced = true
                     card:juice_up(0.8, 0.8)
                     card.ability.extra.ante = G.GAME.round_resets.ante
@@ -2153,7 +2153,7 @@ create_joker({ -- Doodle
 create_joker({ -- Disproportionality
     name = 'Disproportionality', position = 45,
     vars = {{min = 0}, {max = 200}},
-    custom_vars = function(self, info_queue, card)  
+    custom_vars = function(self, info_queue, card)
         local r_chips = {}
         for i = card.ability.extra.min, card.ability.extra.max do
             r_chips[#r_chips + 1] = string.format("%03d", i)
@@ -2695,7 +2695,7 @@ create_joker({ -- ROYGBIV
 
                     if cards and #cards > 0 then
                         big_juice(card)
-                        cards[math.random(#cards)]:set_edition({polychrome = true}, true) 
+                        cards[math.random(#cards)]:set_edition({polychrome = true}, true)
                     end
                 end
             end
