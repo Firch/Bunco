@@ -9,6 +9,8 @@ return {
             double_lovers = 'Double Lovers',
             jokerlike_consumable_editions = 'Editions in Consumables Slot',
 
+            requires_restart = '(Requires game restart)',
+
             -- Miscellaneous
 
             copied = 'Copied!',

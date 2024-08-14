@@ -141,8 +141,14 @@ end
 function bunco.config_tab()
     return {n = G.UIT.ROOT, config = {r = 0.1, minw = 4, align = "tm", padding = 0.2, colour = G.C.BLACK}, nodes = {
         create_toggle({label = loc.dictionary.colorful_finishers, ref_table = bunco.config, ref_value = 'colorful_finishers', callback = function() bunco:save_config() end}),
-        create_toggle({label = loc.dictionary.high_quality_shaders, ref_table = bunco.config, ref_value = 'high_quality_shaders', callback = function() bunco:save_config() end}),
-        create_toggle({label = loc.dictionary.double_lovers, ref_table = bunco.config, ref_value = 'double_lovers', callback = function() bunco:save_config() end}),
+        create_toggle({label = loc.dictionary.high_quality_shaders, info = {loc.dictionary.requires_restart}, ref_table = bunco.config, ref_value = 'high_quality_shaders', callback = function() bunco:save_config() end}),
+        create_toggle({label = loc.dictionary.double_lovers, ref_table = bunco.config, ref_value = 'double_lovers', callback = function() bunco:save_config()
+            if config.double_lovers then
+                G.P_CENTERS.c_lovers.config.max_highlighted = 2
+            else
+                G.P_CENTERS.c_lovers.config.max_highlighted = 1
+            end
+        end}),
         create_toggle({label = loc.dictionary.jokerlike_consumable_editions, ref_table = bunco.config, ref_value = 'jokerlike_consumable_editions', callback = function() bunco:save_config() end})
     }}
 end
