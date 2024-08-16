@@ -2268,3 +2268,151 @@ else
 end
 
 '''
+
+# Scattering Sticker 1/2
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'self.removed = true'
+position = 'before'
+match_indent = true
+payload = '''
+
+local scattering_sticker
+if self.ability.bunc_scattering then scattering_sticker = true end
+
+'''
+
+# Scattering Sticker 2/2
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'Moveable.remove(self)'
+position = 'after'
+match_indent = true
+payload = '''
+
+if scattering_sticker then
+    if G.jokers and G.jokers.cards and #G.jokers.cards > 0 then
+        local random_card
+        local joker_table = {}
+        for i=1, #G.jokers.cards do
+            if not G.jokers.cards[i].ability.eternal then
+                table.insert(joker_table, G.jokers.cards[i])
+            end
+        end
+        random_card = joker_table[math.random(#joker_table)]
+
+        if random_card then random_card:start_dissolve() end
+    end
+end
+
+'''
+
+# Hindered Sticker 1/5
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'self:start_dissolve({G.C.GOLD})'
+position = 'at'
+match_indent = true
+payload = '''
+
+if not self.ability.bunc_hindered then
+    self:start_dissolve({G.C.GOLD})
+else
+    self:highlight(false)
+    self.ability.bunc_hindered_sold = true
+    self.sell_cost = 0
+end
+
+'''
+
+# Hindered Sticker 2/5
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''if (G.SETTINGS.tutorial_complete or G.GAME.pseudorandom.seed ~= 'TUTORIAL' or G.GAME.round_resets.ante > 1) and'''
+position = 'after'
+match_indent = true
+payload = '''not self.ability.bunc_hindered_sold and'''
+
+# Hindered Sticker 3/5
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'elseif self.children.use_button then'
+position = 'before'
+match_indent = true
+payload = '''if self.ability.bunc_hindered_sold and self.children.use_button then self.children.use_button:remove(); self.children.use_button = nil end'''
+
+# Hindered Sticker 4/5
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'function Card:calculate_joker(context)'
+position = 'before'
+match_indent = true
+payload = '''
+
+function Card:calculate_hindered()
+    if self.ability.bunc_hindered and self.ability.bunc_hindered_sold then
+        self:start_dissolve({G.C.GOLD}, nil, 1.6)
+    end
+end
+
+'''
+
+# Hindered Sticker 5/5
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = 'G.jokers.cards[i]:calculate_perishable()'
+position = 'after'
+match_indent = true
+payload = 'G.jokers.cards[i]:calculate_hindered()'
+
+# Reactive Sticker 1/
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'function Card:calculate_joker(context)'
+position = 'before'
+match_indent = true
+payload = '''
+
+function Card:calculate_reactive(stat_increase)
+    if self.ability.bunc_reactive then
+        if stat_increase then
+            self.ability.bunc_reactive_tally = (self.ability.bunc_reactive_tally or 0) + 1
+            card_eval_status_text(self, 'extra', nil, nil, nil, {message = '+1 '..localize('k_round'), colour = G.C.FILTER, delay = 0.45})
+        elseif self.ability.bunc_reactive_tally then
+            if self.ability.bunc_reactive_tally <= 1 then
+                self.ability.bunc_reactive_tally = 0
+            else
+                self.ability.bunc_reactive_tally = self.ability.bunc_reactive_tally - 1
+            end
+            card_eval_status_text(self, 'extra', nil, nil, nil, {message = localize{type = 'variable', key = 'a_remaining', vars = {self.ability.bunc_reactive_tally}}, colour = G.C.FILTER, delay = 0.45})
+        end
+    end
+end
+
+'''
+
+# Reactive Sticker 2/
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = 'G.jokers.cards[i]:calculate_perishable()'
+position = 'after'
+match_indent = true
+payload = 'G.jokers.cards[i]:calculate_reactive(false)'
+
+# Reactive Sticker 3/
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = 'G.jokers.cards[i]:calculate_joker({skip_blind = true})'
+position = 'before'
+match_indent = true
+payload = 'G.jokers.cards[i]:calculate_reactive(true)'

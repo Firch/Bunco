@@ -1409,5 +1409,41 @@ return {
                 [3] = '{C:attention}1{} time per pack'
             }
         }
+    },
+
+    -- Stickers
+
+    scattering = {
+        ['en-us'] = {
+            ['name'] = 'Scattering',
+            ['label'] = 'Scattering',
+            ['text'] = {
+                [1] = 'Destroys random',
+                [2] = 'Joker when sold',
+                [3] = 'or destroyed'
+            }
+        }
+    },
+    hindered = {
+        ['en-us'] = {
+            ['name'] = 'Hindered',
+            ['label'] = 'Hindered',
+            ['text'] = {
+                [1] = 'Stays in place until',
+                [2] = 'the end of the round',
+                [3] = 'after being sold'
+            }
+        }
+    },
+    reactive = {
+        ['en-us'] = {
+            ['name'] = 'Reactive',
+            ['label'] = 'Reactive',
+            ['text'] = {
+                [1] = 'Debuffed after {C:attention}#1#{} rounds',
+                [2] = '{C:attention}+1{} round when skipping',
+                [3] = 'a {C:attention}Blind{}, even if debuffed'
+            }
+        }
     }
 }

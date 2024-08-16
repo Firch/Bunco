@@ -207,6 +207,16 @@ function Game:update(dt)
         end
     end
 
+    -- Reactive
+
+    if G.jokers then
+        for i = 1, #G.jokers.cards do
+            if G.jokers.cards[i].ability.bunc_reactive then
+                G.GAME.blind:debuff_card(G.jokers.cards[i])
+            end
+        end
+    end
+
     original_game_update(self, dt)
 end
 
@@ -251,6 +261,14 @@ function bunco.set_debuff(card)
             if G.jokers.cards[i].ability.extra.joker ~= 0 and card == G.jokers.cards[i].ability.extra.joker then
                 return true
             end
+        end
+    end
+
+    -- Reactive
+
+    for i = 1, #G.jokers.cards do
+        if card == G.jokers.cards[i] and G.jokers.cards[i].ability.bunc_reactive and (G.jokers.cards[i].ability.bunc_reactive_tally or 0) <= 0 then
+            return true
         end
     end
 
@@ -4385,6 +4403,62 @@ SMODS.Voucher{ -- Shell Game
 
     pos = coordinate(6),
     atlas = 'bunco_vouchers'
+}
+
+-- Stickers
+
+SMODS.Atlas({key = 'bunco_stickers', path = 'Stickers/Stickers.png', px = 71, py = 95})
+
+SMODS.Sticker{ -- Scattering
+    key = 'scattering', loc_txt = loc.scattering,
+
+    badge_colour = HEX('9eacbe'),
+
+    order = 5,
+
+    pos = coordinate(1),
+    atlas = 'bunco_stickers'
+}
+
+SMODS.Sticker{ -- Hindered
+    key = 'hindered', loc_txt = loc.hindered,
+
+    apply = function(self, card, val)
+        card.ability[self.key] = val
+        card.ability.bunc_hindered_sold = false
+    end,
+
+    badge_colour = HEX('e97720'),
+
+    order = 6,
+
+    pos = coordinate(2),
+    atlas = 'bunco_stickers'
+}
+
+SMODS.Sticker{ -- Reactive
+    key = 'reactive', loc_txt = loc.reactive,
+
+    loc_vars = function(self, info_queue, card)
+        return {vars = {card.ability.bunc_reactive_tally or 1}}
+    end,
+
+    apply = function(self, card, val)
+        card.ability[self.key] = val
+        if val then
+            card.ability[self.key..'_tally'] = 1
+        else
+            card.ability[self.key..'_tally'] = nil
+        end
+        G.GAME.blind:debuff_card(card)
+    end,
+
+    badge_colour = HEX('8238c3'),
+
+    order = 7,
+
+    pos = coordinate(3),
+    atlas = 'bunco_stickers'
 }
 
 -- Mod compatibility
