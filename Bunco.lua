@@ -4450,7 +4450,6 @@ SMODS.Sticker{ -- Reactive
         else
             card.ability[self.key..'_tally'] = nil
         end
-        G.GAME.blind:debuff_card(card)
     end,
 
     badge_colour = HEX('8238c3'),
