@@ -1446,5 +1446,65 @@ return {
                 [2] = 'are skipped this Ante'
             }
         }
+    },
+
+    -- Stakes
+
+    cyan = {
+        ['en-us'] = {
+            ['description'] = {
+                ['name'] = 'Cyan Stake',
+                ['text'] = {
+                    [1] = 'Shop can have {C:attention}Scattering{} Jokers',
+                    [2] = '{C:inactive,s:0.8}(Destroys random Joker when sold or destroyed)'
+                }
+            },
+            ['sticker'] = {
+                ['name'] = 'Cyan Sticker',
+                ['text'] = {
+                    [1] = 'Used this Joker',
+                    [2] = 'to win on {C:attention}Cyan',
+                    [3] = '{C:attention}Stake{} difficulty'
+                }
+            }
+        }
+    },
+    pink = {
+        ['en-us'] = {
+            ['description'] = {
+                ['name'] = 'Pink Stake',
+                ['text'] = {
+                    [1] = 'Shop can have {C:attention}Hindered{} Jokers',
+                    [2] = '{C:inactive,s:0.8}(Stays in place until the end of the round after being sold)'
+                }
+            },
+            ['sticker'] = {
+                ['name'] = 'Pink Sticker',
+                ['text'] = {
+                    [1] = 'Used this Joker',
+                    [2] = 'to win on {C:attention}Pink',
+                    [3] = '{C:attention}Stake{} difficulty'
+                }
+            }
+        }
+    },
+    magenta = {
+        ['en-us'] = {
+            ['description'] = {
+                ['name'] = 'Magenta Stake',
+                ['text'] = {
+                    [1] = 'Shop can have {C:attention}Reactive{} Jokers',
+                    [2] = '{C:inactive,s:0.8}(Debuffed if no blinds are skipped this Ante)'
+                }
+            },
+            ['sticker'] = {
+                ['name'] = 'Magenta Sticker',
+                ['text'] = {
+                    [1] = 'Used this Joker',
+                    [2] = 'to win on {C:attention}Magenta',
+                    [3] = '{C:attention}Stake{} difficulty'
+                }
+            }
+        }
     }
 }

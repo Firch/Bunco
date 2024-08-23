@@ -4586,6 +4586,11 @@ SMODS.Atlas({key = 'bunco_stickers', path = 'Stickers/Stickers.png', px = 71, py
 SMODS.Sticker{ -- Scattering
     key = 'scattering', loc_txt = loc.scattering,
 
+    apply = function(self, card, val)
+        if card.ability.eternal or card.ability.bunc_hindered or card.ability.bunc_reactive then return end
+        card.ability[self.key] = val
+    end,
+
     badge_colour = HEX('9eacbe'),
 
     order = 5,
@@ -4598,6 +4603,7 @@ SMODS.Sticker{ -- Hindered
     key = 'hindered', loc_txt = loc.hindered,
 
     apply = function(self, card, val)
+        if card.ability.eternal or card.ability.bunc_scattering or card.ability.bunc_reactive then return end
         card.ability[self.key] = val
         card.ability.bunc_hindered_sold = false
     end,
@@ -4613,12 +4619,80 @@ SMODS.Sticker{ -- Hindered
 SMODS.Sticker{ -- Reactive
     key = 'reactive', loc_txt = loc.reactive,
 
+    apply = function(self, card, val)
+        if card.ability.eternal or card.ability.bunc_scattering or card.ability.bunc_hindered then return end
+        card.ability[self.key] = val
+        if G.GAME and G.GAME.blind then G.GAME.blind:debuff_card(card) end
+    end,
+
     badge_colour = HEX('8238c3'),
 
     order = 7,
 
     pos = coordinate(3),
     atlas = 'bunco_stickers'
+}
+
+-- Stakes
+
+SMODS.Atlas({key = 'bunco_stakes', path = 'Stakes/Stakes.png', px = 29, py = 29})
+SMODS.Atlas({key = 'bunco_stake_stickers', path = 'Stickers/StickersStake.png', px = 71, py = 95})
+
+SMODS.Stake{ -- Cyan
+    key = 'cyan', loc_txt = loc.cyan,
+
+    unlocked_stake = 'bunc_pink',
+    applied_stakes = {'orange'},
+    above_stake = 'orange',
+
+    modifiers = function()
+        G.GAME.modifiers.enable_scattering_in_shop = true
+    end,
+
+    colour = HEX('1ceade'),
+
+    pos = coordinate(1),
+    sticker_pos = coordinate(1),
+    atlas = 'bunco_stakes',
+    sticker_atlas = 'bunco_stake_stickers'
+}
+
+SMODS.Stake{ -- Pink
+    key = 'pink', loc_txt = loc.pink,
+
+    unlocked_stake = 'bunc_magenta',
+    applied_stakes = {'bunc_cyan'},
+    above_stake = 'bunc_cyan',
+
+    modifiers = function()
+        G.GAME.modifiers.enable_hindered_in_shop = true
+    end,
+
+    colour = HEX('ff8ea4'),
+
+    pos = coordinate(2),
+    sticker_pos = coordinate(2),
+    atlas = 'bunco_stakes',
+    sticker_atlas = 'bunco_stake_stickers'
+}
+
+SMODS.Stake{ -- Magenta
+    key = 'magenta', loc_txt = loc.magenta,
+
+    unlocked_stake = 'gold',
+    applied_stakes = {'bunc_pink'},
+    above_stake = 'bunc_pink',
+
+    modifiers = function()
+        G.GAME.modifiers.enable_reactive_in_shop = true
+    end,
+
+    colour = HEX('cd47ea'),
+
+    pos = coordinate(3),
+    sticker_pos = coordinate(3),
+    atlas = 'bunco_stakes',
+    sticker_atlas = 'bunco_stake_stickers'
 }
 
 -- Mod compatibility
