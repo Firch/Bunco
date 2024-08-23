@@ -9,6 +9,7 @@ return {
             double_lovers = 'Double Lovers',
             jokerlike_consumable_editions = 'Editions in Consumables Slot',
             fixed_badges = 'Fixed Badges',
+            fixed_sprites = 'Fixed Sprites',
 
             requires_restart = '(Requires game restart)',
 
