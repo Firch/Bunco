@@ -1440,9 +1440,8 @@ return {
             ['name'] = 'Reactive',
             ['label'] = 'Reactive',
             ['text'] = {
-                [1] = 'Debuffed after {C:attention}#1#{} rounds',
-                [2] = '{C:attention}+1{} round when skipping',
-                [3] = 'a {C:attention}Blind{}, even if debuffed'
+                [1] = 'Debuffed if no blinds',
+                [2] = 'are skipped this Ante'
             }
         }
     }

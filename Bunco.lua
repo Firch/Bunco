@@ -267,8 +267,16 @@ function bunco.set_debuff(card)
     -- Reactive
 
     for i = 1, #G.jokers.cards do
-        if card == G.jokers.cards[i] and G.jokers.cards[i].ability.bunc_reactive and (G.jokers.cards[i].ability.bunc_reactive_tally or 0) <= 0 then
-            return true
+        if card == G.jokers.cards[i] and G.jokers.cards[i].ability.bunc_reactive then
+            local condition
+            for _, v in pairs(G.GAME.round_resets.blind_states) do
+                if v == 'Skipped' then
+                    condition = true
+                end
+            end
+            if not condition then
+                return true
+            end
         end
     end
 
@@ -4438,19 +4446,6 @@ SMODS.Sticker{ -- Hindered
 
 SMODS.Sticker{ -- Reactive
     key = 'reactive', loc_txt = loc.reactive,
-
-    loc_vars = function(self, info_queue, card)
-        return {vars = {card.ability.bunc_reactive_tally or 1}}
-    end,
-
-    apply = function(self, card, val)
-        card.ability[self.key] = val
-        if val then
-            card.ability[self.key..'_tally'] = 1
-        else
-            card.ability[self.key..'_tally'] = nil
-        end
-    end,
 
     badge_colour = HEX('8238c3'),
 

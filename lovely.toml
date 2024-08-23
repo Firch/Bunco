@@ -2372,7 +2372,7 @@ position = 'after'
 match_indent = true
 payload = 'G.jokers.cards[i]:calculate_hindered()'
 
-# Reactive Sticker 1/
+# Reactive Sticker 1/2
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
@@ -2381,38 +2381,27 @@ position = 'before'
 match_indent = true
 payload = '''
 
-function Card:calculate_reactive(stat_increase)
+function Card:calculate_reactive()
     if self.ability.bunc_reactive then
-        if stat_increase then
-            self.ability.bunc_reactive_tally = (self.ability.bunc_reactive_tally or 0) + 1
-            card_eval_status_text(self, 'extra', nil, nil, nil, {message = '+1 '..localize('k_round'), colour = G.C.FILTER, delay = 0.45})
-        elseif self.ability.bunc_reactive_tally then
-            if self.ability.bunc_reactive_tally <= 1 then
-                self.ability.bunc_reactive_tally = 0
-            else
-                self.ability.bunc_reactive_tally = self.ability.bunc_reactive_tally - 1
+        local debuffed_blinds = 0
+        for _, v in pairs(G.GAME.round_resets.blind_states) do
+            if v == 'Skipped' then
+                debuffed_blinds = debuffed_blinds + 1
             end
-            card_eval_status_text(self, 'extra', nil, nil, nil, {message = localize{type = 'variable', key = 'a_remaining', vars = {self.ability.bunc_reactive_tally}}, colour = G.C.FILTER, delay = 0.45})
+        end
+        if debuffed_blinds == 1 then
+            self:juice_up(0.3, 0.3)
         end
     end
 end
 
 '''
 
-# Reactive Sticker 2/
-[[patches]]
-[patches.pattern]
-target = 'functions/state_events.lua'
-pattern = 'G.jokers.cards[i]:calculate_perishable()'
-position = 'after'
-match_indent = true
-payload = 'G.jokers.cards[i]:calculate_reactive(false)'
-
-# Reactive Sticker 3/
+# Reactive Sticker 2/2
 [[patches]]
 [patches.pattern]
 target = 'functions/button_callbacks.lua'
 pattern = 'G.jokers.cards[i]:calculate_joker({skip_blind = true})'
 position = 'before'
 match_indent = true
-payload = 'G.jokers.cards[i]:calculate_reactive(true)'
+payload = 'G.jokers.cards[i]:calculate_reactive()'
