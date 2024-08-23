@@ -123,6 +123,7 @@ function bunco.process_loc_text()
 
     SMODS.process_loc_text(G.localization.descriptions.Other, 'temporary_extra_chips', loc.dictionary.temporary_extra_chips)
     SMODS.process_loc_text(G.localization.descriptions.Other, 'exotic_cards', loc.exotic_cards)
+    G.P_CENTERS['exotic_cards'] = {key = 'exotic_cards', set = 'Other'}
 
     global_bunco.loc.exceeded_score = loc.dictionary.exceeded_score
     global_bunco.loc.chips = loc.dictionary.chips
