@@ -8,6 +8,7 @@ return {
             high_quality_shaders = 'High Quality Shaders',
             double_lovers = 'Double Lovers',
             jokerlike_consumable_editions = 'Editions in Consumables Slot',
+            fixed_badges = 'Fixed Badges',
 
             requires_restart = '(Requires game restart)',
 

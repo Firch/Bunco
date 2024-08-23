@@ -150,7 +150,8 @@ function bunco.config_tab()
                 G.P_CENTERS.c_lovers.config.max_highlighted = 1
             end
         end}),
-        create_toggle({label = loc.dictionary.jokerlike_consumable_editions, ref_table = bunco.config, ref_value = 'jokerlike_consumable_editions', callback = function() bunco:save_config() end})
+        create_toggle({label = loc.dictionary.jokerlike_consumable_editions, ref_table = bunco.config, ref_value = 'jokerlike_consumable_editions', callback = function() bunco:save_config() end}),
+        create_toggle({label = loc.dictionary.fixed_badges, ref_table = bunco.config, ref_value = 'fixed_badges', callback = function() bunco:save_config() end})
     }}
 end
 
@@ -174,6 +175,26 @@ if config.colorful_finishers then bunco_colorful_finishers = true end
 if config.double_lovers then
     G.P_CENTERS.c_lovers.config.max_highlighted = 2
 end
+
+-- Fixed badges
+
+SMODS.Consumable:take_ownership('pluto', {
+    set_card_type_badge = function(self, card, badges)
+        badges[1] = create_badge(config.fixed_badges and localize('k_planet') or localize('k_dwarf_planet'), get_type_colour(self or card.config, card), nil, 1.2)
+    end
+})
+
+SMODS.Consumable:take_ownership('ceres', {
+    set_card_type_badge = function(self, card, badges)
+        badges[1] = create_badge(config.fixed_badges and localize('k_planet_q') or localize('k_dwarf_planet'), get_type_colour(self or card.config, card), nil, 1.2)
+    end
+})
+
+SMODS.Consumable:take_ownership('eris', {
+    set_card_type_badge = function(self, card, badges)
+        badges[1] = create_badge(config.fixed_badges and localize('k_planet_q') or localize('k_dwarf_planet'), get_type_colour(self or card.config, card), nil, 1.2)
+    end
+})
 
 -- Temporary extra chips
 
@@ -2868,7 +2889,7 @@ SMODS.Consumable{ -- Quaoar
     set = 'Planet', atlas = 'bunco_planets',
     key = 'Quaoar', loc_txt = loc.quaoar,
     set_card_type_badge = function(self, card, badges)
-        badges[1] = create_badge('Planet?', get_type_colour(self or card.config, card), nil, 1.2)
+        badges[1] = create_badge(config.fixed_badges and localize('k_planet_q') or localize('k_dwarf_planet'), get_type_colour(self or card.config, card), nil, 1.2)
     end,
 
     config = {hand_type = 'bunc_Spectrum', softlock = true},
@@ -2886,7 +2907,7 @@ SMODS.Consumable{ -- Haumea
     set = 'Planet', atlas = 'bunco_planets',
     key = 'Haumea', loc_txt = loc.haumea,
     set_card_type_badge = function(self, card, badges)
-        badges[1] = create_badge('Planet?', get_type_colour(self or card.config, card), nil, 1.2)
+        badges[1] = create_badge(config.fixed_badges and localize('k_planet_q') or localize('k_dwarf_planet'), get_type_colour(self or card.config, card), nil, 1.2)
     end,
 
     config = {hand_type = 'bunc_Straight Spectrum', softlock = true},
@@ -2904,7 +2925,7 @@ SMODS.Consumable{ -- Sedna
     set = 'Planet', atlas = 'bunco_planets',
     key = 'Sedna', loc_txt = loc.sedna,
     set_card_type_badge = function(self, card, badges)
-        badges[1] = create_badge('Planet?', get_type_colour(self or card.config, card), nil, 1.2)
+        badges[1] = create_badge(config.fixed_badges and localize('k_planet_q') or localize('k_dwarf_planet'), get_type_colour(self or card.config, card), nil, 1.2)
     end,
 
     config = {hand_type = 'bunc_Spectrum House', softlock = true},
@@ -2922,7 +2943,7 @@ SMODS.Consumable{ -- Makemake
     set = 'Planet', atlas = 'bunco_planets',
     key = 'Makemake', loc_txt = loc.makemake,
     set_card_type_badge = function(self, card, badges)
-        badges[1] = create_badge('Planet?', get_type_colour(self or card.config, card), nil, 1.2)
+        badges[1] = create_badge(config.fixed_badges and localize('k_planet_q') or localize('k_dwarf_planet'), get_type_colour(self or card.config, card), nil, 1.2)
     end,
 
     config = {hand_type = 'bunc_Spectrum Five', softlock = true},

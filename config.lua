@@ -12,6 +12,10 @@ return {
         jokerlike_consumable_editions = false; -- Enabling this will revert vanilla behaviour of editions on consumables - they will always affect card calculation
         -- Values: true/false (default: false)
 
+        fixed_badges = false; -- Changes how badges on the planets work - "Planet" for every non-hidden planet and "Planet?" for secret poker hand planets
+        -- Values: true/false (default: false)
+
         purist_mode = false; -- Enabling this will disable some features that include references to other videgames or media. This config will be removed as soon as LocalThunk will add videogame refe
         -- Values: true/false (default: false)
+
 }
