@@ -4649,7 +4649,7 @@ SMODS.Stake{ -- Cyan
         G.GAME.modifiers.enable_scattering_in_shop = true
     end,
 
-    colour = HEX('1ceade'),
+    colour = HEX('3cd0c8'),
 
     pos = coordinate(1),
     sticker_pos = coordinate(1),
@@ -4694,6 +4694,10 @@ SMODS.Stake{ -- Magenta
     atlas = 'bunco_stakes',
     sticker_atlas = 'bunco_stake_stickers'
 }
+
+SMODS.Stake:take_ownership('gold', {
+    applied_stakes = {"bunc_magenta"}
+})
 
 -- Mod compatibility
 
