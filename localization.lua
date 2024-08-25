@@ -1185,10 +1185,20 @@ return {
             ['name'] = 'The Depths',
             ['text'] = {
                 [1] = 'After Play, gain Eternal,',
-                [2] = 'Perishable, or Rental tag'
+                [2] = 'Perishable, or Scattering tag'
             }
         }
     },
+    chasm = {
+        ['en-us'] = {
+            ['name'] = 'The Chasm',
+            ['text'] = {
+                [1] = 'After Play, gain Hindered,',
+                [2] = 'Reactive, or Rental tag'
+            }
+        }
+    },
+
 
     -- Finishers
 
@@ -1350,6 +1360,33 @@ return {
             ['text'] = {
                 [1] = 'Next shop Joker',
                 [2] = 'will gain {C:attention}Perishable{} sticker'
+            }
+        }
+    },
+    scattering_tag = {
+        ['en-us'] = {
+            ['name'] = 'Scattering Tag',
+            ['text'] = {
+                [1] = 'Next shop Joker',
+                [2] = 'will gain {C:attention}Scattering{} sticker'
+            }
+        }
+    },
+    hindered_tag = {
+        ['en-us'] = {
+            ['name'] = 'Hindered Tag',
+            ['text'] = {
+                [1] = 'Next shop Joker',
+                [2] = 'will gain {C:attention}Hindered{} sticker'
+            }
+        }
+    },
+    reactive_tag = {
+        ['en-us'] = {
+            ['name'] = 'Reactive Tag',
+            ['text'] = {
+                [1] = 'Next shop Joker',
+                [2] = 'will gain {C:attention}Reactive{} sticker'
             }
         }
     },

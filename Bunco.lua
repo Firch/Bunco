@@ -3939,7 +3939,7 @@ SMODS.Blind{ -- The Depths
 
     press_play = function(self)
         if not G.GAME.blind.disabled then
-            local stickers = {'tag_bunc_eternal', 'tag_bunc_perishable', 'tag_bunc_rental'}
+            local stickers = {'tag_bunc_eternal', 'tag_bunc_perishable', 'tag_bunc_scattering'}
 
             add_tag(Tag(stickers[math.random(#stickers)]))
 
@@ -3960,6 +3960,36 @@ SMODS.Blind{ -- The Depths
     boss_colour = HEX('3f3f3f'),
 
     pos = {y = 18},
+    atlas = 'bunco_blinds'
+}
+
+SMODS.Blind{ -- The Chasm
+    key = 'chasm', loc_txt = loc.chasm,
+    boss = {min = 4},
+
+    press_play = function(self)
+        if not G.GAME.blind.disabled then
+            local stickers = {'tag_bunc_hindered', 'tag_bunc_reactive', 'tag_bunc_rental'}
+
+            add_tag(Tag(stickers[math.random(#stickers)]))
+
+            G.GAME.blind:wiggle()
+            G.GAME.blind.triggered = true
+            delay(0.7)
+        end
+    end,
+
+    in_pool = function()
+        if G.GAME.round_resets.ante < 3 or get_deck_win_stake() < 10 then
+            return false
+        else
+            return true
+        end
+    end,
+
+    boss_colour = HEX('553529'),
+
+    pos = {y = 19},
     atlas = 'bunco_blinds'
 }
 
@@ -4498,6 +4528,125 @@ SMODS.Tag{ -- Perishable
     in_pool = function() return false end
 }
 
+SMODS.Tag{ -- Scattering
+    key = 'scattering', loc_txt = loc.scattering_tag,
+
+    config = {type = 'store_joker_modify'},
+    loc_vars = function(self, info_queue)
+        info_queue[#info_queue + 1] = {key = 'bunc_scattering', set = 'Other'}
+        return {}
+    end,
+
+    apply = function(tag, context)
+        if context.type == 'store_joker_modify' then
+            local applied = nil
+            if not context.card.ability.bunc_scattering
+            and not context.card.ability.bunc_hindered
+            and not context.card.ability.bunc_reactive
+            and not context.card.ability.eternal
+            and context.card.ability.set == 'Joker' then
+                local lock = tag.ID
+                G.CONTROLLER.locks[lock] = true
+                tag:yep('+', G.C.RED, function()
+                    SMODS.Stickers['bunc_scattering']:apply(context.card, true)
+                    big_juice(context.card)
+                    context.card:set_cost()
+                    G.CONTROLLER.locks[lock] = nil
+                    return true
+                end)
+                applied = true
+
+                tag.triggered = true
+            end
+            return applied
+        end
+    end,
+
+    pos = coordinate(3),
+    atlas = 'bunco_tags_sticker',
+
+    in_pool = function() return false end
+}
+
+SMODS.Tag{ -- Hindered
+    key = 'hindered', loc_txt = loc.hindered_tag,
+
+    config = {type = 'store_joker_modify'},
+    loc_vars = function(self, info_queue)
+        info_queue[#info_queue + 1] = {key = 'bunc_hindered', set = 'Other'}
+        return {}
+    end,
+
+    apply = function(tag, context)
+        if context.type == 'store_joker_modify' then
+            local applied = nil
+            if not context.card.ability.bunc_scattering
+            and not context.card.ability.bunc_hindered
+            and not context.card.ability.bunc_reactive
+            and not context.card.ability.eternal
+            and context.card.ability.set == 'Joker' then
+                local lock = tag.ID
+                G.CONTROLLER.locks[lock] = true
+                tag:yep('+', G.C.RED, function()
+                    SMODS.Stickers['bunc_hindered']:apply(context.card, true)
+                    big_juice(context.card)
+                    context.card:set_cost()
+                    G.CONTROLLER.locks[lock] = nil
+                    return true
+                end)
+                applied = true
+
+                tag.triggered = true
+            end
+            return applied
+        end
+    end,
+
+    pos = coordinate(4),
+    atlas = 'bunco_tags_sticker',
+
+    in_pool = function() return false end
+}
+
+SMODS.Tag{ -- Reactive
+    key = 'reactive', loc_txt = loc.reactive_tag,
+
+    config = {type = 'store_joker_modify'},
+    loc_vars = function(self, info_queue)
+        info_queue[#info_queue + 1] = {key = 'bunc_reactive', set = 'Other'}
+        return {}
+    end,
+
+    apply = function(tag, context)
+        if context.type == 'store_joker_modify' then
+            local applied = nil
+            if not context.card.ability.bunc_scattering
+            and not context.card.ability.bunc_hindered
+            and not context.card.ability.bunc_reactive
+            and context.card.ability.set == 'Joker' then
+                local lock = tag.ID
+                G.CONTROLLER.locks[lock] = true
+                tag:yep('+', G.C.RED, function()
+                    SMODS.Stickers['bunc_reactive']:apply(context.card, true)
+                    big_juice(context.card)
+                    context.card:set_cost()
+                    G.CONTROLLER.locks[lock] = nil
+                    return true
+                end)
+                applied = true
+
+                tag.triggered = true
+            end
+            return applied
+        end
+    end,
+
+    pos = coordinate(5),
+    atlas = 'bunco_tags_sticker',
+
+    in_pool = function() return false end
+}
+
 SMODS.Tag{ -- Rental
     key = 'rental', loc_txt = loc.rental,
 
@@ -4528,7 +4677,7 @@ SMODS.Tag{ -- Rental
         end
     end,
 
-    pos = coordinate(3),
+    pos = coordinate(6),
     atlas = 'bunco_tags_sticker',
 
     in_pool = function() return false end
