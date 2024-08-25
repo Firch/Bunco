@@ -10,6 +10,7 @@ return {
             jokerlike_consumable_editions = 'Editions in Consumables Slot',
             fixed_badges = 'Fixed Badges',
             fixed_sprites = 'Fixed Sprites',
+            reworked_jokers = 'Reworked Jokers',
 
             requires_restart = '(Requires game restart)',
 
@@ -165,6 +166,29 @@ return {
         }
     },
 
+    -- Reworked Jokers
+
+    luchador = {
+        ['en-us'] = {
+            ['name'] = 'Luchador',
+            ['text'] = {
+                [1] = 'Sell this card to',
+                [2] = 'create a free',
+                [3] = '{C:attention}Breaking Tag'
+            }
+        }
+    },
+    red_card = {
+        ['en-us'] = {
+            ['name'] = 'Red Card',
+            ['text'] = {
+                [1] = 'This Joker gains {C:red}+#1#{} Mult',
+                [2] = 'per skipped choice',
+                [3] = 'in {C:attention}Booster Pack{}',
+                [4] = '{C:inactive}(Currently {C:red}+#2#{C:inactive} Mult)'
+            }
+        }
+    },
 
     -- Jokers
 
@@ -1232,7 +1256,15 @@ return {
     },
 
     -- Tags
-
+    breaking = {
+        ['en-us'] = {
+            ['name'] = 'Breaking Tag',
+            ['text'] = {
+                [1] = 'Disables the',
+                [2] = '{C:attention}Boss Blind{}'
+            }
+        }
+    },
     glitter_tag = {
         ['en-us'] = {
             ['name'] = 'Glitter Tag',

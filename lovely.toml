@@ -169,10 +169,28 @@ end
 [[patches]]
 [patches.pattern]
 target = 'functions/common_events.lua'
-pattern = "elseif G.GAME.won then"
+pattern = 'elseif G.GAME.won then'
 position = 'at'
 match_indent = true
 payload = '''elseif G.GAME.won and not bunco_colorful_finishers then'''
+
+# Luchador Rework
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "elseif self.ability.name == 'Luchador' then"
+position = 'at'
+match_indent = true
+payload = '''elseif self.ability.name == 'Luchador' and not bunco_reworked_jokers then'''
+
+# Red Card Rework
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "if self.ability.name == 'Red Card' and not context.blueprint then"
+position = 'at'
+match_indent = true
+payload = '''if self.ability.name == 'Red Card' and not context.blueprint and not bunco_reworked_jokers then'''
 
 # # Shiny Blinds
 # [[patches]]

@@ -152,7 +152,8 @@ function bunco.config_tab()
         end}),
         create_toggle({label = loc.dictionary.jokerlike_consumable_editions, ref_table = bunco.config, ref_value = 'jokerlike_consumable_editions', callback = function() bunco:save_config() end}),
         create_toggle({label = loc.dictionary.fixed_badges, ref_table = bunco.config, ref_value = 'fixed_badges', callback = function() bunco:save_config() end}),
-        create_toggle({label = loc.dictionary.fixed_sprites, info = {loc.dictionary.requires_restart}, ref_table = bunco.config, ref_value = 'fixed_sprites', callback = function() bunco:save_config() end})
+        create_toggle({label = loc.dictionary.fixed_sprites, info = {loc.dictionary.requires_restart}, ref_table = bunco.config, ref_value = 'fixed_sprites', callback = function() bunco:save_config() end}),
+        create_toggle({label = loc.dictionary.reworked_jokers, info = {loc.dictionary.requires_restart}, ref_table = bunco.config, ref_value = 'reworked_jokers', callback = function() bunco:save_config() end})
     }}
 end
 
@@ -173,9 +174,7 @@ if config.colorful_finishers then bunco_colorful_finishers = true end
 
 -- Double lovers
 
-if config.double_lovers then
-    G.P_CENTERS.c_lovers.config.max_highlighted = 2
-end
+if config.double_lovers then G.P_CENTERS.c_lovers.config.max_highlighted = 2 end
 
 -- Fixed badges
 
@@ -336,6 +335,52 @@ if config.fixed_sprites then
     SMODS.Consumable:take_ownership('incantation', {
         pos = coordinate(13),
         atlas = 'bunco_resprites_consumables'
+    })
+
+end
+
+-- Reworked Jokers
+
+if config.reworked_jokers then
+
+    bunco_reworked_jokers = true
+
+    SMODS.Joker:take_ownership('luchador', {
+        loc_txt = loc.luchador,
+        loc_vars = function(self, info_queue)
+            info_queue[#info_queue + 1] = {key = 'tag_bunc_breaking', set = 'Tag'}
+            return {}
+        end,
+        calculate = function(self, card, context)
+            if context.selling_self then
+                G.E_MANAGER:add_event(Event({
+                    func = (function()
+                        add_tag(Tag('tag_bunc_breaking'))
+                        play_sound('generic1', 0.9 + math.random() * 0.1, 0.8)
+                        play_sound('holo1', 1.2 + math.random() * 0.1, 0.4)
+                        return true
+                    end)
+                }))
+            end
+        end
+    })
+
+    SMODS.Joker:take_ownership('red_card', {
+        loc_txt = loc.red_card,
+        calculate = function(self, card, context)
+            if context.skipping_booster and not context.blueprint then
+                card.ability.mult = card.ability.mult + (card.ability.extra * G.GAME.pack_choices)
+                event({
+                func = function()
+                    card_eval_status_text(card, 'extra', nil, nil, nil, {
+                        message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra * G.GAME.pack_choices}},
+                        colour = G.C.RED,
+                        delay = 0.45,
+                        card = card
+                    })
+                return true end})
+            end
+        end
     })
 
 end
@@ -4109,6 +4154,41 @@ SMODS.Back{ -- Fairy
 -- Tags
 
 SMODS.Atlas({key = 'bunco_tags', path = 'Tags/Tags.png', px = 34, py = 34})
+SMODS.Atlas({key = 'bunco_tags_edition', path = 'Tags/TagsEdition.png', px = 34, py = 34})
+SMODS.Atlas({key = 'bunco_tags_hand', path = 'Tags/TagsHand.png', px = 34, py = 34})
+SMODS.Atlas({key = 'bunco_tags_exotic', path = 'Tags/TagsExotic.png', px = 34, py = 34})
+SMODS.Atlas({key = 'bunco_tags_sticker', path = 'Tags/TagsSticker.png', px = 34, py = 34})
+
+SMODS.Tag{ -- Breaking
+    key = 'breaking', loc_txt = loc.breaking,
+
+    config = {type = 'round_start_bonus'},
+
+    apply = function(tag, context)
+        if G.GAME.blind and G.GAME.blind.boss and not G.GAME.blind.disabled then
+            tag:yep('+', G.C.BLUE, function() 
+                return true
+            end)
+
+            card_eval_status_text(context.blueprint_card or self, 'extra', nil, nil, nil, {message = localize('ph_boss_disabled')})
+            G.GAME.blind:disable()
+
+            tag.triggered = true
+            return true
+        end
+    end,
+
+    pos = coordinate(1),
+    atlas = 'bunco_tags',
+
+    in_pool = function()
+        if pseudorandom('breaking'..G.SEED) < 0.07 then
+            return true
+        else
+            return false
+        end
+    end
+}
 
 SMODS.Tag{ -- Glitter
     key = 'glitter', loc_txt = loc.glitter_tag,
@@ -4144,7 +4224,7 @@ SMODS.Tag{ -- Glitter
     end,
 
     pos = coordinate(1),
-    atlas = 'bunco_tags',
+    atlas = 'bunco_tags_edition',
 }
 
 SMODS.Tag{ -- Fluorescent
@@ -4181,7 +4261,15 @@ SMODS.Tag{ -- Fluorescent
     end,
 
     pos = coordinate(2),
-    atlas = 'bunco_tags',
+    atlas = 'bunco_tags_edition',
+
+    in_pool = function()
+        if pseudorandom('fluorescent'..G.SEED) < 0.5 then
+            return true
+        else
+            return false
+        end
+    end
 }
 
 SMODS.Tag{ -- Chips
@@ -4205,8 +4293,8 @@ SMODS.Tag{ -- Chips
         end
     end,
 
-    pos = coordinate(3),
-    atlas = 'bunco_tags',
+    pos = coordinate(1),
+    atlas = 'bunco_tags_hand',
 
     in_pool = function() return false end
 }
@@ -4232,8 +4320,8 @@ SMODS.Tag{ -- Mult
         end
     end,
 
-    pos = coordinate(4),
-    atlas = 'bunco_tags',
+    pos = coordinate(2),
+    atlas = 'bunco_tags_hand',
 
     in_pool = function() return false end
 }
@@ -4259,8 +4347,8 @@ SMODS.Tag{ -- Xmult
         end
     end,
 
-    pos = coordinate(5),
-    atlas = 'bunco_tags',
+    pos = coordinate(3),
+    atlas = 'bunco_tags_hand',
 
     in_pool = function() return false end
 }
@@ -4286,8 +4374,8 @@ SMODS.Tag{ -- Xchip
         end
     end,
 
-    pos = coordinate(6),
-    atlas = 'bunco_tags',
+    pos = coordinate(4),
+    atlas = 'bunco_tags_hand',
 
     in_pool = function() return false end
 }
@@ -4332,8 +4420,8 @@ SMODS.Tag{ -- Filigree
         end
     end,
 
-    pos = coordinate(7),
-    atlas = 'bunco_tags',
+    pos = coordinate(1),
+    atlas = 'bunco_tags_exotic',
 
     in_pool = exotic_in_pool
 }
@@ -4368,8 +4456,8 @@ SMODS.Tag{ -- Eternal
         end
     end,
 
-    pos = coordinate(8),
-    atlas = 'bunco_tags',
+    pos = coordinate(1),
+    atlas = 'bunco_tags_sticker',
 
     in_pool = function() return false end
 }
@@ -4404,8 +4492,8 @@ SMODS.Tag{ -- Perishable
         end
     end,
 
-    pos = coordinate(9),
-    atlas = 'bunco_tags',
+    pos = coordinate(2),
+    atlas = 'bunco_tags_sticker',
 
     in_pool = function() return false end
 }
@@ -4440,8 +4528,8 @@ SMODS.Tag{ -- Rental
         end
     end,
 
-    pos = coordinate(10),
-    atlas = 'bunco_tags',
+    pos = coordinate(3),
+    atlas = 'bunco_tags_sticker',
 
     in_pool = function() return false end
 }

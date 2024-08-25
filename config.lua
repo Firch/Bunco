@@ -18,6 +18,9 @@ return {
         fixed_sprites = true; -- Fixes some stray pixels and various weirdness
         -- Values: true/false (default: true)
 
+        reworked_jokers = true; -- Reworks some of the vanilla Jokers
+        -- Values: true/false (default: true)
+
         purist_mode = false; -- Enabling this will disable some features that include references to other videgames or media. This config will be removed as soon as LocalThunk will add videogame refe
         -- Values: true/false (default: false)
 
