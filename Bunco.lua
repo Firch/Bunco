@@ -4192,7 +4192,7 @@ SMODS.Tag{ -- Chips
         return {vars = {G.P_CENTERS.e_foil.config.extra}}
     end,
     apply = function(tag, context)
-        if context.type == 'hand_played' then
+        if context.type == 'hand_played' and context.before then
 
             hand_chips = mod_chips(hand_chips + G.P_CENTERS.e_foil.config.extra)
             update_hand_text({delay = 0}, {chips = hand_chips})
@@ -4219,7 +4219,7 @@ SMODS.Tag{ -- Mult
         return {vars = {G.P_CENTERS.e_holo.config.extra}}
     end,
     apply = function(tag, context)
-        if context.type == 'hand_played' then
+        if context.type == 'hand_played' and context.before then
 
             mult = mod_mult(mult + G.P_CENTERS.e_holo.config.extra)
             update_hand_text({delay = 0}, {mult = mult})
@@ -4246,7 +4246,7 @@ SMODS.Tag{ -- Xmult
         return {vars = {G.P_CENTERS.e_polychrome.config.extra}}
     end,
     apply = function(tag, context)
-        if context.type == 'hand_played' then
+        if context.type == 'hand_played' and context.after then
 
             mult = mod_mult(mult * G.P_CENTERS.e_polychrome.config.extra)
             update_hand_text({delay = 0}, {mult = mult})
@@ -4273,7 +4273,7 @@ SMODS.Tag{ -- Xchip
         return {vars = {G.P_CENTERS.e_bunc_glitter.config.Xchips}}
     end,
     apply = function(tag, context)
-        if context.type == 'hand_played' then
+        if context.type == 'hand_played' and context.after then
 
             hand_chips = mod_chips(hand_chips * G.P_CENTERS.e_bunc_glitter.config.Xchips)
             update_hand_text({delay = 0}, {chips = hand_chips})

@@ -1741,7 +1741,22 @@ end
 
 '''
 
-# Edition tags 1/3
+# Edition tags 1/4
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = 'local modded = false'
+position = 'before'
+match_indent = true
+payload = '''
+
+for i = 1, #G.GAME.tags do
+    G.GAME.tags[i]:apply_to_run({type = 'hand_played', before = true})
+end
+
+'''
+
+# Edition tags 2/4
 [[patches]]
 [patches.regex]
 target = 'functions/state_events.lua'
@@ -1751,12 +1766,12 @@ line_prepend = '$indent'
 payload = '''
 
 for i = 1, #G.GAME.tags do
-    G.GAME.tags[i]:apply_to_run({type = 'hand_played'})
+    G.GAME.tags[i]:apply_to_run({type = 'hand_played', after = true})
 end
 
 '''
 
-# function Card:use_consumeable() Edition tags 2/3
+# function Card:use_consumeable() Edition tags 3/4
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
@@ -1783,7 +1798,7 @@ end
 
 '''
 
-# Edition tags 3/3
+# Edition tags 4/4
 [[patches]]
 [patches.pattern]
 target = 'functions/state_events.lua'
