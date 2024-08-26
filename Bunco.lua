@@ -1204,11 +1204,10 @@ create_joker({ -- JMJB
             context.open_booster and context.card.ability.name == 'Mega Standard Pack') then
                 event({
                     trigger = 'after',
-                    delay = 1.3 * math.sqrt(G.SETTINGS.GAMESPEED),
+                    delay = 0,
                     blockable = false,
                     blocking = false,
                     func = function()
-
                         if G.pack_cards and G.pack_cards.cards and G.pack_cards.cards[1] and G.pack_cards.VT.y < G.ROOM.T.h then
 
                             for _, v in ipairs(G.pack_cards.cards) do
@@ -1915,22 +1914,20 @@ create_joker({ -- Aristocrat
         end
     end,
     calculate = function(self, card, context)
-        if context.open_booster and context.card.ability.name then
+        if context.open_booster and context.card.ability.name and not G.GAME.rerolled_pack then
             event({
                 trigger = 'after',
-                delay = 1.3 * math.sqrt(G.SETTINGS.GAMESPEED),
+                delay = 0,
                 blockable = false,
                 blocking = false,
                 func = function()
-                    if G.pack_cards and (G.pack_cards.VT.y < G.ROOM.T.h) then
+                    if G.pack_cards and G.pack_cards.cards and G.pack_cards.cards[1] and (G.pack_cards.VT.y < G.ROOM.T.h) then
                         G.GAME.pack_choices = G.GAME.pack_choices + 1
-                        if G.pack_cards and G.pack_cards.cards and G.pack_cards.cards[1] then
-                            if G.GAME.pack_choices > #G.pack_cards.cards then
-                                G.GAME.pack_choices = #G.pack_cards.cards
-                            end
+                        if G.GAME.pack_choices > #G.pack_cards.cards then
+                            G.GAME.pack_choices = #G.pack_cards.cards
                         end
+                        return true
                     end
-                    return true
                 end
             })
         end
@@ -4425,7 +4422,7 @@ SMODS.Tag{ -- Filigree
             end)
             event({
                 trigger = 'after',
-                delay = 1.3 * math.sqrt(G.SETTINGS.GAMESPEED),
+                delay = 0,
                 blockable = false,
                 blocking = false,
                 func = function()
@@ -4434,7 +4431,7 @@ SMODS.Tag{ -- Filigree
                         enable_exotics()
 
                         for _, v in ipairs(G.pack_cards.cards) do
-                            if not v:is_suit('bunc_Fleurons') and not v:is_suit('bunc_Halberds') then
+                            if (not v:is_suit('bunc_Fleurons') and not v:is_suit('bunc_Halberds')) or v.config.center == G.P_CENTERS.m_wild then
                                 local suits = {'bunc_Fleurons', 'bunc_Halberds'}
                                 local suit = pseudorandom_element(suits, pseudoseed('filigree'..G.SEED))
                                 v:change_suit(suit)
