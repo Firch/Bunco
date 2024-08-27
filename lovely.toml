@@ -2312,7 +2312,7 @@ match_indent = true
 payload = '''
 
 local scattering_sticker
-if self.ability.bunc_scattering then scattering_sticker = true end
+if self.ability.bunc_scattering and self.area == G.jokers then scattering_sticker = true end
 
 '''
 
@@ -2325,7 +2325,7 @@ position = 'after'
 match_indent = true
 payload = '''
 
-if scattering_sticker and not (self.area and self.area.config.collection) then
+if scattering_sticker then
     if G.jokers and G.jokers.cards and #G.jokers.cards > 0 then
         local random_card
         local joker_table = {}
