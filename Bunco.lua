@@ -2766,10 +2766,12 @@ create_joker({ -- The Joker
         end
     end,
     update = function(self, card)
-        local timer = (G.TIMERS.REAL * G.ANIMATION_FPS * 2) + 20
-        local frame_amount = 40
-        local wrapped_value = (math.floor(timer) - 1) % frame_amount + 1
-        card.children.center:set_sprite_pos({x = wrapped_value, y = card.children.center.sprite_pos.y})
+        if self.unlocked and self.discovered then
+            local timer = (G.TIMERS.REAL * G.ANIMATION_FPS * 2) + 20
+            local frame_amount = 40
+            local wrapped_value = (math.floor(timer) - 1) % frame_amount + 1
+            card.children.center:set_sprite_pos({x = wrapped_value, y = card.children.center.sprite_pos.y})
+        end
     end
 })
 
