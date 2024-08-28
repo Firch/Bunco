@@ -5121,7 +5121,7 @@ SMODS.Stake{ -- Magenta
 }
 
 SMODS.Stake:take_ownership('gold', {
-    applied_stakes = {"bunc_magenta"}
+    applied_stakes = {'bunc_magenta'}
 })
 
 -- Mod compatibility

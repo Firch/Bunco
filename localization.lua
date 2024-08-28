@@ -1546,12 +1546,10 @@ return {
 
     cyan = {
         ['en-us'] = {
-            ['description'] = {
-                ['name'] = 'Cyan Stake',
-                ['text'] = {
-                    [1] = 'Shop can have {C:attention}Scattering{} Jokers',
-                    [2] = '{C:inactive,s:0.8}(Destroys random Joker when sold or destroyed)'
-                }
+            ['name'] = 'Cyan Stake',
+            ['text'] = {
+                [1] = 'Shop can have {C:attention}Scattering{} Jokers',
+                [2] = '{C:inactive,s:0.8}(Destroys random Joker when sold or destroyed)'
             },
             ['sticker'] = {
                 ['name'] = 'Cyan Sticker',
@@ -1565,12 +1563,10 @@ return {
     },
     pink = {
         ['en-us'] = {
-            ['description'] = {
-                ['name'] = 'Pink Stake',
-                ['text'] = {
-                    [1] = 'Shop can have {C:attention}Hindered{} Jokers',
-                    [2] = '{C:inactive,s:0.8}(Stays in place until the end of the round after being sold)'
-                }
+            ['name'] = 'Pink Stake',
+            ['text'] = {
+                [1] = 'Shop can have {C:attention}Hindered{} Jokers',
+                [2] = '{C:inactive,s:0.8}(Stays in place until the end of the round after being sold)'
             },
             ['sticker'] = {
                 ['name'] = 'Pink Sticker',
@@ -1584,12 +1580,10 @@ return {
     },
     magenta = {
         ['en-us'] = {
-            ['description'] = {
-                ['name'] = 'Magenta Stake',
-                ['text'] = {
-                    [1] = 'Shop can have {C:attention}Reactive{} Jokers',
-                    [2] = '{C:inactive,s:0.8}(Debuffed if no blinds are skipped this Ante)'
-                }
+            ['name'] = 'Magenta Stake',
+            ['text'] = {
+                [1] = 'Shop can have {C:attention}Reactive{} Jokers',
+                [2] = '{C:inactive,s:0.8}(Debuffed if no blinds are skipped this Ante)'
             },
             ['sticker'] = {
                 ['name'] = 'Magenta Sticker',
