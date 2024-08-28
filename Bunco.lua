@@ -4913,55 +4913,22 @@ SMODS.Voucher{ -- Shell Game
 
 function Card:create_blind_card()
 
+    if pseudorandom('the_joker'..G.SEED) < 0.04 and not (G.GAME.used_jokers['j_bunc_the_joker'] and not next(find_joker("Showman"))) then
+        return create_card('Joker', G.pack_cards, nil, nil, true, true, 'j_bunc_the_joker', 'buf')
+    end
+
     self = Card(self.T.x, self.T.y, 0.8*G.CARD_W, 0.8*G.CARD_W, nil, G.P_CENTERS.c_base)
 
     -- Blind acquiring like in the base game
 
-    local eligible_bosses = {}
-    for k, v in pairs(G.P_BLINDS) do
-        if not v.boss then
+    local boss, blind
 
-        elseif v.in_pool and type(v.in_pool) == 'function' then
-            if
-                (
-                    ((G.GAME.round_resets.ante)%G.GAME.win_ante == 0 and G.GAME.round_resets.ante >= 2) ==
-                    (v.boss.showdown or false)
-                ) or
-                v.ignore_showdown_check
-            then
-                eligible_bosses[k] = v:in_pool() and true or nil
-            end
-        elseif not v.boss.showdown and (v.boss.min <= math.max(1, G.GAME.round_resets.ante) and ((math.max(1, G.GAME.round_resets.ante))%G.GAME.win_ante ~= 0 or G.GAME.round_resets.ante < 2)) then
-            eligible_bosses[k] = true
-        elseif v.boss.showdown and (G.GAME.round_resets.ante)%G.GAME.win_ante == 0 and G.GAME.round_resets.ante >= 2 then
-            eligible_bosses[k] = true
-        end
+    if not TW_BL then -- TW_BL is for Twich Blinds mod
+        boss = get_new_boss()
+        blind = G.P_BLINDS[boss]
+    else
+        blind = G.P_BLINDS[TW_BL.UTILITIES.get_new_bosses(0, 1)[1]]
     end
-    for k, v in pairs(G.GAME.banned_keys) do
-        if eligible_bosses[k] then eligible_bosses[k] = nil end
-    end
-
-    local min_use = 100
-    for k, v in pairs(G.GAME.bosses_used) do
-        if eligible_bosses[k] then
-            eligible_bosses[k] = v
-            if eligible_bosses[k] <= min_use then 
-                min_use = eligible_bosses[k]
-            end
-        end
-    end
-    for k, v in pairs(eligible_bosses) do
-        if eligible_bosses[k] then
-            if eligible_bosses[k] > min_use then 
-                eligible_bosses[k] = nil
-            end
-        end
-    end
-    local _, blind = pseudorandom_element(eligible_bosses, pseudoseed('boss'))
-
-    -- Key to actual blind object
-
-    blind = G.P_BLINDS[blind]
 
     -- Blind appearance
 
@@ -4987,7 +4954,7 @@ function Card:create_blind_card()
                     self.hover_tilt = 3
                     self:juice_up(0.05, 0.02)
                 play_sound('chips1', math.random() * 0.1 + 0.55, 0.12)
-                self.config.h_popup = create_UIBox_blind_popup(blind, true)
+                self.config.h_popup = create_UIBox_blind_popup(self.ability.blind_card.blind, true)
                 self.config.h_popup_config = {align = 'tm', offset = {x = 0, y = -0.13}, parent = self}
                 Node.hover(self)
                 if self.children.alert then 

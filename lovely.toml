@@ -1545,13 +1545,13 @@ end
 # function get_new_boss() (Vermilion Trident 2/2)
 [[patches]]
 [patches.pattern]
-target = 'functions/common_events.lua'
-pattern = 'return boss'
-position = 'before'
+target = 'game.lua'
+pattern = 'function Game:update(dt)'
+position = 'after'
 match_indent = true
 payload = '''
 
-if boss == 'bl_bunc_final_trident' then
+if G.GAME.round_resets.blind_choices and G.GAME.round_resets.blind_choices.Boss and G.GAME.round_resets.blind_choices.Boss == 'bl_bunc_final_trident' then
     G.GAME.Trident = true
 else
     G.GAME.Trident = false
@@ -1644,13 +1644,13 @@ payload = '''ease_to = G.GAME.chips + math.floor(hand_chips * mult) * (antiscore
 # function get_new_boss() (Turquoise Shield 1/2)
 [[patches]]
 [patches.pattern]
-target = 'functions/common_events.lua'
-pattern = 'return boss'
-position = 'before'
+target = 'game.lua'
+pattern = 'function Game:update(dt)'
+position = 'after'
 match_indent = true
 payload = '''
 
-if boss == 'bl_bunc_final_shield' then
+if G.GAME.round_resets.blind_choices and G.GAME.round_resets.blind_choices.Boss and G.GAME.round_resets.blind_choices.Boss == 'bl_bunc_final_shield' then
     G.GAME.Shield = true
 else
     G.GAME.Shield = false
@@ -2348,12 +2348,14 @@ end
 G.FUNCS.use_blind_card = function(e)
     local card = e.config.ref_table
 
+    local boss = card.ability.blind_card.blind.key
+
     play_sound('other1')
 
     e.config.button = nil
 
     local par = G.blind_select_opts.boss.parent
-    G.GAME.round_resets.blind_choices.Boss = card.ability.blind_card.blind.key
+    G.GAME.round_resets.blind_choices.Boss = boss
 
     if G.blind_select_opts.boss and par and par.config.object then
         G.blind_select_opts.boss:remove()
