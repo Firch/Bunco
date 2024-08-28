@@ -538,6 +538,7 @@ end
 SMODS.Atlas({key = 'bunco_jokers', path = 'Jokers/Jokers.png', px = 71, py = 95})
 SMODS.Atlas({key = 'bunco_jokers_exotic', path = 'Jokers/JokersExotic.png', px = 71, py = 95})
 SMODS.Atlas({key = 'bunco_jokers_legendary', path = 'Jokers/JokersLegendary.png', px = 71, py = 95})
+SMODS.Atlas({key = 'bunco_jokers_the_joker', path = 'Jokers/JokerBlind.png', px = 71, py = 95})
 
 local function create_joker(joker)
 
@@ -555,14 +556,16 @@ local function create_joker(joker)
 
     -- Sprite atlas
 
+    local atlas
+
     if joker.type == nil then
-        joker.atlas = 'bunco_jokers'
+        atlas = 'bunco_jokers'
     elseif joker.type == 'Exotic' then
-        joker.atlas = 'bunco_jokers_exotic'
+        atlas = 'bunco_jokers_exotic'
     end
 
     if joker.rarity == 'Legendary' then
-        joker.atlas = 'bunco_jokers_legendary'
+        atlas = 'bunco_jokers_legendary'
     end
 
     -- Key generation from name
@@ -607,7 +610,7 @@ local function create_joker(joker)
         name = joker.name,
         key = key,
 
-        atlas = joker.atlas,
+        atlas = joker.custom_atlas or atlas,
         pos = joker.position,
         soul_pos = joker.soul,
 
@@ -2692,6 +2695,74 @@ create_joker({ -- Mousetrap
                 }
             end
         end
+    end
+})
+
+create_joker({ -- The Joker
+    name = 'The Joker', custom_atlas = 'bunco_jokers_the_joker', position = 1,
+    vars = {{trash_list = {}}, {odds = 3}},
+    custom_vars = function(self, info_queue, card)
+        local vars
+        if G.GAME and G.GAME.probabilities.normal then
+            vars = {G.GAME.probabilities.normal, card.ability.extra.odds}
+        else
+            vars = {1, card.ability.extra.odds}
+        end
+        return {vars = vars}
+    end,
+    rarity = 'Rare', cost = 6,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if not context.blueprint then
+            if context.scoring_hand and not context.other_card then
+                card.ability.extra.trash_list = {}
+                for k, v in ipairs(context.scoring_hand) do
+                    if v.config.center == G.P_CENTERS.c_base then
+                        if pseudorandom('the_joker'..G.SEED) < G.GAME.probabilities.normal / card.ability.extra.odds then
+                            table.insert(card.ability.extra.trash_list, v)
+                        end
+                    end
+                end
+            end
+
+            if context.after then
+                local trash_list = card.ability.extra.trash_list
+                local dissolve_time_fac = 3
+
+                if #trash_list ~= 0 then
+
+                    event({
+                        trigger = 'before',
+                        delay = 0.7 * dissolve_time_fac * 1.051,
+                        func = function()
+                            big_juice(card)
+                            play_sound('tarot2', 1.2, 0.4)
+                            event({blocking = false, blockable = false, trigger = 'after', delay = 0.06*G.SETTINGS.GAMESPEED, func = function()
+                                play_sound('tarot2', 0.96, 0.4)
+                            return true end})
+                            for _, card_to_trash in ipairs(trash_list) do
+                                if not card_to_trash.removed then
+                                    card_to_trash:start_dissolve(nil, nil, dissolve_time_fac)
+                                end
+                            end
+                            return true
+                        end
+                    })
+
+                    for _, card_to_trash in ipairs(trash_list) do
+                        card_to_trash.destroyed = true
+                    end
+                end
+                card.ability.extra.trash_list = {}
+            end
+        end
+    end,
+    update = function(self, card)
+        local timer = (G.TIMERS.REAL * G.ANIMATION_FPS * 2) + 20
+        local frame_amount = 40
+        local wrapped_value = (math.floor(timer) - 1) % frame_amount + 1
+        card.children.center:set_sprite_pos({x = wrapped_value, y = card.children.center.sprite_pos.y})
     end
 })
 
