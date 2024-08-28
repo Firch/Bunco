@@ -10,7 +10,7 @@ return {
             jokerlike_consumable_editions = 'Editions in Consumables Slot',
             fixed_badges = 'Fixed Badges',
             fixed_sprites = 'Fixed Sprites',
-            reworked_jokers = 'Reworked Jokers',
+            gameplay_reworks = 'Gameplay Reworks',
 
             requires_restart = '(Requires game restart)',
 
@@ -1265,7 +1265,18 @@ return {
         }
     },
 
+    -- Reworked tags
+
+    boss = {
+        name = "Boss Tag",
+        text = {
+            "Gives a free",
+            "{C:attention}Blind Pack"
+        }
+    },
+
     -- Tags
+
     breaking = {
         ['en-us'] = {
             ['name'] = 'Breaking Tag',
@@ -1478,6 +1489,20 @@ return {
                 [1] = 'Reroll {C:attention}contents',
                 [2] = 'of Booster Packs',
                 [3] = '{C:attention}1{} time per pack'
+            }
+        }
+    },
+
+    -- Booster Packs
+
+    blind_standard = {
+        ['en-us'] = {
+            ['group_name'] = 'Blind Pack',
+            ['name'] = 'Blind Pack',
+            ['text'] = {
+                [1] = 'Choose one of up to',
+                [2] = '{C:attention}#1# Boss Blinds{} to',
+                [3] = 'replace on this Ante'
             }
         }
     },

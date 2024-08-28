@@ -153,7 +153,7 @@ function bunco.config_tab()
         create_toggle({label = loc.dictionary.jokerlike_consumable_editions, ref_table = bunco.config, ref_value = 'jokerlike_consumable_editions', callback = function() bunco:save_config() end}),
         create_toggle({label = loc.dictionary.fixed_badges, ref_table = bunco.config, ref_value = 'fixed_badges', callback = function() bunco:save_config() end}),
         create_toggle({label = loc.dictionary.fixed_sprites, info = {loc.dictionary.requires_restart}, ref_table = bunco.config, ref_value = 'fixed_sprites', callback = function() bunco:save_config() end}),
-        create_toggle({label = loc.dictionary.reworked_jokers, info = {loc.dictionary.requires_restart}, ref_table = bunco.config, ref_value = 'reworked_jokers', callback = function() bunco:save_config() end})
+        create_toggle({label = loc.dictionary.gameplay_reworks, info = {loc.dictionary.requires_restart}, ref_table = bunco.config, ref_value = 'gameplay_reworks', callback = function() bunco:save_config() end})
     }}
 end
 
@@ -339,11 +339,11 @@ if config.fixed_sprites then
 
 end
 
--- Reworked Jokers
+-- Gameplay reworks
 
-if config.reworked_jokers then
+if config.gameplay_reworks then
 
-    bunco_reworked_jokers = true
+    bunco_gameplay_reworks = true
 
     SMODS.Joker:take_ownership('luchador', {
         loc_txt = loc.luchador,
@@ -379,6 +379,31 @@ if config.reworked_jokers then
                         card = card
                     })
                 return true end})
+            end
+        end
+    })
+
+    SMODS.Tag:take_ownership('boss', {
+        loc_txt = loc.boss,
+        loc_vars = function(self, info_queue)
+            info_queue[#info_queue + 1] = {key = 'p_bunc_blind_1', set = 'Other', vars = {G.P_CENTERS.p_bunc_blind_1.config.extra}}
+            return {}
+        end,
+        apply = function(tag, context)
+            if context.type == 'new_blind_choice' then
+                tag:yep('+', G.C.SECONDARY_SET.Spectral, function()
+                    local key = 'p_bunc_blind_'..(math.random(4))
+                    local card = Card(G.play.T.x + G.play.T.w/2 - G.CARD_W*1.27/2,
+                    G.play.T.y + G.play.T.h/2-G.CARD_H*1.27/2, G.CARD_W*1.27, G.CARD_H*1.27, G.P_CARDS.empty, G.P_CENTERS[key], {bypass_discovery_center = true, bypass_discovery_ui = true})
+                    card.cost = 0
+                    card.from_tag = true
+                    G.FUNCS.use_card({config = {ref_table = card}})
+                    card:start_materialize()
+                    G.CONTROLLER.locks[tag.ID] = nil
+                    return true
+                end)
+                tag.triggered = true
+                return true
             end
         end
     })
@@ -4812,6 +4837,172 @@ SMODS.Voucher{ -- Shell Game
     pos = coordinate(6),
     atlas = 'bunco_vouchers'
 }
+
+-- Blind Cards
+
+function Card:create_blind_card()
+
+    self = Card(self.T.x, self.T.y, 0.8*G.CARD_W, 0.8*G.CARD_W, nil, G.P_CENTERS.c_base)
+
+    -- Blind acquiring like in the base game
+
+    local eligible_bosses = {}
+    for k, v in pairs(G.P_BLINDS) do
+        if not v.boss then
+
+        elseif v.in_pool and type(v.in_pool) == 'function' then
+            if
+                (
+                    ((G.GAME.round_resets.ante)%G.GAME.win_ante == 0 and G.GAME.round_resets.ante >= 2) ==
+                    (v.boss.showdown or false)
+                ) or
+                v.ignore_showdown_check
+            then
+                eligible_bosses[k] = v:in_pool() and true or nil
+            end
+        elseif not v.boss.showdown and (v.boss.min <= math.max(1, G.GAME.round_resets.ante) and ((math.max(1, G.GAME.round_resets.ante))%G.GAME.win_ante ~= 0 or G.GAME.round_resets.ante < 2)) then
+            eligible_bosses[k] = true
+        elseif v.boss.showdown and (G.GAME.round_resets.ante)%G.GAME.win_ante == 0 and G.GAME.round_resets.ante >= 2 then
+            eligible_bosses[k] = true
+        end
+    end
+    for k, v in pairs(G.GAME.banned_keys) do
+        if eligible_bosses[k] then eligible_bosses[k] = nil end
+    end
+
+    local min_use = 100
+    for k, v in pairs(G.GAME.bosses_used) do
+        if eligible_bosses[k] then
+            eligible_bosses[k] = v
+            if eligible_bosses[k] <= min_use then 
+                min_use = eligible_bosses[k]
+            end
+        end
+    end
+    for k, v in pairs(eligible_bosses) do
+        if eligible_bosses[k] then
+            if eligible_bosses[k] > min_use then 
+                eligible_bosses[k] = nil
+            end
+        end
+    end
+    local _, blind = pseudorandom_element(eligible_bosses, pseudoseed('boss'))
+
+    -- Key to actual blind object
+
+    blind = G.P_BLINDS[blind]
+
+    -- Blind appearance
+
+    self.children.center = Sprite(self.T.x, self.T.y, self.T.w, self.T.w, G.ANIMATION_ATLAS[blind.atlas] or G.ANIMATION_ATLAS['blind_chips'], {x = blind.pos.x or 0, y = blind.pos.y or 0})
+    self.children.center.states.hover = self.states.hover
+    self.children.center.states.click = self.states.click
+    self.children.center.states.drag = self.states.drag
+    self.children.center.states.collide.can = false
+    self.children.center:set_role({role_type = 'Glued', major = self, draw_major = self,
+    xy_bond = 'Strong',
+    wh_bond = 'Strong',
+    r_bond = 'Strong',
+    scale_bond = 'Strong'})
+
+    self.children.back = self.children.center
+
+    self.ability.blind_card = {blind = blind}
+
+    self.hover = function()
+        if not G.CONTROLLER.dragging.target or G.CONTROLLER.using_touch then 
+            if not self.hovering and self.states.visible then
+                    self.hovering = true
+                    self.hover_tilt = 3
+                    self:juice_up(0.05, 0.02)
+                play_sound('chips1', math.random() * 0.1 + 0.55, 0.12)
+                self.config.h_popup = create_UIBox_blind_popup(blind, true)
+                self.config.h_popup_config = {align = 'tm', offset = {x = 0, y = -0.13}, parent = self}
+                Node.hover(self)
+                if self.children.alert then 
+                    self.children.alert:remove()
+                    self.children.alert = nil
+                    self.config.blind.alerted = true
+                    G:save_progress()
+                end
+            end
+        end
+        self.stop_hover = function() self.hovering = false; Node.stop_hover(self); self.hover_tilt = 0 end
+    end
+
+    return self
+end
+
+-- Booster Packs
+
+SMODS.Atlas({key = 'bunco_booster_packs_blind', path = 'Boosters/BoostersBlind.png', px = 71, py = 95})
+
+for i = 1, 4 do -- Blind
+    SMODS.Booster{
+        key = 'blind_'..i, loc_txt = loc.blind_standard,
+
+        loc_vars = function(self, info_queue, card)
+            return {vars = {self.config.extra}}
+        end,
+        config = {extra = 3, choose = 1},
+
+        create_card = function(self, card)
+            return card:create_blind_card()
+        end,
+        update_pack = function(self, dt)
+            SMODS.Booster.update_pack(self)
+            G.GAME.pack_choices = 1
+        end,
+
+        sparkles = {colours = {HEX('19ee94'), HEX('ecbe69'), HEX('ee80cd'), HEX('9894e2')}},
+        ease_background_colour = function(self)
+            ease_colour(G.C.DYN_UI.MAIN, HEX('4d7796'))
+            ease_background_colour{new_colour = HEX('4d7796'), special_colour = HEX('c7d775'), contrast = 2}
+        end,
+
+        pack_uibox = function(self) -- I don't know if I should do it like that, but since I can't inject into steamodded's files directly I do this
+                                    -- However I could mess with the node structure instead of repeating the whole thing. Do you want me to suffer?
+                                    -- Look at this mess. Terrible
+            local _size = SMODS.OPENED_BOOSTER.ability.extra
+            G.pack_cards = CardArea(
+                G.ROOM.T.x + 9 + G.hand.T.x, G.hand.T.y,
+                math.max(1,math.min(_size,5))*G.CARD_W*1.1,
+                1.05*G.CARD_H, 
+                {card_limit = _size, type = 'consumeable', highlight_limit = 1})
+
+            local t = {n=G.UIT.ROOT, config = {align = 'tm', r = 0.15, colour = G.C.CLEAR, padding = 0.15}, nodes={
+                {n=G.UIT.R, config={align = "cl", colour = G.C.CLEAR,r=0.15, padding = 0.1, minh = 2, shadow = true}, nodes={
+                    {n=G.UIT.R, config={align = "cm"}, nodes={
+                    {n=G.UIT.C, config={align = "cm", padding = 0.1}, nodes={
+                        {n=G.UIT.C, config={align = "cm", r=0.2, colour = G.C.CLEAR, shadow = true}, nodes={
+                            {n=G.UIT.O, config={object = G.pack_cards}},}}}}}},
+                {n=G.UIT.R, config={align = "cm"}, nodes={}},
+                {n=G.UIT.R, config={align = "tm"}, nodes={
+                    {n=G.UIT.C,config={align = "tm", padding = 0.05, minw = 2.4}, nodes={}},
+                    {n=G.UIT.C,config={align = "tm", padding = 0.05}, nodes={
+                        UIBox_dyn_container({
+                            {n=G.UIT.C, config={align = "cm", padding = 0.05, minw = 4}, nodes={
+                                {n=G.UIT.R,config={align = "bm", padding = 0.05}, nodes={
+                                    {n=G.UIT.O, config={object = DynaText({string = localize(self.group_key or ('k_booster_group_'..self.key)), colours = {G.C.WHITE},shadow = true, rotate = true, bump = true, spacing =2, scale = 0.7, maxw = 4, pop_in = 0.5})}}}},
+                                {n=G.UIT.R,config={align = "bm", padding = 0.05}, nodes={
+                                    {n=G.UIT.O, config={object = DynaText({string = {localize('b_reroll_boss')}, colours = {G.C.WHITE}, shadow = true, rotate = true, bump = true, spacing = 2, scale = 0.5, pop_in = 0.7})}},}},}}
+                        }),}},
+                    {n=G.UIT.C,config={align = "tm", padding = 0.05, minw = 2.4}, nodes={
+                        {n=G.UIT.R,config={minh =0.2}, nodes={}},
+                        (G.GAME.used_vouchers['v_bunc_shell_game'] and not G.GAME.rerolled_pack and
+                        UIBox_button({label = {localize('k_reroll')}, padding = 0.07, minh = 0.7, minw = 1.8, r = 0.15, one_press = true, button = 'reroll_booster_pack', func = 'reroll_booster_pack_button'}) or nil),
+                        G.GAME.used_vouchers['v_bunc_shell_game'] and {n=G.UIT.R,config = {minh = 0.07}, nodes={}},
+                        {n=G.UIT.R, config = {align = G.GAME.used_vouchers['v_bunc_shell_game'] and 'cm' or 'tm', padding = G.GAME.used_vouchers['v_bunc_shell_game'] and 0.07 or 0.2, minh = G.GAME.used_vouchers['v_bunc_shell_game'] and 0.7 or 1.2, minw = 1.8, r = 0.15, colour = G.C.GREY, one_press = true, button = 'skip_booster', hover = true, shadow = true, func = 'can_skip_booster'}, nodes = {
+                            {n=G.UIT.T, config={text = localize('b_skip'), scale = 0.5, colour = G.C.WHITE, shadow = true, focus_args = {button = 'y', orientation = 'bm'}, func = 'set_button_pip'}}}}}}}}}}}}
+            return t
+        end,
+
+        pos = coordinate(i),
+        atlas = 'bunco_booster_packs_blind',
+
+        in_pool = function() return false end
+    }
+end
 
 -- Stickers
 

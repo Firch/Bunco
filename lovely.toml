@@ -181,7 +181,7 @@ target = 'card.lua'
 pattern = "elseif self.ability.name == 'Luchador' then"
 position = 'at'
 match_indent = true
-payload = '''elseif self.ability.name == 'Luchador' and not bunco_reworked_jokers then'''
+payload = '''elseif self.ability.name == 'Luchador' and not bunco_gameplay_reworks then'''
 
 # Red Card Rework
 [[patches]]
@@ -190,7 +190,16 @@ target = 'card.lua'
 pattern = "if self.ability.name == 'Red Card' and not context.blueprint then"
 position = 'at'
 match_indent = true
-payload = '''if self.ability.name == 'Red Card' and not context.blueprint and not bunco_reworked_jokers then'''
+payload = '''if self.ability.name == 'Red Card' and not context.blueprint and not bunco_gameplay_reworks then'''
+
+# Boss Tag Rework
+[[patches]]
+[patches.pattern]
+target = 'tag.lua'
+pattern = "if self.name == 'Boss Tag' then"
+position = 'at'
+match_indent = true
+payload = '''if self.name == 'Boss Tag' and not bunco_gameplay_reworks then'''
 
 # # Shiny Blinds
 # [[patches]]
@@ -2301,6 +2310,111 @@ else
 end
 
 '''
+
+# Blind Cards 1/3
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''function G.UIDEF.use_and_sell_buttons(card)'''
+position = 'after'
+match_indent = true
+payload = '''
+
+if card.area and card.area == G.pack_cards and card.ability.blind_card then
+    return {
+        n = G.UIT.ROOT, config = {padding = 0, colour = G.C.CLEAR}, nodes = {
+            {n = G.UIT.R, config = {ref_table = card, r = 0.08, padding = 0.1, align = "bm", minw = 0.5 * card.T.w - 0.15, maxw = 0.9 * card.T.w - 0.15, minh = 0.3 * card.T.h, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, button = 'use_blind_card', func = 'can_use_blind_card'}, nodes = {
+                {n=G.UIT.T, config={text = localize('b_select'), colour = G.C.UI.TEXT_LIGHT, scale = 0.45, shadow = true}}
+        }},
+    }}
+end
+
+'''
+
+# Blind Cards 2/3
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = '''G.FUNCS.sell_card = function(e)'''
+position = 'before'
+match_indent = true
+payload = '''
+
+G.FUNCS.can_use_blind_card = function(e)
+    e.config.colour = G.C.GREEN
+    e.config.button = 'use_blind_card'
+end
+
+G.FUNCS.use_blind_card = function(e)
+    local card = e.config.ref_table
+
+    play_sound('other1')
+
+    e.config.button = nil
+
+    local par = G.blind_select_opts.boss.parent
+    G.GAME.round_resets.blind_choices.Boss = card.ability.blind_card.blind.key
+
+    if G.blind_select_opts.boss and par and par.config.object then
+        G.blind_select_opts.boss:remove()
+        G.blind_select_opts.boss = UIBox{
+            T = {par.T.x, 0, 0, 0},
+            definition = {
+                n = G.UIT.ROOT,
+                config = {
+                    align = "cm",
+                    colour = G.C.CLEAR
+                },
+                nodes = {UIBox_dyn_container({create_UIBox_blind_choice('Boss')}, false,
+                    get_blind_main_colour('Boss'), mix_colours(G.C.BLACK, get_blind_main_colour('Boss'), 0.8))}
+            },
+            config = {
+                align = "bmi",
+                offset = {
+                    x = 0,
+                    y = G.ROOM.T.y + 9
+                },
+                major = par,
+                xy_bond = 'Weak'
+            }
+        }
+        par.config.object = G.blind_select_opts.boss
+        par.config.object:recalculate()
+        G.blind_select_opts.boss.parent = par
+        G.blind_select_opts.boss.alignment.offset.y = 0
+    end
+
+    for i = 1, #G.GAME.tags do
+        if G.GAME.tags[i]:apply_to_run({
+            type = 'new_blind_choice'
+        }) then
+            break
+        end
+    end
+    G.FUNCS.end_consumeable()
+end
+
+
+'''
+
+# Blind Cards 3/3 (Blind Animation)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'if G.STAGE == G.STAGES.RUN then'
+position = 'before'
+match_indent = true
+payload = '''
+
+if self.ability and self.ability.blind_card then
+    local timer = G.TIMERS.REAL * G.ANIMATION_FPS
+    local frame_amount = 20
+    local wrapped_value = (math.floor(timer) - 1) % frame_amount + 1
+    self.children.center:set_sprite_pos({x = wrapped_value, y = self.children.center.sprite_pos.y})
+end
+
+'''
+
 
 # Scattering Sticker 1/2
 [[patches]]
