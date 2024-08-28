@@ -2711,8 +2711,15 @@ create_joker({ -- The Joker
         return {vars = vars}
     end,
     rarity = 'Rare', cost = 6,
-    blueprint = true, eternal = true,
-    unlocked = true,
+    blueprint = false, eternal = true,
+    unlocked = false,
+    check_for_unlock = function(self, args)
+        if args.type == 'discover_amount' then
+            if G.DISCOVER_TALLIES.blinds.tally == G.DISCOVER_TALLIES.blinds.of then
+                unlock_card(self)
+            end
+        end
+    end,
     calculate = function(self, card, context)
         if not context.blueprint then
             if context.scoring_hand and not context.other_card then
@@ -4913,7 +4920,7 @@ SMODS.Voucher{ -- Shell Game
 
 function Card:create_blind_card()
 
-    if pseudorandom('the_joker'..G.SEED) < 0.04 and not (G.GAME.used_jokers['j_bunc_the_joker'] and not next(find_joker("Showman"))) then
+    if pseudorandom('the_joker'..G.SEED) < 0.04 and G.P_CENTERS['j_bunc_the_joker'].unlocked and not (G.GAME.used_jokers['j_bunc_the_joker'] and not next(find_joker("Showman"))) then
         return create_card('Joker', G.pack_cards, nil, nil, true, true, 'j_bunc_the_joker', 'buf')
     end
 
@@ -4921,14 +4928,15 @@ function Card:create_blind_card()
 
     -- Blind acquiring like in the base game
 
-    local boss, blind
+    local boss
 
     if not TW_BL then -- TW_BL is for Twich Blinds mod
         boss = get_new_boss()
-        blind = G.P_BLINDS[boss]
     else
-        blind = G.P_BLINDS[TW_BL.UTILITIES.get_new_bosses(0, 1)[1]]
+        boss = TW_BL.UTILITIES.get_new_bosses(0, 1)[1]
     end
+
+    local blind = G.P_BLINDS[boss]
 
     -- Blind appearance
 

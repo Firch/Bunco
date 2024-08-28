@@ -874,6 +874,10 @@ return {
                 [1] = 'After play, each scored',
                 [2] = 'card without an enhancement has',
                 [3] = '{C:green}#1# in #2#{} chance to be destroyed',
+            },
+            ['unlock'] = {
+                [1] = 'Discover every',
+                [2] = '{C:attention}Boss Blind'
             }
         }
     },
