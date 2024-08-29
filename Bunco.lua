@@ -13,7 +13,7 @@
 -- (?) Debuff registration plate level with shader if possible
 -- (done) Nan morgan or make zero shapiro count letter rank cards
 -- (done/WIP) Unlocks
--- Check whats up with joker knight
+-- (done) Check whats up with joker knight
 -- (done) Add purist config
 -- (done) Card sizes
 -- (done) Magenta dagger wobble?

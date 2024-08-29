@@ -326,7 +326,7 @@ position = 'before'
 match_indent = true
 payload = '''
 
-local break_table = {before = nil, after = nil}
+local break_table = {before = nil, after = nil, node = nil}
 
 '''
 
@@ -339,7 +339,7 @@ position = 'after'
 match_indent = true
 payload = '''
 
-if G.jokers ~= nil then
+if G.jokers ~= nil and self:is(Card) and self.area == G.jokers then
     for _, v in ipairs(G.jokers.cards) do
         if v.config.center.key == 'j_bunc_knight' and not v.debuff then
             if break_table.before == nil then
@@ -351,6 +351,8 @@ if G.jokers ~= nil then
                 end
 
                 break_table.after = break_table.before
+                break_table.node = self
+                sendDebugMessage('Start')
 
             end
         end
@@ -368,7 +370,7 @@ position = 'after'
 match_indent = true
 payload = '''
 
-if G.jokers ~= nil then
+if G.jokers ~= nil and self == break_table.node then
     for _, v in ipairs(G.jokers.cards) do
         if v.config.center.key == 'j_bunc_knight' and not v.debuff then
             function do_tables_match(a, b)
@@ -387,8 +389,10 @@ if G.jokers ~= nil then
                 v:calculate_joker({ break_positions = true })
             end
 
+                sendDebugMessage('End')
                 break_table.before = nil
                 break_table.after = nil
+
             end
         end
     end
