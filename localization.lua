@@ -33,9 +33,6 @@ return {
             blade = '(1.5X blind score)',
             exceeded_score = 'Exceeded the limit!',
             temporary_extra_chips = {['text'] = {[1] = '{C:chips}+#1#{} extra chips this round'}}
-        },
-        ['fr'] = {
-            nothing = 'Rien'
         }
     },
 
