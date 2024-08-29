@@ -40,7 +40,7 @@
 -- (done) Check blind flips beforehand (The Umbrella)
 -- (done) Running joke gives negative while the joker in shop
 -- Make configs apply immediately
--- Add unlock to the Shell Game
+-- (done) Add unlock to the Shell Game
 
 global_bunco = global_bunco or {loc = {}, vars = {}}
 local bunco = SMODS.current_mod
@@ -4980,7 +4980,13 @@ SMODS.Voucher{ -- Shell Game
 
     requires = {'v_bunc_cups_n_balls'},
 
-    unlocked = true,
+    unlocked = false,
+
+    check_for_unlock = function(self, args)
+        if args.type == 'open_pack' and args.packs_total >= 25 then
+            unlock_card(self)
+        end
+    end,
 
     pos = coordinate(6),
     atlas = 'bunco_vouchers'

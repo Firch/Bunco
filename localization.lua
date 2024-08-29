@@ -1503,6 +1503,10 @@ return {
                 [1] = 'Reroll {C:attention}contents',
                 [2] = 'of Booster Packs',
                 [3] = '{C:attention}1{} time per pack'
+            },
+            ['unlock'] = {
+                [1] = 'Open {E:1,C:attention}25',
+                [2] = 'Booster Packs'
             }
         }
     },
