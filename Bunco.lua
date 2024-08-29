@@ -652,6 +652,7 @@ local function create_joker(joker)
         add_to_deck = joker.add,
         set_ability = joker.set_ability,
         set_sprites = joker.set_sprites,
+        load = joker.load,
         in_pool = joker.custom_in_pool or pool,
 
         effect = joker.effect
@@ -1223,6 +1224,9 @@ create_joker({ -- Knight
         if self.discovered or card.bypass_discovery_center then
             card.children.center.scale.y = card.children.center.scale.x
         end
+    end,
+    load = function(self, card, card_table, other_card)
+        return self.set_ability(self, card)
     end
 })
 
@@ -1445,6 +1449,9 @@ create_joker({ -- Doorhanger
         if self.discovered or card.bypass_discovery_center then
             card.children.center.scale.x = card.children.center.scale.x / 1.44
         end
+    end,
+    load = function(self, card, card_table, other_card)
+        return self.set_ability(self, card)
     end
 })
 
@@ -1571,6 +1578,9 @@ create_joker({ -- Bierdeckel
         if self.discovered or card.bypass_discovery_center then
             card.children.center.scale.y = card.children.center.scale.x
         end
+    end,
+    load = function(self, card, card_table, other_card)
+        return self.set_ability(self, card)
     end
 })
 
@@ -2654,6 +2664,9 @@ create_joker({ -- Cellphone
         if self.discovered or card.bypass_discovery_center then
             card.children.center.scale.x = card.children.center.scale.x / 1.11
         end
+    end,
+    load = function(self, card, card_table, other_card)
+        return self.set_ability(self, card)
     end
 })
 
@@ -2816,6 +2829,9 @@ create_joker({ -- The Joker
         if self.discovered or card.bypass_discovery_center then
             card.children.center.scale.y = card.children.center.scale.x
         end
+    end,
+    load = function(self, card, card_table, other_card)
+        return self.set_ability(self, card)
     end,
     update = function(self, card)
         if self.discovered or card.bypass_discovery_center then
