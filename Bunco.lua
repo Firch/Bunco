@@ -4370,7 +4370,6 @@ SMODS.Tag{ -- Breaking
                 return true
             end)
 
-            card_eval_status_text(context.blueprint_card or self, 'extra', nil, nil, nil, {message = localize('ph_boss_disabled')})
             G.GAME.blind:disable()
 
             tag.triggered = true
@@ -4996,7 +4995,7 @@ SMODS.Voucher{ -- Shell Game
 
 function Card:create_blind_card()
 
-    if pseudorandom('the_joker'..G.SEED) < 0.04 and G.P_CENTERS['j_bunc_the_joker'].unlocked and not (G.GAME.used_jokers['j_bunc_the_joker'] and not next(find_joker("Showman"))) then
+    if pseudorandom('the_joker'..G.SEED) < 0.04 and G.P_CENTERS['j_bunc_the_joker'].unlocked and not (G.GAME.used_jokers['j_bunc_the_joker'] and not next(find_joker('Showman'))) then
         return create_card('Joker', G.pack_cards, nil, nil, true, true, 'j_bunc_the_joker', 'buf')
     end
 

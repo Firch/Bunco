@@ -1538,7 +1538,7 @@ position = 'at'
 match_indent = true
 payload = '''
 
-if G.GAME.Trident then
+if G.GAME.Trident and not next(find_joker('Chicot')) then
     G.STATE = G.STATES.BLIND_SELECT
 else
     G.STATE = G.STATES.SHOP
