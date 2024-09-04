@@ -41,6 +41,7 @@
 -- (done) Running joke gives negative while the joker in shop
 -- Make configs apply immediately
 -- (done) Add unlock to the Shell Game
+-- Shell Game should modify tables instead of replacing - see Blind Packs
 
 global_bunco = global_bunco or {loc = {}, vars = {}}
 local bunco = SMODS.current_mod
@@ -390,25 +391,23 @@ if config.gameplay_reworks then
             info_queue[#info_queue + 1] = {key = 'p_bunc_blind_1', set = 'Other', vars = {G.P_CENTERS.p_bunc_blind_1.config.extra}}
             return {}
         end,
+        config = {type = 'new_blind_choice'},
         apply = function(tag, context)
-            if context.type == 'new_blind_choice' then
-                tag:yep('+', G.C.SECONDARY_SET.Spectral, function()
-                    local key = 'p_bunc_blind_'..(math.random(4))
-                    local card = Card(G.play.T.x + G.play.T.w/2 - G.CARD_W*1.27/2,
-                    G.play.T.y + G.play.T.h/2-G.CARD_H*1.27/2, G.CARD_W*1.27, G.CARD_H*1.27, G.P_CARDS.empty, G.P_CENTERS[key], {bypass_discovery_center = true, bypass_discovery_ui = true})
-                    card.cost = 0
-                    card.from_tag = true
-                    G.FUNCS.use_card({config = {ref_table = card}})
-                    card:start_materialize()
-                    G.CONTROLLER.locks[tag.ID] = nil
-                    return true
-                end)
-                tag.triggered = true
+            tag:yep('+', G.C.SECONDARY_SET.Spectral, function()
+                local key = 'p_bunc_blind_'..(math.random(4))
+                local card = Card(G.play.T.x + G.play.T.w/2 - G.CARD_W*1.27/2,
+                G.play.T.y + G.play.T.h/2-G.CARD_H*1.27/2, G.CARD_W*1.27, G.CARD_H*1.27, G.P_CARDS.empty, G.P_CENTERS[key], {bypass_discovery_center = true, bypass_discovery_ui = true})
+                card.cost = 0
+                card.from_tag = true
+                G.FUNCS.use_card({config = {ref_table = card}})
+                card:start_materialize()
+                G.CONTROLLER.locks[tag.ID] = nil
                 return true
-            end
+            end)
+            tag.triggered = true
+            return true
         end
     })
-
 end
 
 -- Temporary extra chips
@@ -4366,7 +4365,7 @@ SMODS.Tag{ -- Breaking
 
     apply = function(tag, context)
         if G.GAME.blind and G.GAME.blind.boss and not G.GAME.blind.disabled then
-            tag:yep('+', G.C.BLUE, function() 
+            tag:yep('+', G.C.BLUE, function()
                 return true
             end)
 
@@ -4399,27 +4398,25 @@ SMODS.Tag{ -- Glitter
     end,
 
     apply = function(tag, context)
-        if context.type == 'store_joker_modify' then
-            local applied = nil
-            if not context.card.edition and not context.card.temp_edition and context.card.ability.set == 'Joker' then
-                local lock = tag.ID
-                G.CONTROLLER.locks[lock] = true
+        local applied = nil
+        if not context.card.edition and not context.card.temp_edition and context.card.ability.set == 'Joker' then
+            local lock = tag.ID
+            G.CONTROLLER.locks[lock] = true
 
-                context.card.temp_edition = true
-                tag:yep('+', G.C.DARK_EDITION, function()
-                    context.card:set_edition({bunc_glitter = true}, true)
-                    context.card.ability.couponed = true
-                    context.card:set_cost()
-                    context.card.temp_edition = nil
-                    G.CONTROLLER.locks[lock] = nil
-                    return true
-                end)
-                applied = true
+            context.card.temp_edition = true
+            tag:yep('+', G.C.DARK_EDITION, function()
+                context.card:set_edition({bunc_glitter = true}, true)
+                context.card.ability.couponed = true
+                context.card:set_cost()
+                context.card.temp_edition = nil
+                G.CONTROLLER.locks[lock] = nil
+                return true
+            end)
+            applied = true
 
-                tag.triggered = true
-            end
-            return applied
+            tag.triggered = true
         end
+        return applied
     end,
 
     pos = coordinate(1),
@@ -4436,27 +4433,25 @@ SMODS.Tag{ -- Fluorescent
     end,
 
     apply = function(tag, context)
-        if context.type == 'store_joker_modify' then
-            local applied = nil
-            if not context.card.edition and not context.card.temp_edition and context.card.ability.set == 'Joker' then
-                local lock = tag.ID
-                G.CONTROLLER.locks[lock] = true
+        local applied = nil
+        if not context.card.edition and not context.card.temp_edition and context.card.ability.set == 'Joker' then
+            local lock = tag.ID
+            G.CONTROLLER.locks[lock] = true
 
-                context.card.temp_edition = true
-                tag:yep('+', G.C.DARK_EDITION, function()
-                    context.card:set_edition({bunc_fluorescent = true}, true)
-                    context.card.ability.couponed = true
-                    context.card:set_cost()
-                    context.card.temp_edition = nil
-                    G.CONTROLLER.locks[lock] = nil
-                    return true
-                end)
-                applied = true
+            context.card.temp_edition = true
+            tag:yep('+', G.C.DARK_EDITION, function()
+                context.card:set_edition({bunc_fluorescent = true}, true)
+                context.card.ability.couponed = true
+                context.card:set_cost()
+                context.card.temp_edition = nil
+                G.CONTROLLER.locks[lock] = nil
+                return true
+            end)
+            applied = true
 
-                tag.triggered = true
-            end
-            return applied
+            tag.triggered = true
         end
+        return applied
     end,
 
     pos = coordinate(2),
@@ -4479,7 +4474,7 @@ SMODS.Tag{ -- Chips
         return {vars = {G.P_CENTERS.e_foil.config.extra}}
     end,
     apply = function(tag, context)
-        if context.type == 'hand_played' and context.before then
+        if context.before then
 
             hand_chips = mod_chips(hand_chips + G.P_CENTERS.e_foil.config.extra)
             update_hand_text({delay = 0}, {chips = hand_chips})
@@ -4506,7 +4501,7 @@ SMODS.Tag{ -- Mult
         return {vars = {G.P_CENTERS.e_holo.config.extra}}
     end,
     apply = function(tag, context)
-        if context.type == 'hand_played' and context.before then
+        if context.before then
 
             mult = mod_mult(mult + G.P_CENTERS.e_holo.config.extra)
             update_hand_text({delay = 0}, {mult = mult})
@@ -4533,7 +4528,7 @@ SMODS.Tag{ -- Xmult
         return {vars = {G.P_CENTERS.e_polychrome.config.extra}}
     end,
     apply = function(tag, context)
-        if context.type == 'hand_played' and context.after then
+        if context.after then
 
             mult = mod_mult(mult * G.P_CENTERS.e_polychrome.config.extra)
             update_hand_text({delay = 0}, {mult = mult})
@@ -4560,7 +4555,7 @@ SMODS.Tag{ -- Xchip
         return {vars = {G.P_CENTERS.e_bunc_glitter.config.Xchips}}
     end,
     apply = function(tag, context)
-        if context.type == 'hand_played' and context.after then
+        if context.after then
 
             hand_chips = mod_chips(hand_chips * G.P_CENTERS.e_bunc_glitter.config.Xchips)
             update_hand_text({delay = 0}, {chips = hand_chips})
@@ -4588,35 +4583,33 @@ SMODS.Tag{ -- Filigree
         return {}
     end,
     apply = function(tag, context)
-        if context.type == 'standard_pack_opened' then
-            tag:instayep('+', G.C.BUNCO_EXOTIC, function()
-                return true
-            end)
-            event({
-                trigger = 'after',
-                delay = 0,
-                blockable = false,
-                blocking = false,
-                func = function()
-                    if G.pack_cards and G.pack_cards.cards ~= nil and G.pack_cards.cards[1] and G.pack_cards.VT.y < G.ROOM.T.h then
-
-                        enable_exotics()
-
-                        for _, v in ipairs(G.pack_cards.cards) do
-                            if (not v:is_suit('bunc_Fleurons') and not v:is_suit('bunc_Halberds')) or v.config.center == G.P_CENTERS.m_wild then
-                                local suits = {'bunc_Fleurons', 'bunc_Halberds'}
-                                local suit = pseudorandom_element(suits, pseudoseed('filigree'..G.SEED))
-                                v:change_suit(suit)
-                            end
-                        end
-
-                        return true
-                    end
-                end
-            })
-            tag.triggered = true
+        tag:instayep('+', G.C.BUNCO_EXOTIC, function()
             return true
-        end
+        end)
+        event({
+            trigger = 'after',
+            delay = 0,
+            blockable = false,
+            blocking = false,
+            func = function()
+                if G.pack_cards and G.pack_cards.cards ~= nil and G.pack_cards.cards[1] and G.pack_cards.VT.y < G.ROOM.T.h then
+
+                    enable_exotics()
+
+                    for _, v in ipairs(G.pack_cards.cards) do
+                        if (not v:is_suit('bunc_Fleurons') and not v:is_suit('bunc_Halberds')) or v.config.center == G.P_CENTERS.m_wild then
+                            local suits = {'bunc_Fleurons', 'bunc_Halberds'}
+                            local suit = pseudorandom_element(suits, pseudoseed('filigree'..G.SEED))
+                            v:change_suit(suit)
+                        end
+                    end
+
+                    return true
+                end
+            end
+        })
+        tag.triggered = true
+        return true
     end,
 
     pos = coordinate(1),
@@ -4635,24 +4628,22 @@ SMODS.Tag{ -- Eternal
     end,
 
     apply = function(tag, context)
-        if context.type == 'store_joker_modify' then
-            local applied = nil
-            if not context.card.ability.eternal and not context.card.ability.perishable and context.card.ability.set == 'Joker' then
-                local lock = tag.ID
-                G.CONTROLLER.locks[lock] = true
-                tag:yep('+', G.C.RED, function()
-                    context.card:set_eternal(true)
-                    big_juice(context.card)
-                    context.card:set_cost()
-                    G.CONTROLLER.locks[lock] = nil
-                    return true
-                end)
-                applied = true
+        local applied = nil
+        if not context.card.ability.eternal and not context.card.ability.perishable and context.card.ability.set == 'Joker' then
+            local lock = tag.ID
+            G.CONTROLLER.locks[lock] = true
+            tag:yep('+', G.C.RED, function()
+                context.card:set_eternal(true)
+                big_juice(context.card)
+                context.card:set_cost()
+                G.CONTROLLER.locks[lock] = nil
+                return true
+            end)
+            applied = true
 
-                tag.triggered = true
-            end
-            return applied
+            tag.triggered = true
         end
+        return applied
     end,
 
     pos = coordinate(1),
@@ -4671,24 +4662,22 @@ SMODS.Tag{ -- Perishable
     end,
 
     apply = function(tag, context)
-        if context.type == 'store_joker_modify' then
-            local applied = nil
-            if not context.card.ability.perishable and not context.card.ability.eternal and context.card.ability.set == 'Joker' then
-                local lock = tag.ID
-                G.CONTROLLER.locks[lock] = true
-                tag:yep('+', G.C.RED, function()
-                    context.card:set_perishable(true)
-                    big_juice(context.card)
-                    context.card:set_cost()
-                    G.CONTROLLER.locks[lock] = nil
-                    return true
-                end)
-                applied = true
+        local applied = nil
+        if not context.card.ability.perishable and not context.card.ability.eternal and context.card.ability.set == 'Joker' then
+            local lock = tag.ID
+            G.CONTROLLER.locks[lock] = true
+            tag:yep('+', G.C.RED, function()
+                context.card:set_perishable(true)
+                big_juice(context.card)
+                context.card:set_cost()
+                G.CONTROLLER.locks[lock] = nil
+                return true
+            end)
+            applied = true
 
-                tag.triggered = true
-            end
-            return applied
+            tag.triggered = true
         end
+        return applied
     end,
 
     pos = coordinate(2),
@@ -4707,28 +4696,26 @@ SMODS.Tag{ -- Scattering
     end,
 
     apply = function(tag, context)
-        if context.type == 'store_joker_modify' then
-            local applied = nil
-            if not context.card.ability.bunc_scattering
-            and not context.card.ability.bunc_hindered
-            and not context.card.ability.bunc_reactive
-            and not context.card.ability.eternal
-            and context.card.ability.set == 'Joker' then
-                local lock = tag.ID
-                G.CONTROLLER.locks[lock] = true
-                tag:yep('+', G.C.RED, function()
-                    SMODS.Stickers['bunc_scattering']:apply(context.card, true)
-                    big_juice(context.card)
-                    context.card:set_cost()
-                    G.CONTROLLER.locks[lock] = nil
-                    return true
-                end)
-                applied = true
+        local applied = nil
+        if not context.card.ability.bunc_scattering
+        and not context.card.ability.bunc_hindered
+        and not context.card.ability.bunc_reactive
+        and not context.card.ability.eternal
+        and context.card.ability.set == 'Joker' then
+            local lock = tag.ID
+            G.CONTROLLER.locks[lock] = true
+            tag:yep('+', G.C.RED, function()
+                SMODS.Stickers['bunc_scattering']:apply(context.card, true)
+                big_juice(context.card)
+                context.card:set_cost()
+                G.CONTROLLER.locks[lock] = nil
+                return true
+            end)
+            applied = true
 
-                tag.triggered = true
-            end
-            return applied
+            tag.triggered = true
         end
+        return applied
     end,
 
     pos = coordinate(3),
@@ -4747,28 +4734,26 @@ SMODS.Tag{ -- Hindered
     end,
 
     apply = function(tag, context)
-        if context.type == 'store_joker_modify' then
-            local applied = nil
-            if not context.card.ability.bunc_scattering
-            and not context.card.ability.bunc_hindered
-            and not context.card.ability.bunc_reactive
-            and not context.card.ability.eternal
-            and context.card.ability.set == 'Joker' then
-                local lock = tag.ID
-                G.CONTROLLER.locks[lock] = true
-                tag:yep('+', G.C.RED, function()
-                    SMODS.Stickers['bunc_hindered']:apply(context.card, true)
-                    big_juice(context.card)
-                    context.card:set_cost()
-                    G.CONTROLLER.locks[lock] = nil
-                    return true
-                end)
-                applied = true
+        local applied = nil
+        if not context.card.ability.bunc_scattering
+        and not context.card.ability.bunc_hindered
+        and not context.card.ability.bunc_reactive
+        and not context.card.ability.eternal
+        and context.card.ability.set == 'Joker' then
+            local lock = tag.ID
+            G.CONTROLLER.locks[lock] = true
+            tag:yep('+', G.C.RED, function()
+                SMODS.Stickers['bunc_hindered']:apply(context.card, true)
+                big_juice(context.card)
+                context.card:set_cost()
+                G.CONTROLLER.locks[lock] = nil
+                return true
+            end)
+            applied = true
 
-                tag.triggered = true
-            end
-            return applied
+            tag.triggered = true
         end
+        return applied
     end,
 
     pos = coordinate(4),
@@ -4787,27 +4772,25 @@ SMODS.Tag{ -- Reactive
     end,
 
     apply = function(tag, context)
-        if context.type == 'store_joker_modify' then
-            local applied = nil
-            if not context.card.ability.bunc_scattering
-            and not context.card.ability.bunc_hindered
-            and not context.card.ability.bunc_reactive
-            and context.card.ability.set == 'Joker' then
-                local lock = tag.ID
-                G.CONTROLLER.locks[lock] = true
-                tag:yep('+', G.C.RED, function()
-                    SMODS.Stickers['bunc_reactive']:apply(context.card, true)
-                    big_juice(context.card)
-                    context.card:set_cost()
-                    G.CONTROLLER.locks[lock] = nil
-                    return true
-                end)
-                applied = true
+        local applied = nil
+        if not context.card.ability.bunc_scattering
+        and not context.card.ability.bunc_hindered
+        and not context.card.ability.bunc_reactive
+        and context.card.ability.set == 'Joker' then
+            local lock = tag.ID
+            G.CONTROLLER.locks[lock] = true
+            tag:yep('+', G.C.RED, function()
+                SMODS.Stickers['bunc_reactive']:apply(context.card, true)
+                big_juice(context.card)
+                context.card:set_cost()
+                G.CONTROLLER.locks[lock] = nil
+                return true
+            end)
+            applied = true
 
-                tag.triggered = true
-            end
-            return applied
+            tag.triggered = true
         end
+        return applied
     end,
 
     pos = coordinate(5),
@@ -4826,24 +4809,22 @@ SMODS.Tag{ -- Rental
     end,
 
     apply = function(tag, context)
-        if context.type == 'store_joker_modify' then
-            local applied = nil
-            if not context.card.ability.rental and context.card.ability.set == 'Joker' then
-                local lock = tag.ID
-                G.CONTROLLER.locks[lock] = true
-                tag:yep('+', G.C.RED, function()
-                    context.card:set_rental(true)
-                    big_juice(context.card)
-                    context.card:set_cost()
-                    G.CONTROLLER.locks[lock] = nil
-                    return true
-                end)
-                applied = true
+        local applied = nil
+        if not context.card.ability.rental and context.card.ability.set == 'Joker' then
+            local lock = tag.ID
+            G.CONTROLLER.locks[lock] = true
+            tag:yep('+', G.C.RED, function()
+                context.card:set_rental(true)
+                big_juice(context.card)
+                context.card:set_cost()
+                G.CONTROLLER.locks[lock] = nil
+                return true
+            end)
+            applied = true
 
-                tag.triggered = true
-            end
-            return applied
+            tag.triggered = true
         end
+        return applied
     end,
 
     pos = coordinate(6),
