@@ -3459,8 +3459,10 @@ function CardArea:add_to_highlighted(card, silent)
         for i = 1, #self.cards do
             if self.cards[i].ability.group
             and self.cards[i].ability.group.id == card.ability.group.id then
-                original_add_to_highlighted(self, self.cards[i], (silent == nil) and group_silent or silent)
-                group_silent = true
+                if not self.cards[i].highlighted then
+                    original_add_to_highlighted(self, self.cards[i], (silent == nil) and group_silent or silent)
+                    group_silent = true
+                end
             end
         end
     else
