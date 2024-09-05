@@ -28,11 +28,14 @@ return {
             accepted = 'Accepted!',
             ouch = 'OUCH!',
             mysterious_tarot = 'Tarot?',
+            mysterious_polymino = 'Polymino?',
             most_played_rank = '(most played rank)',
             least_played_hand = '(least played hand)',
             blade = '(1.5X blind score)',
             exceeded_score = 'Exceeded the limit!',
-            temporary_extra_chips = {['text'] = {[1] = '{C:chips}+#1#{} extra chips this round'}}
+            temporary_extra_chips = {['text'] = {[1] = '{C:chips}+#1#{} extra chips this round'}},
+            linked_cards = {['text'] = {[1] = '{C:attention}Linked{} in this group:'}},
+            drawn_linked_cards = {['text'] = {[1] = '{C:attention}Linked{} in drawn group'}}
         }
     },
 
@@ -111,7 +114,27 @@ return {
         }
     },
 
+    -- Consumable Types
+
+    polymino = {
+        ['en-us'] = {
+            ['name'] = 'Polymino',
+            ['collection'] = 'Polymino Cards',
+            ['undiscovered'] = {
+                ['name'] = 'Not Discovered',
+                ['text'] = {
+                    [1] = 'Purchase or use',
+                    [2] = 'this card in an',
+                    [3] = 'unseeded run to',
+                    [4] = 'learn what it does'
+                }
+            }
+        }
+    },
+
     -- Consumables
+
+    -- Tarots
 
     sky = {
         ['en-us'] = {
@@ -133,6 +156,9 @@ return {
             }
         }
     },
+
+    -- Planets
+
     quaoar = {
         ['en-us'] = {
             name = 'Quaoar'
@@ -153,12 +179,115 @@ return {
             name = 'Makemake'
         }
     },
+
+    -- Spectrals
+
     cleanse = {
         ['en-us'] = {
             ['name'] = 'Cleanse',
             ['text'] = {
                 [1] = 'Add {C:dark_edition}Fluorescent{} to',
                 [2] = '{C:attention}#1#{} selected cards in hand'
+            }
+        }
+    },
+
+    -- Polyminoes
+
+    the_i = {
+        ['en-us'] = {
+            ['name'] = 'The I',
+            ['text'] = {
+                [1] = '{C:attention}Link together{} 4 selected cards',
+                [2] = 'that share the {C:attention}same rank or suit'
+            }
+        }
+    },
+    the_o = {
+        ['en-us'] = {
+            ['name'] = 'The O',
+            ['text'] = {
+                [1] = '{C:attention}Link together{} 4 selected cards',
+                [2] = 'where 2 cards share the {C:attention}same property',
+                [3] = '{C:inactive}(rank or suit){} and the other 2 cards',
+                [4] = 'share {C:attention}different type{} of the {C:attention}same property'
+            }
+        }
+    },
+    the_t = {
+        ['en-us'] = {
+            ['name'] = 'The T',
+            ['text'] = {
+                [1] = '{C:attention}Link together{} 4 selected cards',
+                [2] = 'where 3 cards share the {C:attention}same property',
+                [3] = '{C:inactive}(rank or suit){} and the other card that',
+                [4] = '{C:attention}does not share{} the {C:attention}same property{}',
+                [5] = 'with the other cards'
+            }
+        }
+    },
+    the_s = {
+        ['en-us'] = {
+            ['name'] = 'The S',
+            ['text'] = {
+                [1] = '{C:attention}Link together{} 4 selected cards',
+                [2] = 'where {C:attention}2 groups{} of 2 cards share',
+                [3] = 'the {C:attention}same rank{} within each group, with one',
+                [4] = 'card from each group sharing a {C:attention}common suit'
+            }
+        }
+    },
+    the_z = {
+        ['en-us'] = {
+            ['name'] = 'The Z',
+            ['text'] = {
+                [1] = '{C:attention}Link together{} 4 selected cards',
+                [2] = 'where {C:attention}2 groups{} of 2 cards share',
+                [3] = 'the {C:attention}same suit{} within each group, with one',
+                [4] = 'card from each group sharing a {C:attention}common rank'
+            }
+        }
+    },
+    the_j = {
+        ['en-us'] = {
+            ['name'] = 'The J',
+            ['text'] = {
+                [1] = '{C:attention}Link together{} 4 selected cards',
+                [2] = 'where 3 cards share the {C:attention}same rank',
+                [3] = 'and the other card that shares',
+                [4] = 'a {C:attention}common suit{} while',
+                [5] = 'not sharing the same rank'
+            }
+        }
+    },
+    the_l = {
+        ['en-us'] = {
+            ['name'] = 'The L',
+            ['text'] = {
+                [1] = '{C:attention}Link together{} 4 selected cards',
+                [2] = 'where 3 cards share the {C:attention}same suit',
+                [3] = 'and the other card that shares',
+                [4] = 'a {C:attention}common rank{} while',
+                [5] = 'not sharing the same suit'
+            }
+        }
+    },
+    the_slash = {
+        ['en-us'] = {
+            ['name'] = 'The /',
+            ['text'] = {
+                [1] = '{C:attention}Link together{} 4 selected cards',
+                [2] = 'where all the cards have a',
+                [3] = '{C:attention}different property{} {C:inactive}(rank and suit)'
+            }
+        }
+    },
+    the_8 = {
+        ['en-us'] = {
+            ['name'] = 'The 8',
+            ['text'] = {
+                [1] = '{C:attention}Link together{} all',
+                [2] = 'unlinked cards in hand',
             }
         }
     },
@@ -1275,6 +1404,16 @@ return {
             }
         }
     },
+    digital = {
+        ['en-us'] = {
+            ['name'] = 'Digital Deck',
+            ['text'] = {
+                [1] = '{C:bunco_virtual_dark}Polymino{} cards may',
+                [2] = 'appear in the shop,',
+                [3] = "start with {C:bunco_virtual_dark,T:c_bunc_the_i}The I{}"
+            }
+        }
+    },
 
     -- Reworked tags
 
@@ -1295,6 +1434,13 @@ return {
                 [1] = 'Disables the',
                 [2] = '{C:attention}Boss Blind{}'
             }
+        }
+    },
+    arcade = {
+        name = "Arcade Tag",
+        text = {
+            "Gives a free",
+            "{C:bunco_virtual_dark}Mega Virtual Pack"
         }
     },
     glitter_tag = {
@@ -1381,7 +1527,7 @@ return {
             ['name'] = 'Rental Tag',
             ['text'] = {
                 [1] = 'Next shop Joker',
-                [2] = 'will gain {C:attention}Perishable{} sticker'
+                [2] = 'will gain {C:attention}Rental{} sticker'
             }
         }
     },
@@ -1510,7 +1656,7 @@ return {
 
     -- Booster Packs
 
-    blind_standard = {
+    blind = {
         ['en-us'] = {
             ['group_name'] = 'Blind Pack',
             ['name'] = 'Blind Pack',
@@ -1518,6 +1664,39 @@ return {
                 [1] = 'Choose one of up to',
                 [2] = '{C:attention}#1# Boss Blinds{} to',
                 [3] = 'replace on this Ante'
+            }
+        }
+    },
+    virtual = {
+        ['en-us'] = {
+            ['group_name'] = 'Virtual Pack',
+            ['name'] = 'Virtual Pack',
+            ['text'] = {
+                [1] = 'Choose {C:attention}#1#{} of up to',
+                [2] = '{C:attention}#2#{C:bunco_virtual_dark} Polymino{} cards to',
+                [3] = 'be used immediately'
+            }
+        }
+    },
+    virtual_jumbo = {
+        ['en-us'] = {
+            ['group_name'] = 'Virtual Pack',
+            ['name'] = 'Jumbo Virtual Pack',
+            ['text'] = {
+                [1] = 'Choose {C:attention}#1#{} of up to',
+                [2] = '{C:attention}#2#{C:bunco_virtual_dark} Polymino{} cards to',
+                [3] = 'be used immediately'
+            }
+        }
+    },
+    virtual_mega = {
+        ['en-us'] = {
+            ['group_name'] = 'Virtual Pack',
+            ['name'] = 'Mega Virtual Pack',
+            ['text'] = {
+                [1] = 'Choose {C:attention}#1#{} of up to',
+                [2] = '{C:attention}#2#{C:bunco_virtual_dark} Polymino{} cards to',
+                [3] = 'be used immediately'
             }
         }
     },

@@ -247,10 +247,221 @@ target = "functions/common_events.lua"
 pattern = "if main_end then"
 position = "before"
 match_indent = true
-payload = """
+payload = '''
 if (_c.set == 'Default' or _c.set == 'Enhanced') and card and card.ability and type(card.ability) == 'table' and card.ability.temporary_extra_chips and not card.debuff then
     localize{type = 'other', key = 'temporary_extra_chips', nodes = desc_nodes, vars = {card.ability.temporary_extra_chips}}
-end"""
+end'''
+
+# Linked cards selection 1/2
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+pattern = 'function CardArea:can_highlight(card)'
+position = 'after'
+match_indent = true
+payload = '''
+
+-- Making so the player can't choose a group of linked cards if it'd bypass highlighted limit
+
+if card and card.ability.group then
+
+    local group_amount = 0 -- Amount of cards in the same group
+    local highlighted_amount = 0 -- Amount of cards already highlighted
+    local highlighted_group_amount = 0 -- Amount of cards already highlighted in the same group
+
+    for i = 1, #self.cards do
+        if self.cards[i].ability.group and self.cards[i].ability.group.id == card.ability.group.id then
+            if not self.cards[i].highlighted then
+                group_amount = group_amount + 1
+            else
+                highlighted_group_amount = highlighted_group_amount + 1
+            end
+        end
+        if self.cards[i].highlighted then
+            highlighted_amount = highlighted_amount + 1
+        end
+    end
+
+
+    -- If you select a group that has more cards than the game allows
+    if (not card.highlighted) and (group_amount > self.config.highlighted_limit) then
+
+        -- Check if there's already cards selected
+        if highlighted_amount ~= 0 then
+            return false
+        end
+
+        return true
+    end
+
+    -- If you select a normal amount of cards but the amount of cards in the group and already highlighted will bypass the limit
+    if (not card.highlighted) and (self.config.highlighted_limit < (group_amount + highlighted_amount)) then
+        return false
+    end
+
+    -- If you want to unselect cards that already bypassed the limit
+    if card.highlighted then
+        return true
+    end
+end
+
+'''
+
+# Linked cards selection 2/2
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+pattern = 'if #self.highlighted >= self.config.highlighted_limit then'
+position = 'at'
+match_indent = true
+payload = '''if (#self.highlighted >= self.config.highlighted_limit) and (not card.ability.group) then'''
+
+# Linked cards destruction 1/2
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'self.removed = true'
+position = 'before'
+match_indent = true
+payload = '''
+
+local grouped, grouped_area_cards
+if self.ability.group then
+    grouped = self
+    grouped_area_cards = self.area and self.area.cards or nil
+end
+
+'''
+
+# Linked cards destruction 2/2
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'Moveable.remove(self)'
+position = 'after'
+match_indent = true
+payload = '''
+
+G.E_MANAGER:add_event(Event({trigger = 'after', func = function()
+    if grouped and grouped_area_cards and #grouped_area_cards > 0 then
+
+        local next_card
+        local destroyed_cards = {}
+        for i=1, #grouped_area_cards do
+            if grouped_area_cards[i].ability.group and grouped_area_cards[i].ability.group then
+                if grouped_area_cards[i].ability.group.id == grouped.ability.group.id then
+                    table.insert(destroyed_cards, grouped_area_cards[i])
+                end
+            end
+        end
+
+        next_card = destroyed_cards[1]
+
+        if next_card then
+            if next_card.ability.name == 'Glass Card' then
+                next_card:shatter()
+            else
+                next_card:start_dissolve()
+            end
+
+            for i = 1, #G.jokers.cards do
+                eval_card(G.jokers.cards[i], {
+                    cardarea = G.jokers,
+                    remove_playing_cards = true,
+                    removed = {next_card}
+                })
+            end
+        end
+    end
+return true end}))
+
+'''
+
+# Linked cards description
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "if main_end then"
+position = "before"
+match_indent = true
+payload = '''
+if (_c.set == 'Default' or _c.set == 'Enhanced') and card and card.ability and type(card.ability) == 'table' and card.ability.group then
+    localize{type = 'other', key = card.greyed and 'drawn_linked_cards' or 'linked_cards', nodes = desc_nodes, vars = {}}
+    if not card.greyed then
+        main_end = main_end or {}
+        local all_cards_from_group = {}
+        if card and card.area then
+            for i = 1, #card.area.cards do
+                local check_card = card.area.cards[i]
+                if check_card.ability and type(check_card.ability) == 'table' and check_card.ability.group then
+                    if check_card.ability.group.id == card.ability.group.id then
+                        table.insert(all_cards_from_group, check_card)
+                    end
+                end
+            end
+        end
+        local cardarea = CardArea(
+            0,
+            0,
+            2.85 * G.CARD_W,
+            0.75 * G.CARD_H,
+            {card_limit = #all_cards_from_group, type = 'title', highlight_limit = 0}
+        )
+        for k, v in ipairs(all_cards_from_group) do
+            local group_card = copy_card(v, nil, 0.5)
+            group_card:juice_up(0.3, 0.2)
+            if k == 1 then play_sound('paper1', 0.95 + math.random() * 0.1, 0.3) end
+            ease_value(group_card.T, 'scale', 0.25, nil, 'REAL', true, 0.2)
+            cardarea:emplace(group_card)
+        end
+        table.insert(main_end, {n=G.UIT.R, config = {align = "cm", colour = G.C.CLEAR, r = 0.0}, nodes={
+            {n=G.UIT.C, config = {align = "cm"}, nodes={
+                {n=G.UIT.O, config = {object = cardarea}}
+            }}
+        }})
+    end
+end'''
+
+# Linked cards undiscovered sprite
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''local shared_sprite = (self.ability.set == 'Edition' or self.ability.set == 'Joker') and G.shared_undiscovered_joker or G.shared_undiscovered_tarot'''
+position = 'after'
+match_indent = true
+payload = '''
+
+if not G.shared_undiscovered_polymino then G.shared_undiscovered_polymino = Sprite(0, 0, G.CARD_W, G.CARD_H, G.ASSET_ATLAS['bunc_bunco_polyminoes_undiscovered'], {x = 1, y = 0}) end
+
+if self.ability.set == 'Polymino' then
+    shared_sprite = G.shared_undiscovered_polymino
+end
+
+'''
+
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = 'if #G.hand.highlighted <= 0 or G.GAME.blind.block_play or #G.hand.highlighted > 5 then'
+position = 'at'
+match_indent = true
+payload = '''
+
+local group_size = 0
+
+if G.hand and G.hand.highlighted then
+    for i = 1, #G.hand.highlighted do
+        if G.hand.highlighted[i].ability.group then
+            group_size = group_size + 1
+        end
+    end
+end
+
+if (#G.hand.highlighted <= 0 or G.GAME.blind.block_play or #G.hand.highlighted > 5) and not (group_size > 5) then
+
+'''
+
+# Linked cards
 
 # function Card:flip() (Cassette)
 [[patches]]
@@ -352,7 +563,6 @@ if G.jokers ~= nil and self:is(Card) and self.area == G.jokers then
 
                 break_table.after = break_table.before
                 break_table.node = self
-                sendDebugMessage('Start')
 
             end
         end
@@ -389,7 +599,6 @@ if G.jokers ~= nil and self == break_table.node then
                 v:calculate_joker({ break_positions = true })
             end
 
-                sendDebugMessage('End')
                 break_table.before = nil
                 break_table.after = nil
 
@@ -2151,6 +2360,10 @@ function change_booster_amount(mod)
         G.shop:recalculate()
         if mod > 0 then
             for i = 1, G.GAME.shop.booster_max - #G.shop_booster.cards do
+                G.GAME.current_round.used_packs = G.GAME.current_round.used_packs or {}
+                if not G.GAME.current_round.used_packs[i] then
+                    G.GAME.current_round.used_packs[i] = get_pack('shop_pack').key
+                end
                 local card = Card(G.shop_booster.T.x + G.shop_booster.T.w/2,
                 G.shop_booster.T.y, G.CARD_W*1.27, G.CARD_H*1.27, G.P_CARDS.empty, G.P_CENTERS[G.GAME.current_round.used_packs[i]], {bypass_discovery_center = true, bypass_discovery_ui = true})
                 create_shop_card_ui(card, 'Booster', G.shop_booster)
@@ -2421,6 +2634,26 @@ end
 
 '''
 
+# Virtual color, part 1/2
+[[patches]]
+[patches.pattern]
+target = 'globals.lua'
+pattern = "RENTAL = HEX('b18f43'),"
+position = 'after'
+match_indent = true
+payload = '''BUNCO_VIRTUAL = HEX('69fa93'),
+BUNCO_VIRTUAL_DARK = HEX('4fb66f'),
+'''
+
+# Virtual color, part 2/2
+[[patches]]
+[patches.pattern]
+target = 'functions/misc_functions.lua'
+pattern = "legendary = G.C.RARITY[4],"
+position = 'after'
+match_indent = true
+payload = '''bunco_virtual = G.C.BUNCO_VIRTUAL,
+bunco_virtual_dark = G.C.BUNCO_VIRTUAL_DARK,'''
 
 # Scattering Sticker 1/2
 [[patches]]

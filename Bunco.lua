@@ -124,6 +124,8 @@ function bunco.process_loc_text()
     -- Other localization
 
     SMODS.process_loc_text(G.localization.descriptions.Other, 'temporary_extra_chips', loc.dictionary.temporary_extra_chips)
+    SMODS.process_loc_text(G.localization.descriptions.Other, 'linked_cards', loc.dictionary.linked_cards)
+    SMODS.process_loc_text(G.localization.descriptions.Other, 'drawn_linked_cards', loc.dictionary.drawn_linked_cards)
     SMODS.process_loc_text(G.localization.descriptions.Other, 'exotic_cards', loc.exotic_cards)
     G.P_CENTERS['exotic_cards'] = {key = 'exotic_cards', set = 'Other'}
 
@@ -3356,6 +3358,832 @@ SMODS.Consumable{ -- Cleanse
     end
 }
 
+-- Functions for Polyminoes
+
+function create_polymino_card_set(example)
+    local cardarea = CardArea(
+        0,
+        0,
+        2.85 * G.CARD_W,
+        0.75 * G.CARD_H,
+        {card_limit = 4, type = 'title', highlight_limit = 0}
+    )
+    for k, v in ipairs(example) do
+        local card = Card(
+        0,
+        0,
+        0.5 * G.CARD_W,
+        0.5 * G.CARD_H,
+        G.P_CARDS[v[1]],
+        G.P_CENTERS.c_base)
+        if v[2] then card:juice_up(0.3, 0.2) end
+        if k == 1 then play_sound('paper1', 0.95 + math.random() * 0.1, 0.3) end
+        ease_value(card.T, 'scale', v[2] and 0.25 or -0.15, nil, 'REAL', true, 0.2)
+        cardarea:emplace(card)
+    end
+
+    return {n=G.UIT.R, config = {align = "cm", colour = G.C.CLEAR, r = 0.0}, nodes={
+        {n=G.UIT.C, config = {align = "cm"}, nodes={
+            {n=G.UIT.O, config = {object = cardarea}}
+        }}
+    }}
+end
+
+function link_cards(cards, source, ignore_groups)
+    G.GAME.last_card_group = (G.GAME.last_card_group or 0) + 1
+
+    for i = 1, #cards do
+        if (not ignore_groups) or (ignore_groups and not cards[i].ability.group) then
+            cards[i].ability.group = {id = G.GAME.last_card_group, source = source or 'unknown'}
+        end
+    end
+end
+
+-- Pseudoinjections for Polyminoes
+
+local original_draw_from_deck_to_hand = G.FUNCS.draw_from_deck_to_hand
+G.FUNCS.draw_from_deck_to_hand = function(e)
+    original_draw_from_deck_to_hand(e)
+
+    event({delay = 0.0, trigger = 'before', func = function()
+
+        local groups = {}
+        local cards_from_groups = {}
+
+        -- Check for linked cards in the G.hand
+
+        for i = 1, #G.hand.cards do
+            local card = G.hand.cards[i]
+            if card.ability.group then
+                groups[card.ability.group.id] = card.ability.group.id
+            end
+        end
+
+        local m = 1
+        for i = 1, #groups do
+            local group = groups[i]
+
+            local n = 0
+            while n < #G.deck.cards do
+                local card = G.deck.cards[#G.deck.cards - n]
+
+                if card.ability.group and (card.ability.group.id == group) then
+                    cards_from_groups[m] = card
+                    m = m + 1
+                end
+
+                n = n + 1
+            end
+        end
+
+        for i = 1, #cards_from_groups do
+            local n = 0
+            while n < #G.deck.cards do
+                local card = G.deck.cards[#G.deck.cards - n]
+
+                if card == cards_from_groups[i] then
+                    draw_card(G.deck, G.hand, i * 100 / #cards_from_groups, 'up', true, card)
+                end
+
+                n = n + 1
+            end
+        end
+
+    return true end})
+end
+
+local original_add_to_highlighted = CardArea.add_to_highlighted
+function CardArea:add_to_highlighted(card, silent)
+    if card.ability.group and self then
+        local group_silent = false
+        for i = 1, #self.cards do
+            if self.cards[i].ability.group
+            and self.cards[i].ability.group.id == card.ability.group.id then
+                original_add_to_highlighted(self, self.cards[i], (silent == nil) and group_silent or silent)
+                group_silent = true
+            end
+        end
+    else
+        original_add_to_highlighted(self, card, silent)
+    end
+end
+
+local original_remove_from_highlighted = CardArea.remove_from_highlighted
+function CardArea:remove_from_highlighted(card, force)
+    if card.ability.group and self and not force then
+        for i = 1, #self.cards do
+            if self.cards[i].ability.group
+            and self.cards[i].ability.group.id == card.ability.group.id then
+                original_remove_from_highlighted(self, self.cards[i], force)
+            end
+        end
+    else
+        original_remove_from_highlighted(self, card, force)
+    end
+end
+
+-- Polyminoes
+
+SMODS.Atlas({key = 'bunco_polyminoes_undiscovered', path = 'Consumables/PolyminoesUndiscovered.png', px = 71, py = 95})
+SMODS.Atlas({key = 'bunco_polyminoes', path = 'Consumables/Polyminoes.png', px = 71, py = 95})
+
+SMODS.ConsumableType{
+    key = 'Polymino',
+    primary_colour = HEX('424e54'),
+    secondary_colour = G.C.BUNCO_VIRTUAL_DARK,
+    loc_txt = loc.polymino,
+    collection_rows = {4, 4}
+}
+
+SMODS.UndiscoveredSprite{
+    key = 'Polymino',
+    atlas = 'bunco_polyminoes_undiscovered',
+    pos = coordinate(1)
+}
+
+SMODS.Consumable{ -- The I
+    set = 'Polymino', atlas = 'bunco_polyminoes',
+    key = 'the_i', loc_txt = loc.the_i,
+
+    loc_vars = function(self, info_queue, card)
+        local example = {
+            {'S_2', true},
+            {'S_6', true},
+            {'S_7', true},
+            {'S_Q', true}
+        }
+        return {main_end = {create_polymino_card_set(example)}}
+    end,
+
+    can_use = function(self, card)
+        if G.hand and (#G.hand.highlighted == 4) then
+            local cards = G.hand.highlighted
+
+            -- Group check:
+
+            for i = 1, #cards do
+                if cards[i].ability.group then return false end
+            end
+
+            -- Suit check:
+
+            for i = 1, #SMODS.Suit.obj_buffer do
+                local suit = SMODS.Suit.obj_buffer[i]
+                local same_suit = 0
+                for j = 1, #cards do
+                    if cards[j]:is_suit(suit, nil, true) then
+                        same_suit = same_suit + 1
+                    end
+                end
+                if same_suit >= 4 then return true end
+            end
+
+            -- Rank check:
+
+            for i = 1, #cards do
+                local rank = cards[i]:get_id()
+                local same_rank = 0
+                for j = 1, #cards do
+                    if cards[j]:get_id() == rank then
+                        same_rank = same_rank + 1
+                    end
+                end
+                if same_rank >= 4 then return true end
+            end
+        end
+        return false
+    end,
+
+    use = function(self, card)
+        link_cards(G.hand.highlighted, self.key)
+        card:juice_up(0.3, 0.5)
+    end,
+
+    pos = coordinate(1),
+}
+
+SMODS.Consumable{ -- The O
+    set = 'Polymino', atlas = 'bunco_polyminoes',
+    key = 'the_o', loc_txt = loc.the_o,
+
+    loc_vars = function(self, info_queue, card)
+        local example = {
+            {'D_Q', true},
+            {'D_Q', true},
+            {'H_K', true},
+            {'C_K', true}
+        }
+        return {main_end = {create_polymino_card_set(example)}}
+    end,
+
+    can_use = function(self, card)
+        if G.hand and (#G.hand.highlighted == 4) then
+            local cards = G.hand.highlighted
+
+            -- Group check:
+
+            for i = 1, #cards do
+                if cards[i].ability.group then return false end
+            end
+
+            -- Count occurrences of each suit and rank
+
+            local suit_count = {}
+            local rank_count = {}
+
+            for i = 1, #cards do
+                for j = 1, #SMODS.Suit.obj_buffer do
+                    local suit = SMODS.Suit.obj_buffer[j]
+                    if cards[i]:is_suit(suit, nil, true) then
+                        suit_count[suit] = (suit_count[suit] or 0) + 1
+                    end
+                end
+
+                local rank = cards[i]:get_id()
+                rank_count[rank] = (rank_count[rank] or 0) + 1
+            end
+
+            -- Check for exactly two cards with the same suit
+
+            local matching_suits = 0
+            local matching_ranks = 0
+
+            for _, count in pairs(suit_count) do
+                if count == 2 then
+                    matching_suits = matching_suits + 1
+                end
+            end
+
+            -- Check for exactly two cards with the same rank
+
+            for _, count in pairs(rank_count) do
+                if count == 2 then
+                    matching_ranks = matching_ranks + 1
+                end
+            end
+
+            -- Check for two matches of either rank or suit
+
+            if matching_suits == 2 or matching_ranks == 2 then
+                return true
+            end
+        end
+        return false
+    end,
+
+    use = function(self, card)
+        link_cards(G.hand.highlighted, self.key)
+        card:juice_up(0.3, 0.5)
+    end,
+
+    pos = coordinate(2),
+}
+
+SMODS.Consumable{ -- The T
+    set = 'Polymino', atlas = 'bunco_polyminoes',
+    key = 'the_t', loc_txt = loc.the_t,
+
+    loc_vars = function(self, info_queue, card)
+        local example = {
+            {'H_7', true},
+            {'C_7', true},
+            {'S_7', true},
+            {'H_A', true}
+        }
+        return {main_end = {create_polymino_card_set(example)}}
+    end,
+
+    can_use = function(self, card)
+        if G.hand and (#G.hand.highlighted == 4) then
+            local cards = G.hand.highlighted
+
+            -- Group check:
+
+            for i = 1, #cards do
+                if cards[i].ability.group then return false end
+            end
+
+            -- Count occurrences of each suit and rank
+
+            local suit_count = {}
+            local rank_count = {}
+
+            for i = 1, #cards do
+                for j = 1, #SMODS.Suit.obj_buffer do
+                    local suit = SMODS.Suit.obj_buffer[j]
+                    if cards[i]:is_suit(suit, nil, true) then
+                        suit_count[suit] = (suit_count[suit] or 0) + 1
+                    end
+                end
+
+                local rank = cards[i]:get_id()
+                rank_count[rank] = (rank_count[rank] or 0) + 1
+            end
+
+
+            local matching_suits = 0
+            local matching_ranks = 0
+            local mismatched_suits = 0
+            local mismatched_ranks = 0
+
+            -- Check for exactly three cards with the same suit
+
+            for _, count in pairs(suit_count) do
+                if count == 3 then
+                    matching_suits = matching_suits + 1
+                elseif count == 1 then
+                    mismatched_suits = mismatched_suits + 1
+                end
+            end
+
+            -- Check for exactly three cards with the same rank
+
+            for _, count in pairs(rank_count) do
+                if count == 3 then
+                    matching_ranks = matching_ranks + 1
+                elseif count == 1 then
+                    mismatched_ranks = mismatched_ranks + 1
+                end
+            end
+
+            -- Check for three matches of either rank or suit and one mismatch
+
+            if (matching_suits == 1 and mismatched_suits == 1) or (matching_ranks == 1 and mismatched_ranks == 1) then
+                return true
+            end
+        end
+        return false
+    end,
+
+    use = function(self, card)
+        link_cards(G.hand.highlighted, self.key)
+        card:juice_up(0.3, 0.5)
+    end,
+
+    pos = coordinate(3),
+}
+
+SMODS.Consumable{ -- The S
+    set = 'Polymino', atlas = 'bunco_polyminoes',
+    key = 'the_s', loc_txt = loc.the_s,
+
+    loc_vars = function(self, info_queue, card)
+        local example = {
+            {'D_2', true},
+            {'C_2', true},
+            {'C_T', true},
+            {'S_T', true}
+        }
+        return {main_end = {create_polymino_card_set(example)}}
+    end,
+
+    can_use = function(self, card)
+        if G.hand and (#G.hand.highlighted == 4) then
+            local cards = G.hand.highlighted
+
+            -- Group check:
+
+            for i = 1, #cards do
+                if cards[i].ability.group then return false end
+            end
+
+            -- Count occurrences of each rank and suit
+
+            local suit_count = {}
+            local rank_count = {}
+
+            for i = 1, #cards do
+                for j = 1, #SMODS.Suit.obj_buffer do
+                    local suit = SMODS.Suit.obj_buffer[j]
+                    if cards[i]:is_suit(suit, nil, true) then
+                        suit_count[suit] = (suit_count[suit] or 0) + 1
+                    end
+                end
+
+                local rank = cards[i]:get_id()
+                rank_count[rank] = rank_count[rank] or {}
+                table.insert(rank_count[rank], cards[i])
+            end
+
+            -- Identify two groups of two cards with the same rank
+
+            local pair1, pair2 = nil, nil
+            for rank, cards in pairs(rank_count) do
+                if #cards == 2 then
+                    if not pair1 then
+                        pair1 = cards
+                    elseif not pair2 then
+                        pair2 = cards
+                        break
+                    end
+                end
+            end
+
+            if not pair1 or not pair2 then
+                return false
+            end
+
+            -- Check for a common suit between the pairs
+
+            local shared_suits = {}
+            for _, card1 in ipairs(pair1) do
+                for _, card2 in ipairs(pair2) do
+                    for j = 1, #SMODS.Suit.obj_buffer do
+                        local suit = SMODS.Suit.obj_buffer[j]
+                        if card1:is_suit(suit, nil, true) and card2:is_suit(suit, nil, true) then
+                            shared_suits[suit] = true
+                        end
+                    end
+                end
+            end
+
+            if next(shared_suits) then
+                return true
+            end
+        end
+        return false
+    end,
+
+    use = function(self, card)
+        link_cards(G.hand.highlighted, self.key)
+        card:juice_up(0.3, 0.5)
+    end,
+
+    pos = coordinate(4),
+}
+
+SMODS.Consumable{ -- The Z
+    set = 'Polymino', atlas = 'bunco_polyminoes',
+    key = 'the_z', loc_txt = loc.the_z,
+
+    loc_vars = function(self, info_queue, card)
+        local example = {
+            {'S_4', true},
+            {'S_A', true},
+            {'H_A', true},
+            {'H_J', true}
+        }
+        return {main_end = {create_polymino_card_set(example)}}
+    end,
+
+    can_use = function(self, card)
+        if G.hand and (#G.hand.highlighted == 4) then
+            local cards = G.hand.highlighted
+
+            -- Group check:
+
+            for i = 1, #cards do
+                if cards[i].ability.group then return false end
+            end
+
+            -- Count occurrences of each suit and rank
+
+            local suit_count = {}
+            local rank_count = {}
+
+            for i = 1, #cards do
+                for j = 1, #SMODS.Suit.obj_buffer do
+                    local suit = SMODS.Suit.obj_buffer[j]
+                    if cards[i]:is_suit(suit, nil, true) then
+                        suit_count[suit] = suit_count[suit] or {}
+                        table.insert(suit_count[suit], cards[i])
+                    end
+                end
+
+                local rank = cards[i]:get_id()
+                rank_count[rank] = (rank_count[rank] or 0) + 1
+            end
+
+            -- Identify two groups of two cards with the same suit
+
+            local pair1, pair2 = nil, nil
+            for suit, cards in pairs(suit_count) do
+                if #cards == 2 then
+                    if not pair1 then
+                        pair1 = cards
+                    elseif not pair2 then
+                        pair2 = cards
+                        break
+                    end
+                end
+            end
+
+            if not pair1 or not pair2 then
+                return false
+            end
+
+            -- Check for a common rank between the pairs
+
+            local shared_ranks = {}
+            for _, card1 in ipairs(pair1) do
+                for _, card2 in ipairs(pair2) do
+                    if card1:get_id() == card2:get_id() then
+                        shared_ranks[card1:get_id()] = true
+                    end
+                end
+            end
+
+            if next(shared_ranks) then
+                return true
+            end
+        end
+        return false
+    end,
+
+    use = function(self, card)
+        link_cards(G.hand.highlighted, self.key)
+        card:juice_up(0.3, 0.5)
+    end,
+
+    pos = coordinate(5),
+}
+
+SMODS.Consumable{ -- The J
+    set = 'Polymino', atlas = 'bunco_polyminoes',
+    key = 'the_j', loc_txt = loc.the_j,
+
+    loc_vars = function(self, info_queue, card)
+        local example = {
+            {'D_Q', true},
+            {'H_Q', true},
+            {'C_Q', true},
+            {'C_K', true}
+        }
+        return {main_end = {create_polymino_card_set(example)}}
+    end,
+
+    can_use = function(self, card)
+        if G.hand and (#G.hand.highlighted == 4) then
+            local cards = G.hand.highlighted
+
+            -- Group check:
+
+            for i = 1, #cards do
+                if cards[i].ability.group then return false end
+            end
+
+           -- Count occurrences of each rank and suit
+
+            local suit_count = {}
+            local rank_count = {}
+
+            for i = 1, #cards do
+                for j = 1, #SMODS.Suit.obj_buffer do
+                    local suit = SMODS.Suit.obj_buffer[j]
+                    if cards[i]:is_suit(suit, nil, true) then
+                        suit_count[suit] = suit_count[suit] or {}
+                        table.insert(suit_count[suit], cards[i])
+                    end
+                end
+
+                local rank = cards[i]:get_id()
+                rank_count[rank] = rank_count[rank] or {}
+                table.insert(rank_count[rank], cards[i])
+            end
+
+            -- Identify three cards with the same rank
+
+            local three_of_a_kind = nil
+            local other_card = nil
+
+            for rank, cards in pairs(rank_count) do
+                if #cards == 3 then
+                    three_of_a_kind = cards
+                elseif #cards == 1 then
+                    other_card = cards[1]
+                end
+            end
+
+            if not three_of_a_kind or not other_card then
+                return false
+            end
+
+            -- Check for a common suit between the three cards and the other card
+
+            local common_suit_found = false
+            for j = 1, #SMODS.Suit.obj_buffer do
+                local suit = SMODS.Suit.obj_buffer[j]
+                if other_card:is_suit(suit, nil, true) then
+                    for _, card in ipairs(three_of_a_kind) do
+                        if card:is_suit(suit, nil, true) then
+                            common_suit_found = true
+                            break
+                        end
+                    end
+                end
+                if common_suit_found then
+                    break
+                end
+            end
+
+            if common_suit_found then
+                return true
+            end
+        end
+        return false
+    end,
+
+    use = function(self, card)
+        link_cards(G.hand.highlighted, self.key)
+        card:juice_up(0.3, 0.5)
+    end,
+
+    pos = coordinate(6),
+}
+
+SMODS.Consumable{ -- The L
+    set = 'Polymino', atlas = 'bunco_polyminoes',
+    key = 'the_l', loc_txt = loc.the_l,
+
+    loc_vars = function(self, info_queue, card)
+        local example = {
+            {'S_2', true},
+            {'S_3', true},
+            {'S_T', true},
+            {'D_T', true}
+        }
+        return {main_end = {create_polymino_card_set(example)}}
+    end,
+
+    can_use = function(self, card)
+        if G.hand and (#G.hand.highlighted == 4) then
+            local cards = G.hand.highlighted
+
+            -- Group check:
+
+            for i = 1, #cards do
+                if cards[i].ability.group then return false end
+            end
+
+           -- Count occurrences of each suit and rank
+
+            local suit_count = {}
+            local rank_count = {}
+
+            for i = 1, #cards do
+                for j = 1, #SMODS.Suit.obj_buffer do
+                    local suit = SMODS.Suit.obj_buffer[j]
+                    if cards[i]:is_suit(suit, nil, true) then
+                        suit_count[suit] = suit_count[suit] or {}
+                        table.insert(suit_count[suit], cards[i])
+                    end
+                end
+
+                local rank = cards[i]:get_id()
+                rank_count[rank] = rank_count[rank] or {}
+                table.insert(rank_count[rank], cards[i])
+            end
+
+            -- Identify three cards with the same suit
+
+            local three_of_a_suit = nil
+            local other_card = nil
+
+            for suit, cards in pairs(suit_count) do
+                if #cards == 3 then
+                    three_of_a_suit = cards
+                elseif #cards == 1 then
+                    other_card = cards[1]
+                end
+            end
+
+            if not three_of_a_suit or not other_card then
+                return false
+            end
+
+            -- Check for a common rank between the three cards and the other card
+
+            local common_rank_found = false
+            local other_card_rank = other_card:get_id()
+
+            for _, card in ipairs(three_of_a_suit) do
+                if card:get_id() == other_card_rank then
+                    common_rank_found = true
+                    break
+                end
+            end
+
+            if common_rank_found then
+                return true
+            end
+        end
+        return false
+    end,
+
+    use = function(self, card)
+        link_cards(G.hand.highlighted, self.key)
+        card:juice_up(0.3, 0.5)
+    end,
+
+    pos = coordinate(7),
+}
+
+SMODS.Consumable{ -- The /
+    set = 'Polymino', atlas = 'bunco_polyminoes',
+    key = 'the_slash', loc_txt = loc.the_slash,
+
+    loc_vars = function(self, info_queue, card)
+        local example = {
+            {'S_2', true},
+            {'C_T', true},
+            {'H_Q', true},
+            {'D_A', true}
+        }
+        return {main_end = {create_polymino_card_set(example)}}
+    end,
+
+    set_card_type_badge = function(self, card, badges)
+        badges[1] = create_badge(loc.dictionary.mysterious_polymino, get_type_colour(self or card.config, card), nil, 1.2)
+    end,
+
+    can_use = function(self, card)
+        if G.hand and (#G.hand.highlighted == 4) then
+            local cards = G.hand.highlighted
+
+            -- Group check:
+
+            for i = 1, #cards do
+                if cards[i].ability.group then return false end
+            end
+
+           -- Track unique ranks and suits
+
+            local rank_set = {}
+            local suit_set = {}
+
+            for i = 1, #cards do
+                local rank = cards[i]:get_id()
+
+                -- Collect all suits the card belongs to
+
+                local card_suits = {}
+                for j = 1, #SMODS.Suit.obj_buffer do
+                    local suit = SMODS.Suit.obj_buffer[j]
+                    if cards[i]:is_suit(suit, nil, true) then
+                        table.insert(card_suits, suit)
+                    end
+                end
+
+                -- Check if rank or suit is already in the set
+
+                if rank_set[rank] then
+                    return false
+                end
+
+                for _, suit in ipairs(card_suits) do
+                    if suit_set[suit] then
+                        return false
+                    end
+                end
+
+                -- Add rank and suits to their respective sets
+
+                rank_set[rank] = true
+                for _, suit in ipairs(card_suits) do
+                    suit_set[suit] = true
+                end
+            end
+
+            return true
+        end
+        return false
+    end,
+
+    use = function(self, card)
+        link_cards(G.hand.highlighted, self.key)
+        card:juice_up(0.3, 0.5)
+    end,
+
+    pos = coordinate(8),
+
+    in_pool = function(self)
+        return exotic_in_pool()
+    end
+}
+
+SMODS.Consumable{ -- The 8
+    set = 'Spectral', atlas = 'bunco_polyminoes',
+    key = 'the_8', loc_txt = loc.the_8,
+
+    hidden = true,
+    soul_rate = 0.002,
+    soul_set = 'Polymino',
+
+    can_use = function(self, card)
+        if G.hand and #G.hand.cards >= 1 then
+            return true
+        end
+        return false
+    end,
+
+    use = function(self, card)
+        link_cards(G.hand.cards, self.key, true)
+        card:juice_up(0.3, 0.5)
+    end,
+
+    pos = coordinate(9),
+}
+
 -- Exotic suits
 
 SMODS.Atlas({key = 'bunco_cards', path = 'Exotic/ExoticCards.png', px = 71, py = 95})
@@ -4308,7 +5136,7 @@ SMODS.Blind{ -- Turquoise Shield
 SMODS.Atlas({key = 'bunco_decks', path = 'Decks/Decks.png', px = 71, py = 95})
 
 SMODS.Back{ -- Fairy
-	key = "fairy", loc_txt = loc.fairy,
+	key = 'fairy', loc_txt = loc.fairy,
 
     config = {amount = 4},
     loc_vars = function(self)
@@ -4347,6 +5175,26 @@ SMODS.Back{ -- Fairy
         end
     end,
 
+    pos = coordinate(1),
+    atlas = 'bunco_decks'
+}
+
+SMODS.Back{ -- Digital
+	key = 'digital', loc_txt = loc.digital,
+
+    config = {polymino_rate = 2, consumables = {'c_bunc_the_i'}},
+    loc_vars = function(self)
+        return {}
+    end,
+
+    unlocked = false,
+    unlock_condition = {type = 'win_stake', stake = 8},
+
+    apply = function(self)
+        G.GAME.polymino_rate = self.config.polymino_rate
+    end,
+
+    pos = coordinate(2),
     atlas = 'bunco_decks'
 }
 
@@ -4381,6 +5229,43 @@ SMODS.Tag{ -- Breaking
 
     in_pool = function()
         if pseudorandom('breaking'..G.SEED) < 0.07 then
+            return true
+        else
+            return false
+        end
+    end
+}
+
+SMODS.Tag{ -- Arcade
+    key = 'arcade', loc_txt = loc.arcade,
+    loc_vars = function(self, info_queue)
+        info_queue[#info_queue + 1] = {key = 'p_bunc_virtual_mega', set = 'Other', vars = {G.P_CENTERS.p_bunc_virtual_mega.config.choose, G.P_CENTERS.p_bunc_virtual_mega.config.extra}}
+        return {}
+    end,
+
+    config = {type = 'new_blind_choice'},
+
+    apply = function(tag, context)
+        tag:yep('+', G.C.BUNCO_VIRTUAL, function()
+            local key = 'p_bunc_virtual_mega'
+            local card = Card(G.play.T.x + G.play.T.w/2 - G.CARD_W*1.27/2,
+            G.play.T.y + G.play.T.h/2-G.CARD_H*1.27/2, G.CARD_W*1.27, G.CARD_H*1.27, G.P_CARDS.empty, G.P_CENTERS[key], {bypass_discovery_center = true, bypass_discovery_ui = true})
+            card.cost = 0
+            card.from_tag = true
+            G.FUNCS.use_card({config = {ref_table = card}})
+            card:start_materialize()
+            G.CONTROLLER.locks[tag.ID] = nil
+            return true
+        end)
+        tag.triggered = true
+        return true
+    end,
+
+    pos = coordinate(2),
+    atlas = 'bunco_tags',
+
+    in_pool = function()
+        if pseudorandom('virtual'..G.SEED) < 0.1 then
             return true
         else
             return false
@@ -5038,10 +5923,11 @@ end
 -- Booster Packs
 
 SMODS.Atlas({key = 'bunco_booster_packs_blind', path = 'Boosters/BoostersBlind.png', px = 71, py = 95})
+SMODS.Atlas({key = 'bunco_booster_packs_virtual', path = 'Boosters/BoostersVirtual.png', px = 71, py = 95})
 
 for i = 1, 4 do -- Blind
     SMODS.Booster{
-        key = 'blind_'..i, loc_txt = loc.blind_standard,
+        key = 'blind_'..i, loc_txt = loc.blind,
 
         loc_vars = function(self, info_queue, card)
             return {vars = {self.config.extra}}
@@ -5103,6 +5989,30 @@ for i = 1, 4 do -- Blind
         atlas = 'bunco_booster_packs_blind',
 
         in_pool = function() return false end
+    }
+end
+
+for i = 1, 4 do -- Virtual
+    SMODS.Booster{
+        key = 'virtual_'..(i <= 2 and i or i == 3 and 'jumbo' or 'mega'), loc_txt = loc.virtual,
+
+        config = {extra = i <= 2 and 2 or 4, choose =  i <= 3 and 2 or 4},
+        draw_hand = true,
+
+        create_card = function(self, card)
+            return create_card('Polymino', G.pack_cards, nil, nil, true, true, nil, 'vir')
+            -- return {set = 'Polymino', area = G.pack_cards, skip_materialize = nil, soulable = nil, key_append = 'vir'}
+        end,
+
+        ease_background_colour = function(self)
+            ease_colour(G.C.DYN_UI.MAIN, G.C.BUNCO_VIRTUAL)
+            ease_background_colour{new_colour = HEX('50506a'), special_colour = HEX('7e9999'), contrast = 2}
+        end,
+
+        pos = coordinate(i),
+        atlas = 'bunco_booster_packs_virtual',
+
+        in_pool = function() return (pseudorandom('virtual'..G.SEED) < 0.5) end
     }
 end
 
