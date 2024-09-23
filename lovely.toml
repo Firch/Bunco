@@ -442,7 +442,7 @@ end
 [[patches]]
 [patches.pattern]
 target = 'functions/button_callbacks.lua'
-pattern = 'if #G.hand.highlighted <= 0 or G.GAME.blind.block_play or #G.hand.highlighted > 5 then'
+pattern = 'if #G.hand.highlighted <= 0 or G.GAME.blind.block_play or #G.hand.highlighted > G.hand.config.highlighted_limit then'
 position = 'at'
 match_indent = true
 payload = '''
@@ -457,7 +457,7 @@ if G.hand and G.hand.highlighted then
     end
 end
 
-if (#G.hand.highlighted <= 0 or G.GAME.blind.block_play or #G.hand.highlighted > 5) and not (group_size > 5) then
+if (#G.hand.highlighted <= 0 or G.GAME.blind.block_play or #G.hand.highlighted > G.hand.config.highlighted_limit) and not (group_size > 5) then
 
 '''
 
@@ -1348,7 +1348,7 @@ end
 
 if (not G.hand.highlighted) or (#G.hand.highlighted == 0) then unlock_all_flipped = false end
 
-if unlock_all_flipped and #G.hand.highlighted >= 5 then
+if unlock_all_flipped and #G.hand.highlighted >= G.hand.config.highlighted_limit then
     local locked_card
 
     for i = 1, #G.P_LOCKED do
