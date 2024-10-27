@@ -6,49 +6,18 @@
 --- VERSION: 5.0
 
 -- ToDo:
--- (done) Fix Crop Circles always showing Fleurons
--- (done) Check how to add custom entries to the localization (for card messages like linocut's one)
--- (done) Cassette proper coordinates
--- (done) Polychrome desc on roy g biv
--- (?) Debuff registration plate level with shader if possible
--- (done) Nan morgan or make zero shapiro count letter rank cards
--- (done/WIP) Unlocks
--- (done) Check whats up with joker knight
--- (done) Add purist config
--- (done) Card sizes
--- (done) Magenta dagger wobble?
--- (?) Disable Bierdeckel upgrade message on win
--- (done) Global variable for glitter
--- (done) Config for double lovers
 -- Fix suit colors
--- (done) Talisman support
--- (done) Make tags use global values of editions (+ loc vars for it)
 -- (1/2) Make editioned consumables and replace their info_queue (to check: common events.lua)
--- (done) Fix bulwark stray pixels
--- (done) Add config to the consumable editions
--- (done) Remove debuff when fluorescent edition is applied to a debuffed card
--- (done) Make tarot badges use localization
--- (done) Pawn and linocut fake suit and rank
--- (done) Check eternal food compat
--- (done) Reset metallurgist-like bonuses when you lose
--- (done) Reset metallurgist-like bonuses when Joker is debuffed
--- (done) Fix the mask giving spectrum hands when they're invisible
--- (done) Make so enhancement-related Jokers do not appear unless player has respective enhancements
--- (done) Custom description for the Disproportionality that isn't just Misprint 2
 -- (lame fix) Doorhanger doesn't shake when unlocked for some reason?
 -- Make so unlocks actually count things
--- (done) Check blind flips beforehand (The Umbrella)
--- (done) Running joke gives negative while the joker in shop
 -- Make configs apply immediately
--- (done) Add unlock to the Shell Game
 -- Shell Game should modify tables instead of replacing - see Blind Packs
 
-global_bunco = global_bunco or {loc = {}, vars = {}}
-local bunco = SMODS.current_mod
+BUNCOMOD = {loc = {}, vars = {}, funcs = {}, content = SMODS.current_mod}
 local filesystem = NFS or love.filesystem
 
-local loc = filesystem.load(bunco.path..'localization.lua')()
-local config = bunco.config
+local loc = filesystem.load(BUNCOMOD.content.path..'localization.lua')()
+local config = BUNCOMOD.content.config
 
 -- Debug message
 
@@ -110,13 +79,13 @@ end
 
 -- Exotic in_pool function
 
-exotic_in_pool = function()
+BUNCOMOD.funcs.exotic_in_pool = function()
     return G.GAME and G.GAME.Exotic
 end
 
 -- Dictionary wrapper
 
-function bunco.process_loc_text()
+function BUNCOMOD.content.process_loc_text()
     SMODS.process_loc_text(G.localization.misc.dictionary, 'bunco', loc.dictionary)
 
     loc.dictionary = G.localization.misc.dictionary.bunco
@@ -129,52 +98,48 @@ function bunco.process_loc_text()
     SMODS.process_loc_text(G.localization.descriptions.Other, 'exotic_cards', loc.exotic_cards)
     G.P_CENTERS['exotic_cards'] = {key = 'exotic_cards', set = 'Other'}
 
-    global_bunco.loc.exceeded_score = loc.dictionary.exceeded_score
-    global_bunco.loc.chips = loc.dictionary.chips
+    BUNCOMOD.loc.exceeded_score = loc.dictionary.exceeded_score
+    BUNCOMOD.loc.chips = loc.dictionary.chips
 end
 
 -- Config globals
 
-global_bunco.vars.jokerlike_consumable_editions = config.jokerlike_consumable_editions
+BUNCOMOD.vars.jokerlike_consumable_editions = config.jokerlike_consumable_editions
 
 -- Config options
 
-function bunco.save_config(self)
+function BUNCOMOD.content.save_config(self)
     SMODS.save_mod_config(self)
 end
 
-function bunco.config_tab()
+function BUNCOMOD.content.config_tab()
     return {n = G.UIT.ROOT, config = {r = 0.1, minw = 4, align = "tm", padding = 0.2, colour = G.C.BLACK}, nodes = {
-        create_toggle({label = loc.dictionary.colorful_finishers, ref_table = bunco.config, ref_value = 'colorful_finishers', callback = function() bunco:save_config() end}),
-        create_toggle({label = loc.dictionary.high_quality_shaders, info = {loc.dictionary.requires_restart}, ref_table = bunco.config, ref_value = 'high_quality_shaders', callback = function() bunco:save_config() end}),
-        create_toggle({label = loc.dictionary.double_lovers, ref_table = bunco.config, ref_value = 'double_lovers', callback = function() bunco:save_config()
+        create_toggle({label = loc.dictionary.colorful_finishers, ref_table = BUNCOMOD.content.config, ref_value = 'colorful_finishers', callback = function() bunco:save_config() end}),
+        create_toggle({label = loc.dictionary.high_quality_shaders, info = {loc.dictionary.requires_restart}, ref_table = BUNCOMOD.content.config, ref_value = 'high_quality_shaders', callback = function() bunco:save_config() end}),
+        create_toggle({label = loc.dictionary.double_lovers, ref_table = BUNCOMOD.content.config, ref_value = 'double_lovers', callback = function() bunco:save_config()
             if config.double_lovers then
                 G.P_CENTERS.c_lovers.config.max_highlighted = 2
             else
                 G.P_CENTERS.c_lovers.config.max_highlighted = 1
             end
         end}),
-        create_toggle({label = loc.dictionary.jokerlike_consumable_editions, ref_table = bunco.config, ref_value = 'jokerlike_consumable_editions', callback = function() bunco:save_config() end}),
-        create_toggle({label = loc.dictionary.fixed_badges, ref_table = bunco.config, ref_value = 'fixed_badges', callback = function() bunco:save_config() end}),
-        create_toggle({label = loc.dictionary.fixed_sprites, info = {loc.dictionary.requires_restart}, ref_table = bunco.config, ref_value = 'fixed_sprites', callback = function() bunco:save_config() end}),
-        create_toggle({label = loc.dictionary.gameplay_reworks, info = {loc.dictionary.requires_restart}, ref_table = bunco.config, ref_value = 'gameplay_reworks', callback = function() bunco:save_config() end})
+        create_toggle({label = loc.dictionary.jokerlike_consumable_editions, ref_table = BUNCOMOD.content.config, ref_value = 'jokerlike_consumable_editions', callback = function() bunco:save_config() end}),
+        create_toggle({label = loc.dictionary.fixed_badges, ref_table = BUNCOMOD.content.config, ref_value = 'fixed_badges', callback = function() bunco:save_config() end}),
+        create_toggle({label = loc.dictionary.fixed_sprites, info = {loc.dictionary.requires_restart}, ref_table = BUNCOMOD.content.config, ref_value = 'fixed_sprites', callback = function() bunco:save_config() end}),
+        create_toggle({label = loc.dictionary.gameplay_reworks, info = {loc.dictionary.requires_restart}, ref_table = BUNCOMOD.content.config, ref_value = 'gameplay_reworks', callback = function() bunco:save_config() end})
     }}
 end
 
 -- Shaders
 
 if config.high_quality_shaders then
-    local background_shader = NFS.read(bunco.path..'assets/shaders/background.fs')
-    local splash_shader = NFS.read(bunco.path..'assets/shaders/splash.fs')
-    local flame_shader = NFS.read(bunco.path..'assets/shaders/flame.fs')
+    local background_shader = NFS.read(BUNCOMOD.content.path..'assets/shaders/background.fs')
+    local splash_shader = NFS.read(BUNCOMOD.content.path..'assets/shaders/splash.fs')
+    local flame_shader = NFS.read(BUNCOMOD.content.path..'assets/shaders/flame.fs')
     G.SHADERS['background'] = love.graphics.newShader(background_shader)
     G.SHADERS['splash'] = love.graphics.newShader(splash_shader)
     G.SHADERS['flame'] = love.graphics.newShader(flame_shader)
 end
-
--- Colorful Finishers
-
-if config.colorful_finishers then bunco_colorful_finishers = true end
 
 -- Double lovers
 
@@ -458,7 +423,7 @@ function Game:update(dt)
     original_game_update(self, dt)
 end
 
-function bunco.set_debuff(card)
+function BUNCOMOD.content.set_debuff(card)
 
     -- Fluorescent edition
 
@@ -603,7 +568,7 @@ local function create_joker(joker)
     local pool
 
     if joker.type == 'Exotic' then
-        pool = exotic_in_pool
+        pool = BUNCOMOD.funcs.exotic_in_pool
     end
 
     -- Joker creation
@@ -3196,7 +3161,7 @@ SMODS.Consumable{ -- The Sky
         delay(0.5)
     end,
 
-    in_pool = exotic_in_pool
+    in_pool = BUNCOMOD.funcs.exotic_in_pool
 }
 
 SMODS.Consumable{ -- The Abyss
@@ -3238,7 +3203,7 @@ SMODS.Consumable{ -- The Abyss
         delay(0.5)
     end,
 
-    in_pool = exotic_in_pool
+    in_pool = BUNCOMOD.funcs.exotic_in_pool
 }
 
 -- Planets
@@ -4159,7 +4124,7 @@ SMODS.Consumable{ -- The /
     pos = coordinate(8),
 
     in_pool = function(self)
-        return exotic_in_pool()
+        return BUNCOMOD.funcs.exotic_in_pool()
     end
 }
 
@@ -4217,7 +4182,7 @@ SMODS.Suit{ -- Fleurons
         if args and args.initial_deck then
             return false
         end
-        return exotic_in_pool()
+        return BUNCOMOD.funcs.exotic_in_pool()
     end
 }
 
@@ -4244,7 +4209,7 @@ SMODS.Suit{ -- Halberds
         if args and args.initial_deck then
             return false
         end
-        return exotic_in_pool()
+        return BUNCOMOD.funcs.exotic_in_pool()
     end
 }
 
@@ -5502,7 +5467,7 @@ SMODS.Tag{ -- Filigree
     pos = coordinate(1),
     atlas = 'bunco_tags_exotic',
 
-    in_pool = exotic_in_pool
+    in_pool = BUNCOMOD.funcs.exotic_in_pool
 }
 
 SMODS.Tag{ -- Eternal
@@ -6141,5 +6106,5 @@ SMODS.Stake:take_ownership('gold', {
 -- Mod compatibility
 
 if _G["JokerDisplay"] then
-    filesystem.load(bunco.path..'compat/jokerdisplay.lua')()
+    filesystem.load(BUNCOMOD.content.path..'compat/jokerdisplay.lua')()
 end

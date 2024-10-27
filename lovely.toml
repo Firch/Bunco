@@ -155,7 +155,7 @@ position = 'at'
 match_indent = true
 payload = '''
 
-if bunco_colorful_finishers then
+if BUNCOMOD.content.config.colorful_finishers then
     ease_background_colour{new_colour = increase_saturation(mix_colours(boss_col, invert_color(boss_col), 0.3), 1),
     special_colour = boss_col,
     tertiary_colour = darken(increase_saturation(mix_colours(boss_col, invert_color(boss_col, true, false, false), 0.3), 0.6), 0.4), contrast = 1.7}
@@ -172,7 +172,7 @@ target = 'functions/common_events.lua'
 pattern = 'elseif G.GAME.won then'
 position = 'at'
 match_indent = true
-payload = '''elseif G.GAME.won and not bunco_colorful_finishers then'''
+payload = '''elseif G.GAME.won and not BUNCOMOD.content.config.colorful_finishers then'''
 
 # Luchador Rework
 [[patches]]
@@ -181,7 +181,7 @@ target = 'card.lua'
 pattern = "elseif self.ability.name == 'Luchador' then"
 position = 'at'
 match_indent = true
-payload = '''elseif self.ability.name == 'Luchador' and not bunco_gameplay_reworks then'''
+payload = '''elseif self.ability.name == 'Luchador' and not BUNCOMOD.content.config.gameplay_reworks then'''
 
 # Red Card Rework
 [[patches]]
@@ -190,7 +190,7 @@ target = 'card.lua'
 pattern = "if self.ability.name == 'Red Card' and not context.blueprint then"
 position = 'at'
 match_indent = true
-payload = '''if self.ability.name == 'Red Card' and not context.blueprint and not bunco_gameplay_reworks then'''
+payload = '''if self.ability.name == 'Red Card' and not context.blueprint and not BUNCOMOD.content.config.gameplay_reworks then'''
 
 # Boss Tag Rework
 [[patches]]
@@ -199,7 +199,7 @@ target = 'tag.lua'
 pattern = "if self.name == 'Boss Tag' then"
 position = 'at'
 match_indent = true
-payload = '''if self.name == 'Boss Tag' and not bunco_gameplay_reworks then'''
+payload = '''if self.name == 'Boss Tag' and not BUNCOMOD.content.config.gameplay_reworks then'''
 
 # # Shiny Blinds
 # [[patches]]
@@ -1694,7 +1694,7 @@ if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_blade' and not G.GAME.blind.di
             end)
         }))
 
-        local blade_message = global_bunco and global_bunco.loc.exceeded_score or ' '
+        local blade_message = BUNCOMOD and BUNCOMOD.loc.exceeded_score or ' '
         play_area_status_text(blade_message)
 
     end
@@ -2045,7 +2045,7 @@ target = 'functions/state_events.lua'
 pattern = 'for i=1, #G.jokers.cards + #G.consumeables.cards do'
 position = 'at'
 match_indent = true
-payload = '''for i=1, #G.jokers.cards + (global_bunco and global_bunco.vars and global_bunco.vars.jokerlike_consumable_editions and #G.consumeables.cards or 0) do'''
+payload = '''for i=1, #G.jokers.cards + (BUNCOMOD and BUNCOMOD.vars and BUNCOMOD.vars.jokerlike_consumable_editions and #G.consumeables.cards or 0) do'''
 
 # Editions in boosters 1/6
 [[patches]]
@@ -2193,7 +2193,7 @@ if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand
     hand_chips = mod_chips(hand_chips * xchips)
     update_hand_text({delay = 0}, {chips = hand_chips})
     card_eval_status_text(scoring_hand[i], 'extra', nil, percent, nil,
-    {message = 'X'..xchips..' '..global_bunco.loc.chips,
+    {message = 'X'..xchips..' '..BUNCOMOD.loc.chips,
     edition = true,
     x_chips = true})
 end
@@ -2222,7 +2222,7 @@ if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.joke
     hand_chips = mod_chips(hand_chips * xchips)
     update_hand_text({delay = 0}, {chips = hand_chips})
     card_eval_status_text(G.jokers.cards[i], 'extra', nil, percent, nil,
-    {message = 'X'..xchips..' '..global_bunco.loc.chips,
+    {message = 'X'..xchips..' '..BUNCOMOD.loc.chips,
     edition = true,
     x_chips = true})
 end
