@@ -2047,7 +2047,7 @@ position = 'at'
 match_indent = true
 payload = '''for i=1, #G.jokers.cards + (BUNCOMOD and BUNCOMOD.vars and BUNCOMOD.vars.jokerlike_consumable_editions and #G.consumeables.cards or 0) do'''
 
-# Editions in boosters 1/6
+# Editions in boosters 1/2
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
@@ -2060,87 +2060,24 @@ local consumable_edition = {rate = G.GAME.used_vouchers['v_bunc_lamination'] and
 
 '''
 
-# Editions in boosters 2/6
+# Editions in boosters 2/2
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
-pattern = '''card = create_card("Spectral", G.pack_cards, nil, nil, true, true, nil, 'ar2')'''
-position = 'after'
+pattern = '''card:start_materialize({G.C.WHITE, G.C.WHITE}, nil, 1.5*G.SETTINGS.GAMESPEED)'''
+position = 'before'
 match_indent = true
 payload = '''
 
 local edition = poll_edition('standard_edition'..G.GAME.round_resets.ante, consumable_edition.rate, true, consumable_edition.forced,
 {'e_holo', 'e_foil', 'e_polychrome', 'e_bunc_glitter'})
 if not card.edition then
-    card:set_edition(edition)
-end
-
-'''
-
-# Editions in boosters 3/6
-[[patches]]
-[patches.pattern]
-target = 'card.lua'
-pattern = '''card = create_card("Tarot", G.pack_cards, nil, nil, true, true, nil, 'ar1')'''
-position = 'after'
-match_indent = true
-payload = '''
-
-local edition = poll_edition('standard_edition'..G.GAME.round_resets.ante, consumable_edition.rate, true, consumable_edition.forced,
-{'e_holo', 'e_foil', 'e_polychrome', 'e_bunc_glitter'})
-if not card.edition then
-    card:set_edition(edition)
-end
-
-'''
-
-# Editions in boosters 4/6
-[[patches]]
-[patches.pattern]
-target = 'card.lua'
-pattern = '''card = create_card("Planet", G.pack_cards, nil, nil, true, true, _planet, 'pl1')'''
-position = 'after'
-match_indent = true
-payload = '''
-
-local edition = poll_edition('standard_edition'..G.GAME.round_resets.ante, consumable_edition.rate, true, consumable_edition.forced,
-{'e_holo', 'e_foil', 'e_polychrome', 'e_bunc_glitter'})
-if not card.edition then
-    card:set_edition(edition)
-end
-
-'''
-
-# Editions in boosters 5/6
-[[patches]]
-[patches.pattern]
-target = 'card.lua'
-pattern = '''card = create_card("Planet", G.pack_cards, nil, nil, true, true, nil, 'pl1')'''
-position = 'after'
-match_indent = true
-payload = '''
-
-local edition = poll_edition('standard_edition'..G.GAME.round_resets.ante, consumable_edition.rate, true, consumable_edition.forced,
-{'e_holo', 'e_foil', 'e_polychrome', 'e_bunc_glitter'})
-if not card.edition then
-    card:set_edition(edition)
-end
-
-'''
-
-# Editions in boosters 6/6
-[[patches]]
-[patches.pattern]
-target = 'card.lua'
-pattern = '''card = create_card("Spectral", G.pack_cards, nil, nil, true, true, nil, 'spe')'''
-position = 'after'
-match_indent = true
-payload = '''
-
-local edition = poll_edition('standard_edition'..G.GAME.round_resets.ante, consumable_edition.rate, true, consumable_edition.forced,
-{'e_holo', 'e_foil', 'e_polychrome', 'e_bunc_glitter'})
-if not card.edition then
-    card:set_edition(edition)
+    for _, card_type in ipairs(SMODS.ConsumableType.ctype_buffer) do
+        if card.ability.set == card_type then
+            card:set_edition(edition)
+            break
+        end
+    end
 end
 
 '''
