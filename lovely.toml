@@ -2360,16 +2360,18 @@ function change_booster_amount(mod)
         G.shop:recalculate()
         if mod > 0 then
             for i = 1, G.GAME.shop.booster_max - #G.shop_booster.cards do
-                G.GAME.current_round.used_packs = G.GAME.current_round.used_packs or {}
-                if not G.GAME.current_round.used_packs[i] then
-                    G.GAME.current_round.used_packs[i] = get_pack('shop_pack').key
+                if G.GAME.current_round.used_packs[i] ~= 'USED' then
+                    G.GAME.current_round.used_packs = G.GAME.current_round.used_packs or {}
+                    if not G.GAME.current_round.used_packs[i] then
+                        G.GAME.current_round.used_packs[i] = get_pack('shop_pack').key
+                    end
+                    local card = Card(G.shop_booster.T.x + G.shop_booster.T.w/2,
+                    G.shop_booster.T.y, G.CARD_W*1.27, G.CARD_H*1.27, G.P_CARDS.empty, G.P_CENTERS[G.GAME.current_round.used_packs[i]], {bypass_discovery_center = true, bypass_discovery_ui = true})
+                    create_shop_card_ui(card, 'Booster', G.shop_booster)
+                    card:start_materialize()
+                    G.shop_booster:emplace(card)
+                    card:align()
                 end
-                local card = Card(G.shop_booster.T.x + G.shop_booster.T.w/2,
-                G.shop_booster.T.y, G.CARD_W*1.27, G.CARD_H*1.27, G.P_CARDS.empty, G.P_CENTERS[G.GAME.current_round.used_packs[i]], {bypass_discovery_center = true, bypass_discovery_ui = true})
-                create_shop_card_ui(card, 'Booster', G.shop_booster)
-                card:start_materialize()
-                G.shop_booster:emplace(card)
-                card:align()
             end
         end
     end
