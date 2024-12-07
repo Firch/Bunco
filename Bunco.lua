@@ -5480,7 +5480,6 @@ SMODS.Tag{ -- Eternal
     end,
 
     apply = function(tag, context)
-        local applied = nil
         if not context.card.ability.eternal and not context.card.ability.perishable and context.card.ability.set == 'Joker' then
             local lock = tag.ID
             G.CONTROLLER.locks[lock] = true
@@ -5495,7 +5494,7 @@ SMODS.Tag{ -- Eternal
 
             tag.triggered = true
         end
-        return applied
+        return true
     end,
 
     pos = coordinate(1),
@@ -5514,7 +5513,6 @@ SMODS.Tag{ -- Perishable
     end,
 
     apply = function(tag, context)
-        local applied = nil
         if not context.card.ability.perishable and not context.card.ability.eternal and context.card.ability.set == 'Joker' then
             local lock = tag.ID
             G.CONTROLLER.locks[lock] = true
@@ -5529,7 +5527,7 @@ SMODS.Tag{ -- Perishable
 
             tag.triggered = true
         end
-        return applied
+        return true
     end,
 
     pos = coordinate(2),
@@ -5548,7 +5546,6 @@ SMODS.Tag{ -- Scattering
     end,
 
     apply = function(tag, context)
-        local applied = nil
         if not context.card.ability.bunc_scattering
         and not context.card.ability.bunc_hindered
         and not context.card.ability.bunc_reactive
@@ -5567,7 +5564,7 @@ SMODS.Tag{ -- Scattering
 
             tag.triggered = true
         end
-        return applied
+        return true
     end,
 
     pos = coordinate(3),
@@ -5586,7 +5583,6 @@ SMODS.Tag{ -- Hindered
     end,
 
     apply = function(tag, context)
-        local applied = nil
         if not context.card.ability.bunc_scattering
         and not context.card.ability.bunc_hindered
         and not context.card.ability.bunc_reactive
@@ -5605,7 +5601,7 @@ SMODS.Tag{ -- Hindered
 
             tag.triggered = true
         end
-        return applied
+        return true
     end,
 
     pos = coordinate(4),
@@ -5624,7 +5620,6 @@ SMODS.Tag{ -- Reactive
     end,
 
     apply = function(tag, context)
-        local applied = nil
         if not context.card.ability.bunc_scattering
         and not context.card.ability.bunc_hindered
         and not context.card.ability.bunc_reactive
@@ -5642,7 +5637,7 @@ SMODS.Tag{ -- Reactive
 
             tag.triggered = true
         end
-        return applied
+        return true
     end,
 
     pos = coordinate(5),
@@ -5661,7 +5656,6 @@ SMODS.Tag{ -- Rental
     end,
 
     apply = function(tag, context)
-        local applied = nil
         if not context.card.ability.rental and context.card.ability.set == 'Joker' then
             local lock = tag.ID
             G.CONTROLLER.locks[lock] = true
@@ -5676,7 +5670,7 @@ SMODS.Tag{ -- Rental
 
             tag.triggered = true
         end
-        return applied
+        return true
     end,
 
     pos = coordinate(6),
