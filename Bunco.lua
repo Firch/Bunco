@@ -1594,7 +1594,7 @@ create_joker({ -- Registration Plate
         card.ability.extra.combination = table.concat(combination, ", ", 1, 4).." "..loc.dictionary.word_and.." "..table.concat(combination, " ", 5)
     end,
     calculate = function(self, card, context)
-        if context.end_of_round then
+        if context.end_of_round and #G.deck.cards ~= 0 then
             card.ability.extra.card_list = {}
 
             for i = 1, 5 do
