@@ -461,7 +461,27 @@ if (#G.hand.highlighted <= 0 or G.GAME.blind.block_play or #G.hand.highlighted >
 
 '''
 
-# Linked cards
+# Linked cards visual cue
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''if self.greyed then'''
+position = 'before'
+match_indent = true
+payload = '''
+
+if self.ability.group then
+    if not self.children.link then
+        local variant = self.ability.group.id
+        variant = 1 + (variant - 1) % 5
+        self.children.link = Sprite(self.T.x, self.T.y, self.T.w, self.T.h, G.ASSET_ATLAS['bunc_bunco_link'], {x = variant - 1, y = 0})
+        self.children.link.states.visible = false
+    end
+    self.children.link:draw_shader('dissolve', nil, nil, nil, self.children.center, 0, 0)
+    self.children.link.role.draw_major = self
+end
+
+'''
 
 # function Card:flip() (Cassette)
 [[patches]]

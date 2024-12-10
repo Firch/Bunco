@@ -3325,6 +3325,8 @@ SMODS.Consumable{ -- Cleanse
 
 -- Functions for Polyminoes
 
+SMODS.Atlas({key = 'bunco_link', path = 'Links/Link.png', px = 71, py = 95})
+
 function create_polymino_card_set(example)
     local cardarea = CardArea(
         0,
@@ -3358,8 +3360,9 @@ function link_cards(cards, source, ignore_groups)
     G.GAME.last_card_group = (G.GAME.last_card_group or 0) + 1
 
     for i = 1, #cards do
-        if (not ignore_groups) or (ignore_groups and not cards[i].ability.group) then
-            cards[i].ability.group = {id = G.GAME.last_card_group, source = source or 'unknown'}
+        local card = cards[i]
+        if (not ignore_groups) or (ignore_groups and not card.ability.group) then
+            card.ability.group = {id = G.GAME.last_card_group, source = source or 'unknown'}
         end
     end
 end
@@ -3408,6 +3411,7 @@ G.FUNCS.draw_from_deck_to_hand = function(e)
 
                 if card == cards_from_groups[i] then
                     draw_card(G.deck, G.hand, i * 100 / #cards_from_groups, 'up', true, card)
+                    save_run()
                 end
 
                 n = n + 1
