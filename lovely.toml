@@ -391,11 +391,22 @@ if (_c.set == 'Default' or _c.set == 'Enhanced') and card and card.ability and t
         main_end = main_end or {}
         local all_cards_from_group = {}
         if card and card.area then
-            for i = 1, #card.area.cards do
-                local check_card = card.area.cards[i]
-                if check_card.ability and type(check_card.ability) == 'table' and check_card.ability.group then
-                    if check_card.ability.group.id == card.ability.group.id then
-                        table.insert(all_cards_from_group, check_card)
+            if card.area.config.type == 'title' then
+                for i = 1, #G.deck.cards do
+                    local check_card = G.deck.cards[i]
+                    if check_card.ability and type(check_card.ability) == 'table' and check_card.ability.group then
+                        if check_card.ability.group.id == card.ability.group.id then
+                            table.insert(all_cards_from_group, check_card)
+                        end
+                    end
+                end
+            else
+                for i = 1, #card.area.cards do
+                    local check_card = card.area.cards[i]
+                    if check_card.ability and type(check_card.ability) == 'table' and check_card.ability.group then
+                        if check_card.ability.group.id == card.ability.group.id then
+                            table.insert(all_cards_from_group, check_card)
+                        end
                     end
                 end
             end
