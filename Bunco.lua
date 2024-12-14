@@ -3428,7 +3428,7 @@ function CardArea:add_to_highlighted(card, silent)
         for i = 1, #self.cards do
             if self.cards[i].ability.group
             and self.cards[i].ability.group.id == card.ability.group.id then
-                if not self.cards[i].highlighted then
+                if self.config.type == 'hand' and not self.cards[i].highlighted then
                     original_add_to_highlighted(self, self.cards[i], (silent == nil) and group_silent or silent)
                     group_silent = true
                 end
@@ -3443,7 +3443,8 @@ local original_remove_from_highlighted = CardArea.remove_from_highlighted
 function CardArea:remove_from_highlighted(card, force)
     if card.ability.group and self and not force then
         for i = 1, #self.cards do
-            if self.cards[i].ability.group
+            if self.config.type == 'hand'
+            and self.cards[i].ability.group
             and self.cards[i].ability.group.id == card.ability.group.id then
                 original_remove_from_highlighted(self, self.cards[i], force)
             end
