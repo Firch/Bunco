@@ -359,7 +359,7 @@ if config.gameplay_reworks then
             return {}
         end,
         config = {type = 'new_blind_choice'},
-        apply = function(tag, context)
+        apply = function(self, tag, context)
             tag:yep('+', G.C.SECONDARY_SET.Spectral, function()
                 local key = 'p_bunc_blind_'..(math.random(4))
                 local card = Card(G.play.T.x + G.play.T.w/2 - G.CARD_W*1.27/2,
@@ -5183,7 +5183,7 @@ SMODS.Tag{ -- Breaking
 
     config = {type = 'round_start_bonus'},
 
-    apply = function(tag, context)
+    apply = function(self, tag, context)
         if G.GAME.blind and G.GAME.blind.boss and not G.GAME.blind.disabled then
             tag:yep('+', G.C.BLUE, function()
                 return true
@@ -5217,7 +5217,7 @@ SMODS.Tag{ -- Arcade
 
     config = {type = 'new_blind_choice'},
 
-    apply = function(tag, context)
+    apply = function(self, tag, context)
         tag:yep('+', G.C.BUNCO_VIRTUAL, function()
             local key = 'p_bunc_virtual_mega'
             local card = Card(G.play.T.x + G.play.T.w/2 - G.CARD_W*1.27/2,
@@ -5254,7 +5254,7 @@ SMODS.Tag{ -- Glitter
         return {}
     end,
 
-    apply = function(tag, context)
+    apply = function(self, tag, context)
         local applied = nil
         if not context.card.edition and not context.card.temp_edition and context.card.ability.set == 'Joker' then
             local lock = tag.ID
@@ -5289,7 +5289,7 @@ SMODS.Tag{ -- Fluorescent
         return {}
     end,
 
-    apply = function(tag, context)
+    apply = function(self, tag, context)
         local applied = nil
         if not context.card.edition and not context.card.temp_edition and context.card.ability.set == 'Joker' then
             local lock = tag.ID
@@ -5330,7 +5330,7 @@ SMODS.Tag{ -- Chips
     loc_vars = function(self, info_queue)
         return {vars = {G.P_CENTERS.e_foil.config.extra}}
     end,
-    apply = function(tag, context)
+    apply = function(self, tag, context)
         if context.before then
 
             hand_chips = mod_chips(hand_chips + G.P_CENTERS.e_foil.config.extra)
@@ -5357,7 +5357,7 @@ SMODS.Tag{ -- Mult
     loc_vars = function(self, info_queue)
         return {vars = {G.P_CENTERS.e_holo.config.extra}}
     end,
-    apply = function(tag, context)
+    apply = function(self, tag, context)
         if context.before then
 
             mult = mod_mult(mult + G.P_CENTERS.e_holo.config.extra)
@@ -5384,7 +5384,7 @@ SMODS.Tag{ -- Xmult
     loc_vars = function(self, info_queue)
         return {vars = {G.P_CENTERS.e_polychrome.config.extra}}
     end,
-    apply = function(tag, context)
+    apply = function(self, tag, context)
         if context.after then
 
             mult = mod_mult(mult * G.P_CENTERS.e_polychrome.config.extra)
@@ -5411,7 +5411,7 @@ SMODS.Tag{ -- Xchip
     loc_vars = function(self, info_queue)
         return {vars = {G.P_CENTERS.e_bunc_glitter.config.Xchips}}
     end,
-    apply = function(tag, context)
+    apply = function(self, tag, context)
         if context.after then
 
             hand_chips = mod_chips(hand_chips * G.P_CENTERS.e_bunc_glitter.config.Xchips)
@@ -5439,7 +5439,7 @@ SMODS.Tag{ -- Filigree
         info_queue[#info_queue+1] = {set = 'Other', key = 'exotic_cards'}
         return {}
     end,
-    apply = function(tag, context)
+    apply = function(self, tag, context)
         tag:instayep('+', G.C.BUNCO_EXOTIC, function()
             return true
         end)
@@ -5484,7 +5484,7 @@ SMODS.Tag{ -- Eternal
         return {}
     end,
 
-    apply = function(tag, context)
+    apply = function(self, tag, context)
         if not context.card.ability.eternal and not context.card.ability.perishable and context.card.ability.set == 'Joker' then
             local lock = tag.ID
             G.CONTROLLER.locks[lock] = true
@@ -5517,7 +5517,7 @@ SMODS.Tag{ -- Perishable
         return {}
     end,
 
-    apply = function(tag, context)
+    apply = function(self, tag, context)
         if not context.card.ability.perishable and not context.card.ability.eternal and context.card.ability.set == 'Joker' then
             local lock = tag.ID
             G.CONTROLLER.locks[lock] = true
@@ -5550,7 +5550,7 @@ SMODS.Tag{ -- Scattering
         return {}
     end,
 
-    apply = function(tag, context)
+    apply = function(self, tag, context)
         if not context.card.ability.bunc_scattering
         and not context.card.ability.bunc_hindered
         and not context.card.ability.bunc_reactive
@@ -5587,7 +5587,7 @@ SMODS.Tag{ -- Hindered
         return {}
     end,
 
-    apply = function(tag, context)
+    apply = function(self, tag, context)
         if not context.card.ability.bunc_scattering
         and not context.card.ability.bunc_hindered
         and not context.card.ability.bunc_reactive
@@ -5624,7 +5624,7 @@ SMODS.Tag{ -- Reactive
         return {}
     end,
 
-    apply = function(tag, context)
+    apply = function(self, tag, context)
         if not context.card.ability.bunc_scattering
         and not context.card.ability.bunc_hindered
         and not context.card.ability.bunc_reactive
@@ -5660,7 +5660,7 @@ SMODS.Tag{ -- Rental
         return {}
     end,
 
-    apply = function(tag, context)
+    apply = function(self, tag, context)
         if not context.card.ability.rental and context.card.ability.set == 'Joker' then
             local lock = tag.ID
             G.CONTROLLER.locks[lock] = true
