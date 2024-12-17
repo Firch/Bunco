@@ -5256,7 +5256,7 @@ SMODS.Tag{ -- Glitter
 
     apply = function(self, tag, context)
         local applied = nil
-        if not context.card.edition and not context.card.temp_edition and context.card.ability.set == 'Joker' then
+        if context.card and not context.card.edition and not context.card.temp_edition and context.card.ability.set == 'Joker' then
             local lock = tag.ID
             G.CONTROLLER.locks[lock] = true
 
@@ -5291,7 +5291,7 @@ SMODS.Tag{ -- Fluorescent
 
     apply = function(self, tag, context)
         local applied = nil
-        if not context.card.edition and not context.card.temp_edition and context.card.ability.set == 'Joker' then
+        if context.card and not context.card.edition and not context.card.temp_edition and context.card.ability.set == 'Joker' then
             local lock = tag.ID
             G.CONTROLLER.locks[lock] = true
 
@@ -5485,7 +5485,7 @@ SMODS.Tag{ -- Eternal
     end,
 
     apply = function(self, tag, context)
-        if not context.card.ability.eternal and not context.card.ability.perishable and context.card.ability.set == 'Joker' then
+        if context.card and not context.card.ability.eternal and not context.card.ability.perishable and context.card.ability.set == 'Joker' then
             local lock = tag.ID
             G.CONTROLLER.locks[lock] = true
             tag:yep('+', G.C.RED, function()
@@ -5518,7 +5518,7 @@ SMODS.Tag{ -- Perishable
     end,
 
     apply = function(self, tag, context)
-        if not context.card.ability.perishable and not context.card.ability.eternal and context.card.ability.set == 'Joker' then
+        if context.card and not context.card.ability.perishable and not context.card.ability.eternal and context.card.ability.set == 'Joker' then
             local lock = tag.ID
             G.CONTROLLER.locks[lock] = true
             tag:yep('+', G.C.RED, function()
@@ -5551,7 +5551,8 @@ SMODS.Tag{ -- Scattering
     end,
 
     apply = function(self, tag, context)
-        if not context.card.ability.bunc_scattering
+        if context.card
+        and not context.card.ability.bunc_scattering
         and not context.card.ability.bunc_hindered
         and not context.card.ability.bunc_reactive
         and not context.card.ability.eternal
@@ -5588,7 +5589,8 @@ SMODS.Tag{ -- Hindered
     end,
 
     apply = function(self, tag, context)
-        if not context.card.ability.bunc_scattering
+        if context.card
+        and not context.card.ability.bunc_scattering
         and not context.card.ability.bunc_hindered
         and not context.card.ability.bunc_reactive
         and not context.card.ability.eternal
@@ -5625,7 +5627,8 @@ SMODS.Tag{ -- Reactive
     end,
 
     apply = function(self, tag, context)
-        if not context.card.ability.bunc_scattering
+        if context.card
+        and not context.card.ability.bunc_scattering
         and not context.card.ability.bunc_hindered
         and not context.card.ability.bunc_reactive
         and context.card.ability.set == 'Joker' then
@@ -5661,7 +5664,7 @@ SMODS.Tag{ -- Rental
     end,
 
     apply = function(self, tag, context)
-        if not context.card.ability.rental and context.card.ability.set == 'Joker' then
+        if context.card and not context.card.ability.rental and context.card.ability.set == 'Joker' then
             local lock = tag.ID
             G.CONTROLLER.locks[lock] = true
             tag:yep('+', G.C.RED, function()
