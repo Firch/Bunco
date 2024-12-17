@@ -4278,7 +4278,7 @@ SMODS.PokerHand{ -- Spectrum (Referenced from SixSuits)
         { 'D_7',    true },
         { 'C_3', true },
         { 'bunc_FLEURON_5', true },
-        { 'D_K',    true },
+        { 'H_K',    true },
     },
     loc_txt = loc.spectrum,
     evaluate = function(parts)
