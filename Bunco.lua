@@ -3411,7 +3411,6 @@ G.FUNCS.draw_from_deck_to_hand = function(e)
 
                 if card == cards_from_groups[i] then
                     draw_card(G.deck, G.hand, i * 100 / #cards_from_groups, 'up', true, card)
-                    save_run()
                 end
 
                 n = n + 1
