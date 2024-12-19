@@ -6127,6 +6127,7 @@ SMODS.Stake{ -- Cyan
     unlocked_stake = 'bunc_pink',
     applied_stakes = {'orange'},
     above_stake = 'orange',
+    prefix_config = {above_stake = {mod = false}, applied_stakes = {mod = false}},
 
     modifiers = function()
         G.GAME.modifiers.enable_scattering_in_shop = true
@@ -6179,7 +6180,8 @@ SMODS.Stake{ -- Magenta
 }
 
 SMODS.Stake:take_ownership('gold', {
-    applied_stakes = {'bunc_magenta'}
+    applied_stakes = {'bunc_magenta'},
+    above_stake = 'bunc_magenta'
 })
 
 -- Mod compatibility
