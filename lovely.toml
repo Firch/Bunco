@@ -515,8 +515,11 @@ if self.config.type == 'hand' and G.hand and G.STATE == G.STATES.SMODS_BOOSTER_O
         card.T.y = card.T.y - (
             card.base.suit == 'Spades' and offset_mult * 2
         or card.base.suit == 'Hearts' and offset_mult * 1
+        or card.base.suit == 'Clubs' and offset_mult * 0
         or card.base.suit == 'Diamonds' and offset_mult * -1
-        or 0)
+        or card.base.suit == 'bunc_Fleurons' and offset_mult * -2
+        or card.base.suit == 'bunc_Halberds' and offset_mult * -3
+        or offset_mult * -4)
 
         local align_mult = 0.2
 
@@ -524,7 +527,10 @@ if self.config.type == 'hand' and G.hand and G.STATE == G.STATES.SMODS_BOOSTER_O
             card.base.suit == 'Spades' and 0.0
         or card.base.suit == 'Hearts' and align_mult
         or card.base.suit == 'Clubs' and align_mult * 2
-        or align_mult * 3)
+        or card.base.suit == 'Diamonds' and align_mult * 3
+        or card.base.suit == 'bunc_Fleurons' and align_mult * 4
+        or card.base.suit == 'bunc_Halberds' and align_mult * 5
+        or align_mult * 6)
 
         card.T.r = card.T.r / 3.0
         if card.highlighted then
