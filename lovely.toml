@@ -387,7 +387,7 @@ match_indent = true
 payload = '''
 if (_c.set == 'Default' or _c.set == 'Enhanced') and card and card.ability and type(card.ability) == 'table' and card.ability.group then
     localize{type = 'other', key = card.greyed and 'drawn_linked_cards' or 'linked_cards', nodes = desc_nodes, vars = {}}
-    if not card.greyed then
+    if not (card.area.config.type == 'title' and card.greyed) then
         main_end = main_end or {}
         local all_cards_from_group = {}
         if card and card.area then
@@ -420,6 +420,7 @@ if (_c.set == 'Default' or _c.set == 'Enhanced') and card and card.ability and t
         )
         for k, v in ipairs(all_cards_from_group) do
             local group_card = copy_card(v, nil, 0.5)
+            group_card.states.hover.can = false
             group_card:juice_up(0.3, 0.2)
             if k == 1 then play_sound('paper1', 0.95 + math.random() * 0.1, 0.3) end
             ease_value(group_card.T, 'scale', 0.25, nil, 'REAL', true, 0.2)
@@ -490,6 +491,49 @@ if self.ability.group then
     end
     self.children.link:draw_shader('dissolve', nil, nil, nil, self.children.center, 0, 0)
     self.children.link.role.draw_major = self
+end
+
+'''
+
+# Virtual pack deck alignment
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+pattern = '''if self.children.view_deck then'''
+position = 'before'
+match_indent = true
+payload = '''
+
+if self.config.type == 'hand' and G.hand and G.STATE == G.STATES.SMODS_BOOSTER_OPENED and SMODS.OPENED_BOOSTER.config.center.type == 'bunc_virtual' then
+    G.hand:sort()
+    for i = 1, #G.hand.cards do
+        local card = G.hand.cards[i]
+        card.states.drag.can = false
+
+        local offset_mult = 0.4
+
+        card.T.y = card.T.y - (
+            card.base.suit == 'Spades' and offset_mult * 2
+        or card.base.suit == 'Hearts' and offset_mult * 1
+        or card.base.suit == 'Diamonds' and offset_mult * -1
+        or 0)
+
+        local align_mult = 0.2
+
+        card.T.x = card.T.x - (
+            card.base.suit == 'Spades' and 0.0
+        or card.base.suit == 'Hearts' and align_mult
+        or card.base.suit == 'Clubs' and align_mult * 2
+        or align_mult * 3)
+
+        card.T.r = card.T.r / 3.0
+        if card.highlighted then
+            card.T.y = card.T.y + 0.5
+            card.greyed = false
+        else
+            card.greyed = true
+        end
+    end
 end
 
 '''

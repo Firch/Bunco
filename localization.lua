@@ -1672,9 +1672,10 @@ return {
             ['group_name'] = 'Virtual Pack',
             ['name'] = 'Virtual Pack',
             ['text'] = {
-                [1] = 'Choose {C:attention}#1#{} of up to',
-                [2] = '{C:attention}#2#{C:bunco_virtual_dark} Polymino{} cards to',
-                [3] = 'be used immediately'
+                [1] = 'Draw the whole deck and',
+                [2] = 'choose {C:attention}#1#{} of up to',
+                [3] = '{C:attention}#2#{C:bunco_virtual_dark} Polymino{} cards to',
+                [4] = 'be used immediately'
             }
         }
     },
@@ -1683,9 +1684,10 @@ return {
             ['group_name'] = 'Virtual Pack',
             ['name'] = 'Jumbo Virtual Pack',
             ['text'] = {
-                [1] = 'Choose {C:attention}#1#{} of up to',
-                [2] = '{C:attention}#2#{C:bunco_virtual_dark} Polymino{} cards to',
-                [3] = 'be used immediately'
+                [1] = 'Draw the whole deck and',
+                [2] = 'choose {C:attention}#1#{} of up to',
+                [3] = '{C:attention}#2#{C:bunco_virtual_dark} Polymino{} cards to',
+                [4] = 'be used immediately'
             }
         }
     },
@@ -1694,9 +1696,10 @@ return {
             ['group_name'] = 'Virtual Pack',
             ['name'] = 'Mega Virtual Pack',
             ['text'] = {
-                [1] = 'Choose {C:attention}#1#{} of up to',
-                [2] = '{C:attention}#2#{C:bunco_virtual_dark} Polymino{} cards to',
-                [3] = 'be used immediately'
+                [1] = 'Draw the whole deck and',
+                [2] = 'choose {C:attention}#1#{} of up to',
+                [3] = '{C:attention}#2#{C:bunco_virtual_dark} Polymino{} cards to',
+                [4] = 'be used immediately'
             }
         }
     },

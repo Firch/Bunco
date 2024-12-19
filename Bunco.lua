@@ -5941,7 +5941,7 @@ for i = 1, 4 do -- Blind
             ease_background_colour{new_colour = HEX('4d7796'), special_colour = HEX('c7d775'), contrast = 2}
         end,
 
-        pack_uibox = function(self) -- I don't know if I should do it like that, but since I can't inject into steamodded's files directly I do this
+        create_UIBox = function(self) -- I don't know if I should do it like that, but since I can't inject into steamodded's files directly I do this
                                     -- However I could mess with the node structure instead of repeating the whole thing. Do you want me to suffer?
                                     -- Look at this mess. Terrible
             local _size = SMODS.OPENED_BOOSTER.ability.extra
@@ -5987,14 +5987,68 @@ end
 
 for i = 1, 4 do -- Virtual
     SMODS.Booster{
+        type = 'bunc_virtual',
+
         key = 'virtual_'..(i <= 2 and i or i == 3 and 'jumbo' or 'mega'), loc_txt = loc.virtual,
 
-        config = {extra = i <= 2 and 2 or 4, choose =  i <= 3 and 2 or 4},
-        draw_hand = true,
+        config = {extra = i <= 2 and 2 or 4, choose = i <= 3 and 1 or 2},
 
         create_card = function(self, card)
             return create_card('Polymino', G.pack_cards, nil, nil, true, true, nil, 'vir')
             -- return {set = 'Polymino', area = G.pack_cards, skip_materialize = nil, soulable = nil, key_append = 'vir'}
+        end,
+
+        create_UIBox = function(self) -- I don't know if I should do it like that, but since I can't inject into steamodded's files directly I do this
+            -- However I could mess with the node structure instead of repeating the whole thing. Do you want me to suffer?
+            -- Look at this mess. Terrible
+
+            for i = 1, #G.deck.cards do
+                draw_card(G.deck, G.hand, i * 100 / #G.deck.cards, 'up', true)
+            end
+
+            local _size = SMODS.OPENED_BOOSTER.ability.extra
+            G.pack_cards = CardArea(
+            G.ROOM.T.x + 9 + G.hand.T.x, G.hand.T.y,
+            math.max(1,math.min(_size,5))*G.CARD_W*1.1,
+            1.05*G.CARD_H,
+            {card_limit = _size, type = 'consumeable', highlight_limit = 1})
+
+            local t = {n=G.UIT.ROOT, config = {align = 'tm', r = 0.15, colour = G.C.CLEAR, padding = 0.15}, nodes={
+            {n=G.UIT.R, config={align = "cl", colour = G.C.CLEAR,r=0.15, padding = 0.1, minh = 2, shadow = true}, nodes={
+            {n=G.UIT.R, config={align = "cm"}, nodes={
+            {n=G.UIT.C, config={align = "cm", padding = 0.1}, nodes={
+            {n=G.UIT.C, config={align = "cm", r=0.2, colour = G.C.CLEAR, shadow = true}, nodes={
+                {n=G.UIT.O, config={object = G.pack_cards}},}}}}}},
+            {n=G.UIT.R, config={align = "cm"}, nodes={}},
+            {n=G.UIT.R, config={align = "tm"}, nodes={
+            {n=G.UIT.C,config={align = "tm", padding = 0.05, minw = 2.4}, nodes={}},
+            {n=G.UIT.C,config={align = "tm", padding = 0.05}, nodes={
+            UIBox_dyn_container({
+                {n=G.UIT.C, config={align = "cm", padding = 0.05, minw = 4}, nodes={
+                    {n=G.UIT.R,config={align = "bm", padding = 0.05}, nodes={
+                        {n=G.UIT.O, config={object = DynaText({string = localize(self.group_key or ('k_booster_group_'..self.key)), colours = {G.C.WHITE},shadow = true, rotate = true, bump = true, spacing =2, scale = 0.7, maxw = 4, pop_in = 0.5})}}}},
+                    {n=G.UIT.R,config={align = "bm", padding = 0.05}, nodes={
+                        {n=G.UIT.O, config={object = DynaText({string = {localize('k_choose')..' '}, colours = {G.C.WHITE}, shadow = true, rotate = true, bump = true, spacing = 2, scale = 0.5, pop_in = 0.7})}},
+                        {n=G.UIT.O, config={object = DynaText({string = {{ref_table = G.GAME, ref_value = 'pack_choices'}}, colours = {G.C.WHITE},shadow = true, rotate = true, bump = true, spacing =2, scale = 0.5, pop_in = 0.7})}}}},}}
+            }),}},
+            {n=G.UIT.C,config={align = "tm", padding = 0.05, minw = 2.4}, nodes={
+            {n=G.UIT.R,config={minh =0.2}, nodes={}},
+            (G.GAME.used_vouchers['v_bunc_shell_game'] and not G.GAME.rerolled_pack and
+            UIBox_button({label = {localize('k_reroll')}, padding = 0.07, minh = 0.7, minw = 1.8, r = 0.15, one_press = true, button = 'reroll_booster_pack', func = 'reroll_booster_pack_button'}) or nil),
+            G.GAME.used_vouchers['v_bunc_shell_game'] and {n=G.UIT.R,config = {minh = 0.07}, nodes={}},
+            {n=G.UIT.R, config = {align = G.GAME.used_vouchers['v_bunc_shell_game'] and 'cm' or 'tm', padding = G.GAME.used_vouchers['v_bunc_shell_game'] and 0.07 or 0.2, minh = G.GAME.used_vouchers['v_bunc_shell_game'] and 0.7 or 1.2, minw = 1.8, r = 0.15, colour = G.C.GREY, one_press = true, button = 'skip_booster', hover = true, shadow = true, func = 'can_skip_booster'}, nodes = {
+                {n=G.UIT.T, config={text = localize('b_skip'), scale = 0.5, colour = G.C.WHITE, shadow = true, focus_args = {button = 'y', orientation = 'bm'}, func = 'set_button_pip'}}}}}}}}}}}}
+            return t
+        end,
+
+        update_pack = function(self, dt)
+            SMODS.Booster.update_pack(self)
+            if G.STATE_COMPLETE then
+                for i = 1, #G.deck.cards do
+                    local card = G.deck.cards[i]
+                    card.greyed = false
+                end
+            end
         end,
 
         ease_background_colour = function(self)
