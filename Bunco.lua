@@ -172,6 +172,11 @@ SMODS.Atlas({key = 'bunco_resprites_consumables', path = 'Resprites/Consumables.
 
 if config.fixed_sprites then
 
+    -- High contrast
+
+    SMODS.Atlas{key = 'cards_2', path = 'Resprites/EnhancedContrast.png', px = 71, py = 95, prefix_config = {key = false}}
+    SMODS.Atlas{key = 'ui_2', path = 'Resprites/EnhancedUIContrast.png', px = 71, py = 95, prefix_config = {key = false}}
+
     -- Jokers
 
     SMODS.Joker:take_ownership('juggler', {
