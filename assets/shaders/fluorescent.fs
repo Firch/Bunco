@@ -57,144 +57,41 @@ vec4 dissolve_mask(vec4 tex, vec2 texture_coords, vec2 uv)
     return vec4(shadow ? vec3(0.,0.,0.) : tex.xyz, res > adjusted_dissolve ? (shadow ? tex.a*0.3: tex.a) : .0);
 }
 
-number hue(number s, number t, number h)
+float distanceBetweenColors(vec3 colorA, vec3 colorB) {
+    return length(clamp(colorA, 0.0, 1.0) - clamp(colorB, 0.0, 1.0));
+}
+
+vec3 rgb2hsv(vec3 c)
 {
-    number hs = mod(h, 1.)*6.;
-    if (hs < 1.) return (t-s) * hs + s;
-    if (hs < 3.) return t;
-    if (hs < 4.) return (t-s) * (4.-hs) + s;
-    return s;
-}
-
-vec4 RGB(vec4 c)
-{
-    if (c.y < 0.0001)
-        return vec4(vec3(c.z), c.a);
-
-    number t = (c.z < .5) ? c.y*c.z + c.z : -c.y*c.z + (c.y+c.z);
-    number s = 2.0 * c.z - t;
-    return vec4(hue(s,t,c.x + 1./3.), hue(s,t,c.x), hue(s,t,c.x - 1./3.), c.w);
-}
-
-vec4 HSL(vec4 c)
-{
-    number low = min(c.r, min(c.g, c.b));
-    number high = max(c.r, max(c.g, c.b));
-    number delta = high - low;
-    number sum = high+low;
-
-    vec4 hsl = vec4(.0, .0, .5 * sum, c.a);
-    if (delta == .0)
-        return hsl;
-
-    hsl.y = (hsl.z < .5) ? delta / sum : delta / (2.0 - sum);
-
-    if (high == c.r)
-        hsl.x = (c.g - c.b) / delta;
-    else if (high == c.g)
-        hsl.x = (c.b - c.r) / delta + 2.0;
-    else
-        hsl.x = (c.r - c.g) / delta + 4.0;
-
-    hsl.x = mod(hsl.x / 6., 1.);
-    return hsl;
-}
-
-vec4 saturate(vec4 color, float saturation) {
-    float gray = dot(color.rgb, vec3(0.299, 0.587, 0.114));
-
-    vec3 saturatedColor = mix(vec3(gray), color.rgb, saturation);
-
-    return vec4(saturatedColor, color.a);
-}
-
-// Lighten blending mode
-vec4 lighten(vec4 colour1, vec4 colour2) {
-    vec4 result;
-    result.r = max(colour1.r, colour2.r);
-    result.g = max(colour1.g, colour2.g);
-    result.b = max(colour1.b, colour2.b);
-    result.a = max(colour1.a, colour2.a);
-    return result;
-}
-
-// Overlay blending mode
-vec4 overlay(vec4 baseColor, vec4 blendColor) {
-    vec3 result;
-
-    for (int i = 0; i < 3; i++) {
-        if (baseColor[i] < 0.5) {
-            result[i] = 2.0 * baseColor[i] * blendColor[i];
-        } else {
-            result[i] = 1.0 - 2.0 * (1.0 - baseColor[i]) * (1.0 - blendColor[i]);
-        }
-    }
-
-    vec3 blendedRGB = mix(baseColor.rgb, result, 1.0);
-    return vec4(blendedRGB, baseColor.a);
-}
-
-// White-to-color blending mode
-vec4 rewhite(vec4 baseColor, vec4 blendColor) {
-    float whiteness = (baseColor.r + baseColor.g + baseColor.b) / 3.0;
-
-    float blendFactor = whiteness;
-
-    vec3 blendedRGB = mix(baseColor.rgb, blendColor.rgb, blendFactor);
-
-    return vec4(blendedRGB, baseColor.a);
-}
-
-// Hue blending mode (3 functions)
-vec4 rgb2hsv(vec4 c) {
-    vec4 K = vec4(0.0, -1.0/3.0, 2.0/3.0, -1.0);
+    vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
     vec4 p = mix(vec4(c.bg, K.wz), vec4(c.gb, K.xy), step(c.b, c.g));
     vec4 q = mix(vec4(p.xyw, c.r), vec4(c.r, p.yzx), step(p.x, c.r));
 
     float d = q.x - min(q.w, q.y);
     float e = 1.0e-10;
-    return vec4(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x, c.a);
+    return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
 }
 
-vec4 hsv2rgb(vec4 c) {
-    vec4 K = vec4(1.0, 2.0/3.0, 1.0/3.0, 3.0);
+vec3 hsv2rgb(vec3 c)
+{
+    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
     vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
-    return vec4(c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y), c.a);
+    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
 }
 
-vec4 hueBlend(vec4 baseColor, vec4 blendColor) {
-    vec4 baseHSV = rgb2hsv(baseColor);
-    vec4 blendHSV = rgb2hsv(blendColor);
-
-    baseHSV.x = blendHSV.x;  // Replace hue
-
-    vec4 resultRGB = hsv2rgb(baseHSV);
-    return vec4(resultRGB.rgb, baseColor.a);
+vec3 hueshift(vec3 rgb, float adjustment)
+{
+    vec3 hsv = rgb2hsv(rgb);
+    hsv.x += adjustment;
+    return hsv2rgb(hsv);
 }
 
-// Hueshift
-vec4 hueShift(vec4 color, float shift) {
-    vec4 hsv = rgb2hsv(color);
-
-    hsv.x = mod(hsv.x + shift, 1.0);
-
-    vec4 resultRGB = hsv2rgb(hsv);
-    return vec4(resultRGB.rgb, color.a);
-}
-
-// Colorburn blending mode
-vec4 colorBurn(vec4 baseColor, vec4 blendColor) {
-    vec3 result;
-
-    for(int i = 0; i < 3; i++) {
-        if (blendColor[i] == 0.0) {
-            result[i] = 0.0;
-        } else {
-            result[i] = 1.0 - (1.0 - baseColor[i]) / blendColor[i];
-        }
-    }
-
-    return vec4(result, baseColor.a);
+vec3 saturation(vec3 rgb, float adjustment)
+{
+    // Algorithm from Chapter 16 of OpenGL Shading Language
+    const vec3 W = vec3(0.1125, 0.2154, 0.0221);
+    vec3 intensity = vec3(dot(rgb, W));
+    return mix(intensity, rgb, adjustment);
 }
 
 // this is what actually changes the look of card
@@ -202,6 +99,7 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
 {
     // turns the texture into pixels
     vec4 tex = Texel(texture, texture_coords);
+    vec3 pixelColor = tex.rgb;
     vec2 uv = (((texture_coords)*(image_details)) - texture_details.xy*texture_details.ba)/texture_details.ba;
 
     // Dummy, doesn't do anything but at least it makes the shader useable
@@ -209,50 +107,69 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
         uv = fluorescent;
     }
 
-    float mod = fluorescent.r * 1.0;
+    vec3 targetColors[6] = vec3[6](
+        vec3(1.0, 0.0, 0.0), // Red
+        vec3(0.0, 1.0, 0.0), // Green
+        vec3(0.0, 0.0, 1.0), // Blue
+        vec3(1.0, 1.0, 0.0), // Yellow
+        vec3(0.0, 1.0, 1.0), // Cyan
+        vec3(1.0, 0.0, 1.0)  // Magenta
+    );
 
-    // From negative shader
-    number low = min(tex.r, min(tex.g, tex.b));
-    number high = max(tex.r, max(tex.g, tex.b));
-	number delta = high-low -0.1;
+    float sharpnessMultipliers[6] = float[6](
+        3.0, // Red
+        3.0, // Green
+        3.0, // Blue
+        3.0, // Yellow
+        3.0, // Cyan
+        3.0  // Magenta
+    );
 
-    number fac = 0.8 + 0.9*sin(11.*uv.x+4.32*uv.y + mod*12. + cos(mod*5.3 + uv.y*4.2 - uv.x*4.));
-    number fac2 = 0.5 + 0.5*sin(8.*uv.x+2.32*uv.y + mod*5. - cos(mod*2.3 + uv.x*8.2));
-    number fac3 = 0.5 + 0.5*sin(10.*uv.x+5.32*uv.y + mod*6.111 + sin(mod*5.3 + uv.y*3.2));
-    number fac4 = 0.5 + 0.5*sin(3.*uv.x+2.32*uv.y + mod*8.111 + sin(mod*1.3 + uv.y*11.2));
-    number fac5 = sin(0.9*16.*uv.x+5.32*uv.y + mod*12. + cos(mod*5.3 + uv.y*4.2 - uv.x*4.));
+    float effect = 0.7 + (0.3 * clamp(cos(sin(uv.y * 8.24 + fluorescent.x * 6.0) + sin(uv.x * 6.12 + fluorescent.x * 2.0) * fluorescent.x * uv.y * 3.15), 0.0, 1.0));
 
-    number maxfac = (0.7*max(max(fac, max(fac2, max(fac3,0.0))) + (fac+fac2+fac3*fac4), 0.)) - 0.5;
+    vec3 grayscaleColor = vec3(1.0, 1.0, 1.0) * (pixelColor.r + pixelColor.g + pixelColor.b) / 3.0; // Get grayscale
 
-    // Actual shader
-    vec4 white = vec4(1.0,1.0,1.0,1.0);
-    vec4 black = vec4(0.0,0.0,0.0,1.0);
-    vec4 jokerblack = vec4(0.31,0.388,0.404,1.0);
+    grayscaleColor = vec3(0.0, 0.0, 0.0);
 
-    vec4 final = tex;
-    final.rgb = (final.rgb - 1.0) * -1.0; // Invert
+    // Initialize variables for blended effect
+    float totalWeight = 0.0;
+    vec3 blendedColor = vec3(0.0);
 
-    vec4 burned = tex;
+    // Iterate through all target colors
+    for (int i = 0; i < 6; i++) {
 
-    burned = hueShift(tex / 2.0, 0.32); // Burn color hue-shifted
-    final = colorBurn(final, burned); // Burn the color
+        float distance = distanceBetweenColors(pixelColor, targetColors[i]);
+        float weight = exp(-distance * sharpnessMultipliers[i]); // Exponential weight based on distance
+        totalWeight += weight;
 
-    final = hueBlend(final, tex); // Restore the original hue
-    final.r += final.r + final.r;
+        // Saturate and weight the contribution of the current target color
+        vec3 saturatedColor = saturation(pixelColor, 3.0);
+        blendedColor += saturatedColor * weight;
+    }
 
-    vec4 rewhited = rewhite(tex, tex / 1.2) / 0.9;
-    rewhited = rgb2hsv(rewhited);
-    rewhited.y /= 3.0;
-    rewhited = hsv2rgb(rewhited);
+    // Normalize the blended result
+    if (totalWeight > 0.0) {
+        blendedColor /= totalWeight;
+    }
 
-    final += rewhited; // Various contrast & jokerblack tweaks
-    final += tex * 0.15;
-    final = lighten(final, jokerblack + tex * 0.3);
+    // Blend with grayscale
+    float desaturationFactor = smoothstep(0.0, 1.0, totalWeight); // Adjust factor based on weight
 
-    final.a = tex.a; // Restore alpha
+    blendedColor = rgb2hsv(blendedColor);
+
+    blendedColor.z *= desaturationFactor * blendedColor.y;
+    blendedColor.y = 1.0;
+
+    blendedColor = hsv2rgb(blendedColor);
+
+    vec3 tintedColor = pixelColor * vec3(0.28, 0.35, 0.49);
+
+    tintedColor -= (tintedColor * (effect - 1.0)) * 0.15;
+
+    vec3 finalColor = blendedColor * effect + tintedColor;
 
     // required
-    return dissolve_mask(final, texture_coords, uv);
+    return dissolve_mask(vec4(finalColor.rgb, tex.a * tex.a), texture_coords, uv);
 }
 
 // for transforming the card while your mouse is on it
