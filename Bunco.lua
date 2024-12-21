@@ -2818,16 +2818,34 @@ create_joker({ -- The Joker
 
 create_joker({ -- Tangram
     name = 'Tangram', position = 54,
+    vars = {{mult = 7}},
     rarity = 'Uncommon', cost = 7,
     blueprint = true, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
+        if context.individual and context.cardarea == G.play then
+
+            local sevens = 0
+
+            for k, v in ipairs(context.full_hand) do
+                if v:get_id() == 7 then
+                    sevens = sevens + 1
+                end
+            end
+
+            if context.other_card:get_id() == 7 then
+                return {
+                    mult = card.ability.extra.mult * sevens,
+                    card = card
+                }
+            end
+        end
     end
 })
 
 create_joker({ -- Domino
     name = 'Domino', position = 55,
-    rarity = 'Uncommon', cost = 7,
+    rarity = 'Uncommon', cost = 5,
     blueprint = false, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
