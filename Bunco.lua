@@ -175,7 +175,7 @@ if config.fixed_sprites then
     -- High contrast
 
     SMODS.Atlas{key = 'cards_2', path = 'Resprites/EnhancedContrast.png', px = 71, py = 95, prefix_config = {key = false}}
-    SMODS.Atlas{key = 'ui_2', path = 'Resprites/EnhancedUIContrast.png', px = 71, py = 95, prefix_config = {key = false}}
+    SMODS.Atlas{key = 'ui_2', path = 'Resprites/EnhancedUIContrast.png', px = 18, py = 18, prefix_config = {key = false}}
 
     -- Jokers
 
