@@ -1007,6 +1007,25 @@ return {
             }
         }
     },
+    tangram = {
+        ['en-us'] = {
+            ['name'] = 'Tangram',
+            ['text'] = {
+                [1] = ''
+            }
+        }
+    },
+    domino = {
+        ['en-us'] = {
+            ['name'] = 'Domino',
+            ['text'] = {
+                [1] = 'Upon {C:attention}acquiring{} or {C:attention}using',
+                [2] = 'a card from shop or',
+                [3] = 'Booster Pack, acquire {C:attention}2',
+                [4] = 'adjacent cards if possible'
+            }
+        }
+    },
 
     -- Exotic
 

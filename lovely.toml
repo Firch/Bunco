@@ -1089,6 +1089,130 @@ end
 
 '''
 
+# G.FUNCS.play_cards_from_highlighted() (Domino 1/5)
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = "if c1 and c1:is(Card) then"
+position = 'after'
+match_indent = true
+payload = '''
+
+local pre_cardarea = c1.area
+local pre_card_pos
+local pre_card_left
+local pre_card_right
+
+if c1.area then
+    for i = 1, #c1.area.cards do
+        if c1.area.cards[i] == c1 then
+            pre_card_pos = i
+        end
+    end
+end
+
+if pre_cardarea and pre_cardarea.cards[pre_card_pos - 1] then pre_card_left = pre_cardarea.cards[pre_card_pos - 1] end
+if pre_cardarea and pre_cardarea.cards[pre_card_pos + 1] then pre_card_right = pre_cardarea.cards[pre_card_pos + 1] end
+
+'''
+
+# G.FUNCS.play_cards_from_highlighted() (Domino 2/5)
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = "if G.GAME.modifiers.inflation then"
+position = 'before'
+match_indent = true
+payload = '''
+
+if G.jokers ~= nil then
+    for _, v in ipairs(G.jokers.cards) do
+        if v.config.center.key == 'j_bunc_domino' and not v.debuff then
+            v:calculate_joker({buying_card = true,
+            card = c1,
+            pre_cardarea = pre_cardarea,
+            pre_card_pos = pre_card_pos,
+            pre_card_left = pre_card_left,
+            pre_card_right = pre_card_right})
+            break
+        end
+    end
+end
+
+'''
+
+# G.FUNCS.play_cards_from_highlighted() (Domino 3/5)
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = "if card:check_use() then"
+position = 'before'
+match_indent = true
+payload = '''
+
+local pre_cardarea = card.area
+local pre_card_pos
+local pre_card_left
+local pre_card_right
+
+if card.area then
+    for i = 1, #card.area.cards do
+        if card.area.cards[i] == card then
+            pre_card_pos = i
+        end
+    end
+end
+
+if pre_cardarea and pre_cardarea.cards[pre_card_pos - 1] then pre_card_left = pre_cardarea.cards[pre_card_pos - 1] end
+if pre_cardarea and pre_cardarea.cards[pre_card_pos + 1] then pre_card_right = pre_cardarea.cards[pre_card_pos + 1] end
+
+local function call_getting_booster_card()
+    G.E_MANAGER:add_event(Event{func = function()
+        if G.jokers ~= nil then
+            for _, v in ipairs(G.jokers.cards) do
+                if v.config.center.key == 'j_bunc_domino' and not v.debuff then
+                    v:calculate_joker({getting_booster_card = true,
+                    card = card,
+                    pre_cardarea = pre_cardarea,
+                    pre_card_pos = pre_card_pos,
+                    pre_card_left = pre_card_left,
+                    pre_card_right = pre_card_right})
+                    break
+                end
+            end
+        end
+        return true
+    end})
+end
+
+'''
+
+# G.FUNCS.play_cards_from_highlighted() (Domino 4/5)
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = "card:add_to_deck()"
+position = 'after'
+match_indent = true
+payload = '''
+
+call_getting_booster_card()
+
+'''
+
+# G.FUNCS.play_cards_from_highlighted() (Domino 5/5)
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = "e.config.ref_table:use_consumeable(area)"
+position = 'before'
+match_indent = true
+payload = '''
+
+call_getting_booster_card()
+
+'''
+
 # function Card:is_suit (Myopia & Astigmatism)
 [[patches]]
 [patches.pattern]

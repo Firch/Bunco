@@ -2816,6 +2816,101 @@ create_joker({ -- The Joker
     end
 })
 
+create_joker({ -- Tangram
+    name = 'Tangram', position = 54,
+    rarity = 'Uncommon', cost = 7,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+    end
+})
+
+create_joker({ -- Domino
+    name = 'Domino', position = 55,
+    rarity = 'Uncommon', cost = 7,
+    blueprint = false, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if (context.buying_card or context.getting_booster_card) and context.pre_cardarea and not context.blueprint then
+
+            local function acquire(acquired_card)
+                acquired_card.area:remove_card(acquired_card)
+                acquired_card:add_to_deck()
+                if acquired_card.children.price then acquired_card.children.price:remove() end
+                acquired_card.children.price = nil
+                if acquired_card.children.buy_button then acquired_card.children.buy_button:remove() end
+                acquired_card.children.buy_button = nil
+                remove_nils(acquired_card.children)
+                if acquired_card.ability.set == 'Default' or acquired_card.ability.set == 'Enhanced' then
+                    inc_career_stat('c_playing_cards_bought', 1)
+                    G.playing_card = (G.playing_card and G.playing_card + 1) or 1
+                    G.deck:emplace(acquired_card)
+                    acquired_card.playing_card = G.playing_card
+                    playing_card_joker_effects({acquired_card})
+                    table.insert(G.playing_cards, acquired_card)
+                else
+                    if acquired_card.ability.consumeable then
+                        G.consumeables:emplace(acquired_card)
+                    else
+                        G.jokers:emplace(acquired_card)
+                    end
+                    event({func = function() acquired_card:calculate_joker({buying_card = true, card = acquired_card}) return true end})
+                end
+                --Tallies for unlocks
+                G.GAME.round_scores.cards_purchased.amt = G.GAME.round_scores.cards_purchased.amt + 1
+                if acquired_card.ability.consumeable then
+                    if acquired_card.config.center.set == 'Planet' then
+                        inc_career_stat('c_planets_bought', 1)
+                    elseif acquired_card.config.center.set == 'Tarot' then
+                        inc_career_stat('c_tarots_bought', 1)
+                    end
+                elseif acquired_card.ability.set == 'Joker' then
+                    G.GAME.current_round.jokers_purchased = G.GAME.current_round.jokers_purchased + 1
+                end
+            end
+
+            local card_pos = context.pre_card_pos
+            if card_pos then
+                if context.pre_card_left then
+                    if G.FUNCS.check_for_buy_space(context.pre_card_left) then
+                        acquire(context.pre_card_left)
+                    end
+                    big_juice(card)
+                end
+                if context.pre_card_right then
+                    if G.FUNCS.check_for_buy_space(context.pre_card_right) then
+                        acquire(context.pre_card_right)
+                    end
+                    big_juice(card)
+                end
+                if G.STATE == G.STATES.STANDARD_PACK
+                or G.STATE == G.STATES.BUFFOON_PACK
+                or G.STATE == G.STATES.TAROT_PACK
+                or G.STATE == G.STATES.PLANET_PACK
+                or G.STATE == G.STATES.SPECTRAL_PACK
+                or G.STATE == G.STATES.SMODS_BOOSTER_OPENED then
+                    if #context.pre_cardarea.cards == 0 then
+                        G.GAME.pack_choices = 0
+                    end
+                end
+            end
+        end
+    end,
+    set_ability = function(self, card, initial, delay_sprites)
+        if self.discovered or card.bypass_discovery_center then
+            card.T.w = card.T.w / 1.5
+        end
+    end,
+    set_sprites = function(self, card, front)
+        if self.discovered or card.bypass_discovery_center then
+            card.children.center.scale.x = card.children.center.scale.x / 1.5
+        end
+    end,
+    load = function(self, card, card_table, other_card)
+        return self.set_ability(self, card)
+    end
+})
+
 -- Exotic Jokers
 
 create_joker({ -- Zealous
