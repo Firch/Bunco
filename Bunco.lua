@@ -6177,7 +6177,7 @@ for i = 1, 4 do -- Virtual
         pos = coordinate(i),
         atlas = 'bunco_booster_packs_virtual',
 
-        in_pool = function() return (pseudorandom('virtual'..G.SEED) < 0.5) end
+        in_pool = function() return (pseudorandom('virtual'..G.SEED) < 0.2) end
     }
 end
 
