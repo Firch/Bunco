@@ -905,6 +905,13 @@ payload = '''
 
 if self.config.center.key == 'j_bunc_vandalism' and (self.config.center.discovered or self.bypass_discovery_center) then
     self.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, self.children.center, 0, 0)
+    if self.edition then
+        for k, v in pairs(G.P_CENTER_POOLS.Edition) do
+            if self.edition[v.key:sub(3)] and v.shader then
+                self.children.floating_sprite:draw_shader(v.shader, nil, self.ARGS.send_to_shader, nil, self.children.center, 0, 0)
+            end
+        end
+    end
 end
 
 '''
@@ -920,6 +927,13 @@ payload = '''
 
 if self.config.center.key == 'j_bunc_vandalism' and (self.config.center.discovered or self.bypass_discovery_center) then
     self.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, self.children.center, 0, 0)
+    if self.edition then
+        for k, v in pairs(G.P_CENTER_POOLS.Edition) do
+            if self.edition[v.key:sub(3)] and v.shader then
+                self.children.floating_sprite:draw_shader(v.shader, nil, self.ARGS.send_to_shader, nil, self.children.center, 0, 0)
+            end
+        end
+    end
 end
 
 '''
@@ -935,6 +949,13 @@ payload = '''
 
 if self.config.center.key == 'j_bunc_vandalism' and (self.config.center.discovered or self.bypass_discovery_center) then
     self.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, self.children.center, 0, 0)
+    if self.edition then
+        for k, v in pairs(G.P_CENTER_POOLS.Edition) do
+            if self.edition[v.key:sub(3)] and v.shader then
+                self.children.floating_sprite:draw_shader(v.shader, nil, self.ARGS.send_to_shader, nil, self.children.center, 0, 0)
+            end
+        end
+    end
 end
 
 '''
