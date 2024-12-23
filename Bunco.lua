@@ -12,6 +12,7 @@
 -- Make so unlocks actually count things
 -- Make configs apply immediately
 -- Shell Game should modify tables instead of replacing - see Blind Packs
+-- The Mask is back again sshowing unplayed secret hands, eugh
 
 BUNCOMOD = {loc = {}, vars = {}, funcs = {}, content = SMODS.current_mod}
 local filesystem = NFS or love.filesystem
@@ -3503,19 +3504,18 @@ G.FUNCS.draw_from_deck_to_hand = function(e)
         for i = 1, #G.hand.cards do
             local card = G.hand.cards[i]
             if card.ability.group then
-                groups[card.ability.group.id] = card.ability.group.id
+                table.insert(groups, card.ability.group)
             end
         end
 
         local m = 1
-        for i = 1, #groups do
-            local group = groups[i]
+        for _, group in ipairs(groups) do
 
             local n = 0
             while n < #G.deck.cards do
                 local card = G.deck.cards[#G.deck.cards - n]
 
-                if card.ability.group and (card.ability.group.id == group) then
+                if card.ability.group and (card.ability.group.id == group.id) then
                     cards_from_groups[m] = card
                     m = m + 1
                 end
