@@ -12,7 +12,6 @@
 -- Make so unlocks actually count things
 -- Make configs apply immediately
 -- Shell Game should modify tables instead of replacing - see Blind Packs
--- The Mask is back again sshowing unplayed secret hands, eugh
 
 BUNCOMOD = {loc = {}, vars = {}, funcs = {}, content = SMODS.current_mod}
 local filesystem = NFS or love.filesystem

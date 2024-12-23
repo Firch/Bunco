@@ -1870,8 +1870,8 @@ for i = #G.handlist, 1, -1 do
     local v = G.handlist[i]
     local playedCount = G.GAME.hands and G.GAME.hands[v] and G.GAME.hands[v].played or 0
     if (playedCount < lowestValue) and G.GAME.hands[v].visible then
-        lowestValue = playedCount
-        leastPlayedHand = v
+        lowestValue = G.GAME.hands[v].visible and playedCount or lowestValue
+        leastPlayedHand = G.GAME.hands[v].visible and v or leastPlayedHand
     end
 end
 
