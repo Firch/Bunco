@@ -366,6 +366,7 @@ if config.gameplay_reworks then
         config = {type = 'new_blind_choice'},
         apply = function(self, tag, context)
             if context.type == self.config.type then
+                G.CONTROLLER.locks[tag.ID] = true
                 tag:yep('+', G.C.SECONDARY_SET.Spectral, function()
                     local key = 'p_bunc_blind_'..(math.random(4))
                     local card = Card(G.play.T.x + G.play.T.w/2 - G.CARD_W*1.27/2,
@@ -5347,6 +5348,7 @@ SMODS.Tag{ -- Arcade
 
     apply = function(self, tag, context)
         if context.type == self.config.type then
+            G.CONTROLLER.locks[tag.ID] = true
             tag:yep('+', G.C.BUNCO_VIRTUAL, function()
                 local key = 'p_bunc_virtual_mega'
                 local card = Card(G.play.T.x + G.play.T.w/2 - G.CARD_W*1.27/2,
@@ -6057,7 +6059,7 @@ for i = 1, 4 do -- Blind
             return card:create_blind_card()
         end,
         update_pack = function(self, dt)
-            SMODS.Booster.update_pack(self)
+            SMODS.Booster.update_pack(self, dt)
             G.GAME.pack_choices = 1
         end,
 

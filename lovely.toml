@@ -2786,14 +2786,7 @@ G.FUNCS.use_blind_card = function(e)
         G.blind_select_opts.boss.alignment.offset.y = 0
     end
 
-    for i = 1, #G.GAME.tags do
-        if G.GAME.tags[i]:apply_to_run({
-            type = 'new_blind_choice'
-        }) then
-            break
-        end
-    end
-    G.FUNCS.end_consumeable()
+    G.FUNCS.end_consumeable(nil, 0.2)
 end
 
 
