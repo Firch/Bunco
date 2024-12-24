@@ -2225,7 +2225,7 @@ end
 
 '''
 
-# Edition tags 1/4
+# Edition tags 1/5
 [[patches]]
 [patches.pattern]
 target = 'functions/state_events.lua'
@@ -2240,7 +2240,7 @@ end
 
 '''
 
-# Edition tags 2/4
+# Edition tags 2/5
 [[patches]]
 [patches.regex]
 target = 'functions/state_events.lua'
@@ -2255,7 +2255,7 @@ end
 
 '''
 
-# function Card:use_consumeable() Edition tags 3/4
+# function Card:use_consumeable() Edition tags 3/5
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
@@ -2282,14 +2282,47 @@ end
 
 '''
 
-# Edition tags 4/4
+# Edition tags 4/5
 [[patches]]
 [patches.pattern]
 target = 'functions/state_events.lua'
 pattern = 'for i=1, #G.jokers.cards + #G.consumeables.cards do'
 position = 'at'
 match_indent = true
-payload = '''for i=1, #G.jokers.cards + (BUNCOMOD and BUNCOMOD.vars and BUNCOMOD.vars.jokerlike_consumable_editions and #G.consumeables.cards or 0) do'''
+payload = '''
+
+for i=1, #G.jokers.cards + (BUNCOMOD and BUNCOMOD.vars and BUNCOMOD.vars.jokerlike_consumable_editions and #G.consumeables.cards or 0) do
+
+'''
+
+# Edition tags 5/5
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "local nu_chip, nu_mult = G.GAME.selected_back:trigger_effect{context = 'final_scoring_step', chips = hand_chips, mult = mult}"
+position = 'before'
+match_indent = true
+payload = '''
+
+for i=1, BUNCOMOD and BUNCOMOD.vars and BUNCOMOD.vars.jokerlike_consumable_editions and 0 or #G.consumeables.cards do
+    local _card = G.jokers.cards[i] or G.consumeables.cards[i - #G.jokers.cards]
+    local effects = eval_card(_card, {cardarea = G.jokers, full_hand = G.play.cards, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, joker_main = true, callback = function(_card, ret) effects = {jokers = ret}
+
+    --Any Joker effects
+    if effects.jokers then
+        local extras = {mult = false, hand_chips = false}
+        if effects.jokers.mult_mod then mult = mod_mult(mult + effects.jokers.mult_mod);extras.mult = true end
+        if effects.jokers.chip_mod then hand_chips = mod_chips(hand_chips + effects.jokers.chip_mod);extras.hand_chips = true end
+        if effects.jokers.Xmult_mod then mult = mod_mult(mult*effects.jokers.Xmult_mod);extras.mult = true  end
+        update_hand_text({delay = 0}, {chips = extras.hand_chips and hand_chips, mult = extras.mult and mult})
+        card_eval_status_text(_card, 'jokers', nil, percent, nil, effects.jokers)
+        percent = percent+percent_delta
+    end
+
+    end})
+end
+
+'''
 
 # Editions in boosters 1/2
 [[patches]]
