@@ -6,7 +6,6 @@
 --- VERSION: 5.0
 
 -- ToDo:
--- Fix suit colors
 -- (1/2) Make editioned consumables and replace their info_queue (to check: common events.lua)
 -- (lame fix) Doorhanger doesn't shake when unlocked for some reason?
 -- Make so unlocks actually count things
@@ -3512,7 +3511,17 @@ G.FUNCS.draw_from_deck_to_hand = function(e)
         for i = 1, #G.hand.cards do
             local card = G.hand.cards[i]
             if card.ability.group then
-                table.insert(groups, card.ability.group)
+                local can_insert = true
+
+                for _, group in ipairs(groups) do
+                    if group.id == card.ability.group.id then
+                        can_insert = false
+                    end
+                end
+
+                if can_insert then
+                    table.insert(groups, card.ability.group)
+                end
             end
         end
 
