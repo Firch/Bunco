@@ -2342,12 +2342,14 @@ create_joker({ -- Vandalism
         end
     end,
     set_sprites = function(self, card, front)
-        card.children.center = Sprite(card.T.x, card.T.y, card.T.w, card.T.h, G.ASSET_ATLAS[(G.GAME.viewed_back or G.GAME.selected_back) and ((G.GAME.viewed_back or G.GAME.selected_back)[G.SETTINGS.colourblind_option and 'hc_atlas' or 'lc_atlas'] or (G.GAME.viewed_back or G.GAME.selected_back).atlas) or 'centers'], card.params.bypass_back or (card.playing_card and G.GAME[card.back].pos or G.P_CENTERS['b_red'].pos))
-        card.children.center.states.hover = card.states.hover
-        card.children.center.states.click = card.states.click
-        card.children.center.states.drag = card.states.drag
-        card.children.center.states.collide.can = false
-        card.children.center:set_role({major = card, role_type = 'Glued', draw_major = card})
+        if card.config.center.discovered or card.bypass_discovery_center then
+            card.children.center = Sprite(card.T.x, card.T.y, card.T.w, card.T.h, G.ASSET_ATLAS[(G.GAME.viewed_back or G.GAME.selected_back) and ((G.GAME.viewed_back or G.GAME.selected_back)[G.SETTINGS.colourblind_option and 'hc_atlas' or 'lc_atlas'] or (G.GAME.viewed_back or G.GAME.selected_back).atlas) or 'centers'], card.params.bypass_back or (card.playing_card and G.GAME[card.back].pos or G.P_CENTERS['b_red'].pos))
+            card.children.center.states.hover = card.states.hover
+            card.children.center.states.click = card.states.click
+            card.children.center.states.drag = card.states.drag
+            card.children.center.states.collide.can = false
+            card.children.center:set_role({major = card, role_type = 'Glued', draw_major = card})
+        end
     end
 })
 
