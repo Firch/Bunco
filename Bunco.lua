@@ -5380,7 +5380,7 @@ SMODS.Tag{ -- Arcade
     atlas = 'bunco_tags',
 
     in_pool = function()
-        if pseudorandom('virtual'..G.SEED) < 0.1 then
+        if pseudorandom('arcade'..G.SEED) < 0.1 then
             return true
         else
             return false
@@ -5989,6 +5989,43 @@ SMODS.Voucher{ -- Shell Game
     atlas = 'bunco_vouchers'
 }
 
+SMODS.Voucher{ -- Disguise
+    key = 'disguise', loc_txt = loc.disguise,
+
+    unlocked = true,
+
+    pos = coordinate(7),
+    atlas = 'bunco_vouchers'
+}
+
+SMODS.Voucher{ -- Masquerade
+    key = 'masquerade', loc_txt = loc.masquerade,
+
+    requires = {'v_bunc_disguise'},
+
+    redeem = function(self)
+        if G.shop_booster and G.shop_booster.cards then
+            for _, booster in ipairs(G.shop_booster.cards) do
+                if booster.config.center.type == 'bunc_blind' then
+                    booster.cost = 0
+                end
+            end
+        end
+    end,
+
+    unlocked = false,
+
+    check_for_unlock = function(self, args)
+        if args.type == 'use_blind_card' and args.blinds_total >= 5 then
+            unlock_card(self)
+        end
+    end,
+
+    pos = coordinate(8),
+    atlas = 'bunco_vouchers'
+}
+
+
 -- Blind Cards
 
 function Card:create_blind_card()
@@ -6059,12 +6096,17 @@ SMODS.Atlas({key = 'bunco_booster_packs_virtual', path = 'Boosters/BoostersVirtu
 
 for i = 1, 4 do -- Blind
     SMODS.Booster{
+        type = 'bunc_blind',
+
         key = 'blind_'..i, loc_txt = loc.blind,
 
         loc_vars = function(self, info_queue, card)
             return {vars = {self.config.extra}}
         end,
         config = {extra = 3, choose = 1},
+
+        cost = 8,
+        weight = 1,
 
         create_card = function(self, card)
             return card:create_blind_card()
@@ -6120,7 +6162,7 @@ for i = 1, 4 do -- Blind
         pos = coordinate(i),
         atlas = 'bunco_booster_packs_blind',
 
-        in_pool = function() return false end
+        in_pool = function() return G.GAME.used_vouchers['v_bunc_disguise'] end
     }
 end
 
@@ -6131,6 +6173,8 @@ for i = 1, 4 do -- Virtual
         key = 'virtual_'..(i <= 2 and i or i == 3 and 'jumbo' or 'mega'), loc_txt = loc.virtual,
 
         config = {extra = i <= 2 and 2 or 4, choose = i <= 3 and 1 or 2},
+
+        weight = 0.07,
 
         create_card = function(self, card)
             return create_card('Polymino', G.pack_cards, nil, nil, true, true, nil, 'vir')
@@ -6197,8 +6241,6 @@ for i = 1, 4 do -- Virtual
 
         pos = coordinate(i),
         atlas = 'bunco_booster_packs_virtual',
-
-        in_pool = function() return (pseudorandom('virtual'..G.SEED) < 0.2) end
     }
 end
 

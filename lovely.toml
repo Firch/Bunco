@@ -2744,6 +2744,21 @@ end
 
 '''
 
+# Masquerade
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'if self.area and self.ability.couponed and (self.area == G.shop_jokers or self.area == G.shop_booster) then self.cost = 0 end'
+position = 'after'
+match_indent = true
+payload = '''
+
+if self.config.center.type == 'bunc_blind' and G.GAME.used_vouchers['v_bunc_masquerade'] then
+    self.cost = 0
+end
+
+'''
+
 # Blind Cards 1/3
 [[patches]]
 [patches.pattern]
@@ -2817,6 +2832,19 @@ G.FUNCS.use_blind_card = function(e)
         par.config.object:recalculate()
         G.blind_select_opts.boss.parent = par
         G.blind_select_opts.boss.alignment.offset.y = 0
+    end
+
+    G.PROFILES[G.SETTINGS.profile].blind_cards_used = (G.PROFILES[G.SETTINGS.profile].blind_cards_used or 0) + 1
+    if G.PROFILES[G.SETTINGS.profile].blind_cards_used then
+        local locked_card
+
+        for i = 1, #G.P_LOCKED do
+            locked_card = G.P_LOCKED[i]
+
+            if not locked_card.unlocked and locked_card.check_for_unlock and type(locked_card.check_for_unlock) == 'function' then
+                locked_card:check_for_unlock({type = 'use_blind_card', blinds_total = G.PROFILES[G.SETTINGS.profile].blind_cards_used})
+            end
+        end
     end
 
     G.FUNCS.end_consumeable(nil, 0.2)

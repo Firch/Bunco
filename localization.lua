@@ -1674,6 +1674,29 @@ return {
             }
         }
     },
+    disguise = {
+        ['en-us'] = {
+            ['name'] = "Disguise",
+            ['text'] = {
+                [1] = '{C:attention}Blind Packs{} may',
+                [2] = 'appear in the shop'
+            }
+        }
+    },
+    masquerade = {
+        ['en-us'] = {
+            ['name'] = 'Masquerade',
+            ['text'] = {
+                [1] = 'All {C:attention}Blind Packs{} in',
+                [2] = 'the shop are free'
+            },
+            ['unlock'] = {
+                [1] = 'Replace {E:1,C:attention}5{}',
+                [2] = 'Blinds with Blinds',
+                [3] = 'from Blind Pack'
+            }
+        }
+    },
 
     -- Booster Packs
 
