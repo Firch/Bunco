@@ -2876,7 +2876,7 @@ create_joker({ -- Tangram
 
 create_joker({ -- Domino
     name = 'Domino', position = 55,
-    rarity = 'Uncommon', cost = 5,
+    rarity = 'Rare', cost = 5,
     blueprint = false, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
