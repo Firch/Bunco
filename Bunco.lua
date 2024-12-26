@@ -2850,7 +2850,7 @@ create_joker({ -- The Joker
 create_joker({ -- Tangram
     name = 'Tangram', position = 54,
     vars = {{mult = 7}},
-    rarity = 'Uncommon', cost = 7,
+    rarity = 'Rare', cost = 7,
     blueprint = true, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
