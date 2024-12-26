@@ -2610,7 +2610,7 @@ create_joker({ -- Rasta
 
 create_joker({ -- Critic
     name = 'Critic', position = 49,
-    vars = {{xmult = 2}, {fraction = 5}},
+    vars = {{xmult = 2}, {fraction = 3}},
     rarity = 'Common', cost = 6,
     blueprint = true, eternal = true,
     unlocked = true,
