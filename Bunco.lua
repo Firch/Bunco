@@ -6268,7 +6268,7 @@ for i = 1, 4 do -- Virtual
 
         config = {extra = i <= 2 and 2 or 4, choose = i <= 3 and 1 or 2},
 
-        weight = 0.07,
+        weight = i <= 2 and 0.07 or i == 3 and 0.05 or 0.03,
 
         create_card = function(self, card)
             return create_card('Polymino', G.pack_cards, nil, nil, true, true, nil, 'vir')
