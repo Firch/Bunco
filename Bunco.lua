@@ -384,18 +384,6 @@ if config.gameplay_reworks then
     })
 end
 
-SMODS.Tag:take_ownership('double', {
-    process_loc_text = function(self)
-        SMODS.Tag.process_loc_text(self)
-        SMODS.process_loc_text(G.localization.descriptions.Tag, self.key..'_additional', loc.double)
-    end,
-    loc_vars = function(self)
-        if G.GAME and G.GAME.used_vouchers['v_bunc_pin_collector'] then
-            return {key = self.key..'_additional'}
-        end
-    end,
-})
-
 -- Temporary extra chips
 
 local original_end_round = end_round
@@ -518,6 +506,27 @@ function Game:start_run(args)
         G.P_CENTERS.m_glass.config.extra = G.P_CENTERS.m_glass.config.extra / SMODS.Jokers['j_bunc_sledgehammer'].config.extra.div_chance_denom
     end
 end
+
+SMODS.Tag:take_ownership('double', {
+    process_loc_text = function(self)
+        SMODS.Tag.process_loc_text(self)
+        SMODS.process_loc_text(G.localization.descriptions.Tag, self.key..'_additional', loc.double)
+    end,
+    loc_vars = function(self)
+        if G.GAME and G.GAME.used_vouchers['v_bunc_pin_collector'] then
+            return {key = self.key..'_additional'}
+        end
+    end,
+})
+
+SMODS.Challenge:take_ownership('c_mad_world_1', {
+    register = function(self)
+        SMODS.Challenge.register(self)
+        table.insert(self.restrictions.banned_other, {id = 'bl_bunc_cadaver', type = 'blind'})
+    end
+})
+
+
 
 -- Joker creation setup
 
