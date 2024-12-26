@@ -384,6 +384,18 @@ if config.gameplay_reworks then
     })
 end
 
+SMODS.Tag:take_ownership('double', {
+    process_loc_text = function(self)
+        SMODS.Tag.process_loc_text(self)
+        SMODS.process_loc_text(G.localization.descriptions.Tag, self.key..'_additional', loc.double)
+    end,
+    loc_vars = function(self)
+        if G.GAME and G.GAME.used_vouchers['v_bunc_pin_collector'] then
+            return {key = self.key..'_additional'}
+        end
+    end,
+})
+
 -- Temporary extra chips
 
 local original_end_round = end_round
@@ -5388,6 +5400,35 @@ SMODS.Tag{ -- Arcade
     end
 }
 
+SMODS.Tag{ -- Triple
+    key = 'triple', loc_txt = loc.triple,
+
+    config = {type = 'tag_add'},
+
+    apply = function(self, tag, context)
+        if context.type == self.config.type and context.tag.key ~= 'tag_double' and context.tag.key ~= 'tag_bunc_triple' then
+            G.CONTROLLER.locks[tag.ID] = true
+            tag:yep('+', G.C.BUNCO_VIRTUAL, function()
+                if context.tag.ability and context.tag.ability.orbital_hand then
+                    G.orbital_hand = context.tag.ability.orbital_hand
+                end
+                add_tag(Tag(context.tag.key))
+                add_tag(Tag(context.tag.key))
+                G.orbital_hand = nil
+                G.CONTROLLER.locks[tag.ID] = nil
+                return true
+            end)
+            tag.triggered = true
+            return true
+        end
+    end,
+
+    pos = coordinate(3),
+    atlas = 'bunco_tags',
+
+    in_pool = function() return G.GAME.used_vouchers['v_bunc_pin_collector'] end
+}
+
 SMODS.Tag{ -- Glitter
     key = 'glitter', loc_txt = loc.glitter_tag,
 
@@ -6025,6 +6066,50 @@ SMODS.Voucher{ -- Masquerade
     atlas = 'bunco_vouchers'
 }
 
+SMODS.Voucher{ -- Fanny Pack
+    key = 'fanny_pack', loc_txt = loc.fanny_pack,
+
+    config = {extra = {odds = 4}},
+    loc_vars = function(self, info_queue, card)
+
+        info_queue[#info_queue+1] = {set = 'Tag', key = 'tag_double'}
+
+        local vars
+        if G.GAME and G.GAME.probabilities.normal then
+            vars = {G.GAME.probabilities.normal, card.ability.extra.odds}
+        else
+            vars = {1, card.ability.extra.odds}
+        end
+        return {vars = vars}
+    end,
+
+    unlocked = true,
+
+    pos = coordinate(9),
+    atlas = 'bunco_vouchers'
+}
+
+SMODS.Voucher{ -- Pin Collector
+    key = 'pin_collector', loc_txt = loc.pin_collector,
+
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue+1] = {set = 'Tag', key = 'tag_bunc_triple'}
+        return {}
+    end,
+
+    requires = {'v_bunc_fanny_pack'},
+
+    unlocked = false,
+
+    check_for_unlock = function(self, args)
+        if args.type == 'blind_skipped' and args.skips_total >= 30 then
+            unlock_card(self)
+        end
+    end,
+
+    pos = coordinate(10),
+    atlas = 'bunco_vouchers'
+}
 
 -- Blind Cards
 

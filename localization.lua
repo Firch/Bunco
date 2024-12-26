@@ -1439,10 +1439,22 @@ return {
     -- Reworked tags
 
     boss = {
-        name = "Boss Tag",
-        text = {
-            "Gives a free",
-            "{C:attention}Blind Pack"
+        ['en-us'] = {
+            ['name'] = 'Boss Tag',
+            ['text'] = {
+                [1] = 'Gives a free',
+                [2] = '{C:attention}Blind Pack'
+            }
+        }
+    },
+    double = {
+        ['en-us'] = {
+            ['name'] = 'Double Tag',
+            ['text'] = {
+                [1] = 'Gives a copy of the',
+                [2] = 'next selected {C:attention}Tag{}',
+                [3] = '{s:0.6,C:attention}Double and Triple Tags{s:0.8} excluded'
+            }
         }
     },
 
@@ -1458,10 +1470,22 @@ return {
         }
     },
     arcade = {
-        name = "Arcade Tag",
-        text = {
-            "Gives a free",
-            "{C:bunco_virtual_dark}Mega Virtual Pack"
+        ['en-us'] = {
+            ['name'] = 'Arcade Tag',
+            ['text'] = {
+                [1] = 'Gives a free',
+                [2] = '{C:bunco_virtual_dark}Mega Virtual Pack'
+            }
+        }
+    },
+    triple = {
+        ['en-us'] = {
+            ['name'] = 'Triple Tag',
+            ['text'] = {
+                [1] = 'Gives two copies of the',
+                [2] = 'next selected {C:attention}Tag{}',
+                [3] = '{s:0.8,C:attention}Triple Tag{s:0.8} excluded'
+            }
         }
     },
     glitter_tag = {
@@ -1694,6 +1718,30 @@ return {
                 [1] = 'Replace {E:1,C:attention}5{}',
                 [2] = 'Blinds with Blinds',
                 [3] = 'from Blind Pack'
+            }
+        }
+    },
+    fanny_pack = {
+        ['en-us'] = {
+            ['name'] = "Fanny Pack",
+            ['text'] = {
+                [1] = '{C:green}#1# in #2#{} chance to',
+                [2] = 'gain a {C:attention}Double Tag',
+                [3] = 'each time a blind',
+                [4] = 'is {C:attention}skipped'
+            }
+        }
+    },
+    pin_collector = {
+        ['en-us'] = {
+            ['name'] = 'Pin Collector',
+            ['text'] = {
+                [1] = 'All new {C:attention}Double Tags',
+                [2] = 'appear as {C:attention}Triple Tags'
+            },
+            ['unlock'] = {
+                [1] = 'Skip a total of',
+                [2] = '{E:1,C:attention}30{} blinds'
             }
         }
     },

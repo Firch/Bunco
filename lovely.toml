@@ -1631,6 +1631,30 @@ end
 
 '''
 
+# Total skips unlocking
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = 'G.GAME.skips = (G.GAME.skips or 0) + 1'
+position = 'after'
+match_indent = true
+payload = '''
+
+G.PROFILES[G.SETTINGS.profile].skips_total = (G.PROFILES[G.SETTINGS.profile].skips_total or 0) + 1
+if G.PROFILES[G.SETTINGS.profile].skips_total then
+    local locked_card
+
+    for i = 1, #G.P_LOCKED do
+        locked_card = G.P_LOCKED[i]
+
+        if not locked_card.unlocked and locked_card.check_for_unlock and type(locked_card.check_for_unlock) == 'function' then
+            locked_card:check_for_unlock({type = 'blind_skipped', skips_total = G.PROFILES[G.SETTINGS.profile].skips_total})
+        end
+    end
+end
+
+'''
+
 # G.FUNCS.discard_cards_from_highlighted() (The Paling 1/2)
 [[patches]]
 [patches.pattern]
@@ -2758,6 +2782,49 @@ if self.config.center.type == 'bunc_blind' and G.GAME.used_vouchers['v_bunc_masq
 end
 
 '''
+
+# Fanny Pack
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = 'add_tag(_tag.config.ref_table)'
+position = 'before'
+match_indent = true
+payload = '''
+
+if G.GAME.used_vouchers['v_bunc_fanny_pack'] then
+    if pseudorandom('fanny_pack'..G.SEED) < G.GAME.probabilities.normal / G.P_CENTERS.v_bunc_fanny_pack.config.extra.odds then
+        add_tag(Tag('tag_double'))
+    end
+end
+
+'''
+
+# Pin Collector 1/2
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = 'function add_tag(_tag)'
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.GAME.used_vouchers['v_bunc_pin_collector'] then
+    if _tag.key == 'tag_double' then
+        _tag = Tag('tag_bunc_triple')
+    end
+end
+
+'''
+
+# Pin Collector 2/2
+[[patches]]
+[patches.pattern]
+target = 'tag.lua'
+pattern = "if self.name == 'Double Tag' and _context.tag.key ~= 'tag_double' then"
+position = 'at'
+match_indent = true
+payload = '''if self.name == 'Double Tag' and _context.tag.key ~= 'tag_double' and _context.tag.key ~= 'tag_bunc_triple' then'''
 
 # Blind Cards 1/3
 [[patches]]
