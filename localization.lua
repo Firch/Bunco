@@ -473,7 +473,7 @@ return {
             ['text'] = {
                 [1] = '{C:attention}Conecta{} 4 cartas seleccionadas',
                 [2] = 'donde todas las cartas tienen una',
-                [3] = '{C:attention}propiedad diferente{} {C:inactive}(rank and suit)'
+                [3] = '{C:attention}propiedad diferente{} {C:inactive}(categoría o palo)'
             }
         }
     },
@@ -1808,9 +1808,9 @@ return {
         ['es_419'] = {
             ['name'] = 'Tangram',
             ['text'] = {
-                [1] = 'Cada {C:attention}7{} jugado otorga',
-                [2] = '{C:mult}+#1#{} multi por cada',
-                [3] = '{C:attention}7{} anotado cuando anotan'
+                [1] = 'Cuando un {C:attention}7{} es anotado,',
+                [2] = '{C:mult}+#1#{} multi multiplicado',
+                [3] = 'por la cantidad de {C:attention}7s{} anotados'
             }
         }
     },
@@ -2438,8 +2438,9 @@ return {
             ['name'] = 'Corona cartujo',
             ['text'] = {
                 [1] = 'Todas las cartas de palo base',
-                [2] = 'de Espadas, Corazón, Trébol y Diamante'
-            }
+                [2] = 'de Espadas, Corazón, Trébol y Diamante',
+                [3] = 'se debilitan'
+             }
         }
     },
     vermilion_trident = {
@@ -3108,6 +3109,13 @@ return {
                 [1] = '{C:bunco_virtual_dark}Virtual Packs',
                 [2] = 'appear {C:attention}4X{} more often'
             }
+        },
+        ['es_419'] = {
+            ['name'] = 'Máquina de arcade',
+            ['text'] = {
+                [1] = 'Los {C:bunco_virtual_dark}paquetes virtuales',
+                [2] = 'aparecen {C:attention}4X{} mas'
+            }
         }
     },
     polybius = {
@@ -3121,6 +3129,18 @@ return {
             ['unlock'] = {
                 [1] = 'Create a total of',
                 [2] = '{E:1,C:attention}10{} linked groups'
+            }
+        },
+        ['es_419'] = {
+            ['name'] = 'Polybius',
+            ['text'] = {
+                [1] = 'Las cartas de {C:bunco_virtual_dark}poliminó{} permiten',
+                [2] = 'conectar {C:attention}una carta{} más',
+                [3] = '{s:0.6,C:inactive}La carta extra puede ser de cualquier propiedad'
+            },
+            ['unlock'] = {
+                [1] = 'Crea un total de',
+                [2] = '{E:1,C:attention}10{} grupos conectados'
             }
         }
     },
