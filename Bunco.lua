@@ -3516,6 +3516,19 @@ function link_cards(cards, source, ignore_groups)
             card.ability.group = {id = G.GAME.last_card_group, source = source or 'unknown'}
         end
     end
+
+    G.PROFILES[G.SETTINGS.profile].cards_linked = (G.PROFILES[G.SETTINGS.profile].cards_linked or 0) + 1
+    if G.PROFILES[G.SETTINGS.profile].cards_linked then
+        local locked_card
+
+        for i = 1, #G.P_LOCKED do
+            locked_card = G.P_LOCKED[i]
+
+            if not locked_card.unlocked and locked_card.check_for_unlock and type(locked_card.check_for_unlock) == 'function' then
+                locked_card:check_for_unlock({type = 'link_cards', links_total = G.PROFILES[G.SETTINGS.profile].cards_linked})
+            end
+        end
+    end
 end
 
 -- Pseudoinjections for Polyminoes
@@ -3647,7 +3660,7 @@ SMODS.Consumable{ -- The I
     end,
 
     can_use = function(self, card)
-        if G.hand and (#G.hand.highlighted == 4) then
+        if G.hand and (#G.hand.highlighted == 4 or (G.GAME.used_vouchers['v_bunc_polybius'] and #G.hand.highlighted == 5)) then
             local cards = G.hand.highlighted
 
             -- Group check:
@@ -3708,7 +3721,7 @@ SMODS.Consumable{ -- The O
     end,
 
     can_use = function(self, card)
-        if G.hand and (#G.hand.highlighted == 4) then
+        if G.hand and (#G.hand.highlighted == 4 or (G.GAME.used_vouchers['v_bunc_polybius'] and #G.hand.highlighted == 5)) then
             local cards = G.hand.highlighted
 
             -- Group check:
@@ -3740,7 +3753,7 @@ SMODS.Consumable{ -- The O
             local matching_ranks = 0
 
             for _, count in pairs(suit_count) do
-                if count == 2 then
+                if count >= 2 then
                     matching_suits = matching_suits + 1
                 end
             end
@@ -3748,14 +3761,14 @@ SMODS.Consumable{ -- The O
             -- Check for exactly two cards with the same rank
 
             for _, count in pairs(rank_count) do
-                if count == 2 then
+                if count >= 2 then
                     matching_ranks = matching_ranks + 1
                 end
             end
 
             -- Check for two matches of either rank or suit
 
-            if matching_suits == 2 or matching_ranks == 2 then
+            if matching_suits >= 2 or matching_ranks >= 2 then
                 return true
             end
         end
@@ -3785,7 +3798,7 @@ SMODS.Consumable{ -- The T
     end,
 
     can_use = function(self, card)
-        if G.hand and (#G.hand.highlighted == 4) then
+        if G.hand and (#G.hand.highlighted == 4 or (G.GAME.used_vouchers['v_bunc_polybius'] and #G.hand.highlighted == 5)) then
             local cards = G.hand.highlighted
 
             -- Group check:
@@ -3820,9 +3833,9 @@ SMODS.Consumable{ -- The T
             -- Check for exactly three cards with the same suit
 
             for _, count in pairs(suit_count) do
-                if count == 3 then
+                if count >= 3 then
                     matching_suits = matching_suits + 1
-                elseif count == 1 then
+                elseif count >= 1 then
                     mismatched_suits = mismatched_suits + 1
                 end
             end
@@ -3830,16 +3843,19 @@ SMODS.Consumable{ -- The T
             -- Check for exactly three cards with the same rank
 
             for _, count in pairs(rank_count) do
-                if count == 3 then
+                if count >= 3 then
                     matching_ranks = matching_ranks + 1
-                elseif count == 1 then
+                elseif count >= 1 then
                     mismatched_ranks = mismatched_ranks + 1
                 end
             end
 
             -- Check for three matches of either rank or suit and one mismatch
 
-            if (matching_suits == 1 and mismatched_suits == 1) or (matching_ranks == 1 and mismatched_ranks == 1) then
+            say('matching_ranks: '..matching_ranks..', mismatched_ranks: '..mismatched_ranks)
+            say('matching_suits: '..matching_suits..', mismatched_suits: '..mismatched_suits)
+
+            if (matching_suits >= 1 and mismatched_suits >= 1) or (matching_ranks >= 1 and mismatched_ranks >= 1) then
                 return true
             end
         end
@@ -3869,7 +3885,7 @@ SMODS.Consumable{ -- The S
     end,
 
     can_use = function(self, card)
-        if G.hand and (#G.hand.highlighted == 4) then
+        if G.hand and (#G.hand.highlighted == 4 or (G.GAME.used_vouchers['v_bunc_polybius'] and #G.hand.highlighted == 5)) then
             local cards = G.hand.highlighted
 
             -- Group check:
@@ -3900,7 +3916,7 @@ SMODS.Consumable{ -- The S
 
             local pair1, pair2 = nil, nil
             for rank, cards in pairs(rank_count) do
-                if #cards == 2 then
+                if #cards >= 2 then
                     if not pair1 then
                         pair1 = cards
                     elseif not pair2 then
@@ -3958,7 +3974,7 @@ SMODS.Consumable{ -- The Z
     end,
 
     can_use = function(self, card)
-        if G.hand and (#G.hand.highlighted == 4) then
+        if G.hand and (#G.hand.highlighted == 4 or (G.GAME.used_vouchers['v_bunc_polybius'] and #G.hand.highlighted == 5)) then
             local cards = G.hand.highlighted
 
             -- Group check:
@@ -3989,7 +4005,7 @@ SMODS.Consumable{ -- The Z
 
             local pair1, pair2 = nil, nil
             for suit, cards in pairs(suit_count) do
-                if #cards == 2 then
+                if #cards >= 2 then
                     if not pair1 then
                         pair1 = cards
                     elseif not pair2 then
@@ -4044,7 +4060,7 @@ SMODS.Consumable{ -- The J
     end,
 
     can_use = function(self, card)
-        if G.hand and (#G.hand.highlighted == 4) then
+        if G.hand and (#G.hand.highlighted == 4 or (G.GAME.used_vouchers['v_bunc_polybius'] and #G.hand.highlighted == 5)) then
             local cards = G.hand.highlighted
 
             -- Group check:
@@ -4075,17 +4091,22 @@ SMODS.Consumable{ -- The J
             -- Identify three cards with the same rank
 
             local three_of_a_kind = nil
-            local other_card = nil
+            local other_cards = nil
 
             for rank, cards in pairs(rank_count) do
-                if #cards == 3 then
+                if #cards >= 3 then
                     three_of_a_kind = cards
-                elseif #cards == 1 then
-                    other_card = cards[1]
+                elseif #cards >= 1 then
+                    if not other_cards then
+                        other_cards = {}
+                    end
+                    for _, card in ipairs(cards) do
+                        table.insert(other_cards, card)
+                    end
                 end
             end
 
-            if not three_of_a_kind or not other_card then
+            if not three_of_a_kind or not other_cards then
                 return false
             end
 
@@ -4094,11 +4115,12 @@ SMODS.Consumable{ -- The J
             local common_suit_found = false
             for j = 1, #SMODS.Suit.obj_buffer do
                 local suit = SMODS.Suit.obj_buffer[j]
-                if other_card:is_suit(suit, nil, true) then
-                    for _, card in ipairs(three_of_a_kind) do
-                        if card:is_suit(suit, nil, true) then
-                            common_suit_found = true
-                            break
+                for _, other_card in ipairs(other_cards) do
+                    if other_card:is_suit(suit, nil, true) then
+                        for _, card in ipairs(three_of_a_kind) do
+                            if card:is_suit(suit, nil, true) then
+                                common_suit_found = true
+                            end
                         end
                     end
                 end
@@ -4137,7 +4159,7 @@ SMODS.Consumable{ -- The L
     end,
 
     can_use = function(self, card)
-        if G.hand and (#G.hand.highlighted == 4) then
+        if G.hand and (#G.hand.highlighted == 4 or (G.GAME.used_vouchers['v_bunc_polybius'] and #G.hand.highlighted == 5)) then
             local cards = G.hand.highlighted
 
             -- Group check:
@@ -4168,29 +4190,37 @@ SMODS.Consumable{ -- The L
             -- Identify three cards with the same suit
 
             local three_of_a_suit = nil
-            local other_card = nil
+            local other_cards = nil
 
             for suit, cards in pairs(suit_count) do
-                if #cards == 3 then
+                if #cards >= 3 then
                     three_of_a_suit = cards
-                elseif #cards == 1 then
-                    other_card = cards[1]
+                elseif #cards >= 1 then
+                    if not other_cards then
+                        other_cards = {}
+                    end
+                    for _, card in ipairs(cards) do
+                        table.insert(other_cards, card)
+                    end
                 end
             end
 
-            if not three_of_a_suit or not other_card then
+            if not three_of_a_suit or not other_cards then
                 return false
             end
 
             -- Check for a common rank between the three cards and the other card
 
             local common_rank_found = false
-            local other_card_rank = other_card:get_id()
 
-            for _, card in ipairs(three_of_a_suit) do
-                if card:get_id() == other_card_rank then
-                    common_rank_found = true
-                    break
+            for _, other_card in ipairs(other_cards) do
+                local other_card_rank = other_card:get_id()
+
+                for _, card in ipairs(three_of_a_suit) do
+                    if card:get_id() == other_card_rank then
+                        common_rank_found = true
+                        break
+                    end
                 end
             end
 
@@ -4228,7 +4258,7 @@ SMODS.Consumable{ -- The /
     end,
 
     can_use = function(self, card)
-        if G.hand and (#G.hand.highlighted == 4) then
+        if G.hand and (#G.hand.highlighted == 4 or (G.GAME.used_vouchers['v_bunc_polybius'] and #G.hand.highlighted == 5)) then
             local cards = G.hand.highlighted
 
             -- Group check:
@@ -4241,6 +4271,9 @@ SMODS.Consumable{ -- The /
 
             local rank_set = {}
             local suit_set = {}
+
+            local extra_suits = 0
+            local extra_ranks = 0
 
             for i = 1, #cards do
                 local rank = cards[i]:get_id()
@@ -4258,13 +4291,21 @@ SMODS.Consumable{ -- The /
                 -- Check if rank or suit is already in the set
 
                 if rank_set[rank] then
+                    extra_ranks = extra_ranks + 1
+                end
+
+                if (#cards == 4 and extra_ranks >= 1) or (#cards == 5 and extra_ranks >= 2) then
                     return false
                 end
 
                 for _, suit in ipairs(card_suits) do
                     if suit_set[suit] then
-                        return false
+                        extra_suits = extra_suits + 1
                     end
+                end
+
+                if (#cards == 4 and extra_suits >= 1) or (#cards == 5 and extra_suits >= 2) then
+                    return false
                 end
 
                 -- Add rank and suits to their respective sets
@@ -6120,6 +6161,32 @@ SMODS.Voucher{ -- Pin Collector
     atlas = 'bunco_vouchers'
 }
 
+SMODS.Voucher{ -- Arcade Machine
+    key = 'arcade_machine', loc_txt = loc.arcade_machine,
+
+    unlocked = true,
+
+    pos = coordinate(11),
+    atlas = 'bunco_vouchers'
+}
+
+SMODS.Voucher{ -- Polybius
+    key = 'polybius', loc_txt = loc.polybius,
+
+    requires = {'v_bunc_arcade_machine'},
+
+    unlocked = false,
+
+    check_for_unlock = function(self, args)
+        if args.type == 'link_cards' and args.links_total >= 10 then
+            unlock_card(self)
+        end
+    end,
+
+    pos = coordinate(12),
+    atlas = 'bunco_vouchers'
+}
+
 -- Blind Cards
 
 function Card:create_blind_card()
@@ -6269,6 +6336,10 @@ for i = 1, 4 do -- Virtual
         config = {extra = i <= 2 and 2 or 4, choose = i <= 3 and 1 or 2},
 
         weight = i <= 2 and 0.07 or i == 3 and 0.05 or 0.03,
+        get_weight = function(self)
+            local new_weight = self.weight * (G.GAME.used_vouchers['v_bunc_arcade_machine'] and 4 or 1)
+            return new_weight
+        end,
 
         create_card = function(self, card)
             return create_card('Polymino', G.pack_cards, nil, nil, true, true, nil, 'vir')

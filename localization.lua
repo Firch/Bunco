@@ -1700,7 +1700,7 @@ return {
     },
     disguise = {
         ['en-us'] = {
-            ['name'] = "Disguise",
+            ['name'] = 'Disguise',
             ['text'] = {
                 [1] = '{C:attention}Blind Packs{} may',
                 [2] = 'appear in the shop'
@@ -1723,7 +1723,7 @@ return {
     },
     fanny_pack = {
         ['en-us'] = {
-            ['name'] = "Fanny Pack",
+            ['name'] = 'Fanny Pack',
             ['text'] = {
                 [1] = '{C:green}#1# in #2#{} chance to',
                 [2] = 'gain a {C:attention}Double Tag',
@@ -1742,6 +1742,29 @@ return {
             ['unlock'] = {
                 [1] = 'Skip a total of',
                 [2] = '{E:1,C:attention}30{} blinds'
+            }
+        }
+    },
+    arcade_machine = {
+        ['en-us'] = {
+            ['name'] = 'Arcade Machine',
+            ['text'] = {
+                [1] = '{C:bunco_virtual_dark}Virtual Packs',
+                [2] = 'appear {C:attention}4X{} more often'
+            }
+        }
+    },
+    polybius = {
+        ['en-us'] = {
+            ['name'] = 'Polybius',
+            ['text'] = {
+                [1] = '{C:bunco_virtual_dark}Polymino{} cards allow to',
+                [2] = 'link {C:attention}one more{} card',
+                [3] = '{s:0.6,C:inactive}Extra card can be of any property'
+            },
+            ['unlock'] = {
+                [1] = 'Create a total of',
+                [2] = '{E:1,C:attention}10{} linked groups'
             }
         }
     },
