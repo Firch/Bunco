@@ -1800,9 +1800,9 @@ return {
         ['en-us'] = {
             ['name'] = 'Tangram',
             ['text'] = {
-                [1] = 'Every played {C:attention}7{} gives',
-                [2] = '{C:mult}+#1#{} Mult per every',
-                [3] = 'scored {C:attention}7{} when scored'
+                [1] = 'When a {C:attention}7{} is scored,',
+                [2] = '{C:mult}+#1#{} Mult times the',
+                [3] = 'amount of scored {C:attention}7s{}'
             }
         },
         ['es_419'] = {
