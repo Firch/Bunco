@@ -342,7 +342,7 @@ position = 'after'
 match_indent = true
 payload = '''
 
-G.E_MANAGER:add_event(Event({trigger = 'after', func = function()
+G.E_MANAGER:add_event(Event({blocking = false, trigger = 'after', func = function()
     if grouped and grouped_area_cards and #grouped_area_cards > 0 then
 
         local next_card
