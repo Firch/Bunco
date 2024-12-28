@@ -654,6 +654,9 @@ local function create_joker(joker)
     end
 end
 
+SMODS.Sound({key = 'gunshot', path = 'gunshot.ogg'})
+SMODS.Sound({key = 'mousetrap', path = 'mousetrap.ogg'})
+
 -- Jokers
 
 create_joker({ -- Cassette
@@ -2190,8 +2193,9 @@ create_joker({ -- Trigger Finger
                     end
                 end
                 if G.hand.highlighted then
-                    forced_message(loc.dictionary.pew, card, G.C.RED)
                     G.FUNCS.play_cards_from_highlighted()
+                    play_sound('bunc_gunshot')
+                    forced_message(loc.dictionary.pew, card, G.C.RED)
                 end
             return true end})
         end
@@ -2746,6 +2750,7 @@ create_joker({ -- Mousetrap
         if context.joker_main then
             if pseudorandom('mousetrap'..G.SEED) < G.GAME.probabilities.normal / card.ability.extra.odds then
                 if G.GAME.current_round.hands_left ~= 0 then ease_hands_played(-1) end
+                event({func = function() play_sound('bunc_mousetrap') return true end})
                 forced_message(loc.dictionary.ouch, card, G.C.RED, true)
             else
                 return {
