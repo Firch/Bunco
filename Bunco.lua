@@ -312,6 +312,13 @@ if config.fixed_sprites then
 
 end
 
+-- Text icons
+
+local font_replacement = NFS.read(BUNCOMOD.content.path..'assets/fonts/font.ttf')
+love.filesystem.write('font_replacement.ttf', font_replacement)
+G.LANG.font.FONT = love.graphics.newFont('font_replacement.ttf', G.TILESIZE * 10)
+love.filesystem.remove('font_replacement.ttf')
+
 -- Gameplay reworks
 
 if config.gameplay_reworks then
