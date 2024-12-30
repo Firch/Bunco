@@ -34,13 +34,48 @@ return {
             bunc_blade = '(1.5X blind score)',
             bunc_exceeded_score = 'Exceeded the limit!',
         },
-        suits_singular={
+
+        -- Suits
+
+        suits_singular = {
             bunc_Fleurons = 'Fleuron',
             bunc_Halberds = 'Halberd'
         },
-        suits_plural={
+        suits_plural = {
             bunc_Fleurons = 'Fleurons',
             bunc_Halberds = 'Halberds'
+        },
+
+        -- Poker hands
+
+        poker_hands = {
+            ['bunc_Spectrum'] = 'Spectrum',
+            ['bunc_Straight Spectrum'] = 'Straight Spectrum',
+            ['bunc_Straight Spectrum (Royal)'] = 'Royal Spectrum',
+            ['bunc_Spectrum House'] = 'Spectrum House',
+            ['bunc_Spectrum Five'] = 'Spectrum Five',
+            ['bunc_Deal'] = 'Deal'
+        },
+        poker_hand_descriptions = {
+            ['bunc_Spectrum'] = {
+                [1] = '5 cards with different suits'
+            },
+            ['bunc_Straight Spectrum'] = {
+                [1] = '5 cards in a row (consecutive ranks),',
+                [2] = 'each with a different suit'
+            },
+            ['bunc_Spectrum House'] = {
+                [1] = 'A Three of a Kind and a Pair with',
+                [2] = 'each card having a different suit'
+            },
+            ['bunc_Spectrum Five'] = {
+                [1] = '5 cards with the same rank,',
+                [2] = 'each with a different suit'
+            },
+            ['bunc_Deal'] = {
+                [1] = '5 ranks picked',
+                [2] = 'by Registration Plate'
+            }
         }
     },
     descriptions = {

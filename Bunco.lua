@@ -531,8 +531,6 @@ SMODS.Challenge:take_ownership('c_mad_world_1', {
     end
 })
 
-
-
 -- Joker creation setup
 
 SMODS.Atlas({key = 'bunco_jokers', path = 'Jokers/Jokers.png', px = 71, py = 95})
@@ -4486,7 +4484,6 @@ SMODS.PokerHand{ -- Spectrum (Referenced from SixSuits)
         { 'bunc_FLEURON_5', true },
         { 'H_K',    true },
     },
-    loc_txt = loc.spectrum,
     evaluate = function(parts)
         return parts.bunc_spectrum
     end
@@ -4506,10 +4503,9 @@ SMODS.PokerHand{ -- Straight Spectrum (Referenced from SixSuits)
         { 'D_9', true },
         { 'H_8',    true }
     },
-    loc_txt = loc.straight_spectrum,
     process_loc_text = function(self)
         SMODS.PokerHand.process_loc_text(self)
-        SMODS.process_loc_text(G.localization.misc.poker_hands, self.key..'_2', self.loc_txt, 'extra')
+        SMODS.process_loc_text(G.localization.misc.poker_hands, self.key..' (Royal)', self.loc_txt, 'extra')
     end,
     evaluate = function(parts)
         if not next(parts.bunc_spectrum) or not next(parts._straight) then return {} end
@@ -4522,7 +4518,7 @@ SMODS.PokerHand{ -- Straight Spectrum (Referenced from SixSuits)
 			royal = royal and (rank.key == 'Ace' or rank.key == '10' or rank.face)
 		end
 		if royal then
-			return self.key..'_2'
+			return self.key..' (Royal)'
 		end
     end
 }
@@ -4542,7 +4538,6 @@ SMODS.PokerHand{ -- Spectrum House (Referenced from SixSuits)
         { 'D_8',    true },
         { 'H_8',    true }
     },
-    loc_txt = loc.spectrum_house,
     evaluate = function(parts)
         if #parts._3 < 1 or #parts._2 < 2 or not next(parts.bunc_spectrum) then return {} end
         return {SMODS.merge_lists (parts._all_pairs, parts.bunc_spectrum)}
@@ -4564,7 +4559,6 @@ SMODS.PokerHand{ -- Spectrum Five (Referenced from SixSuits)
         { 'H_7',    true },
         { 'C_7',    true }
     },
-    loc_txt = loc.spectrum_five,
     evaluate = function(parts)
         if not next(parts._5) or not next(parts.bunc_spectrum) then return {} end
         return {SMODS.merge_lists (parts._5, parts.bunc_spectrum)}
@@ -4653,7 +4647,6 @@ SMODS.PokerHand{ -- Deal
     l_chips = 0,
     l_mult = 0,
     example = {},
-    loc_txt = loc.deal,
     evaluate = function(parts)
         return parts.bunc_deal
     end
