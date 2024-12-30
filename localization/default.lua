@@ -233,6 +233,28 @@ return {
                     [3] = '{C:attention}different property{} {C:inactive}(rank and suit)'
                 }
             }
+        },
+        Joker = {
+
+            -- Reworked Jokers
+
+            j_bunc_luchador = {
+                ['name'] = 'Luchador',
+                ['text'] = {
+                    [1] = 'Sell this card to',
+                    [2] = 'create a free',
+                    [3] = '{C:attention}Breaking Tag'
+                }
+            },
+            j_bunc_red_card = {
+                ['name'] = 'Red Card',
+                ['text'] = {
+                    [1] = 'This Joker gains {C:red}+#1#{} Mult',
+                    [2] = 'per skipped choice',
+                    [3] = 'in {C:attention}Booster Pack{}',
+                    [4] = '{C:inactive}(Currently {C:red}+#2#{C:inactive} Mult)'
+                }
+            }
         }
     }
 }

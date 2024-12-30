@@ -321,13 +321,12 @@ love.filesystem.remove('font_replacement.ttf')
 
 if config.gameplay_reworks then
 
-    bunco_gameplay_reworks = true
+    BUNCOMOD.content.config.gameplay_reworks = true
 
     SMODS.Joker:take_ownership('luchador', {
-        loc_txt = loc.luchador,
         loc_vars = function(self, info_queue)
             info_queue[#info_queue + 1] = {key = 'tag_bunc_breaking', set = 'Tag'}
-            return {}
+            return {key = 'j_bunc_luchador'}
         end,
         calculate = function(self, card, context)
             if context.selling_self then
@@ -344,7 +343,9 @@ if config.gameplay_reworks then
     })
 
     SMODS.Joker:take_ownership('red_card', {
-        loc_txt = loc.red_card,
+        loc_vars = function(self, info_queue)
+            return {key = 'j_bunc_red_card'}
+        end,
         calculate = function(self, card, context)
             if context.skipping_booster and not context.blueprint then
                 card.ability.mult = card.ability.mult + (card.ability.extra * G.GAME.pack_choices)
