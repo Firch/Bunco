@@ -176,6 +176,17 @@ if config.fixed_sprites then
     SMODS.Atlas{key = 'cards_2', path = 'Resprites/EnhancedContrast.png', px = 71, py = 95, prefix_config = {key = false}}
     SMODS.Atlas{key = 'ui_2', path = 'Resprites/EnhancedUIContrast.png', px = 18, py = 18, prefix_config = {key = false}}
 
+    G.C['SO_2'] = {
+        Hearts = HEX('ee151b'),
+        Diamonds = HEX('e56b10'),
+        Spades = HEX('5d55a6'),
+        Clubs = HEX('197f77')
+    }
+
+    G.C['SO_1']['Spades'] = HEX('3c4368')
+
+    G.C.SUITS = G.C["SO_" .. (G.SETTINGS.colourblind_option and 2 or 1)]
+
     -- Jokers
 
     SMODS.Joker:take_ownership('juggler', {
