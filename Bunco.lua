@@ -85,20 +85,7 @@ end
 -- Dictionary wrapper
 
 function BUNCOMOD.content.process_loc_text()
-    SMODS.process_loc_text(G.localization.misc.dictionary, 'bunco', loc.dictionary)
-
-    loc.dictionary = G.localization.misc.dictionary.bunco
-
-    -- Other localization
-
-    SMODS.process_loc_text(G.localization.descriptions.Other, 'temporary_extra_chips', loc.dictionary.temporary_extra_chips)
-    SMODS.process_loc_text(G.localization.descriptions.Other, 'linked_cards', loc.dictionary.linked_cards)
-    SMODS.process_loc_text(G.localization.descriptions.Other, 'drawn_linked_cards', loc.dictionary.drawn_linked_cards)
-    SMODS.process_loc_text(G.localization.descriptions.Other, 'exotic_cards', loc.exotic_cards)
-    G.P_CENTERS['exotic_cards'] = {key = 'exotic_cards', set = 'Other'}
-
-    BUNCOMOD.loc.exceeded_score = loc.dictionary.exceeded_score
-    BUNCOMOD.loc.chips = loc.dictionary.chips
+    G.P_CENTERS['bunc_exotic_cards'] = {key = 'bunc_exotic_cards', set = 'Other'}
 end
 
 -- Config globals
@@ -113,19 +100,19 @@ end
 
 function BUNCOMOD.content.config_tab()
     return {n = G.UIT.ROOT, config = {r = 0.1, minw = 4, align = "tm", padding = 0.2, colour = G.C.BLACK}, nodes = {
-        create_toggle({label = loc.dictionary.colorful_finishers, ref_table = BUNCOMOD.content.config, ref_value = 'colorful_finishers', callback = function() BUNCOMOD.content:save_config() end}),
-        create_toggle({label = loc.dictionary.high_quality_shaders, info = {loc.dictionary.requires_restart}, ref_table = BUNCOMOD.content.config, ref_value = 'high_quality_shaders', callback = function() BUNCOMOD.content:save_config() end}),
-        create_toggle({label = loc.dictionary.double_lovers, ref_table = BUNCOMOD.content.config, ref_value = 'double_lovers', callback = function() BUNCOMOD.content:save_config()
+        create_toggle({label = G.localization.misc.dictionary.bunc_colorful_finishers, ref_table = BUNCOMOD.content.config, ref_value = 'colorful_finishers', callback = function() BUNCOMOD.content:save_config() end}),
+        create_toggle({label = G.localization.misc.dictionary.bunc_high_quality_shaders, info = {G.localization.misc.dictionary.bunc_requires_restart}, ref_table = BUNCOMOD.content.config, ref_value = 'high_quality_shaders', callback = function() BUNCOMOD.content:save_config() end}),
+        create_toggle({label = G.localization.misc.dictionary.bunc_double_lovers, ref_table = BUNCOMOD.content.config, ref_value = 'double_lovers', callback = function() BUNCOMOD.content:save_config()
             if config.double_lovers then
                 G.P_CENTERS.c_lovers.config.max_highlighted = 2
             else
                 G.P_CENTERS.c_lovers.config.max_highlighted = 1
             end
         end}),
-        create_toggle({label = loc.dictionary.jokerlike_consumable_editions, ref_table = BUNCOMOD.content.config, ref_value = 'jokerlike_consumable_editions', callback = function() BUNCOMOD.content:save_config() end}),
-        create_toggle({label = loc.dictionary.fixed_badges, ref_table = BUNCOMOD.content.config, ref_value = 'fixed_badges', callback = function() BUNCOMOD.content:save_config() end}),
-        create_toggle({label = loc.dictionary.fixed_sprites, info = {loc.dictionary.requires_restart}, ref_table = BUNCOMOD.content.config, ref_value = 'fixed_sprites', callback = function() BUNCOMOD.content:save_config() end}),
-        create_toggle({label = loc.dictionary.gameplay_reworks, info = {loc.dictionary.requires_restart}, ref_table = BUNCOMOD.content.config, ref_value = 'gameplay_reworks', callback = function() BUNCOMOD.content:save_config() end})
+        create_toggle({label = G.localization.misc.dictionary.bunc_jokerlike_consumable_editions, ref_table = BUNCOMOD.content.config, ref_value = 'jokerlike_consumable_editions', callback = function() BUNCOMOD.content:save_config() end}),
+        create_toggle({label = G.localization.misc.dictionary.bunc_fixed_badges, ref_table = BUNCOMOD.content.config, ref_value = 'fixed_badges', callback = function() BUNCOMOD.content:save_config() end}),
+        create_toggle({label = G.localization.misc.dictionary.bunc_fixed_sprites, info = {G.localization.misc.dictionary.bunc_requires_restart}, ref_table = BUNCOMOD.content.config, ref_value = 'fixed_sprites', callback = function() BUNCOMOD.content:save_config() end}),
+        create_toggle({label = G.localization.misc.dictionary.bunc_gameplay_reworks, info = {G.localization.misc.dictionary.bunc_requires_restart}, ref_table = BUNCOMOD.content.config, ref_value = 'gameplay_reworks', callback = function() BUNCOMOD.content:save_config() end})
     }}
 end
 
@@ -1060,7 +1047,7 @@ create_joker({ -- Linocut
                 event({trigger = 'after', delay = 0.15, func = function() context.scoring_hand[1]:flip(); play_sound('card1', 1); context.scoring_hand[1]:juice_up(0.3, 0.3); return true end })
                 event({trigger = 'after', delay = 0.1,  func = function() context.scoring_hand[1]:change_suit(context.scoring_hand[2].config.card.suit); return true end })
                 event({trigger = 'after', delay = 0.15, func = function() context.scoring_hand[1]:flip(); play_sound('tarot2', 1, 0.6); big_juice(card); context.scoring_hand[1]:juice_up(0.3, 0.3); return true end })
-                forced_message(loc.dictionary.copied, card, G.C.RED, true)
+                forced_message(G.localization.misc.dictionary.bunc_copied, card, G.C.RED, true)
             end
         end
     end
@@ -1072,7 +1059,7 @@ create_joker({ -- Ghost Print
     custom_vars = function(self, info_queue, card)
         local vars
         if card.ability.extra.last_hand == 'Nothing' then
-            vars = {loc.dictionary.nothing}
+            vars = {G.localization.misc.dictionary.bunc_nothing}
         else
             vars = {G.localization.misc['poker_hands'][card.ability.extra.last_hand]}
         end
@@ -1161,7 +1148,7 @@ create_joker({ -- Shepherd
         if context.after and context.poker_hands ~= nil and next(context.poker_hands['Pair']) and not context.blueprint then
             card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.bonus
 
-            forced_message('+'..tostring(card.ability.extra.chips)..' '..loc.dictionary.chips, card, G.C.BLUE, true)
+            forced_message('+'..tostring(card.ability.extra.chips)..' '..G.localization.misc.dictionary.bunc_chips, card, G.C.BLUE, true)
         end
 
         if context.joker_main then
@@ -1394,7 +1381,7 @@ create_joker({ -- Carnival
                     card:juice_up(0.8, 0.8)
                     card.ability.extra.ante = G.GAME.round_resets.ante
                     ease_ante(-1)
-                    forced_message(loc.dictionary.loop, card, G.C.BLACK)
+                    forced_message(G.localization.misc.dictionary.bunc_loop, card, G.C.BLACK)
                     joker_to_destroy:start_dissolve({G.C.BLACK}, nil, 1.6)
                     play_sound('slice1', 0.96+math.random()*0.08)
                 end
@@ -1517,7 +1504,7 @@ create_joker({ -- Zero Shapiro
                 end
 
                 return {
-                    extra = {message = '+X'..card.ability.extra.bonus..' '..loc.dictionary.chance, colour = G.C.GREEN},
+                    extra = {message = '+X'..card.ability.extra.bonus..' '..G.localization.misc.dictionary.bunc_chance, colour = G.C.GREEN},
                     card = card
                 }
             end
@@ -1614,7 +1601,7 @@ create_joker({ -- Registration Plate
     custom_vars = function(self, info_queue, card)
         local vars
         if card.ability.extra.combination == '' then
-            vars = {'2, 3, 4, 5 '..loc.dictionary.word_and..' 6'}
+            vars = {'2, 3, 4, 5 '..G.localization.misc.dictionary.bunc_word_and..' 6'}
         else
             vars = {card.ability.extra.combination}
         end
@@ -1640,7 +1627,7 @@ create_joker({ -- Registration Plate
             table.insert(card.ability.extra.ranks, card.ability.extra.card_list[i]:get_id())
         end
 
-        card.ability.extra.combination = table.concat(combination, ", ", 1, 4).." "..loc.dictionary.word_and.." "..table.concat(combination, " ", 5)
+        card.ability.extra.combination = table.concat(combination, ", ", 1, 4).." "..G.localization.misc.dictionary.bunc_word_and.." "..table.concat(combination, " ", 5)
     end,
     calculate = function(self, card, context)
         if context.end_of_round and #G.deck.cards ~= 0 then
@@ -1663,7 +1650,7 @@ create_joker({ -- Registration Plate
                 table.insert(card.ability.extra.ranks, card.ability.extra.card_list[i]:get_id())
             end
 
-            card.ability.extra.combination = table.concat(combination, ", ", 1, 4).." "..loc.dictionary.word_and.." "..table.concat(combination, " ", 5)
+            card.ability.extra.combination = table.concat(combination, ", ", 1, 4).." "..G.localization.misc.dictionary.bunc_word_and.." "..table.concat(combination, " ", 5)
         end
     end
 })
@@ -1842,7 +1829,7 @@ create_joker({ -- Conquest
             end
 
             if card.ability.extra.joker ~= 0 then
-                forced_message(loc.dictionary.debuffed, card, G.C.RED, true, card.ability.extra.joker)
+                forced_message(G.localization.misc.dictionary.bunc_debuffed, card, G.C.RED, true, card.ability.extra.joker)
             end
         end
         if context.joker_main then
@@ -2213,7 +2200,7 @@ create_joker({ -- Trigger Finger
                 if G.hand.highlighted then
                     G.FUNCS.play_cards_from_highlighted()
                     play_sound('bunc_gunshot')
-                    forced_message(loc.dictionary.pew, card, G.C.RED)
+                    forced_message(G.localization.misc.dictionary.bunc_pew, card, G.C.RED)
                 end
             return true end})
         end
@@ -2488,7 +2475,7 @@ create_joker({ -- Disproportionality
         for i = card.ability.extra.min, card.ability.extra.max do
             r_chips[#r_chips + 1] = string.format("%03d", i)
         end
-        local loc_chips = ' '..(loc.dictionary.chips)..' '
+        local loc_chips = ' '..(G.localization.misc.dictionary.bunc_chips)..' '
         local text = {
             [1] = "[1] Lua local 'handler'",
             [2] = "at file 'chip_mod.lua:",
@@ -2668,7 +2655,7 @@ create_joker({ -- Cellphone
             card.ability.extra.cards_to_hand = context.scoring_hand
         end
         if context.press_play and card.ability.extra.active and G.GAME.current_round.hands_played == 0 then
-            forced_message(loc.dictionary.accepted, card, G.C.GREEN)
+            forced_message(G.localization.misc.dictionary.bunc_accepted, card, G.C.GREEN)
         end
         if context.after and G.GAME.current_round.hands_played == 0 then
             event({func = function ()
@@ -2678,7 +2665,7 @@ create_joker({ -- Cellphone
         end
         if context.pre_discard and card.ability.extra.active then
             card.ability.extra.active = false
-            forced_message(loc.dictionary.declined, card, G.C.RED, true)
+            forced_message(G.localization.misc.dictionary.bunc_declined, card, G.C.RED, true)
         end
     end,
     set_ability = function(self, card, initial, delay_sprites)
@@ -2769,7 +2756,7 @@ create_joker({ -- Mousetrap
             if pseudorandom('mousetrap'..G.SEED) < G.GAME.probabilities.normal / card.ability.extra.odds then
                 if G.GAME.current_round.hands_left ~= 0 then ease_hands_played(-1) end
                 event({func = function() play_sound('bunc_mousetrap') return true end})
-                forced_message(loc.dictionary.ouch, card, G.C.RED, true)
+                forced_message(G.localization.misc.dictionary.bunc_ouch, card, G.C.RED, true)
             else
                 return {
                     message = localize{type='variable', key='a_chips', vars={card.ability.extra.chips}},
@@ -3257,7 +3244,7 @@ create_joker({ -- Rigoletto
     name = 'Rigoletto', position = 1,
     vars = {{bonus = 0.2}, {xmult = 1}, {tally = 0}},
     custom_vars = function(self, info_queue, card)
-        info_queue[#info_queue+1] = {set = 'Other', key = 'exotic_cards'}
+        info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_exotic_cards'}
         return {vars = {card.ability.extra.bonus, card.ability.extra.xmult}}
     end,
     rarity = 'Legendary', cost = 20,
@@ -3300,7 +3287,7 @@ SMODS.Consumable{ -- The Sky
     set = 'Tarot', atlas = 'bunco_tarots',
     key = 'sky', loc_txt = loc.sky,
     set_card_type_badge = function(self, card, badges)
-        badges[1] = create_badge(loc.dictionary.mysterious_tarot, get_type_colour(self or card.config, card), nil, 1.2)
+        badges[1] = create_badge(G.localization.misc.dictionary.bunc_mysterious_tarot, get_type_colour(self or card.config, card), nil, 1.2)
     end,
 
     config = {max_highlighted = 3, suit_conv = 'bunc_Fleurons'},
@@ -3342,7 +3329,7 @@ SMODS.Consumable{ -- The Abyss
     set = 'Tarot', atlas = 'bunco_tarots',
     key = 'abyss', loc_txt = loc.abyss,
     set_card_type_badge = function(self, card, badges)
-        badges[1] = create_badge(loc.dictionary.mysterious_tarot, get_type_colour(self or card.config, card), nil, 1.2)
+        badges[1] = create_badge(G.localization.misc.dictionary.bunc_mysterious_tarot, get_type_colour(self or card.config, card), nil, 1.2)
     end,
 
     config = {max_highlighted = 3, suit_conv = 'bunc_Halberds'},
@@ -4277,7 +4264,7 @@ SMODS.Consumable{ -- The /
     end,
 
     set_card_type_badge = function(self, card, badges)
-        badges[1] = create_badge(loc.dictionary.mysterious_polymino, get_type_colour(self or card.config, card), nil, 1.2)
+        badges[1] = create_badge(G.localization.misc.dictionary.bunc_mysterious_polymino, get_type_colour(self or card.config, card), nil, 1.2)
     end,
 
     can_use = function(self, card)
@@ -4722,7 +4709,7 @@ SMODS.Blind{ -- The Tine
     end,
     process_loc_text = function(self)
         SMODS.Blind.process_loc_text(self)
-        self.vars = {loc.dictionary.most_played_rank}
+        self.vars = {G.localization.misc.dictionary.bunc_most_played_rank}
     end,
 
     debuff_card = function(self, card, from_blind)
@@ -4838,7 +4825,7 @@ SMODS.Blind{ -- The Mask
     end,
     process_loc_text = function(self)
         SMODS.Blind.process_loc_text(self)
-        self.vars = {localize('ph_most_played'), loc.dictionary.least_played_hand}
+        self.vars = {localize('ph_most_played'), G.localization.misc.dictionary.bunc_least_played_hand}
     end,
 
     modify_hand = function(self, cards, poker_hands, text, mult, hand_chips)
@@ -5031,7 +5018,7 @@ SMODS.Blind{ -- The Blade
     end,
     process_loc_text = function(self)
         SMODS.Blind.process_loc_text(self)
-        self.vars = {loc.dictionary.blade}
+        self.vars = {G.localization.misc.dictionary.bunc_blade}
     end,
 
     boss_colour = HEX('d92034'),
@@ -5335,7 +5322,7 @@ SMODS.Back{ -- Fairy
 
     config = {amount = 4},
     loc_vars = function(self)
-        return {vars = {self.config.amount, localize{type = 'name_text', set = 'Other', key = 'exotic_cards'}}}
+        return {vars = {self.config.amount, localize{type = 'name_text', set = 'Other', key = 'bunc_exotic_cards'}}}
     end,
 
     unlocked = false,
@@ -5705,7 +5692,7 @@ SMODS.Tag{ -- Filigree
 
     config = {type = 'standard_pack_opened'},
     loc_vars = function(self, info_queue)
-        info_queue[#info_queue+1] = {set = 'Other', key = 'exotic_cards'}
+        info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_exotic_cards'}
         return {}
     end,
     apply = function(self, tag, context)

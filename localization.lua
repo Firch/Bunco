@@ -2514,7 +2514,7 @@ return {
             ['text'] = {
                 [1] = 'After defeating each',
                 [2] = '{C:attention}Boss Blind{}, add #1#',
-                [3] = "random {C:bunco_exotic,T:exotic_cards}#2#",
+                [3] = "random {C:bunco_exotic,T:bunc_exotic_cards}#2#",
                 [4] = "to your deck"
             },
             ['unlock'] = {
@@ -2527,7 +2527,7 @@ return {
             ['text'] = {
                 [1] = 'Despues de derrotar cada',
                 [2] = '{C:attention}ciega jefe{}, agrega #1#',
-                [3] = "{C:bunco_exotic,T:exotic_cards}#2#",
+                [3] = "{C:bunco_exotic,T:bunc_exotic_cards}#2#",
                 [4] = " al azar a tu baraja"
             },
             ['unlock'] = {
