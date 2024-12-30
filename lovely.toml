@@ -203,11 +203,13 @@ or string.find(assembled_string, localize('Clubs', 'suits_plural')) then
     assembled_string = '♣'..assembled_string
 end
 
-if string.find(assembled_string, 'Fleuron') then
+if string.find(assembled_string, localize('bunc_Fleurons', 'suits_singular'))
+or string.find(assembled_string, localize('bunc_Fleurons', 'suits_plural')) then
     assembled_string = '✤'..assembled_string
 end
 
-if string.find(assembled_string, 'Halberd') then
+if string.find(assembled_string, localize('bunc_Halberds', 'suits_singular'))
+or string.find(assembled_string, localize('bunc_Halberds', 'suits_plural')) then
     assembled_string = '✠'..assembled_string
 end
 

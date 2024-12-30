@@ -4391,8 +4391,6 @@ SMODS.Suit{ -- Fleurons
     lc_colour = HEX('d6901a'),
     hc_colour = HEX('dbb529'),
 
-    loc_txt = loc.fleurons,
-
     in_pool = function(self, args)
         if args and args.initial_deck then
             return false
@@ -4417,8 +4415,6 @@ SMODS.Suit{ -- Halberds
 
     lc_colour = HEX('6e3c63'),
     hc_colour = HEX('993283'),
-
-    loc_txt = loc.halberds,
 
     in_pool = function(self, args)
         if args and args.initial_deck then

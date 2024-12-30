@@ -33,6 +33,14 @@ return {
             bunc_least_played_hand = '(least played hand)',
             bunc_blade = '(1.5X blind score)',
             bunc_exceeded_score = 'Exceeded the limit!',
+        },
+        suits_singular={
+            bunc_Fleurons = 'Fleuron',
+            bunc_Halberds = 'Halberd'
+        },
+        suits_plural={
+            bunc_Fleurons = 'Fleurons',
+            bunc_Halberds = 'Halberds'
         }
     },
     descriptions = {
