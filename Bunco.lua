@@ -3643,7 +3643,6 @@ SMODS.ConsumableType{
     key = 'Polymino',
     primary_colour = HEX('424e54'),
     secondary_colour = G.C.BUNCO_VIRTUAL_DARK,
-    loc_txt = loc.polymino,
     collection_rows = {4, 4}
 }
 

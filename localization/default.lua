@@ -33,6 +33,12 @@ return {
             bunc_least_played_hand = '(least played hand)',
             bunc_blade = '(1.5X blind score)',
             bunc_exceeded_score = 'Exceeded the limit!',
+
+            -- Consumable types
+
+            k_polymino = 'Polymino',
+            b_polymino_cards = 'Polymino Cards'
+
         },
 
         -- Suits
@@ -88,6 +94,18 @@ return {
                 ['text'] = {
                     [1] = 'Cards with',
                     [2] = '{C:bunc_fleurons}Fleuron{} or {C:bunc_halberds}Halberd{} suit'
+                }
+            },
+
+            -- Undiscovered     
+
+            undiscovered_polymino = {
+                ['name'] = 'Not Discovered',
+                ['text'] = {
+                    [1] = 'Purchase or use',
+                    [2] = 'this card in an',
+                    [3] = 'unseeded run to',
+                    [4] = 'learn what it does'
                 }
             }
         }
