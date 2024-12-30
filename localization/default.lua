@@ -254,6 +254,733 @@ return {
                     [3] = 'in {C:attention}Booster Pack{}',
                     [4] = '{C:inactive}(Currently {C:red}+#2#{C:inactive} Mult)'
                 }
+            },
+
+            -- Main Jokers
+
+            j_bunc_cassette = {
+                ['name'] = 'Cassette',
+                ['text'] = {
+                    [1] = 'On discard, flip Joker to the other side',
+                    [2] = '{C:attention}A side:{} Cards with light suit',
+                    [3] = 'give {C:chips}+#1#{} Chips when scored',
+                    [4] = '{C:attention}B side:{} Cards with dark suit',
+                    [5] = 'give {C:mult}+#2#{} Mult when scored'
+                    -- TODO would be good to have a line for the side
+                    -- or colorize the active side
+                }
+            },
+            j_bunc_mosaic = {
+                ['name'] = 'Mosaic Joker',
+                ['text'] = {
+                    [1] = 'Played {C:attention}Stone Cards',
+                    [2] = 'give {C:mult}+#1#{} Mult',
+                    [3] = 'when scored'
+                },
+                ['unlock'] = {
+                    [1] = 'Play a 5 card hand',
+                    [2] = 'that contains only',
+                    [3] = '{C:attention,E:1}Stone{} cards'
+                }
+            },
+            j_bunc_voxel = {
+                ['name'] = 'Voxel Joker',
+                ['text'] = {
+                    [1] = '{X:mult,C:white}X#1#{} Mult, {X:mult,C:white}-X#2#{} Mult for each',
+                    [2] = '{C:attention}Enhanced card{} in your {C:attention}full deck{}',
+                    [3] = '{C:inactive}(Currently {X:mult,C:white}X#3#{C:inactive} Mult)'
+                },
+                ['unlock'] = {
+                    [1] = 'Have at least {C:attention}10',
+                    [2] = '{E:1,C:attention}Enhanced{} cards in',
+                    [3] = 'your deck'
+                    -- TODO localize number
+                }
+            },
+            j_bunc_crop_circles = {
+                ['name'] = 'Crop Circles',
+                ['text'] = {
+                    [1] = 'Base suit {C:clubs}Clubs{} give {C:mult}+3{} Mult,',
+                    [2] = '{C:attention}8s{} give {C:mult}+2{} Mult,',
+                    [3] = '{C:attention}Qs{}, {C:attention}10s{}, {C:attention}9s{}, {C:attention}6s{} give {C:mult}+1{} Mult'
+                }
+            },
+            j_bunc_crop_circles_exotic = {
+                ['name'] = 'Crop Circles',
+                ['text'] = {
+                    [1] = 'Base suit {C:bunc_fleurons}Fleurons{} give {C:mult}+4{} Mult,',
+                    [2] = 'Base suit {C:clubs}Clubs{} give {C:mult}+3{} Mult,',
+                    [3] = '{C:attention}8s{} give {C:mult}+2{} Mult,',
+                    [4] = '{C:attention}Qs{}, {C:attention}10s{}, {C:attention}9s{}, {C:attention}6s{} give {C:mult}+1{} Mult'
+                }
+            },
+            j_bunc_xray = {
+                ['name'] = 'X-Ray',
+                ['text'] = {
+                    [1] = 'This Joker gains {X:mult,C:white}X#1#{} Mult',
+                    [2] = 'per card drawn face down',
+                    [3] = '{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)'
+                },
+                ['unlock'] = {
+                    [1] = 'Complete the {E:1,C:attention}X-ray Vision',
+                    [2] = 'challenge'
+                }
+            },
+            j_bunc_dread = {
+                ['name'] = 'Dread',
+                ['text'] = {
+                    [1] = 'After scoring your {C:attention}last{} {C:blue}hand{},',
+                    [2] = 'upgrade it by {C:attention}2 levels{}',
+                    [3] = 'and {C:attention}destroy{} scored cards',
+                    [4] = '{C:red}Lose{} all {C:attention}gained levels{} if you remove this Joker'
+                },
+                ['unlock'] = {
+                    [1] = 'Reduce your deck',
+                    [2] = 'by at least {E:1,C:attention}10{} cards',
+                    [3] = 'in one round'
+                    -- TODO localize number
+                }
+            },
+            j_bunc_prehistoric = {
+                ['name'] = 'Prehistoric Joker',
+                ['text'] = {
+                    [1] = 'Played cards that share',
+                    [2] = 'both {C:attention}rank and suit{} with an',
+                    [3] = '{C:attention}already-scored card{} this round',
+                    [4] = 'give {C:mult}+#1#{} Mult'
+                },
+                ['unlock'] = {
+                    [1] = 'Play a',
+                    [2] = '{E:1,C:attention}Flush Five'
+                }
+            },
+            j_bunc_linocut = {
+                ['name'] = 'Linocut Joker',
+                ['text'] = {
+                    [1] = 'When you play exactly {C:attention}2{} cards',
+                    [2] = 'that form a {C:attention}Pair{},',
+                    [3] = "convert the {C:attention}left{} card's suit",
+                    [4] = "into the {C:attention}right{} card's suit",
+                    [5] = '{C:inactive}(Drag to rearrange)'
+                    -- TODO this joker is a bit wordy
+                }
+            },
+            j_bunc_ghost_print = {
+                ['name'] = 'Ghost Print',
+                ['text'] = {
+                    [1] = 'Gives Chips and Mult',
+                    [2] = 'from last {C:attention}hand type{} played',
+                    [3] = '{C:inactive}(Last poker hand: #1#)'
+                }
+            },
+            j_bunc_loan_shark = {
+                ['name'] = 'Loan Shark',
+                ['text'] = {
+                    [1] = 'Gain {C:money}$#1#',
+                    [2] = 'when acquired...'
+                },
+                ['unlock'] = {
+                    [1] = 'Spend at least {E:1,C:attention}$100',
+                    [2] = 'during a single round'
+                }
+            },
+            j_bunc_loan_shark_full = {
+                ['name'] = 'Loan Shark',
+                ['text'] = {
+                    [1] = 'Gain {C:money}$#1#{} when acquired,',
+                    [2] = 'set sell price to {C:money}$-100'
+                }
+            },
+            j_bunc_basement = {
+                ['name'] = 'Basement Joker',
+                ['text'] = {
+                    [1] = 'When {C:attention}Boss Blind{} is defeated,',
+                    [2] = 'create a {C:spectral}Spectral{} card',
+                    [3] = '{C:inactive}(Must have room)'
+                }
+            },
+            j_bunc_shepherd = {
+                ['name'] = 'Shepherd Joker',
+                ['text'] = {
+                    [1] = 'This Joker gains {C:chips}+#1#{} Chips',
+                    [2] = 'when played hand contains a {C:attention}Pair',
+                    [3] = '{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)'
+                }
+            },
+            j_bunc_knight = {
+                ['name'] = 'Joker Knight',
+                ['text'] = {
+                    [1] = 'When {C:attention}Blind{} is selected, {C:attention}shuffle{} all Jokers',
+                    [2] = 'and this Joker gains {C:mult}+#1#{} Mult,',
+                    [3] = '{C:red}resets{} when any Joker is rearranged',
+                    [4] = '{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)'
+                },
+                ['unlock'] = {
+                    [1] = 'Defeat {E:1,C:attention}Amber Acorn',
+                    [2] = 'without disabling it'
+                }
+            },
+            j_bunc_jmjb = {
+                ['name'] = 'Joker Man & Jester Boy Trading Card No. 54',
+                ['text'] = {
+                    [1] = '{C:attention}Standard Packs{} contain',
+                    [2] = 'only {C:attention}Enhanced cards{}'
+                },
+                ['unlock'] = {
+                    [1] = 'Open {E:1,C:attention}50',
+                    [2] = 'Booster Packs'
+                    -- TODO localize number
+                }
+            },
+            j_bunc_dogs_playing_poker = {
+                ['name'] = 'Dogs Playing Poker',
+                ['text'] = {
+                    [1] = '{X:mult,C:white}X#1#{} Mult if every scored',
+                    [2] = 'rank is {C:attention}2{}, {C:attention}3{}, {C:attention}4{}, or {C:attention}5'
+                }
+            },
+            j_bunc_righthook = {
+                ['name'] = 'Righthook Joker',
+                ['text'] = {
+                    [1] = 'Retrigger rightmost scored card',
+                    [2] = 'one time per remaining {C:blue}hand{}',
+                },
+                ['unlock'] = {
+                    [1] = 'Retrigger a played',
+                    [2] = 'card at least',
+                    [3] = '{E:1,C:attention}5 times{}'
+                    -- TODO localize number
+                }
+            },
+            j_bunc_fiendish = {
+                ['name'] = 'Fiendish Joker',
+                ['text'] = {
+                    [1] = 'Double all sources of money,',
+                    [2] = '{C:green}#1# in #2#{} chance to pay out',
+                    [3] = 'with {C:money}$1{} instead'
+                },
+                ['unlock'] = {
+                    [1] = 'Complete the {E:1,C:attention}Double or Nothing',
+                    [2] = 'challenge'
+                }
+            },
+            j_bunc_carnival = {
+                ['name'] = 'Carnival',
+                ['text'] = {
+                    [1] = 'After defeating {C:attention}Boss Blind{},',
+                    [2] = '{C:attention}destroy{} a random Joker to',
+                    [3] = 'go one Ante back, next time',
+                    [4] = 'works only on a greater Ante'
+                    -- TODO needs a line for whether it's active / ante it will be active
+                },
+                ['unlock'] = {
+                    [1] = 'Reach Ante',
+                    [2] = 'level {E:1,C:attention}0'
+                }
+            },
+            j_bunc_sledgehammer = {
+                ['name'] = 'Sledgehammer',
+                ['text'] = {
+                    [1] = '{C:attention}Glass Cards{} give +{X:mult,C:white}X#1#{} Mult',
+                    [2] = 'but are guaranteed to break'
+                },
+                ['unlock'] = {
+                    [1] = 'Play a 5 card hand',
+                    [2] = 'that contains only',
+                    [3] = '{C:attention,E:1}Glass{} cards'
+                }
+            },
+            j_bunc_doorhanger = {
+                ['name'] = 'Doorhanger',
+                ['text'] = {
+                    [1] = '{C:blue}Common{} Jokers do not appear',
+                    [2] = '{s:0.8}Different rarities appear instead'
+                },
+                ['unlock'] = {
+                    [1] = 'Win a run without',
+                    [2] = 'ever having',
+                    [3] = '{C:attention}Common{} Jokers' -- Sorry, no E:1! It doesn't work
+                }
+            },
+            j_bunc_fingerprints = {
+                ['name'] = 'Fingerprints',
+                ['text'] = {
+                    [1] = 'Scored cards in {C:attention}winning hand{}',
+                    [2] = 'gain {C:chips}+#1#{} Chips for',
+                    [3] = 'next round only',
+                }
+            },
+            j_bunc_zero_shapiro = {
+                ['name'] = 'Zero Shapiro',
+                ['text'] = {
+                    [1] = 'This Joker gains {C:attention}#1#X{} to',
+                    [2] = '{C:green,E:1,S:1.1}probabilities{} {C:attention}this round{} when a',
+                    [3] = 'card with {C:attention}no{}, {C:attention}zero{}, or {C:attention}non-count{}',
+                    [4] = 'rank scores {C:inactive}(K, Q, J, 0, Rankless)',
+                    [5] = '{C:inactive}(Currently {C:attention}X#2#{C:inactive} to {C:green,E:1,S:1.1}probabilities{C:inactive})'
+                    -- TODO not sure how to word non-countable
+                }
+            },
+            j_bunc_nil_bill = {
+                ['name'] = 'Nil Bill',
+                ['text'] = {
+                    [1] = '{C:attention}Debuffed{} cards earn',
+                    [2] = '{C:money}$#1#{} when scored'
+                }
+            },
+            j_bunc_bierdeckel = {
+                ['name'] = 'Bierdeckel',
+                ['text'] = {
+                    [1] = 'Cards in hand gain',
+                    [2] = '{C:chips}+#1#{} Chips this round',
+                    [3] = 'after play or discard'
+                }
+            },
+            j_bunc_registration_plate = {
+                ['name'] = 'Registration Plate',
+                ['text'] = {
+                    [1] = '#1#',
+                    [2] = 'has the Chips and Mult of all',
+                    [3] = '{C:attention}poker hands{} played this game',
+                    [4] = '{s:0.8}Combination changes every round'
+                },
+                ['unlock'] = {
+                    [1] = 'Complete the {E:1,C:attention}15 Minute City',
+                    [2] = 'challenge'
+                }
+            },
+            j_bunc_slothful = {
+                ['name'] = 'Slothful Joker',
+                ['text'] = {
+                    [1] = 'Played {C:attention}Wild Cards',
+                    [2] = 'give {C:mult}+#1#{} Mult',
+                    [3] = 'when scored'
+                },
+                ['unlock'] = {
+                    [1] = 'Play a 5 card hand',
+                    [2] = 'that contains only',
+                    [3] = '{C:attention,E:1}Wild{} cards'
+                }
+            },
+            j_bunc_neon = {
+                ['name'] = 'Neon Joker',
+                ['text'] = {
+                    [1] = 'This Joker gains {X:mult,C:white}X#1#{} Mult',
+                    [2] = 'per {C:attention}debuffed{} card scored',
+                    [3] = '{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)'
+                },
+                ['unlock'] = {
+                    [1] = 'Play a 5 card hand',
+                    [2] = 'that contains only',
+                    [3] = '{C:attention,E:1}Debuffed{} cards'
+                }
+            },
+            j_bunc_gameplan = {
+                ['name'] = 'Gameplan',
+                ['text'] = {
+                    [1] = '{C:attention}Jokers{} next to this Joker',
+                    [2] = 'are {C:red}debuffed{} and',
+                    [3] = 'give {C:mult}+#1#{} Mult'
+                },
+                ['unlock'] = {
+                    [1] = 'Defeat {E:1,C:attention}Verdant Leaf',
+                    [2] = 'without disabling it'
+                }
+            },
+            j_bunc_conquest = {
+                ['name'] = 'Conquest',
+                ['text'] = {
+                    [1] = '{C:chips}+#1#{} Chips,',
+                    [2] = '{C:red}debuffs{} random Joker',
+                    [3] = 'when {C:attention}Blind{} is selected'
+                },
+                ['unlock'] = {
+                    [1] = 'Defeat {E:1,C:attention}Crimson Heart',
+                    [2] = 'without disabling it'
+                }
+            },
+            j_bunc_hierarchy_of_needs = {
+                ['name'] = 'Hierarchy of Needs',
+                ['text'] = {
+                    [1] = '{C:mult}+#1#{} Mult per',
+                    -- TODO do wilds count, or base suit only?
+                    [2] = '{C:attention}2-Ace{} of the same suit',
+                    [3] = 'in your {C:attention}full deck',
+                    [4] = '{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)'
+                }
+            },
+            j_bunc_dwarven = {
+                ['name'] = 'Dwarven Joker',
+                ['text'] = {
+                    [1] = '{C:attention}Stone Cards{} held in hand',
+                    [2] = 'have the abilities of',
+                    [3] = '{C:attention}Steel{} and {C:attention}Gold Cards'
+                },
+                ['unlock'] = {
+                    [1] = 'Play a hand that',
+                    [2] = 'contains {E:1,C:attention}Stone{}, {E:1,C:attention}Steel,',
+                    [3] = 'and {E:1,C:attention}Gold{} cards'
+                }
+            },
+            j_bunc_aristocrat = {
+                ['name'] = 'Aristocrat',
+                ['text'] = {
+                    [1] = 'Choose an extra card',
+                    [2] = 'from {C:attention}Booster Packs'
+                },
+                ['unlock'] = {
+                    [1] = 'Win a run without',
+                    [2] = 'ever opening',
+                    [3] = '{C:attention,E:1}Booster Packs'
+                }
+            },
+            j_bunc_metallurgist = {
+                ['name'] = 'Metallurgist',
+                ['text'] = {
+                    [1] = '{C:attention}Gold Cards{} give {C:mult}+#1#{} Mult',
+                    [2] = 'while held in hand'
+                }
+            },
+            j_bunc_juggalo = {
+                ['name'] = 'Juggalo',
+                ['text'] = {
+                    [1] = 'Adds {C:dark_edition}Foil{}, {C:dark_edition}Holographic{},',
+                    [2] = '{C:dark_edition}Polychrome{}, or {C:dark_edition}Glitter{} edition',
+                    [3] = 'to a random {C:attention}consumable{}',
+                    [4] = 'when {C:attention}Blind{} is selected'
+                },
+                ['unlock'] = {
+                    [1] = 'Use {C:attention,E:1}10{} consumables',
+                    [2] = 'with {C:attention,E:1}Editions'
+                    -- TODO localize number
+                }
+            },
+            j_bunc_head_in_the_clouds = {
+                ['name'] = 'Head in the Clouds',
+                ['text'] = {
+                    [1] = '{C:green}#1# in #2#{} chance to upgrade',
+                    [2] = '{C:attention}High Card{} when you',
+                    [3] = 'upgrade any {C:attention}poker hand'
+                },
+                ['unlock'] = {
+                    [1] = 'Win a run with',
+                    [2] = '{C:attention,E:1}High Card{} being the',
+                    [3] = 'most leveled poker hand'
+                }
+            },
+            j_bunc_headshot = {
+                ['name'] = 'Headshot',
+                ['text'] = {
+                    [1] = '{X:mult,C:white}X#1#{} Mult if played hand',
+                    [2] = 'contains only a single',
+                    [3] = 'scoring {C:attention}face card{}'
+                }
+            },
+            j_bunc_trigger_finger = {
+                ['name'] = 'Trigger Finger',
+                ['text'] = {
+                    [1] = '{X:mult,C:white}X#1#{} Mult,',
+                    [2] = '{C:attention}selecting{} a card has',
+                    [3] = 'a {C:green}#2# in #3#{} chance to',
+                    [4] = 'play selected cards'
+                },
+                ['unlock'] = {
+                    [1] = 'Defeat {E:1,C:attention}Cerulean Bell',
+                    [2] = 'without disabling it'
+                }
+            },
+            j_bunc_hopscotch = {
+                ['name'] = 'Hopscotch',
+                ['text'] = {
+                    [1] = 'Gain {C:red}+#1#{} discard',
+                    [2] = 'if played hand',
+                    [3] = 'contains a {C:attention}Straight{}'
+                }
+            },
+            j_bunc_pawn = {
+                ['name'] = 'Pawn',
+                ['text'] = {
+                    [1] = 'Cards of the {C:attention}lowest{}',
+                    [2] = 'rank in your full deck',
+                    [3] = '{C:attention}increase in rank{} when scored'
+                    -- TODO "when scored" is only accurate
+                    -- if the card's rank changes during scoring
+                }
+            },
+            j_bunc_puzzle_board = {
+                ['name'] = 'Puzzle Board',
+                ['text'] = {
+                    [1] = 'When {C:tarot}Tarot{} card is used,',
+                    [2] = '{C:green}#1# in #2#{} chance to add',
+                    [3] = '{C:dark_edition}Foil{}, {C:dark_edition}Holographic{}, or',
+                    [4] = '{C:dark_edition}Polychrome{} edition to a random',
+                    [5] = 'selected playing card'
+                }
+            },
+            j_bunc_vandalism = {
+                ['name'] = 'Vandalism',
+                ['text'] = {
+                    [1] = '{C:green}#1# in #2#{} chance for',
+                    [2] = 'cards to be drawn face down',
+                    [3] = 'Face down cards give',
+                    [4] = '{X:mult,C:white}X#3#{} Mult when scored'
+                },
+                ['unlock'] = {
+                    [1] = 'Play a 5 card hand',
+                    [2] = 'that contains only',
+                    [3] = '{C:attention,E:1}Flipped{} cards'
+                }
+            },
+            j_bunc_protester = {
+                ['name'] = 'Protester',
+                ['text'] = {
+                    [1] = 'Adds {C:attention}#1#X{} the highest rank',
+                    [2] = 'discarded this round to Chips',
+                    [3] = '{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)'
+                }
+            },
+            j_bunc_doodle = {
+                ['name'] = 'Doodle',
+                ['text'] = {
+                    [1] = '{C:attention}Copy{} first consumable',
+                    [2] = 'used this round',
+                    [3] = '{C:inactive}(Must have room)'
+                },
+                ['unlock'] = {
+                    [1] = 'Win {C:attention,E:1}10{} runs'
+                    -- TODO localize number
+                }
+            },
+            j_bunc_disproportionality = {
+                ['name'] = 'Disproportionality',
+                ['text'] = {
+                    [1] = ''
+                }
+            },
+            j_bunc_running_joke = {
+                ['name'] = 'Running Joke',
+                ['text'] = {
+                    [1] = 'Create a {C:dark_edition}Negative',
+                    [2] = '"{C:attention}Joker{}" at the',
+                    [3] = 'start of every shop'
+                }
+            },
+            j_bunc_on_broadway = {
+                ['name'] = 'On Broadway',
+                ['text'] = {
+                    [1] = '{C:chips}+#1#{} Chips and {C:mult}+#2#{} Mult if',
+                    [2] = 'played hand contains a {C:attention}Straight{}',
+                    [3] = 'with a scoring {C:attention}face card'
+                }
+            },
+            j_bunc_rasta = {
+                ['name'] = 'Rasta',
+                ['text'] = {
+                    [1] = '{C:mult}+#1#{} Mult if no',
+                    [2] = '{C:attention}Enhanced cards{}',
+                    [3] = 'are scored'
+                },
+                ['unlock'] = {
+                    [1] = 'Win a run without ever',
+                    [2] = 'having {C:attention,E:1}Enhanced cards'
+                }
+            },
+            j_bunc_critic = {
+                ['name'] = 'Critic',
+                ['text'] = {
+                    [1] = "{X:mult,C:white}X#1#{} Mult if played hand's",
+                    [2] = 'current score is',
+                    [3] = '{C:attention}less than 1/#2#{} of',
+                    [4] = "blind's required score"
+                }
+            },
+            j_bunc_cellphone = {
+                ['name'] = 'Cellphone',
+                ['text'] = {
+                    [1] = '{C:attention}Return{} scored cards to hand',
+                    [2] = 'after first play of round',
+                    [3] = 'if no discards were used'
+                }
+            },
+            j_bunc_wino = {
+                ['name'] = 'Wino',
+                ['text'] = {
+                    [1] = 'Played cards with',
+                    [2] = '{C:hearts}Heart{} and {C:diamonds}Diamond{} suit',
+                    [3] = 'give {C:chips}+#1#{} Chips when scored'
+                }
+            },
+            j_bunc_bounty_hunter = {
+                ['name'] = 'Bounty Hunter',
+                ['text'] = {
+                    [1] = '{C:mult}+#1#{} Mult for',
+                    [2] = 'each {C:money}$1{} below {C:money}$0',
+                    [3] = '{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)'
+                },
+                ['unlock'] = {
+                    [1] = 'Have less than {E:1,C:attention}$-20',
+                    [2] = 'during a single run'
+                    -- TODO localize number
+                }
+            },
+            j_bunc_mousetrap = {
+                ['name'] = 'Mousetrap',
+                ['text'] = {
+                    [1] = '{C:chips}+#1#{} Chips,',
+                    [2] = '{C:green}#2# in #3#{} chance to',
+                    [3] = '{C:attention}lose{} one hand instead'
+                }
+            },
+            j_bunc_the_joker = {
+                ['name'] = 'The Joker',
+                ['text'] = {
+                    [1] = 'After play, each scored',
+                    [2] = 'card without an enhancement has',
+                    [3] = '{C:green}#1# in #2#{} chance to be destroyed',
+                },
+                ['unlock'] = {
+                    [1] = 'Discover every',
+                    [2] = '{C:attention}Boss Blind'
+                }
+            },
+            j_bunc_tangram = {
+                ['name'] = 'Tangram',
+                ['text'] = {
+                    [1] = 'When a {C:attention}7{} is scored,',
+                    [2] = '{C:mult}+#1#{} Mult times the',
+                    [3] = 'amount of scored {C:attention}7s{}'
+                }
+            },
+            j_bunc_domino = {
+                ['name'] = 'Domino',
+                ['text'] = {
+                    [1] = 'Upon {C:attention}acquiring{} or {C:attention}using',
+                    [2] = 'a card from shop or',
+                    [3] = 'Booster Pack, acquire {C:attention}2',
+                    [4] = 'adjacent cards if possible'
+                }
+            },
+
+            -- Exotic Jokers
+
+            j_bunc_zealous = {
+                ['name'] = 'Zealous Joker',
+                ['text'] = {
+                    [1] = '{C:mult}+#1#{} Mult if played',
+                    [2] = 'hand contains',
+                    [3] = 'a {C:attention}Spectrum'
+                }
+            },
+            j_bunc_lurid = {
+                ['name'] = 'Lurid Joker',
+                ['text'] = {
+                    [1] = '{C:chips}+#1#{} Chips if played',
+                    [2] = 'hand contains',
+                    [3] = 'a {C:attention}Spectrum'
+                }
+            },
+            j_bunc_envious = {
+                ['name'] = 'Envious Joker',
+                ['text'] = {
+                    [1] = 'Played cards with',
+                    [2] = '{C:bunc_fleurons}Fleuron{} suit give',
+                    [3] = '{C:mult}+#1#{} Mult when scored'
+                }
+            },
+            j_bunc_proud = {
+                ['name'] = 'Proud Joker',
+                ['text'] = {
+                    [1] = 'Played cards with',
+                    [2] = '{C:bunc_halberds}Halberd{} suit give',
+                    [3] = '{C:mult}+#1#{} Mult when scored'
+                }
+            },
+            j_bunc_wishalloy = {
+                ['name'] = 'Wishalloy',
+                ['text'] = {
+                    [1] = '{C:green}#1# in #2#{} chance for',
+                    [2] = 'played {C:bunc_fleurons}Fleurons{} to',
+                    [3] = 'earn {C:money}${} equal to',
+                    [4] = "card's scored Chips"
+                }
+            },
+            j_bunc_unobtanium = {
+                ['name'] = 'Unobtanium',
+                ['text'] = {
+                    [1] = 'Played cards with',
+                    [2] = '{C:bunc_halberds}Halberd{} suit give',
+                    [3] = '{C:chips}+#1#{} Chips and {C:mult}+#2#{} Mult',
+                    [4] = "when scored"
+                }
+            },
+            j_bunc_dynasty = {
+                ['name'] = 'The Dynasty',
+                ['text'] = {
+                    [1] = '{X:mult,C:white}X#1#{} Mult if played',
+                    [2] = 'hand contains',
+                    [3] = 'a {C:attention}Spectrum'
+                }
+            },
+            j_bunc_magic_wand = {
+                ['name'] = 'Magic Wand',
+                ['text'] = {
+                    [1] = 'This Joker gains {X:mult,C:white}X#1#{} Mult',
+                    [2] = 'per {C:attention}consecutive{} played hand',
+                    [3] = 'containing a {C:attention}Spectrum{}',
+                    [4] = '{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)'
+                }
+            },
+            j_bunc_starfruit = {
+                ['name'] = 'Starfruit',
+                ['text'] = {
+                    [1] = '{C:green}#1# in #2#{} chance to level up played',
+                    [2] = '{C:attention}poker hand{} if it contains a {C:attention}Spectrum',
+                    [3] = '{C:green}#1# in #3#{} chance to destroy this Joker at end of round',
+                    [4] = 'if a {C:attention}Spectrum{}-containing hand was played this round'
+                    -- TODO this joker is way too long
+                }
+            },
+            j_bunc_fondue = {
+                ['name'] = 'Fondue',
+                ['text'] = {
+                    [1] = 'Scored cards in the',
+                    [2] = '{C:attention}first hand{} of round are',
+                    [3] = 'converted to {C:bunc_fleurons}Fleurons'
+                }
+            },
+            j_bunc_myopia = {
+                ['name'] = 'Myopia',
+                ['text'] = {
+                    [1] = '{C:spades}Spades{} and {C:clubs}Clubs{}',
+                    [2] = 'count as {C:bunc_halberds}Halberds'
+                }
+            },
+            j_bunc_astigmatism = {
+                ['name'] = 'Astigmatism',
+                ['text'] = {
+                    [1] = '{C:hearts}Hearts{} and {C:diamonds}Diamonds{}',
+                    [2] = 'count as {C:bunc_fleurons}Fleurons'
+                }
+            },
+            j_bunc_roygbiv = {
+                ['name'] = 'Roy G. Biv',
+                ['text'] = {
+                    [1] = '{C:green}#1# in #2#{} chance to add',
+                    [2] = '{C:dark_edition}Polychrome{} edition',
+                    [3] = 'to a random scored card if',
+                    [4] = 'hand contains a {C:attention}Spectrum'
+                }
+            },
+            j_bunc_rigoletto = {
+                ['name'] = 'Rigoletto',
+                ['text'] = {
+                    [1] = '{X:mult,C:white}X#1#{} Mult per {C:bunco_exotic}Exotic card{}',
+                    [2] = 'in your {C:attention}full deck',
+                    [3] = '{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)'
+                },
+                ['unlock'] = {
+                    [1] = '{E:1,s:1.3}?????'
+                }
             }
         }
     }
