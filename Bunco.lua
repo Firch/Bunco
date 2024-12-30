@@ -3283,7 +3283,7 @@ SMODS.Atlas({key = 'bunco_tarots', path = 'Consumables/Tarots.png', px = 71, py 
 
 SMODS.Consumable{ -- The Sky
     set = 'Tarot', atlas = 'bunco_tarots',
-    key = 'sky', loc_txt = loc.sky,
+    key = 'sky',
     set_card_type_badge = function(self, card, badges)
         badges[1] = create_badge(G.localization.misc.dictionary.bunc_mysterious_tarot, get_type_colour(self or card.config, card), nil, 1.2)
     end,
@@ -3325,7 +3325,7 @@ SMODS.Consumable{ -- The Sky
 
 SMODS.Consumable{ -- The Abyss
     set = 'Tarot', atlas = 'bunco_tarots',
-    key = 'abyss', loc_txt = loc.abyss,
+    key = 'abyss',
     set_card_type_badge = function(self, card, badges)
         badges[1] = create_badge(G.localization.misc.dictionary.bunc_mysterious_tarot, get_type_colour(self or card.config, card), nil, 1.2)
     end,
@@ -3371,7 +3371,7 @@ SMODS.Atlas({key = 'bunco_planets', path = 'Consumables/Planets.png', px = 71, p
 
 SMODS.Consumable{ -- Quaoar
     set = 'Planet', atlas = 'bunco_planets',
-    key = 'Quaoar', loc_txt = loc.quaoar,
+    key = 'quaoar',
     set_card_type_badge = function(self, card, badges)
         badges[1] = create_badge(config.fixed_badges and localize('k_planet_q') or localize('k_dwarf_planet'), get_type_colour(self or card.config, card), nil, 1.2)
     end,
@@ -3383,13 +3383,14 @@ SMODS.Consumable{ -- Quaoar
     process_loc_text = function(self)
         local target_text = G.localization.descriptions[self.set]['c_mercury'].text
         SMODS.Consumable.process_loc_text(self)
+        G.localization.descriptions[self.set][self.key] = {}
         G.localization.descriptions[self.set][self.key].text = target_text
     end
 }
 
 SMODS.Consumable{ -- Haumea
     set = 'Planet', atlas = 'bunco_planets',
-    key = 'Haumea', loc_txt = loc.haumea,
+    key = 'haumea',
     set_card_type_badge = function(self, card, badges)
         badges[1] = create_badge(config.fixed_badges and localize('k_planet_q') or localize('k_dwarf_planet'), get_type_colour(self or card.config, card), nil, 1.2)
     end,
@@ -3401,13 +3402,14 @@ SMODS.Consumable{ -- Haumea
     process_loc_text = function(self)
         local target_text = G.localization.descriptions[self.set]['c_mercury'].text
         SMODS.Consumable.process_loc_text(self)
+        G.localization.descriptions[self.set][self.key] = {}
         G.localization.descriptions[self.set][self.key].text = target_text
     end
 }
 
 SMODS.Consumable{ -- Sedna
     set = 'Planet', atlas = 'bunco_planets',
-    key = 'Sedna', loc_txt = loc.sedna,
+    key = 'sedna', loc_txt = loc.sedna,
     set_card_type_badge = function(self, card, badges)
         badges[1] = create_badge(config.fixed_badges and localize('k_planet_q') or localize('k_dwarf_planet'), get_type_colour(self or card.config, card), nil, 1.2)
     end,
@@ -3419,13 +3421,14 @@ SMODS.Consumable{ -- Sedna
     process_loc_text = function(self)
         local target_text = G.localization.descriptions[self.set]['c_mercury'].text
         SMODS.Consumable.process_loc_text(self)
+        G.localization.descriptions[self.set][self.key] = {}
         G.localization.descriptions[self.set][self.key].text = target_text
     end
 }
 
 SMODS.Consumable{ -- Makemake
     set = 'Planet', atlas = 'bunco_planets',
-    key = 'Makemake', loc_txt = loc.makemake,
+    key = 'makemake', loc_txt = loc.makemake,
     set_card_type_badge = function(self, card, badges)
         badges[1] = create_badge(config.fixed_badges and localize('k_planet_q') or localize('k_dwarf_planet'), get_type_colour(self or card.config, card), nil, 1.2)
     end,
@@ -3437,6 +3440,7 @@ SMODS.Consumable{ -- Makemake
     process_loc_text = function(self)
         local target_text = G.localization.descriptions[self.set]['c_mercury'].text
         SMODS.Consumable.process_loc_text(self)
+        G.localization.descriptions[self.set][self.key] = {}
         G.localization.descriptions[self.set][self.key].text = target_text
     end
 }
@@ -3447,7 +3451,7 @@ SMODS.Atlas({key = 'bunco_spectrals', path = 'Consumables/Spectrals.png', px = 7
 
 SMODS.Consumable{ -- Cleanse
     set = 'Spectral', atlas = 'bunco_spectrals',
-    key = 'cleanse', loc_txt = loc.cleanse,
+    key = 'cleanse',
 
     config = {max_highlighted = 3},
     pos = coordinate(1),
@@ -3654,7 +3658,7 @@ SMODS.UndiscoveredSprite{
 
 SMODS.Consumable{ -- The I
     set = 'Polymino', atlas = 'bunco_polyminoes',
-    key = 'the_i', loc_txt = loc.the_i,
+    key = 'the_i',
 
     loc_vars = function(self, info_queue, card)
         local example = {
@@ -3715,7 +3719,7 @@ SMODS.Consumable{ -- The I
 
 SMODS.Consumable{ -- The O
     set = 'Polymino', atlas = 'bunco_polyminoes',
-    key = 'the_o', loc_txt = loc.the_o,
+    key = 'the_o',
 
     loc_vars = function(self, info_queue, card)
         local example = {
@@ -3792,7 +3796,7 @@ SMODS.Consumable{ -- The O
 
 SMODS.Consumable{ -- The T
     set = 'Polymino', atlas = 'bunco_polyminoes',
-    key = 'the_t', loc_txt = loc.the_t,
+    key = 'the_t',
 
     loc_vars = function(self, info_queue, card)
         local example = {
@@ -3879,7 +3883,7 @@ SMODS.Consumable{ -- The T
 
 SMODS.Consumable{ -- The S
     set = 'Polymino', atlas = 'bunco_polyminoes',
-    key = 'the_s', loc_txt = loc.the_s,
+    key = 'the_s',
 
     loc_vars = function(self, info_queue, card)
         local example = {
@@ -3968,7 +3972,7 @@ SMODS.Consumable{ -- The S
 
 SMODS.Consumable{ -- The Z
     set = 'Polymino', atlas = 'bunco_polyminoes',
-    key = 'the_z', loc_txt = loc.the_z,
+    key = 'the_z',
 
     loc_vars = function(self, info_queue, card)
         local example = {
@@ -4054,7 +4058,7 @@ SMODS.Consumable{ -- The Z
 
 SMODS.Consumable{ -- The J
     set = 'Polymino', atlas = 'bunco_polyminoes',
-    key = 'the_j', loc_txt = loc.the_j,
+    key = 'the_j',
 
     loc_vars = function(self, info_queue, card)
         local example = {
@@ -4153,7 +4157,7 @@ SMODS.Consumable{ -- The J
 
 SMODS.Consumable{ -- The L
     set = 'Polymino', atlas = 'bunco_polyminoes',
-    key = 'the_l', loc_txt = loc.the_l,
+    key = 'the_l',
 
     loc_vars = function(self, info_queue, card)
         local example = {
@@ -4248,7 +4252,7 @@ SMODS.Consumable{ -- The L
 
 SMODS.Consumable{ -- The /
     set = 'Polymino', atlas = 'bunco_polyminoes',
-    key = 'the_slash', loc_txt = loc.the_slash,
+    key = 'the_slash',
 
     loc_vars = function(self, info_queue, card)
         local example = {
@@ -4342,7 +4346,7 @@ SMODS.Consumable{ -- The /
 
 SMODS.Consumable{ -- The 8
     set = 'Spectral', atlas = 'bunco_polyminoes',
-    key = 'the_8', loc_txt = loc.the_8,
+    key = 'the_8',
 
     hidden = true,
     soul_rate = 0.002,

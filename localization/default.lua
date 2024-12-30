@@ -97,7 +97,7 @@ return {
                 }
             },
 
-            -- Undiscovered     
+            -- Undiscovered
 
             undiscovered_polymino = {
                 ['name'] = 'Not Discovered',
@@ -106,6 +106,131 @@ return {
                     [2] = 'this card in an',
                     [3] = 'unseeded run to',
                     [4] = 'learn what it does'
+                }
+            }
+        },
+
+        -- Consumables
+
+        Tarot = {
+            c_bunc_sky = {
+                ['name'] = 'The Sky',
+                ['text'] = {
+                    [1] = 'Converts up to',
+                    [2] = '{C:attention}#1#{} selected cards',
+                    [3] = 'to {C:bunc_fleurons}Fleurons{}'
+                }
+            },
+            c_bunc_abyss = {
+                ['name'] = 'The Abyss',
+                ['text'] = {
+                    [1] = 'Converts up to',
+                    [2] = '{C:attention}#1#{} selected cards',
+                    [3] = 'to {C:bunc_halberds}Halberds{}'
+                }
+            },
+        },
+        Planet = {
+            c_bunc_quaoar = {
+                ['name'] = 'Quaoar'
+            },
+            c_bunc_haumea = {
+                ['name'] = 'Haumea'
+            },
+            c_bunc_sedna = {
+                ['name'] = 'Sedna'
+            },
+            c_bunc_makemake = {
+                ['name'] = 'Makemake'
+            },
+        },
+        Spectral = {
+            c_bunc_cleanse = {
+                ['name'] = 'Cleanse',
+                ['text'] = {
+                    [1] = 'Add {C:dark_edition}Fluorescent{} to',
+                    [2] = '{C:attention}#1#{} selected cards in hand'
+                }
+            },
+            c_bunc_the_8 = {
+                ['name'] = 'The 8',
+                ['text'] = {
+                    [1] = '{C:attention}Link together{} all',
+                    [2] = 'unlinked cards in hand',
+                }
+            }
+        },
+        Polymino = {
+            c_bunc_the_i = {
+                ['name'] = 'The I',
+                ['text'] = {
+                    [1] = '{C:attention}Link together{} 4 selected cards',
+                    [2] = 'that share the {C:attention}same rank or suit'
+                }
+            },
+            c_bunc_the_o = {
+                ['name'] = 'The O',
+                ['text'] = {
+                    [1] = '{C:attention}Link together{} 4 selected cards',
+                    [2] = 'where 2 cards share the {C:attention}same property',
+                    [3] = '{C:inactive}(rank or suit){} and the other 2 cards',
+                    [4] = 'share {C:attention}different type{} of the {C:attention}same property'
+                }
+            },
+            c_bunc_the_t = {
+                ['name'] = 'The T',
+                ['text'] = {
+                    [1] = '{C:attention}Link together{} 4 selected cards',
+                    [2] = 'where 3 cards share the {C:attention}same property',
+                    [3] = '{C:inactive}(rank or suit){} and the other card that',
+                    [4] = '{C:attention}does not share{} the {C:attention}same property{}',
+                    [5] = 'with the other cards'
+                }
+            },
+            c_bunc_the_s = {
+                ['name'] = 'The S',
+                ['text'] = {
+                    [1] = '{C:attention}Link together{} 4 selected cards',
+                    [2] = 'where {C:attention}2 groups{} of 2 cards share',
+                    [3] = 'the {C:attention}same rank{} within each group, with one',
+                    [4] = 'card from each group sharing a {C:attention}common suit'
+                }
+            },
+            c_bunc_the_z = {
+                ['name'] = 'The Z',
+                ['text'] = {
+                    [1] = '{C:attention}Link together{} 4 selected cards',
+                    [2] = 'where {C:attention}2 groups{} of 2 cards share',
+                    [3] = 'the {C:attention}same suit{} within each group, with one',
+                    [4] = 'card from each group sharing a {C:attention}common rank'
+                }
+            },
+            c_bunc_the_j = {
+                ['name'] = 'The J',
+                ['text'] = {
+                    [1] = '{C:attention}Link together{} 4 selected cards',
+                    [2] = 'where 3 cards share the {C:attention}same rank',
+                    [3] = 'and the other card that shares',
+                    [4] = 'a {C:attention}common suit{} while',
+                    [5] = 'not sharing the same rank'
+                }
+            },
+            c_bunc_the_l = {
+                ['name'] = 'The L',
+                ['text'] = {
+                    [1] = '{C:attention}Link together{} 4 selected cards',
+                    [2] = 'where 3 cards share the {C:attention}same suit',
+                    [3] = 'and the other card that shares',
+                    [4] = 'a {C:attention}common rank{} while',
+                    [5] = 'not sharing the same suit'
+                }
+            },
+            c_bunc_the_slash = {
+                ['name'] = 'The /',
+                ['text'] = {
+                    [1] = '{C:attention}Link together{} 4 selected cards',
+                    [2] = 'where all the cards have a',
+                    [3] = '{C:attention}different property{} {C:inactive}(rank and suit)'
                 }
             }
         }
