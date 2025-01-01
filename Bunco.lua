@@ -6248,10 +6248,10 @@ for i = 1, 4 do -- Blind
     SMODS.Booster{
         type = 'bunc_blind',
 
-        key = 'blind_'..i, loc_txt = loc.blind,
+        key = 'blind_'..i,
 
         loc_vars = function(self, info_queue, card)
-            return {vars = {self.config.extra}}
+            return {key = 'p_bunc_blind', vars = {self.config.extra}}
         end,
         config = {extra = 3, choose = 1},
 
@@ -6320,7 +6320,11 @@ for i = 1, 4 do -- Virtual
     SMODS.Booster{
         type = 'bunc_virtual',
 
-        key = 'virtual_'..(i <= 2 and i or i == 3 and 'jumbo' or 'mega'), loc_txt = loc.virtual,
+        key = 'virtual_'..(i <= 2 and i or i == 3 and 'jumbo' or 'mega'),
+
+        loc_vars = function(self, info_queue, card)
+            return {key = (self.key == 'p_bunc_virtual_1' or self.key == 'p_bunc_virtual_2') and 'p_bunc_virtual_normal' or self.key, vars = {self.config.choose, self.config.extra}}
+        end,
 
         config = {extra = i <= 2 and 2 or 4, choose = i <= 3 and 1 or 2},
 

@@ -114,6 +114,48 @@ return {
                     [3] = 'unseeded run to',
                     [4] = 'learn what it does'
                 }
+            },
+
+            -- Booster Packs
+
+            p_bunc_blind = {
+                ['group_name'] = 'Blind Pack',
+                ['name'] = 'Blind Pack',
+                ['text'] = {
+                    [1] = 'Choose one of up to',
+                    [2] = '{C:attention}#1# Boss Blinds{} to',
+                    [3] = 'replace on this Ante'
+                }
+            },
+            p_bunc_virtual_normal = {
+                ['group_name'] = 'Virtual Pack',
+                ['name'] = 'Virtual Pack',
+                ['text'] = {
+                    [1] = 'Draw the whole deck and',
+                    [2] = 'choose {C:attention}#1#{} of up to',
+                    [3] = '{C:attention}#2#{C:bunco_virtual_dark} Polymino{} cards to',
+                    [4] = 'be used immediately'
+                }
+            },
+            p_bunc_virtual_jumbo = {
+                ['group_name'] = 'Virtual Pack',
+                ['name'] = 'Jumbo Virtual Pack',
+                ['text'] = {
+                    [1] = 'Draw the whole deck and',
+                    [2] = 'choose {C:attention}#1#{} of up to',
+                    [3] = '{C:attention}#2#{C:bunco_virtual_dark} Polymino{} cards to',
+                    [4] = 'be used immediately'
+                }
+            },
+            p_bunc_virtual_mega = {
+                ['group_name'] = 'Virtual Pack',
+                ['name'] = 'Mega Virtual Pack',
+                ['text'] = {
+                    [1] = 'Draw the whole deck and',
+                    [2] = 'choose {C:attention}#1#{} of up to',
+                    [3] = '{C:attention}#2#{C:bunco_virtual_dark} Polymino{} cards to',
+                    [4] = 'be used immediately'
+                }
             }
         },
 
