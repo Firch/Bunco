@@ -5298,7 +5298,7 @@ SMODS.Blind{ -- Turquoise Shield
 SMODS.Atlas({key = 'bunco_decks', path = 'Decks/Decks.png', px = 71, py = 95})
 
 SMODS.Back{ -- Fairy
-	key = 'fairy', loc_txt = loc.fairy,
+	key = 'fairy',
 
     config = {amount = 4},
     loc_vars = function(self)
@@ -5342,7 +5342,7 @@ SMODS.Back{ -- Fairy
 }
 
 SMODS.Back{ -- Digital
-	key = 'digital', loc_txt = loc.digital,
+	key = 'digital',
 
     config = {polymino_rate = 2, consumables = {'c_bunc_the_i'}},
     loc_vars = function(self)

@@ -1159,6 +1159,25 @@ return {
                     [2] = "to this blind's required score"
                 }
             }
+        },
+        Back = {
+            b_bunc_fairy = {
+                ['name'] = 'Fairy Deck',
+                ['text'] = {
+                    [1] = 'After defeating each',
+                    [2] = '{C:attention}Boss Blind{}, add #1#',
+                    [3] = 'random {C:bunco_exotic,T:bunc_exotic_cards}#2#',
+                    [4] = 'to your deck'
+                }
+            },
+            b_bunc_digital = {
+                ['name'] = 'Digital Deck',
+                ['text'] = {
+                    [1] = '{C:bunco_virtual_dark}Polymino{} cards may',
+                    [2] = 'appear in the shop,',
+                    [3] = "start with {C:bunco_virtual_dark,T:c_bunc_the_i}The I{}"
+                }
+            }
         }
     }
 }
