@@ -183,34 +183,43 @@ position = 'before'
 match_indent = true
 payload = '''
 
+local function add_symbol(text, symbol)
+    local leading_spaces = string.match(text, "^%s*")
+    if #leading_spaces > 0 then
+        return leading_spaces..symbol..string.sub(text, #leading_spaces + 1)
+    else
+        return symbol..text
+    end
+end
+
 if string.find(assembled_string, localize('Diamonds', 'suits_singular'))
 or string.find(assembled_string, localize('Diamonds', 'suits_plural')) then
-    assembled_string = '♦'..assembled_string
+    assembled_string = add_symbol(assembled_string, '♦')
 end
 
 if string.find(assembled_string, localize('Hearts', 'suits_singular'))
 or string.find(assembled_string, localize('Hearts', 'suits_plural')) then
-    assembled_string = '♥'..assembled_string
+    assembled_string = add_symbol(assembled_string, '♥')
 end
 
 if string.find(assembled_string, localize('Spades', 'suits_singular'))
 or string.find(assembled_string, localize('Spades', 'suits_plural')) then
-    assembled_string = '♠'..assembled_string
+    assembled_string = add_symbol(assembled_string, '♠')
 end
 
 if string.find(assembled_string, localize('Clubs', 'suits_singular'))
 or string.find(assembled_string, localize('Clubs', 'suits_plural')) then
-    assembled_string = '♣'..assembled_string
+    assembled_string = add_symbol(assembled_string, '♣')
 end
 
 if string.find(assembled_string, localize('bunc_Fleurons', 'suits_singular'))
 or string.find(assembled_string, localize('bunc_Fleurons', 'suits_plural')) then
-    assembled_string = '✤'..assembled_string
+    assembled_string = add_symbol(assembled_string, '✤')
 end
 
 if string.find(assembled_string, localize('bunc_Halberds', 'suits_singular'))
 or string.find(assembled_string, localize('bunc_Halberds', 'suits_plural')) then
-    assembled_string = '✠'..assembled_string
+    assembled_string = add_symbol(assembled_string, '✠')
 end
 
 '''
