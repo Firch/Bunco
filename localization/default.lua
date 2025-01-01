@@ -88,7 +88,13 @@ return {
             -- Editions
 
             bunc_glitter = 'Glitter',
-            bunc_fluorescent = 'Fluorescent'
+            bunc_fluorescent = 'Fluorescent',
+
+            -- Stickers
+
+            bunc_scattering = 'Scattering',
+            bunc_hindered = 'Hindered',
+            bunc_reactive = 'Reactive'
         }
     },
     descriptions = {
@@ -155,6 +161,32 @@ return {
                     [2] = 'choose {C:attention}#1#{} of up to',
                     [3] = '{C:attention}#2#{C:bunco_virtual_dark} Polymino{} cards to',
                     [4] = 'be used immediately'
+                }
+            },
+
+            -- Stickers
+
+            bunc_scattering = {
+                ['name'] = 'Scattering',
+                ['text'] = {
+                    [1] = 'Destroys random',
+                    [2] = 'Joker when sold',
+                    [3] = 'or destroyed'
+                }
+            },
+            bunc_hindered = {
+                ['name'] = 'Hindered',
+                ['text'] = {
+                    [1] = 'Stays in place until',
+                    [2] = 'the end of the round',
+                    [3] = 'after being sold'
+                }
+            },
+            bunc_reactive = {
+                ['name'] = 'Reactive',
+                ['text'] = {
+                    [1] = 'Debuffed if no blinds',
+                    [2] = 'are skipped this Ante'
                 }
             }
         },

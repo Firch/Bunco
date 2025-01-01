@@ -6407,7 +6407,7 @@ end
 SMODS.Atlas({key = 'bunco_stickers', path = 'Stickers/Stickers.png', px = 71, py = 95})
 
 SMODS.Sticker{ -- Scattering
-    key = 'scattering', loc_txt = loc.scattering,
+    key = 'scattering',
 
     apply = function(self, card, val)
         if card.ability.eternal or card.ability.bunc_hindered or card.ability.bunc_reactive then return end
@@ -6423,7 +6423,7 @@ SMODS.Sticker{ -- Scattering
 }
 
 SMODS.Sticker{ -- Hindered
-    key = 'hindered', loc_txt = loc.hindered,
+    key = 'hindered',
 
     apply = function(self, card, val)
         if card.ability.eternal or card.ability.bunc_scattering or card.ability.bunc_reactive then return end
@@ -6440,7 +6440,7 @@ SMODS.Sticker{ -- Hindered
 }
 
 SMODS.Sticker{ -- Reactive
-    key = 'reactive', loc_txt = loc.reactive,
+    key = 'reactive',
 
     apply = function(self, card, val)
         if card.ability.eternal or card.ability.bunc_scattering or card.ability.bunc_hindered then return end
