@@ -5974,7 +5974,7 @@ SMODS.Edition{
 SMODS.Atlas({key = 'bunco_vouchers', path = 'Vouchers/Vouchers.png', px = 71, py = 95})
 
 SMODS.Voucher{ -- Lamination
-    key = 'lamination', loc_txt = loc.lamination,
+    key = 'lamination',
 
     unlocked = true,
 
@@ -5983,7 +5983,7 @@ SMODS.Voucher{ -- Lamination
 }
 
 SMODS.Voucher{ -- Supercoating
-    key = 'supercoating', loc_txt = loc.supercoating,
+    key = 'supercoating',
 
     requires = {'v_bunc_lamination'},
 
@@ -6000,7 +6000,7 @@ SMODS.Voucher{ -- Supercoating
 }
 
 SMODS.Voucher{ -- Hedge Trimmer
-    key = 'hedge_trimmer', loc_txt = loc.hedge_trimmer,
+    key = 'hedge_trimmer',
 
     config = {percent = 5},
     loc_vars = function(self, info_queue)
@@ -6014,7 +6014,7 @@ SMODS.Voucher{ -- Hedge Trimmer
 }
 
 SMODS.Voucher{ -- Chainsaw
-    key = 'chainsaw', loc_txt = loc.chainsaw,
+    key = 'chainsaw',
 
     config = {percent = 20},
     loc_vars = function(self, info_queue)
@@ -6040,7 +6040,7 @@ SMODS.Voucher{ -- Chainsaw
 }
 
 SMODS.Voucher{ -- Cups 'n' Balls
-    key = 'cups_n_balls', loc_txt = loc.cups_n_balls,
+    key = 'cups_n_balls',
 
     redeem = function(self)
         change_booster_amount(1)
@@ -6053,7 +6053,7 @@ SMODS.Voucher{ -- Cups 'n' Balls
 }
 
 SMODS.Voucher{ -- Shell Game
-    key = 'shell_game', loc_txt = loc.shell_game,
+    key = 'shell_game',
 
     requires = {'v_bunc_cups_n_balls'},
 
@@ -6070,7 +6070,7 @@ SMODS.Voucher{ -- Shell Game
 }
 
 SMODS.Voucher{ -- Disguise
-    key = 'disguise', loc_txt = loc.disguise,
+    key = 'disguise',
 
     unlocked = true,
 
@@ -6079,7 +6079,7 @@ SMODS.Voucher{ -- Disguise
 }
 
 SMODS.Voucher{ -- Masquerade
-    key = 'masquerade', loc_txt = loc.masquerade,
+    key = 'masquerade',
 
     requires = {'v_bunc_disguise'},
 
@@ -6106,7 +6106,7 @@ SMODS.Voucher{ -- Masquerade
 }
 
 SMODS.Voucher{ -- Fanny Pack
-    key = 'fanny_pack', loc_txt = loc.fanny_pack,
+    key = 'fanny_pack',
 
     config = {extra = {odds = 4}},
     loc_vars = function(self, info_queue, card)
@@ -6129,7 +6129,7 @@ SMODS.Voucher{ -- Fanny Pack
 }
 
 SMODS.Voucher{ -- Pin Collector
-    key = 'pin_collector', loc_txt = loc.pin_collector,
+    key = 'pin_collector',
 
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue+1] = {set = 'Tag', key = 'tag_bunc_triple'}
@@ -6151,7 +6151,7 @@ SMODS.Voucher{ -- Pin Collector
 }
 
 SMODS.Voucher{ -- Arcade Machine
-    key = 'arcade_machine', loc_txt = loc.arcade_machine,
+    key = 'arcade_machine',
 
     unlocked = true,
 
@@ -6160,7 +6160,7 @@ SMODS.Voucher{ -- Arcade Machine
 }
 
 SMODS.Voucher{ -- Polybius
-    key = 'polybius', loc_txt = loc.polybius,
+    key = 'polybius',
 
     requires = {'v_bunc_arcade_machine'},
 

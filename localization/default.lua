@@ -1346,6 +1346,130 @@ return {
                     [2] = 'or forced to be selected'
                 }
             }
+        },
+        Voucher = {
+            v_bunc_lamination = {
+                ['name'] = 'Lamination',
+                ['text'] = {
+                    [1] = 'Consumables in',
+                    [2] = '{C:attention}Booster Packs{} may',
+                    [3] = 'appear with {C:dark_edition}Edition'
+                }
+            },
+            v_bunc_supercoating = {
+                ['name'] = 'Supercoating',
+                ['text'] = {
+                    [1] = 'All consumables in',
+                    [2] = '{C:attention}Booster Packs{} will',
+                    [3] = 'appear with {C:dark_edition}Edition'
+                },
+                ['unlock'] = {
+                    [1] = 'Use {C:attention,E:1}5{} consumables',
+                    [2] = 'with {C:attention,E:1}Editions'
+                    -- TODO localize number
+                }
+            },
+            v_bunc_hedge_trimmer = {
+                ['name'] = 'Hedge Trimmer',
+                ['text'] = {
+                    [1] = "Reduce blind's score",
+                    [2] = 'by {C:attention}#1#%{} every hand played'
+                }
+            },
+            v_bunc_chainsaw = {
+                ['name'] = 'Chainsaw',
+                ['text'] = {
+                    [1] = 'All required scores',
+                    [2] = 'reduced by {C:attention}#1#%{}'
+                },
+                ['unlock'] = {
+                    [1] = "Reduce blind's score using",
+                    [2] = 'Hedge Trimmer',
+                    [3] = 'a total of {C:attention,E:1}20{} times'
+                    -- TODO localize number
+                }
+            },
+            v_bunc_cups_n_balls = {
+                ['name'] = "Cups 'n' Balls",
+                ['text'] = {
+                    [1] = '{C:attention}+1{} Booster Pack',
+                    [2] = 'slot available in shop'
+                }
+            },
+            v_bunc_shell_game = {
+                ['name'] = 'Shell Game',
+                ['text'] = {
+                    [1] = 'Reroll {C:attention}contents',
+                    [2] = 'of Booster Packs',
+                    [3] = '{C:attention}1{} time per pack'
+                },
+                ['unlock'] = {
+                    [1] = 'Open {E:1,C:attention}25',
+                    [2] = 'Booster Packs'
+                    -- TODO localize number
+                }
+            },
+            v_bunc_disguise = {
+                ['name'] = 'Disguise',
+                ['text'] = {
+                    [1] = '{C:attention}Blind Packs{} may',
+                    [2] = 'appear in the shop'
+                }
+            },
+            v_bunc_masquerade = {
+                ['name'] = 'Masquerade',
+                ['text'] = {
+                    [1] = 'All {C:attention}Blind Packs{} in',
+                    [2] = 'the shop are free'
+                },
+                ['unlock'] = {
+                    [1] = 'Replace {E:1,C:attention}5{}',
+                    [2] = 'Blinds with Blinds',
+                    [3] = 'from Blind Pack'
+                    -- TODO localize number
+                }
+            },
+            v_bunc_fanny_pack = {
+                ['name'] = 'Fanny Pack',
+                ['text'] = {
+                    [1] = '{C:green}#1# in #2#{} chance to',
+                    [2] = 'gain a {C:attention}Double Tag',
+                    [3] = 'each time a blind',
+                    [4] = 'is {C:attention}skipped'
+                }
+            },
+            v_bunc_pin_collector = {
+                ['name'] = 'Pin Collector',
+                ['text'] = {
+                    [1] = 'All new {C:attention}Double Tags',
+                    [2] = 'appear as {C:attention}Triple Tags'
+                },
+                ['unlock'] = {
+                    [1] = 'Skip a total of',
+                    [2] = '{E:1,C:attention}30{} blinds'
+                    -- TODO localize number
+                }
+            },
+            v_bunc_arcade_machine = {
+                ['name'] = 'Arcade Machine',
+                ['text'] = {
+                    [1] = '{C:bunco_virtual_dark}Virtual Packs',
+                    [2] = 'appear {C:attention}4X{} more often'
+                }
+            },
+            v_bunc_polybius = {
+                ['name'] = 'Polybius',
+                ['text'] = {
+                    [1] = '{C:bunco_virtual_dark}Polymino{} cards allow to',
+                    [2] = 'link {C:attention}one more{} card',
+                    [3] = '{s:0.6,C:inactive}Extra card can be of any property'
+                },
+                ['unlock'] = {
+                    [1] = 'Create a total of',
+                    [2] = '{E:1,C:attention}10{} linked groups'
+                    -- TODO localize number
+                }
+            }
         }
     }
 }
