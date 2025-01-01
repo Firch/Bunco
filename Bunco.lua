@@ -12,10 +12,9 @@
 -- Make configs apply immediately
 -- Shell Game should modify tables instead of replacing - see Blind Packs
 
-BUNCOMOD = {loc = {}, vars = {}, funcs = {}, content = SMODS.current_mod}
+BUNCOMOD = {vars = {}, funcs = {}, content = SMODS.current_mod}
 local filesystem = NFS or love.filesystem
 
-local loc = filesystem.load(BUNCOMOD.content.path..'localization.lua')()
 local config = BUNCOMOD.content.config
 
 -- Debug message
@@ -513,10 +512,6 @@ function Game:start_run(args)
 end
 
 SMODS.Tag:take_ownership('double', {
-    process_loc_text = function(self)
-        SMODS.Tag.process_loc_text(self)
-        SMODS.process_loc_text(G.localization.descriptions.Tag, self.key..'_additional', loc.double)
-    end,
     loc_vars = function(self)
         if G.GAME and G.GAME.used_vouchers['v_bunc_pin_collector'] then
             return {key = 'tag_bunc_double'}
@@ -3400,7 +3395,7 @@ SMODS.Consumable{ -- Haumea
 
 SMODS.Consumable{ -- Sedna
     set = 'Planet', atlas = 'bunco_planets',
-    key = 'sedna', loc_txt = loc.sedna,
+    key = 'sedna',
     set_card_type_badge = function(self, card, badges)
         badges[1] = create_badge(config.fixed_badges and localize('k_planet_q') or localize('k_dwarf_planet'), get_type_colour(self or card.config, card), nil, 1.2)
     end,
@@ -3419,7 +3414,7 @@ SMODS.Consumable{ -- Sedna
 
 SMODS.Consumable{ -- Makemake
     set = 'Planet', atlas = 'bunco_planets',
-    key = 'makemake', loc_txt = loc.makemake,
+    key = 'makemake',
     set_card_type_badge = function(self, card, badges)
         badges[1] = create_badge(config.fixed_badges and localize('k_planet_q') or localize('k_dwarf_planet'), get_type_colour(self or card.config, card), nil, 1.2)
     end,
