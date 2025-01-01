@@ -5936,7 +5936,7 @@ SMODS.Shader({key = 'glitter', path = 'glitter.fs'})
 SMODS.Sound({key = 'glitter', path = 'glitter.ogg'})
 
 SMODS.Edition{
-    key = 'glitter', loc_txt = loc.glitter_edition,
+    key = 'glitter',
 
     config = {Xchips = 1.3},
     loc_vars = function(self, info_queue)
@@ -5957,7 +5957,7 @@ SMODS.Shader({key = 'fluorescent', path = 'fluorescent.fs'})
 SMODS.Sound({key = 'fluorescent', path = 'fluorescent.ogg'})
 
 SMODS.Edition{
-    key = 'fluorescent', loc_txt = loc.fluorescent_edition,
+    key = 'fluorescent',
 
     sound = {sound = 'bunc_fluorescent', per = 1.2, vol = 0.4},
     in_shop = true,

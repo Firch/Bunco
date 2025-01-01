@@ -82,6 +82,13 @@ return {
                 [1] = '5 ranks picked',
                 [2] = 'by Registration Plate'
             }
+        },
+        labels = {
+
+            -- Editions
+
+            bunc_glitter = 'Glitter',
+            bunc_fluorescent = 'Fluorescent'
         }
     },
     descriptions = {
@@ -1322,6 +1329,21 @@ return {
                 ['text'] = {
                     [1] = 'Next shop Joker',
                     [2] = 'will gain {C:attention}Rental{} sticker'
+                }
+            }
+        },
+        Edition = {
+            e_bunc_glitter = {
+                ['name'] = 'Glitter',
+                ['text'] = {
+                    [1] = '{X:chips,C:white}X#1#{} Chips'
+                }
+            },
+            e_bunc_fluorescent = {
+                ['name'] = 'Fluorescent',
+                ['text'] = {
+                    [1] = 'Cannot be flipped, debuffed',
+                    [2] = 'or forced to be selected'
                 }
             }
         }
