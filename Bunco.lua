@@ -363,7 +363,7 @@ if config.gameplay_reworks then
 
     SMODS.Tag:take_ownership('boss', {
         loc_vars = function(self, info_queue)
-            info_queue[#info_queue + 1] = {key = 'p_bunc_blind_1', set = 'Other', vars = {G.P_CENTERS.p_bunc_blind_1.config.extra}}
+            info_queue[#info_queue + 1] = {key = 'p_bunc_blind', set = 'Other', vars = {G.P_CENTERS.p_bunc_blind_1.config.extra}}
             return {key = 'tag_bunc_boss'}
         end,
         config = {type = 'new_blind_choice'},
