@@ -4653,7 +4653,7 @@ SMODS.Atlas({key = 'bunco_blinds', path = 'Blinds/Blinds.png', px = 34, py = 34,
 SMODS.Atlas({key = 'bunco_blinds_finisher', path = 'Blinds/BlindsFinisher.png', px = 34, py = 34, frames = 21, atlas_table = 'ANIMATION_ATLAS'})
 
 SMODS.Blind{ -- The Paling
-    key = 'paling', loc_txt = loc.paling,
+    key = 'paling',
     boss = {min = 2},
 
     boss_colour = HEX('45d368'),
@@ -4663,7 +4663,7 @@ SMODS.Blind{ -- The Paling
 }
 
 SMODS.Blind{ -- The Umbrella
-    key = 'umbrella', loc_txt = loc.umbrella,
+    key = 'umbrella',
     boss = {min = 2},
 
     disable = function(self)
@@ -4684,16 +4684,15 @@ SMODS.Blind{ -- The Umbrella
 }
 
 SMODS.Blind{ -- The Tine
-    key = 'tine', loc_txt = loc.tine,
+    key = 'tine',
     boss = {min = 2},
 
     vars = {},
     loc_vars = function(self)
         return {vars = {localize(G.GAME.current_round.most_played_rank, 'ranks')}}
     end,
-    process_loc_text = function(self)
-        SMODS.Blind.process_loc_text(self)
-        self.vars = {G.localization.misc.dictionary.bunc_most_played_rank}
+    collection_loc_vars = function(self)
+        return {vars = {localize('bunc_most_played_rank')}}
     end,
 
     debuff_card = function(self, card, from_blind)
@@ -4713,7 +4712,7 @@ SMODS.Blind{ -- The Tine
 }
 
 SMODS.Blind{ -- The Swing
-    key = 'swing', loc_txt = loc.swing,
+    key = 'swing',
     boss = {min = 3},
 
     defeat = function(self)
@@ -4746,7 +4745,7 @@ SMODS.Blind{ -- The Swing
 }
 
 SMODS.Blind{ -- The Miser
-    key = 'miser', loc_txt = loc.miser,
+    key = 'miser',
     boss = {min = 2},
 
     defeat = function(self)
@@ -4770,7 +4769,7 @@ SMODS.Blind{ -- The Miser
 }
 
 SMODS.Blind{ -- The Gate
-    key = 'gate', loc_txt = loc.gate,
+    key = 'gate',
     boss = {min = 1},
 
     boss_colour = HEX('c9a27a'),
@@ -4780,7 +4779,7 @@ SMODS.Blind{ -- The Gate
 }
 
 SMODS.Blind{ -- The Flame
-    key = 'flame', loc_txt = loc.flame,
+    key = 'flame',
     boss = {min = 3},
 
     debuff_card = function(self, card, from_blind)
@@ -4800,16 +4799,15 @@ SMODS.Blind{ -- The Flame
 }
 
 SMODS.Blind{ -- The Mask
-    key = 'mask', loc_txt = loc.mask,
+    key = 'mask',
     boss = {min = 2},
 
     vars = {},
     loc_vars = function(self)
         return {vars = {localize(G.GAME.current_round.most_played_poker_hand, 'poker_hands'), localize(G.GAME.current_round.least_played_poker_hand, 'poker_hands')}}
     end,
-    process_loc_text = function(self)
-        SMODS.Blind.process_loc_text(self)
-        self.vars = {localize('ph_most_played'), G.localization.misc.dictionary.bunc_least_played_hand}
+    collection_loc_vars = function(self)
+        return {vars = {localize('ph_most_played'), localize('bunc_least_played_hand')}}
     end,
 
     modify_hand = function(self, cards, poker_hands, text, mult, hand_chips)
@@ -4829,16 +4827,15 @@ SMODS.Blind{ -- The Mask
 }
 
 SMODS.Blind{ -- The Bulwark
-    key = 'bulwark', loc_txt = loc.bulwark,
+    key = 'bulwark',
     boss = {min = 2},
 
     vars = {},
     loc_vars = function(self)
         return {vars = {localize(G.GAME.current_round.most_played_poker_hand, 'poker_hands')}}
     end,
-    process_loc_text = function(self)
-        SMODS.Blind.process_loc_text(self)
-        self.vars = {localize('ph_most_played')}
+    collection_loc_vars = function(self)
+        return {vars = {localize('ph_most_played')}}
     end,
 
     press_play = function(self)
@@ -4872,7 +4869,7 @@ SMODS.Blind{ -- The Bulwark
 }
 
 SMODS.Blind{ -- The Knoll
-    key = 'knoll', loc_txt = loc.knoll,
+    key = 'knoll',
     boss = {min = 4},
 
     stay_flipped = function(self, area, card)
@@ -4891,7 +4888,7 @@ SMODS.Blind{ -- The Knoll
 }
 
 SMODS.Blind{ -- The Stone
-    key = 'stone', loc_txt = loc.stone,
+    key = 'stone',
     boss = {min = 4},
 
     set_blind = function(self, reset, silent)
@@ -4937,7 +4934,7 @@ SMODS.Blind{ -- The Stone
 }
 
 SMODS.Blind{ -- The Sand
-    key = 'sand', loc_txt = loc.sand,
+    key = 'sand',
     boss = {min = 4},
 
     set_blind = function(self, reset, silent)
@@ -4991,7 +4988,7 @@ SMODS.Blind{ -- The Sand
 }
 
 SMODS.Blind{ -- The Blade
-    key = 'blade', loc_txt = loc.blade,
+    key = 'blade',
     boss = {min = 4},
 
     vars = {},
@@ -5000,9 +4997,8 @@ SMODS.Blind{ -- The Blade
         overscore = number_format(overscore * 1.5)
         return {vars = {overscore}}
     end,
-    process_loc_text = function(self)
-        SMODS.Blind.process_loc_text(self)
-        self.vars = {G.localization.misc.dictionary.bunc_blade}
+    collection_loc_vars = function(self)
+        return {vars = {localize('bunc_blade')}}
     end,
 
     boss_colour = HEX('d92034'),
@@ -5012,7 +5008,7 @@ SMODS.Blind{ -- The Blade
 }
 
 SMODS.Blind{ -- The Claw
-    key = 'claw', loc_txt = loc.claw,
+    key = 'claw',
     boss = {min = 1},
 
     boss_colour = HEX('d45741'),
@@ -5022,7 +5018,7 @@ SMODS.Blind{ -- The Claw
 }
 
 SMODS.Blind{ -- The Veil
-    key = 'veil', loc_txt = loc.veil,
+    key = 'veil',
     boss = {min = 1},
 
     boss_colour = HEX('ffdf7d'),
@@ -5032,7 +5028,7 @@ SMODS.Blind{ -- The Veil
 }
 
 SMODS.Blind{ -- The Cadaver
-    key = 'cadaver', loc_txt = loc.cadaver,
+    key = 'cadaver',
     boss = {min = 2},
 
     debuff_hand = function(self, cards, hand, handname, check)
@@ -5053,7 +5049,7 @@ SMODS.Blind{ -- The Cadaver
 }
 
 SMODS.Blind{ -- The Wind
-    key = 'wind', loc_txt = loc.wind,
+    key = 'wind',
     boss = {min = 6},
 
     drawn_to_hand = function(self)
@@ -5071,7 +5067,7 @@ SMODS.Blind{ -- The Wind
 }
 
 SMODS.Blind{ -- The Prince
-    key = 'prince', loc_txt = loc.prince,
+    key = 'prince',
     boss = {min = 6},
 
     drawn_to_hand = function(self)
@@ -5097,7 +5093,7 @@ SMODS.Blind{ -- The Prince
 }
 
 SMODS.Blind{ -- The Depths
-    key = 'depths', loc_txt = loc.depths,
+    key = 'depths',
     boss = {min = 4},
 
     press_play = function(self)
@@ -5127,7 +5123,7 @@ SMODS.Blind{ -- The Depths
 }
 
 SMODS.Blind{ -- The Chasm
-    key = 'chasm', loc_txt = loc.chasm,
+    key = 'chasm',
     boss = {min = 4},
 
     press_play = function(self)
@@ -5159,7 +5155,7 @@ SMODS.Blind{ -- The Chasm
 -- Finishers
 
 SMODS.Blind{ -- Chartreuse Crown
-    key = 'final_crown', loc_txt = loc.chartreuse_crown,
+    key = 'final_crown',
     boss = {showdown = true, min = 10, max = 10},
 
     debuff_card = function(self, card, from_blind)
@@ -5204,7 +5200,7 @@ SMODS.Blind{ -- Chartreuse Crown
 }
 
 SMODS.Blind{ -- Vermilion Trident
-    key = 'final_trident', loc_txt = loc.vermilion_trident,
+    key = 'final_trident',
     boss = {showdown = true, min = 10, max = 10},
 
     defeat = function(self)
@@ -5218,7 +5214,7 @@ SMODS.Blind{ -- Vermilion Trident
 }
 
 SMODS.Blind{ -- Indigo Tower
-    key = 'final_tower', loc_txt = loc.indigo_tower,
+    key = 'final_tower',
     boss = {showdown = true, min = 10, max = 10},
 
     debuff_card = function(self, card, from_blind)
@@ -5238,7 +5234,7 @@ SMODS.Blind{ -- Indigo Tower
 }
 
 SMODS.Blind{ -- Magenta Dagger
-    key = 'final_dagger', loc_txt = loc.magenta_dagger,
+    key = 'final_dagger',
     boss = {showdown = true, min = 10, max = 10},
 
     boss_colour = HEX('cb589f'),
@@ -5248,7 +5244,7 @@ SMODS.Blind{ -- Magenta Dagger
 }
 
 SMODS.Blind{ -- Turquoise Shield
-    key = 'final_shield', loc_txt = loc.turquoise_shield,
+    key = 'final_shield',
     boss = {showdown = true, min = 10, max = 10},
 
     set_blind = function(self, reset, silent)

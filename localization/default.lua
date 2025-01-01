@@ -981,6 +981,183 @@ return {
                 ['unlock'] = {
                     [1] = '{E:1,s:1.3}?????'
                 }
+            },
+        },
+        Blind = {
+            bl_bunc_paling = {
+                ['name'] = 'The Paling',
+                ['text'] = {
+                    [1] = 'Playing or Discarding costs',
+                    [2] = 'both hand and discard'
+                }
+            },
+            bl_bunc_umbrella = {
+                ['name'] = 'The Umbrella',
+                ['text'] = {
+                    [1] = 'After Play, flip all',
+                    [2] = 'cards in hand face down'
+                }
+            },
+            bl_bunc_tine = {
+                ['name'] = 'The Tine',
+                ['text'] = {
+                    [1] = 'Each #1# is debuffed'
+                }
+            },
+            bl_bunc_swing = {
+                ['name'] = 'The Swing',
+                ['text'] = {
+                    [1] = 'After Play or Discard,',
+                    [2] = 'flip all cards'
+                }
+            },
+            bl_bunc_miser = {
+                ['name'] = 'The Miser',
+                ['text'] = {
+                    [1] = 'Skip the shop after',
+                    [2] = 'defeating this blind'
+                }
+            },
+            bl_bunc_gate = {
+                ['name'] = 'The Gate',
+                ['text'] = {
+                    [1] = 'Cards cannot',
+                    [2] = 'be deselected'
+                }
+            },
+            bl_bunc_flame = {
+                ['name'] = 'The Flame',
+                ['text'] = {
+                    [1] = 'All Enhanced cards',
+                    [2] = 'are debuffed'
+                }
+            },
+            bl_bunc_mask = {
+                ['name'] = 'The Mask',
+                ['text'] = {
+                    [1] = '#1# has the base',
+                    [2] = 'Chips and Mult of #2#'
+                }
+            },
+            bl_bunc_bulwark = {
+                ['name'] = 'The Bulwark',
+                ['text'] = {
+                    [1] = 'Playing a #1# discards',
+                    [2] = 'all cards in hand'
+                }
+            },
+            bl_bunc_knoll = {
+                ['name'] = 'The Knoll',
+                ['text'] = {
+                    [1] = 'Having more than $5',
+                    [2] = 'debuffs first hand drawn'
+                }
+            },
+            bl_bunc_stone = {
+                ['name'] = 'The Stone',
+                ['text'] = {
+                    [1] = '+1X Base score for',
+                    [2] = 'every $10 held'
+                }
+            },
+            bl_bunc_sand = {
+                ['name'] = 'The Sand',
+                ['text'] = {
+                    [1] = '+1X Base score for',
+                    [2] = 'every tag held'
+                }
+            },
+            bl_bunc_blade = {
+                ['name'] = 'The Blade',
+                ['text'] = {
+                    [1] = 'First time score exceeds #1#',
+                    [2] = 'makes played hand score 0'
+                }
+            },
+            bl_bunc_claw = {
+                ['name'] = 'The Claw',
+                ['text'] = {
+                    [1] = 'Discarded cards',
+                    [2] = 'go back into the deck'
+                }
+            },
+            bl_bunc_veil = {
+                ['name'] = 'The Veil',
+                ['text'] = {
+                    [1] = 'Selected cards are',
+                    [2] = 'flipped face down'
+                }
+            },
+            bl_bunc_cadaver = {
+                ['name'] = 'The Cadaver',
+                ['text'] = {
+                    [1] = 'Must not play face cards'
+                }
+            },
+            bl_bunc_wind = {
+                ['name'] = 'The Wind',
+                ['text'] = {
+                    [1] = 'Leftmost Joker',
+                    [2] = 'is debuffed'
+                }
+            },
+            bl_bunc_prince = {
+                ['name'] = 'The Prince',
+                ['text'] = {
+                    [1] = 'All Jokers are debuffed',
+                    [2] = 'until first hand is played'
+                }
+            },
+            bl_bunc_depths = {
+                ['name'] = 'The Depths',
+                ['text'] = {
+                    [1] = 'After Play, gain Eternal,',
+                    [2] = 'Perishable, or Scattering tag'
+                }
+            },
+            bl_bunc_chasm = {
+                ['name'] = 'The Chasm',
+                ['text'] = {
+                    [1] = 'After Play, gain Hindered,',
+                    [2] = 'Reactive, or Rental tag'
+                }
+            },
+
+            -- Final
+
+            bl_bunc_final_crown = {
+                ['name'] = 'Chartreuse Crown',
+                ['text'] = {
+                    [1] = 'All Spade, Heart, Club, and Diamond',
+                    [2] = 'base suit cards are debuffed'
+                }
+            },
+            bl_bunc_final_trident = {
+                ['name'] = 'Vermilion Trident',
+                ['text'] = {
+                    [1] = 'No shops this Ante'
+                }
+            },
+            bl_bunc_final_tower = {
+                ['name'] = 'Indigo Tower',
+                ['text'] = {
+                    [1] = 'Cards not played previously',
+                    [2] = 'this Ante are debuffed'
+                }
+            },
+            bl_bunc_final_dagger = {
+                ['name'] = 'Magenta Dagger',
+                ['text'] = {
+                    [1] = 'Discarding cards plays them',
+                    [2] = 'and subtracts scored value'
+                }
+            },
+            bl_bunc_final_shield = {
+                ['name'] = 'Turquoise Shield',
+                ['text'] = {
+                    [1] = 'Excess score this Ante adds',
+                    [2] = "to this blind's required score"
+                }
             }
         }
     }
