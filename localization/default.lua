@@ -1178,6 +1178,152 @@ return {
                     [3] = "start with {C:bunco_virtual_dark,T:c_bunc_the_i}The I{}"
                 }
             }
+        },
+        Tag = {
+
+            -- Reworked
+
+            tag_bunc_boss = {
+                ['name'] = 'Boss Tag',
+                ['text'] = {
+                    [1] = 'Gives a free',
+                    [2] = '{C:attention}Blind Pack'
+                }
+            },
+            tag_bunc_double = {
+                ['name'] = 'Double Tag',
+                ['text'] = {
+                    [1] = 'Gives a copy of the',
+                    [2] = 'next selected {C:attention}Tag{}',
+                    [3] = '{s:0.6,C:attention}Double and Triple Tags{s:0.8} excluded'
+                }
+            },
+
+            -- Main Tags
+
+            tag_bunc_breaking = {
+                ['name'] = 'Breaking Tag',
+                ['text'] = {
+                    [1] = 'Disables the',
+                    [2] = '{C:attention}Boss Blind{}'
+                }
+            },
+            tag_bunc_arcade = {
+                ['name'] = 'Arcade Tag',
+                ['text'] = {
+                    [1] = 'Gives a free',
+                    [2] = '{C:bunco_virtual_dark}Mega Virtual Pack'
+                }
+            },
+            tag_bunc_triple = {
+                ['name'] = 'Triple Tag',
+                ['text'] = {
+                    [1] = 'Gives two copies of the',
+                    [2] = 'next selected {C:attention}Tag{}',
+                    [3] = '{s:0.8,C:attention}Triple Tag{s:0.8} excluded'
+                }
+            },
+
+            -- Edition tags
+
+            tag_bunc_glitter = {
+                ['name'] = 'Glitter Tag',
+                ['text'] = {
+                    [1] = 'Next base edition shop',
+                    [2] = 'Joker is free and',
+                    [3] = 'becomes {C:dark_edition}Glitter'
+                }
+            },
+            tag_bunc_fluorescent = {
+                ['name'] = 'Fluorescent Tag',
+                ['text'] = {
+                    [1] = 'Next base edition shop',
+                    [2] = 'Joker is free and',
+                    [3] = 'becomes {C:dark_edition}Fluorescent'
+                }
+            },
+
+            -- Consumable edition tags
+
+            tag_bunc_chips = {
+                ['name'] = 'Chips Tag',
+                ['text'] = {
+                    [1] = '{C:chips}+#1#{} Chips next hand'
+                }
+            },
+            tag_bunc_mult = {
+                ['name'] = 'Mult Tag',
+                ['text'] = {
+                    [1] = '{C:mult}+#1#{} Mult next hand',
+                }
+            },
+            tag_bunc_xmult = {
+                ['name'] = 'Megamult Tag',
+                ['text'] = {
+                    [1] = '{X:mult,C:white}X#1#{} Mult next hand',
+                }
+            },
+            tag_bunc_xchips = {
+                ['name'] = 'Ultrachips Tag',
+                ['text'] = {
+                    [1] = '{X:chips,C:white}X#1#{} Chips next hand'
+                }
+            },
+
+            -- Exotic tags
+
+            tag_bunc_filigree = {
+                ['name'] = 'Filigree Tag',
+                ['text'] = {
+                    [1] = 'Next {C:attention}Standard Pack{} opened',
+                    [2] = 'has only {C:bunco_exotic}Exotic cards'
+                }
+            },
+
+            -- Anti-tags
+
+            tag_bunc_eternal = {
+                ['name'] = 'Eternal Tag',
+                ['text'] = {
+                    [1] = 'Next shop Joker',
+                    [2] = 'will gain {C:attention}Eternal{} sticker'
+                }
+            },
+            tag_bunc_perishable = {
+                ['name'] = 'Perishable Tag',
+                ['text'] = {
+                    [1] = 'Next shop Joker',
+                    [2] = 'will gain {C:attention}Perishable{} sticker'
+                }
+            },
+            tag_bunc_scattering = {
+                ['name'] = 'Scattering Tag',
+                ['text'] = {
+                    [1] = 'Next shop Joker',
+                    [2] = 'will gain {C:attention}Scattering{} sticker'
+                }
+            },
+            tag_bunc_hindered = {
+                ['name'] = 'Hindered Tag',
+                ['text'] = {
+                    [1] = 'Next shop Joker',
+                    [2] = 'will gain {C:attention}Hindered{} sticker'
+                }
+            },
+            tag_bunc_reactive = {
+                ['name'] = 'Reactive Tag',
+                ['text'] = {
+                    [1] = 'Next shop Joker',
+                    [2] = 'will gain {C:attention}Reactive{} sticker'
+                }
+            },
+            tag_bunc_rental = {
+                ['name'] = 'Rental Tag',
+                ['text'] = {
+                    [1] = 'Next shop Joker',
+                    [2] = 'will gain {C:attention}Rental{} sticker'
+                }
+            }
         }
     }
 }

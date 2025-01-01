@@ -363,10 +363,9 @@ if config.gameplay_reworks then
     })
 
     SMODS.Tag:take_ownership('boss', {
-        loc_txt = loc.boss,
         loc_vars = function(self, info_queue)
             info_queue[#info_queue + 1] = {key = 'p_bunc_blind_1', set = 'Other', vars = {G.P_CENTERS.p_bunc_blind_1.config.extra}}
-            return {}
+            return {key = 'tag_bunc_boss'}
         end,
         config = {type = 'new_blind_choice'},
         apply = function(self, tag, context)
@@ -520,7 +519,7 @@ SMODS.Tag:take_ownership('double', {
     end,
     loc_vars = function(self)
         if G.GAME and G.GAME.used_vouchers['v_bunc_pin_collector'] then
-            return {key = self.key..'_additional'}
+            return {key = 'tag_bunc_double'}
         end
     end,
 })
@@ -5369,7 +5368,7 @@ SMODS.Atlas({key = 'bunco_tags_exotic', path = 'Tags/TagsExotic.png', px = 34, p
 SMODS.Atlas({key = 'bunco_tags_sticker', path = 'Tags/TagsSticker.png', px = 34, py = 34})
 
 SMODS.Tag{ -- Breaking
-    key = 'breaking', loc_txt = loc.breaking,
+    key = 'breaking',
 
     config = {type = 'round_start_bonus'},
 
@@ -5401,7 +5400,7 @@ SMODS.Tag{ -- Breaking
 }
 
 SMODS.Tag{ -- Arcade
-    key = 'arcade', loc_txt = loc.arcade,
+    key = 'arcade',
     loc_vars = function(self, info_queue)
         info_queue[#info_queue + 1] = {key = 'p_bunc_virtual_mega', set = 'Other', vars = {G.P_CENTERS.p_bunc_virtual_mega.config.choose, G.P_CENTERS.p_bunc_virtual_mega.config.extra}}
         return {}
@@ -5441,7 +5440,7 @@ SMODS.Tag{ -- Arcade
 }
 
 SMODS.Tag{ -- Triple
-    key = 'triple', loc_txt = loc.triple,
+    key = 'triple',
 
     config = {type = 'tag_add'},
 
@@ -5470,7 +5469,7 @@ SMODS.Tag{ -- Triple
 }
 
 SMODS.Tag{ -- Glitter
-    key = 'glitter', loc_txt = loc.glitter_tag,
+    key = 'glitter',
 
     config = {type = 'store_joker_modify', edition = 'bunc_glitter', odds = 4},
     loc_vars = function(self, info_queue)
@@ -5507,7 +5506,7 @@ SMODS.Tag{ -- Glitter
 }
 
 SMODS.Tag{ -- Fluorescent
-    key = 'fluorescent', loc_txt = loc.fluorescent_tag,
+    key = 'fluorescent',
 
     config = {type = 'store_joker_modify', edition = 'bunc_fluorescent', odds = 4},
     loc_vars = function(self, info_queue)
@@ -5552,7 +5551,7 @@ SMODS.Tag{ -- Fluorescent
 }
 
 SMODS.Tag{ -- Chips
-    key = 'chips', loc_txt = loc.chips,
+    key = 'chips',
 
     config = {type = 'hand_played'},
     loc_vars = function(self, info_queue)
@@ -5581,7 +5580,7 @@ SMODS.Tag{ -- Chips
 }
 
 SMODS.Tag{ -- Mult
-    key = 'mult', loc_txt = loc.mult,
+    key = 'mult',
 
     config = {type = 'hand_played'},
     loc_vars = function(self, info_queue)
@@ -5610,7 +5609,7 @@ SMODS.Tag{ -- Mult
 }
 
 SMODS.Tag{ -- Xmult
-    key = 'xmult', loc_txt = loc.xmult,
+    key = 'xmult',
 
     config = {type = 'hand_played'},
     loc_vars = function(self, info_queue)
@@ -5639,7 +5638,7 @@ SMODS.Tag{ -- Xmult
 }
 
 SMODS.Tag{ -- Xchip
-    key = 'xchips', loc_txt = loc.xchips,
+    key = 'xchips',
 
     config = {type = 'hand_played', odds = -1},
     loc_vars = function(self, info_queue)
@@ -5668,7 +5667,7 @@ SMODS.Tag{ -- Xchip
 }
 
 SMODS.Tag{ -- Filigree
-    key = 'filigree', loc_txt = loc.filigree,
+    key = 'filigree',
 
     config = {type = 'standard_pack_opened'},
     loc_vars = function(self, info_queue)
@@ -5714,7 +5713,7 @@ SMODS.Tag{ -- Filigree
 }
 
 SMODS.Tag{ -- Eternal
-    key = 'eternal', loc_txt = loc.eternal,
+    key = 'eternal',
 
     config = {type = 'store_joker_modify'},
     loc_vars = function(self, info_queue)
@@ -5748,7 +5747,7 @@ SMODS.Tag{ -- Eternal
 }
 
 SMODS.Tag{ -- Perishable
-    key = 'perishable', loc_txt = loc.perishable,
+    key = 'perishable',
 
     config = {type = 'store_joker_modify'},
     loc_vars = function(self, info_queue)
@@ -5782,7 +5781,7 @@ SMODS.Tag{ -- Perishable
 }
 
 SMODS.Tag{ -- Scattering
-    key = 'scattering', loc_txt = loc.scattering_tag,
+    key = 'scattering',
 
     config = {type = 'store_joker_modify'},
     loc_vars = function(self, info_queue)
@@ -5821,7 +5820,7 @@ SMODS.Tag{ -- Scattering
 }
 
 SMODS.Tag{ -- Hindered
-    key = 'hindered', loc_txt = loc.hindered_tag,
+    key = 'hindered',
 
     config = {type = 'store_joker_modify'},
     loc_vars = function(self, info_queue)
@@ -5860,7 +5859,7 @@ SMODS.Tag{ -- Hindered
 }
 
 SMODS.Tag{ -- Reactive
-    key = 'reactive', loc_txt = loc.reactive_tag,
+    key = 'reactive',
 
     config = {type = 'store_joker_modify'},
     loc_vars = function(self, info_queue)
@@ -5898,7 +5897,7 @@ SMODS.Tag{ -- Reactive
 }
 
 SMODS.Tag{ -- Rental
-    key = 'rental', loc_txt = loc.rental,
+    key = 'rental',
 
     config = {type = 'store_joker_modify'},
     loc_vars = function(self, info_queue)
