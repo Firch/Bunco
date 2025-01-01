@@ -6462,7 +6462,7 @@ SMODS.Atlas({key = 'bunco_stakes', path = 'Stakes/Stakes.png', px = 29, py = 29}
 SMODS.Atlas({key = 'bunco_stake_stickers', path = 'Stickers/StickersStake.png', px = 71, py = 95})
 
 SMODS.Stake{ -- Cyan
-    key = 'cyan', loc_txt = loc.cyan,
+    key = 'cyan',
 
     unlocked_stake = 'bunc_pink',
     applied_stakes = {'orange'},
@@ -6482,7 +6482,7 @@ SMODS.Stake{ -- Cyan
 }
 
 SMODS.Stake{ -- Pink
-    key = 'pink', loc_txt = loc.pink,
+    key = 'pink',
 
     unlocked_stake = 'bunc_magenta',
     applied_stakes = {'bunc_cyan'},
@@ -6501,7 +6501,7 @@ SMODS.Stake{ -- Pink
 }
 
 SMODS.Stake{ -- Magenta
-    key = 'magenta', loc_txt = loc.magenta,
+    key = 'magenta',
 
     unlocked_stake = 'gold',
     applied_stakes = {'bunc_pink'},

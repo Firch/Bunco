@@ -188,6 +188,33 @@ return {
                     [1] = 'Debuffed if no blinds',
                     [2] = 'are skipped this Ante'
                 }
+            },
+
+            -- Stake stickers
+
+            bunc_cyan_sticker = {
+                ['name'] = 'Cyan Sticker',
+                ['text'] = {
+                    [1] = 'Used this Joker',
+                    [2] = 'to win on {C:attention}Cyan',
+                    [3] = '{C:attention}Stake{} difficulty'
+                }
+            },
+            bunc_pink_sticker = {
+                ['name'] = 'Pink Sticker',
+                ['text'] = {
+                    [1] = 'Used this Joker',
+                    [2] = 'to win on {C:attention}Pink',
+                    [3] = '{C:attention}Stake{} difficulty'
+                }
+            },
+            bunc_magenta_sticker = {
+                ['name'] = 'Magenta Sticker',
+                ['text'] = {
+                    [1] = 'Used this Joker',
+                    [2] = 'to win on {C:attention}Magenta',
+                    [3] = '{C:attention}Stake{} difficulty'
+                }
             }
         },
 
@@ -1542,6 +1569,29 @@ return {
                     [1] = 'Create a total of',
                     [2] = '{E:1,C:attention}10{} linked groups'
                     -- TODO localize number
+                }
+            }
+        },
+        Stake = {
+            stake_bunc_cyan = {
+                ['name'] = 'Cyan Stake',
+                ['text'] = {
+                    [1] = 'Shop can have {C:attention}Scattering{} Jokers',
+                    [2] = '{C:inactive,s:0.8}(Destroys random Joker when sold or destroyed)'
+                }
+            },
+            stake_bunc_pink = {
+                ['name'] = 'Pink Stake',
+                ['text'] = {
+                    [1] = 'Shop can have {C:attention}Hindered{} Jokers',
+                    [2] = '{C:inactive,s:0.8}(Stays in place until the end of the round after being sold)'
+                }
+            },
+            stake_bunc_magenta = {
+                ['name'] = 'Magenta Stake',
+                ['text'] = {
+                    [1] = 'Shop can have {C:attention}Reactive{} Jokers',
+                    [2] = '{C:inactive,s:0.8}(Debuffed if no blinds are skipped this Ante)'
                 }
             }
         }
