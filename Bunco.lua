@@ -99,19 +99,163 @@ end
 
 function BUNCOMOD.content.config_tab()
     return {n = G.UIT.ROOT, config = {r = 0.1, minw = 4, align = "tm", padding = 0.2, colour = G.C.BLACK}, nodes = {
-        create_toggle({label = G.localization.misc.dictionary.bunc_colorful_finishers, ref_table = BUNCOMOD.content.config, ref_value = 'colorful_finishers', callback = function() BUNCOMOD.content:save_config() end}),
-        create_toggle({label = G.localization.misc.dictionary.bunc_high_quality_shaders, info = {G.localization.misc.dictionary.bunc_requires_restart}, ref_table = BUNCOMOD.content.config, ref_value = 'high_quality_shaders', callback = function() BUNCOMOD.content:save_config() end}),
-        create_toggle({label = G.localization.misc.dictionary.bunc_double_lovers, ref_table = BUNCOMOD.content.config, ref_value = 'double_lovers', callback = function() BUNCOMOD.content:save_config()
-            if config.double_lovers then
-                G.P_CENTERS.c_lovers.config.max_highlighted = 2
-            else
-                G.P_CENTERS.c_lovers.config.max_highlighted = 1
-            end
-        end}),
-        create_toggle({label = G.localization.misc.dictionary.bunc_jokerlike_consumable_editions, ref_table = BUNCOMOD.content.config, ref_value = 'jokerlike_consumable_editions', callback = function() BUNCOMOD.content:save_config() end}),
-        create_toggle({label = G.localization.misc.dictionary.bunc_fixed_badges, ref_table = BUNCOMOD.content.config, ref_value = 'fixed_badges', callback = function() BUNCOMOD.content:save_config() end}),
-        create_toggle({label = G.localization.misc.dictionary.bunc_fixed_sprites, info = {G.localization.misc.dictionary.bunc_requires_restart}, ref_table = BUNCOMOD.content.config, ref_value = 'fixed_sprites', callback = function() BUNCOMOD.content:save_config() end}),
-        create_toggle({label = G.localization.misc.dictionary.bunc_gameplay_reworks, info = {G.localization.misc.dictionary.bunc_requires_restart}, ref_table = BUNCOMOD.content.config, ref_value = 'gameplay_reworks', callback = function() BUNCOMOD.content:save_config() end})
+        {n = G.UIT.C, config = {r = 0.1, minw = 4, align = "tl", padding = 0.2, colour = G.C.BLACK}, nodes =
+            {
+                {
+                    n = G.UIT.R,
+                    config = {
+                        align = "cm",
+                        r = 0.1,
+                        emboss = 0.1,
+                        outline = 1,
+                        padding = 0.14
+                    },
+                    nodes = {
+                        create_toggle({
+                            label = G.localization.misc.dictionary.bunc_colorful_finishers,
+                            info = {
+                                G.localization.misc.dictionary.bunc_default_true,
+                                '',
+                                G.localization.misc.dictionary.bunc_colorful_finishers_desc,
+                                G.localization.misc.dictionary.bunc_colorful_finishers_desc_2
+                            },
+                            ref_table = BUNCOMOD.content.config,
+                            ref_value = 'colorful_finishers',
+                            callback = function() BUNCOMOD.content:save_config()
+                        end})
+                    }
+                },
+                {
+                    n = G.UIT.R,
+                    config = {
+                        align = "cm",
+                        r = 0.1,
+                        emboss = 0.1,
+                        outline = 1,
+                        padding = 0.14
+                    },
+                    nodes = {
+                        create_toggle({
+                            label = G.localization.misc.dictionary.bunc_high_quality_shaders,
+                            info = {
+                                G.localization.misc.dictionary.bunc_default_true..', '..G.localization.misc.dictionary.bunc_requires_restart,
+                                '',
+                                G.localization.misc.dictionary.bunc_high_quality_shaders_desc,
+                                G.localization.misc.dictionary.bunc_high_quality_shaders_desc_2
+                            },
+                            ref_table = BUNCOMOD.content.config,
+                            ref_value = 'high_quality_shaders',
+                            callback = function() BUNCOMOD.content:save_config()
+                        end})
+                    }
+                },
+                {
+                    n = G.UIT.R,
+                    config = {
+                        align = "cm",
+                        r = 0.1,
+                        emboss = 0.1,
+                        outline = 1,
+                        padding = 0.14
+                    },
+                    nodes = {
+                        create_toggle({
+                            label = G.localization.misc.dictionary.bunc_fixed_sprites,
+                            info = {
+                                G.localization.misc.dictionary.bunc_default_true..', '..G.localization.misc.dictionary.bunc_requires_restart,
+                                '',
+                                G.localization.misc.dictionary.bunc_fixed_sprites_desc,
+                                G.localization.misc.dictionary.bunc_fixed_sprites_desc_2
+                            },
+                            ref_table = BUNCOMOD.content.config,
+                            ref_value = 'fixed_sprites',
+                            callback = function() BUNCOMOD.content:save_config()
+                        end})
+                    }
+                }
+            }
+        },
+        {n = G.UIT.C, config = {r = 0.1, minw = 4, align = "tc", padding = 0.2, colour = G.C.BLACK}, nodes =
+            {
+                {
+                    n = G.UIT.R,
+                    config = {
+                        align = "cm",
+                        r = 0.1,
+                        emboss = 0.1,
+                        outline = 1,
+                        padding = 0.14
+                    },
+                    nodes = {
+                        create_toggle({
+                        label = G.localization.misc.dictionary.bunc_gameplay_reworks,
+                        info = {
+                            G.localization.misc.dictionary.bunc_default_true..', '..G.localization.misc.dictionary.bunc_requires_restart,
+                            '',
+                            G.localization.misc.dictionary.bunc_gameplay_reworks_desc,
+                            G.localization.misc.dictionary.bunc_gameplay_reworks_desc_2
+                        },
+                        ref_table = BUNCOMOD.content.config,
+                        ref_value = 'gameplay_reworks',
+                        callback = function() BUNCOMOD.content:save_config()
+                            if config.gameplay_reworks then
+                                G.P_CENTERS.c_lovers.config.max_highlighted = 2
+                            else
+                                G.P_CENTERS.c_lovers.config.max_highlighted = 1
+                            end
+                        end})
+                    }
+                },
+                {
+                    n = G.UIT.R,
+                    config = {
+                        align = "cm",
+                        r = 0.1,
+                        emboss = 0.1,
+                        outline = 1,
+                        padding = 0.14
+                    },
+                    nodes = {
+                        create_toggle({
+                            label = G.localization.misc.dictionary.bunc_fixed_badges,
+                            info = {
+                                G.localization.misc.dictionary.bunc_default_false,
+                                '',
+                                G.localization.misc.dictionary.bunc_fixed_badges_desc,
+                                G.localization.misc.dictionary.bunc_fixed_badges_desc_2
+                            },
+                            ref_table = BUNCOMOD.content.config,
+                            ref_value = 'fixed_badges',
+                            callback = function() BUNCOMOD.content:save_config()
+                        end})
+                    }
+                },
+                {
+                    n = G.UIT.R,
+                    config = {
+                        align = "cm",
+                        r = 0.1,
+                        emboss = 0.1,
+                        outline = 1,
+                        padding = 0.14
+                    },
+                    nodes = {
+                        create_toggle({
+                            label = G.localization.misc.dictionary.bunc_jokerlike_consumable_editions,
+                            info = {
+                                G.localization.misc.dictionary.bunc_default_false,
+                                '',
+                                G.localization.misc.dictionary.bunc_jokerlike_consumable_editions_desc,
+                                G.localization.misc.dictionary.bunc_jokerlike_consumable_editions_desc_2
+                            },
+                            ref_table = BUNCOMOD.content.config,
+                            ref_value = 'jokerlike_consumable_editions',
+                            callback = function() BUNCOMOD.content:save_config()
+                        end})
+                    }
+                }
+            }
+        }
     }}
 end
 

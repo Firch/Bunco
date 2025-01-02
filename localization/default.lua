@@ -5,14 +5,32 @@ return {
             -- Config values
 
             bunc_colorful_finishers = 'Colorful Final Blinds',
-            bunc_high_quality_shaders = 'High Quality Shaders',
-            bunc_double_lovers = 'Double Lovers',
-            bunc_jokerlike_consumable_editions = 'Editions in Consumables Slot',
-            bunc_fixed_badges = 'Fixed Badges',
-            bunc_fixed_sprites = 'Fixed Sprites',
-            bunc_gameplay_reworks = 'Gameplay Reworks',
+            bunc_colorful_finishers_desc = 'Enables colorful backgrounds for the final blinds',
+            bunc_colorful_finishers_desc_2 = 'and removes gray background in the Endless Mode',
 
-            bunc_requires_restart = '(Requires game restart)',
+            bunc_high_quality_shaders = 'High Quality Shaders',
+            bunc_high_quality_shaders_desc = 'Makes some of the vanilla shaders',
+            bunc_high_quality_shaders_desc_2 = 'render in higher quality (might cause lag)',
+
+            bunc_fixed_sprites = 'Fixed Sprites',
+            bunc_fixed_sprites_desc = 'Tweaks some sprites in a minor way by removing',
+            bunc_fixed_sprites_desc_2 = 'stray pixels, improving consistency and high contrast',
+
+            bunc_gameplay_reworks = 'Gameplay Reworks',
+            bunc_gameplay_reworks_desc = 'Reworks some of the vanilla mechanics',
+            bunc_gameplay_reworks_desc_2 = 'to make the game more enjoyable',
+
+            bunc_fixed_badges = 'Fixed Badges',
+            bunc_fixed_badges_desc = 'Changes the badges on consumables by replacing confusing',
+            bunc_fixed_badges_desc_2 = 'flavor text with indication of their way of obtaining',
+
+            bunc_jokerlike_consumable_editions = 'Editions in Consumables Slot',
+            bunc_jokerlike_consumable_editions_desc = 'Reverts the vanilla behavior of consumables with',
+            bunc_jokerlike_consumable_editions_desc_2 = 'editions acting like Jokers (for other conflicting mods)',
+
+            bunc_default_true = 'Enabled by default',
+            bunc_default_false = 'Disabled by default',
+            bunc_requires_restart = 'Requires game restart',
 
             -- Miscellaneous
 
