@@ -2379,7 +2379,7 @@ match_indent = true
 payload = '''
 
 for i=1, BUNCOMOD and BUNCOMOD.vars and BUNCOMOD.vars.jokerlike_consumable_editions and 0 or #G.consumeables.cards do
-    local _card = G.jokers.cards[i] or G.consumeables.cards[i - #G.jokers.cards]
+    local _card = G.consumeables.cards[i]
     local effects = eval_card(_card, {cardarea = G.jokers, full_hand = G.play.cards, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, joker_main = true, callback = function(_card, ret) effects = {jokers = ret}
 
     --Any Joker effects
