@@ -1284,6 +1284,26 @@ call_getting_booster_card()
 
 '''
 
+# function CardArea:align_cards() (Taped)
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+pattern = 'if self.children.view_deck then'
+position = 'before'
+match_indent = true
+payload = '''
+
+for k, card in ipairs(self.cards) do
+    if card.config.center.key == 'j_bunc_taped' and card.config.center.discovered or card.bypass_discovery_center then
+        if not card.states.drag.is then
+            card.T.x = card.T.x + (0.18 * card.T.w)
+            card.T.y = card.T.y - (0.01 * card.T.h)
+        end
+    end
+end
+
+'''
+
 # function Card:is_suit (Myopia & Astigmatism)
 [[patches]]
 [patches.pattern]

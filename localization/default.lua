@@ -986,6 +986,23 @@ return {
                     [4] = 'adjacent cards if possible'
                 }
             },
+            j_bunc_glue_gun = {
+                ['name'] = 'Glue Gun',
+                ['text'] = {
+                    [1] = 'Sell this card to',
+                    [2] = '{C:attention}link together{} #1# selected',
+                    [3] = 'playing cards'
+                }
+            },
+            j_bunc_taped = {
+                ['name'] = 'Taped Jokers',
+                ['text'] = {
+                    [1] = '{C:attention}Link together{} all',
+                    [2] = 'played cards in first',
+                    [3] = 'scored hand during',
+                    [4] = '{C:attention}Boss Blind{}'
+                }
+            },
 
             -- Exotic Jokers
 

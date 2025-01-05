@@ -676,6 +676,10 @@ SMODS.Atlas({key = 'bunco_jokers', path = 'Jokers/Jokers.png', px = 71, py = 95}
 SMODS.Atlas({key = 'bunco_jokers_exotic', path = 'Jokers/JokersExotic.png', px = 71, py = 95})
 SMODS.Atlas({key = 'bunco_jokers_legendary', path = 'Jokers/JokersLegendary.png', px = 71, py = 95})
 SMODS.Atlas({key = 'bunco_jokers_the_joker', path = 'Jokers/JokerBlind.png', px = 71, py = 95})
+SMODS.Atlas({key = 'bunco_jokers_taped', path = 'Jokers/JokerTaped.png', px = 127, py = 113})
+
+SMODS.Sound({key = 'gunshot', path = 'gunshot.ogg'})
+SMODS.Sound({key = 'mousetrap', path = 'mousetrap.ogg'})
 
 local function create_joker(joker)
 
@@ -794,9 +798,6 @@ local function create_joker(joker)
         }
     end
 end
-
-SMODS.Sound({key = 'gunshot', path = 'gunshot.ogg'})
-SMODS.Sound({key = 'mousetrap', path = 'mousetrap.ogg'})
 
 -- Jokers
 
@@ -3091,6 +3092,82 @@ create_joker({ -- Domino
     set_sprites = function(self, card, front)
         if self.discovered or card.bypass_discovery_center then
             card.children.center.scale.x = card.children.center.scale.x / 1.5
+        end
+    end,
+    load = function(self, card, card_table, other_card)
+        return self.set_ability(self, card)
+    end
+})
+
+create_joker({ -- Glue Gun
+    name = 'Glue Gun', position = 56,
+    vars = {{amount = 4}},
+    rarity = 'Uncommon', cost = 4,
+    blueprint = false, eternal = false,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.selling_self and not context.blueprint then
+            event({func = function()
+                if G.hand and G.hand.highlighted and #G.hand.highlighted == 4 then
+
+                    for i = 1, #G.hand.highlighted do
+                        if G.hand.highlighted[i].ability.group then return true end
+                    end
+
+                    link_cards(G.hand.highlighted, self.key)
+                    for i = 1, #G.hand.highlighted do
+                        big_juice(G.hand.highlighted[i])
+                    end
+                end
+            return true end})
+        end
+    end
+})
+
+create_joker({ -- Taped
+    name = 'Taped', custom_atlas = 'bunco_jokers_taped', position = 1,
+    rarity = 'Rare', cost = 6,
+    blueprint = false, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.before
+        and context.full_hand
+        and not context.other_card
+        and G.GAME.current_round.hands_played == 0
+        and G.GAME.blind.boss
+        and not context.blueprint then
+            event({func = function()
+
+                local cards = {}
+
+                for i = 1, #context.full_hand do
+                    if not context.full_hand[i].ability.group then
+                        table.insert(cards, context.full_hand[i])
+                    end
+                end
+
+                if #cards > 1 then
+                    link_cards(cards, self.key)
+                    big_juice(card)
+
+                    for i = 1, #cards do
+                        big_juice(cards[i])
+                    end
+                end
+
+            return true end})
+        end
+    end,
+    set_ability = function(self, card, initial, delay_sprites)
+        if self.discovered or card.bypass_discovery_center then
+            card.T.w = G.CARD_W * 1.788732394366197
+            card.T.h = G.CARD_H * 1.189473684210526
+        end
+    end,
+    set_sprites = function(self, card, front)
+        if self.discovered or card.bypass_discovery_center then
+            card.children.center.scale = {x = 127, y = 113}
+            card.children.center:reset()
         end
     end,
     load = function(self, card, card_table, other_card)
