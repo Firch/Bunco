@@ -3175,6 +3175,35 @@ create_joker({ -- Taped
     end
 })
 
+create_joker({ -- Rubber Band Ball
+    name = 'Rubber Band Ball', position = 57,
+    vars = {{bonus = 1}, {xmult = 1}},
+    rarity = 'Uncommon', cost = 6,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            if card.ability.extra.xmult ~= 1 then
+                return {
+                    message = localize {
+                        type = 'variable',
+                        key = 'a_xmult',
+                        vars = { card.ability.extra.xmult }
+                    },
+                    Xmult_mod = card.ability.extra.xmult,
+                    card = card
+                }
+            end
+        end
+    end,
+    update = function(self, card)
+        card.ability.extra.xmult = (G.GAME.last_card_group and G.GAME.last_card_group + 1 or 1) * card.ability.extra.bonus
+    end,
+    custom_in_pool = function()
+        return G.GAME.last_card_group
+    end,
+})
+
 -- Exotic Jokers
 
 create_joker({ -- Zealous

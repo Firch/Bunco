@@ -1003,6 +1003,14 @@ return {
                     [4] = '{C:attention}Boss Blind{}'
                 }
             },
+            j_bunc_rubber_band_ball = {
+                ['name'] = 'Rubber Band Ball',
+                ['text'] = {
+                    [1] = '{X:mult,C:white}X#1#{} Mult per {C:attention}link{}',
+                    [2] = 'created this run',
+                    [3] = '{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)'
+                }
+            },
 
             -- Exotic Jokers
 
