@@ -6,7 +6,6 @@
 --- VERSION: 5.0
 
 -- ToDo:
--- (1/2) Make editioned consumables and replace their info_queue (to check: common events.lua)
 -- (lame fix) Doorhanger doesn't shake when unlocked for some reason?
 -- Make so unlocks actually count things
 -- Make configs apply immediately
@@ -85,6 +84,10 @@ end
 
 function BUNCOMOD.content.process_loc_text()
     G.P_CENTERS['bunc_exotic_cards'] = {key = 'bunc_exotic_cards', set = 'Other'}
+    G.P_CENTERS['bunc_consumable_edition_foil'] = {key = 'bunc_consumable_edition_foil', set = 'Other'}
+    G.P_CENTERS['bunc_consumable_edition_holo'] = {key = 'bunc_consumable_edition_holo', set = 'Other'}
+    G.P_CENTERS['bunc_consumable_edition_polychrome'] = {key = 'bunc_consumable_edition_polychrome', set = 'Other'}
+    G.P_CENTERS['bunc_consumable_edition_bunc_glitter'] = {key = 'bunc_consumable_edition_bunc_glitter', set = 'Other'}
 end
 
 -- Config globals
