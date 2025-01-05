@@ -6511,7 +6511,7 @@ for i = 1, 4 do -- Blind
                         UIBox_dyn_container({
                             {n=G.UIT.C, config={align = "cm", padding = 0.05, minw = 4}, nodes={
                                 {n=G.UIT.R,config={align = "bm", padding = 0.05}, nodes={
-                                    {n=G.UIT.O, config={object = DynaText({string = localize(self.group_key or ('k_booster_group_'..self.key)), colours = {G.C.WHITE},shadow = true, rotate = true, bump = true, spacing =2, scale = 0.7, maxw = 4, pop_in = 0.5})}}}},
+                                    {n=G.UIT.O, config={object = DynaText({string = localize(self.group_key or ('k_bunc_blind_pack')), colours = {G.C.WHITE},shadow = true, rotate = true, bump = true, spacing =2, scale = 0.7, maxw = 4, pop_in = 0.5})}}}},
                                 {n=G.UIT.R,config={align = "bm", padding = 0.05}, nodes={
                                     {n=G.UIT.O, config={object = DynaText({string = {localize('b_reroll_boss')}, colours = {G.C.WHITE}, shadow = true, rotate = true, bump = true, spacing = 2, scale = 0.5, pop_in = 0.7})}},}},}}
                         }),}},
@@ -6583,7 +6583,7 @@ for i = 1, 4 do -- Virtual
             UIBox_dyn_container({
                 {n=G.UIT.C, config={align = "cm", padding = 0.05, minw = 4}, nodes={
                     {n=G.UIT.R,config={align = "bm", padding = 0.05}, nodes={
-                        {n=G.UIT.O, config={object = DynaText({string = localize(self.group_key or ('k_booster_group_'..self.key)), colours = {G.C.WHITE},shadow = true, rotate = true, bump = true, spacing =2, scale = 0.7, maxw = 4, pop_in = 0.5})}}}},
+                        {n=G.UIT.O, config={object = DynaText({string = localize(self.group_key or ('k_bunc_virtual_pack')), colours = {G.C.WHITE},shadow = true, rotate = true, bump = true, spacing =2, scale = 0.7, maxw = 4, pop_in = 0.5})}}}},
                     {n=G.UIT.R,config={align = "bm", padding = 0.05}, nodes={
                         {n=G.UIT.O, config={object = DynaText({string = {localize('k_choose')..' '}, colours = {G.C.WHITE}, shadow = true, rotate = true, bump = true, spacing = 2, scale = 0.5, pop_in = 0.7})}},
                         {n=G.UIT.O, config={object = DynaText({string = {{ref_table = G.GAME, ref_value = 'pack_choices'}}, colours = {G.C.WHITE},shadow = true, rotate = true, bump = true, spacing =2, scale = 0.5, pop_in = 0.7})}}}},}}

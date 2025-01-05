@@ -55,8 +55,12 @@ return {
             -- Consumable types
 
             k_polymino = 'Polymino',
-            b_polymino_cards = 'Polymino Cards'
+            b_polymino_cards = 'Polymino Cards',
 
+            -- Booster types
+
+            k_bunc_blind_pack = 'Blind Pack',
+            k_bunc_virtual_pack = 'Virtual Pack'
         },
 
         -- Suits
@@ -143,7 +147,6 @@ return {
             -- Booster Packs
 
             p_bunc_blind = {
-                ['group_name'] = 'Blind Pack',
                 ['name'] = 'Blind Pack',
                 ['text'] = {
                     [1] = 'Choose one of up to',
@@ -152,7 +155,6 @@ return {
                 }
             },
             p_bunc_virtual_normal = {
-                ['group_name'] = 'Virtual Pack',
                 ['name'] = 'Virtual Pack',
                 ['text'] = {
                     [1] = 'Draw the whole deck and',
@@ -162,7 +164,6 @@ return {
                 }
             },
             p_bunc_virtual_jumbo = {
-                ['group_name'] = 'Virtual Pack',
                 ['name'] = 'Jumbo Virtual Pack',
                 ['text'] = {
                     [1] = 'Draw the whole deck and',
@@ -172,7 +173,6 @@ return {
                 }
             },
             p_bunc_virtual_mega = {
-                ['group_name'] = 'Virtual Pack',
                 ['name'] = 'Mega Virtual Pack',
                 ['text'] = {
                     [1] = 'Draw the whole deck and',
