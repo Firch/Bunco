@@ -34,6 +34,12 @@ local function coordinate(position)
     return get_coordinates(position - 1)
 end
 
+-- ...existing code...
+local function safe_arithmetic(a, b)
+    return (a or 0) + (b or 0)
+end
+-- ...existing code...
+
 -- math.huge replacement
 
 local huge_number = 9999
