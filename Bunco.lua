@@ -6,7 +6,6 @@
 --- VERSION: 5.0
 
 -- ToDo:
--- (1/2) Make editioned consumables and replace their info_queue (to check: common events.lua)
 -- (lame fix) Doorhanger doesn't shake when unlocked for some reason?
 -- Make so unlocks actually count things
 -- Make configs apply immediately
@@ -91,6 +90,10 @@ end
 
 function BUNCOMOD.content.process_loc_text()
     G.P_CENTERS['bunc_exotic_cards'] = {key = 'bunc_exotic_cards', set = 'Other'}
+    G.P_CENTERS['bunc_consumable_edition_foil'] = {key = 'bunc_consumable_edition_foil', set = 'Other'}
+    G.P_CENTERS['bunc_consumable_edition_holo'] = {key = 'bunc_consumable_edition_holo', set = 'Other'}
+    G.P_CENTERS['bunc_consumable_edition_polychrome'] = {key = 'bunc_consumable_edition_polychrome', set = 'Other'}
+    G.P_CENTERS['bunc_consumable_edition_bunc_glitter'] = {key = 'bunc_consumable_edition_bunc_glitter', set = 'Other'}
 end
 
 -- Config globals
@@ -682,6 +685,10 @@ SMODS.Atlas({key = 'bunco_jokers', path = 'Jokers/Jokers.png', px = 71, py = 95}
 SMODS.Atlas({key = 'bunco_jokers_exotic', path = 'Jokers/JokersExotic.png', px = 71, py = 95})
 SMODS.Atlas({key = 'bunco_jokers_legendary', path = 'Jokers/JokersLegendary.png', px = 71, py = 95})
 SMODS.Atlas({key = 'bunco_jokers_the_joker', path = 'Jokers/JokerBlind.png', px = 71, py = 95})
+SMODS.Atlas({key = 'bunco_jokers_taped', path = 'Jokers/JokerTaped.png', px = 127, py = 113})
+
+SMODS.Sound({key = 'gunshot', path = 'gunshot.ogg'})
+SMODS.Sound({key = 'mousetrap', path = 'mousetrap.ogg'})
 
 local function create_joker(joker)
 
@@ -800,9 +807,6 @@ local function create_joker(joker)
         }
     end
 end
-
-SMODS.Sound({key = 'gunshot', path = 'gunshot.ogg'})
-SMODS.Sound({key = 'mousetrap', path = 'mousetrap.ogg'})
 
 -- Jokers
 
@@ -3102,6 +3106,111 @@ create_joker({ -- Domino
     load = function(self, card, card_table, other_card)
         return self.set_ability(self, card)
     end
+})
+
+create_joker({ -- Glue Gun
+    name = 'Glue Gun', position = 56,
+    vars = {{amount = 4}},
+    rarity = 'Uncommon', cost = 4,
+    blueprint = false, eternal = false,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.selling_self and not context.blueprint then
+            event({func = function()
+                if G.hand and G.hand.highlighted and #G.hand.highlighted == 4 then
+
+                    for i = 1, #G.hand.highlighted do
+                        if G.hand.highlighted[i].ability.group then return true end
+                    end
+
+                    link_cards(G.hand.highlighted, self.key)
+                    for i = 1, #G.hand.highlighted do
+                        big_juice(G.hand.highlighted[i])
+                    end
+                end
+            return true end})
+        end
+    end
+})
+
+create_joker({ -- Taped
+    name = 'Taped', custom_atlas = 'bunco_jokers_taped', position = 1,
+    rarity = 'Rare', cost = 6,
+    blueprint = false, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.before
+        and context.full_hand
+        and not context.other_card
+        and G.GAME.current_round.hands_played == 0
+        and G.GAME.blind.boss
+        and not context.blueprint then
+            event({func = function()
+
+                local cards = {}
+
+                for i = 1, #context.full_hand do
+                    if not context.full_hand[i].ability.group then
+                        table.insert(cards, context.full_hand[i])
+                    end
+                end
+
+                if #cards > 1 then
+                    link_cards(cards, self.key)
+                    big_juice(card)
+
+                    for i = 1, #cards do
+                        big_juice(cards[i])
+                    end
+                end
+
+            return true end})
+        end
+    end,
+    set_ability = function(self, card, initial, delay_sprites)
+        if self.discovered or card.bypass_discovery_center then
+            card.T.w = G.CARD_W * 1.788732394366197
+            card.T.h = G.CARD_H * 1.189473684210526
+        end
+    end,
+    set_sprites = function(self, card, front)
+        if self.discovered or card.bypass_discovery_center then
+            card.children.center.scale = {x = 127, y = 113}
+            card.children.center:reset()
+        end
+    end,
+    load = function(self, card, card_table, other_card)
+        return self.set_ability(self, card)
+    end
+})
+
+create_joker({ -- Rubber Band Ball
+    name = 'Rubber Band Ball', position = 57,
+    vars = {{bonus = 1}, {xmult = 1}},
+    rarity = 'Uncommon', cost = 6,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            if card.ability.extra.xmult ~= 1 then
+                return {
+                    message = localize {
+                        type = 'variable',
+                        key = 'a_xmult',
+                        vars = { card.ability.extra.xmult }
+                    },
+                    Xmult_mod = card.ability.extra.xmult,
+                    card = card
+                }
+            end
+        end
+    end,
+    update = function(self, card)
+        card.ability.extra.xmult = (G.GAME.last_card_group and G.GAME.last_card_group + 1 or 1) * card.ability.extra.bonus
+    end,
+    custom_in_pool = function()
+        return G.GAME.last_card_group
+    end,
 })
 
 -- Exotic Jokers
@@ -6440,7 +6549,7 @@ for i = 1, 4 do -- Blind
                         UIBox_dyn_container({
                             {n=G.UIT.C, config={align = "cm", padding = 0.05, minw = 4}, nodes={
                                 {n=G.UIT.R,config={align = "bm", padding = 0.05}, nodes={
-                                    {n=G.UIT.O, config={object = DynaText({string = localize(self.group_key or ('k_booster_group_'..self.key)), colours = {G.C.WHITE},shadow = true, rotate = true, bump = true, spacing =2, scale = 0.7, maxw = 4, pop_in = 0.5})}}}},
+                                    {n=G.UIT.O, config={object = DynaText({string = localize(self.group_key or ('k_bunc_blind_pack')), colours = {G.C.WHITE},shadow = true, rotate = true, bump = true, spacing =2, scale = 0.7, maxw = 4, pop_in = 0.5})}}}},
                                 {n=G.UIT.R,config={align = "bm", padding = 0.05}, nodes={
                                     {n=G.UIT.O, config={object = DynaText({string = {localize('b_reroll_boss')}, colours = {G.C.WHITE}, shadow = true, rotate = true, bump = true, spacing = 2, scale = 0.5, pop_in = 0.7})}},}},}}
                         }),}},
@@ -6512,7 +6621,7 @@ for i = 1, 4 do -- Virtual
             UIBox_dyn_container({
                 {n=G.UIT.C, config={align = "cm", padding = 0.05, minw = 4}, nodes={
                     {n=G.UIT.R,config={align = "bm", padding = 0.05}, nodes={
-                        {n=G.UIT.O, config={object = DynaText({string = localize(self.group_key or ('k_booster_group_'..self.key)), colours = {G.C.WHITE},shadow = true, rotate = true, bump = true, spacing =2, scale = 0.7, maxw = 4, pop_in = 0.5})}}}},
+                        {n=G.UIT.O, config={object = DynaText({string = localize(self.group_key or ('k_bunc_virtual_pack')), colours = {G.C.WHITE},shadow = true, rotate = true, bump = true, spacing =2, scale = 0.7, maxw = 4, pop_in = 0.5})}}}},
                     {n=G.UIT.R,config={align = "bm", padding = 0.05}, nodes={
                         {n=G.UIT.O, config={object = DynaText({string = {localize('k_choose')..' '}, colours = {G.C.WHITE}, shadow = true, rotate = true, bump = true, spacing = 2, scale = 0.5, pop_in = 0.7})}},
                         {n=G.UIT.O, config={object = DynaText({string = {{ref_table = G.GAME, ref_value = 'pack_choices'}}, colours = {G.C.WHITE},shadow = true, rotate = true, bump = true, spacing =2, scale = 0.5, pop_in = 0.7})}}}},}}

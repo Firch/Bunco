@@ -55,8 +55,12 @@ return {
             -- Consumable types
 
             k_polymino = 'Polymino',
-            b_polymino_cards = 'Polymino Cards'
+            b_polymino_cards = 'Polymino Cards',
 
+            -- Booster types
+
+            k_bunc_blind_pack = 'Blind Pack',
+            k_bunc_virtual_pack = 'Virtual Pack'
         },
 
         -- Suits
@@ -127,6 +131,30 @@ return {
                     [2] = '{C:bunc_fleurons}Fleuron{} or {C:bunc_halberds}Halberd{} suit'
                 }
             },
+            bunc_consumable_edition_foil = {
+                ['name'] = 'Foil',
+                ['text'] = {
+                    [1] = 'Create a {C:attention}Chips Tag'
+                }
+            },
+            bunc_consumable_edition_holo = {
+                ['name'] = 'Holographic',
+                ['text'] = {
+                    [1] = 'Create a {C:attention}Mult Tag'
+                }
+            },
+            bunc_consumable_edition_polychrome = {
+                ['name'] = 'Polychrome',
+                ['text'] = {
+                    [1] = 'Create a {C:attention}Megamult Tag'
+                }
+            },
+            bunc_consumable_edition_bunc_glitter = {
+                ['name'] = 'Glitter',
+                ['text'] = {
+                    [1] = 'Create a {C:attention}Ultrachips Tag'
+                }
+            },
 
             -- Undiscovered
 
@@ -143,7 +171,6 @@ return {
             -- Booster Packs
 
             p_bunc_blind = {
-                ['group_name'] = 'Blind Pack',
                 ['name'] = 'Blind Pack',
                 ['text'] = {
                     [1] = 'Choose one of up to',
@@ -152,7 +179,6 @@ return {
                 }
             },
             p_bunc_virtual_normal = {
-                ['group_name'] = 'Virtual Pack',
                 ['name'] = 'Virtual Pack',
                 ['text'] = {
                     [1] = 'Draw the whole deck and',
@@ -162,7 +188,6 @@ return {
                 }
             },
             p_bunc_virtual_jumbo = {
-                ['group_name'] = 'Virtual Pack',
                 ['name'] = 'Jumbo Virtual Pack',
                 ['text'] = {
                     [1] = 'Draw the whole deck and',
@@ -172,7 +197,6 @@ return {
                 }
             },
             p_bunc_virtual_mega = {
-                ['group_name'] = 'Virtual Pack',
                 ['name'] = 'Mega Virtual Pack',
                 ['text'] = {
                     [1] = 'Draw the whole deck and',
@@ -984,6 +1008,31 @@ return {
                     [2] = 'a card from shop or',
                     [3] = 'Booster Pack, acquire {C:attention}2',
                     [4] = 'adjacent cards if possible'
+                }
+            },
+            j_bunc_glue_gun = {
+                ['name'] = 'Glue Gun',
+                ['text'] = {
+                    [1] = 'Sell this card to',
+                    [2] = '{C:attention}link together{} #1# selected',
+                    [3] = 'playing cards'
+                }
+            },
+            j_bunc_taped = {
+                ['name'] = 'Taped Jokers',
+                ['text'] = {
+                    [1] = '{C:attention}Link together{} all',
+                    [2] = 'played cards in first',
+                    [3] = 'scored hand during',
+                    [4] = '{C:attention}Boss Blind{}'
+                }
+            },
+            j_bunc_rubber_band_ball = {
+                ['name'] = 'Rubber Band Ball',
+                ['text'] = {
+                    [1] = '{X:mult,C:white}X#1#{} Mult per {C:attention}link{}',
+                    [2] = 'created this run',
+                    [3] = '{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)'
                 }
             },
 
