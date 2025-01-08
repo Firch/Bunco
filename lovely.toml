@@ -1313,7 +1313,7 @@ position = 'before'
 match_indent = true
 payload = '''
 
-if self.config.center.key == 'j_bunc_headache' then
+if self.config.center.key == 'j_bunc_headache' and (self.config.center.discovered or self.bypass_discovery_center) then
     local realw, realh = love.window.getMode()
 
     self.children.center:draw_shader('bunc_headache', nil, {
