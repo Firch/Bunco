@@ -273,10 +273,6 @@ if config.high_quality_shaders then
     G.SHADERS['flame'] = love.graphics.newShader(flame_shader)
 end
 
--- Double lovers
-
-if config.double_lovers then G.P_CENTERS.c_lovers.config.max_highlighted = 2 end
-
 -- Fixed badges
 
 SMODS.Consumable:take_ownership('pluto', {
@@ -468,6 +464,8 @@ love.filesystem.remove('font_replacement.ttf')
 if config.gameplay_reworks then
 
     BUNCOMOD.content.config.gameplay_reworks = true
+
+    G.P_CENTERS.c_lovers.config.max_highlighted = 2
 
     SMODS.Joker:take_ownership('luchador', {
         loc_vars = function(self, info_queue)
