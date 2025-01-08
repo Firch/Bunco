@@ -654,7 +654,7 @@ function Game:start_run(args)
         G.P_CENTERS.m_glass.config.Xmult = G.P_CENTERS.m_glass.config.Xmult + card.ability.extra.plus_xmult
     end
     if #sledgehammers >= 1 then
-        G.P_CENTERS.m_glass.config.extra = G.P_CENTERS.m_glass.config.extra / SMODS.Jokers['j_bunc_sledgehammer'].config.extra.div_chance_denom
+        G.P_CENTERS.m_glass.config.extra = G.P_CENTERS.m_glass.config.extra / G.P_CENTERS['j_bunc_sledgehammer'].config.extra.div_chance_denom
     end
 end
 
@@ -1555,14 +1555,36 @@ create_joker({ -- Sledgehammer
     end,
     add = function(self, card)
         G.P_CENTERS.m_glass.config.Xmult = G.P_CENTERS.m_glass.config.Xmult + card.ability.extra.plus_xmult
-        if #SMODS.find_card('j_bunc_sledgehammer') == 1 then
+        for _, deck_card in pairs(G.playing_cards) do
+            if deck_card.config.center == G.P_CENTERS.m_glass then
+                deck_card.ability.Xmult = deck_card.ability.Xmult + card.ability.extra.plus_xmult
+            end
+        end
+        if #SMODS.find_card('j_bunc_sledgehammer') == 0 then
             G.P_CENTERS.m_glass.config.extra = G.P_CENTERS.m_glass.config.extra / self.config.extra.div_chance_denom
+
+            for _, deck_card in pairs(G.playing_cards) do
+                if deck_card.config.center == G.P_CENTERS.m_glass then
+                    deck_card.ability.extra = deck_card.ability.extra / self.config.extra.div_chance_denom
+                end
+            end
         end
     end,
     remove = function(self, card)
         G.P_CENTERS.m_glass.config.Xmult = G.P_CENTERS.m_glass.config.Xmult - card.ability.extra.plus_xmult
+        for _, deck_card in pairs(G.playing_cards) do
+            if deck_card.config.center == G.P_CENTERS.m_glass then
+                deck_card.ability.Xmult = deck_card.ability.Xmult - card.ability.extra.plus_xmult
+            end
+        end
         if #SMODS.find_card('j_bunc_sledgehammer') == 0 then
             G.P_CENTERS.m_glass.config.extra = G.P_CENTERS.m_glass.config.extra * self.config.extra.div_chance_denom
+
+            for _, deck_card in pairs(G.playing_cards) do
+                if deck_card.config.center == G.P_CENTERS.m_glass then
+                    deck_card.ability.extra = deck_card.ability.extra * self.config.extra.div_chance_denom
+                end
+            end
         end
     end
 })
