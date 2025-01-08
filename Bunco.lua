@@ -2185,7 +2185,7 @@ create_joker({ -- Metallurgist
     add = function(self, card)
         for _, deck_card in pairs(G.playing_cards) do
             if deck_card.config.center == G.P_CENTERS.m_gold then
-                deck_card.ability.h_mult = (deck_card.ability.h_mult or 0) + card.ability.extra.mult
+                deck_card.ability.h_mult = (deck_card.ability.h_mult and (deck_card.ability.h_mult + card.ability.extra.mult) or 0)
             end
         end
         G.P_CENTERS.m_gold.config.h_mult = (G.P_CENTERS.m_gold.config.h_mult or 0) + card.ability.extra.mult
@@ -2196,7 +2196,7 @@ create_joker({ -- Metallurgist
                 deck_card.ability.h_mult = deck_card.ability.h_mult - card.ability.extra.mult
             end
         end
-        G.P_CENTERS.m_gold.config.h_mult = G.P_CENTERS.m_gold.config.h_mult - card.ability.extra.mult
+        G.P_CENTERS.m_gold.config.h_mult = (G.P_CENTERS.m_gold.config.h_mult and (G.P_CENTERS.m_gold.config.h_mult - card.ability.extra.mult) or 0)
     end
 })
 
