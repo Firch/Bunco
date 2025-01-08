@@ -1044,6 +1044,15 @@ return {
                     [4] = '{C:inactive}({C:attention}#2#{C:inactive}/#1# cards destroyed)'
                 }
             },
+            j_bunc_jumper = {
+                ['name'] = 'Jumper',
+                ['text'] = {
+                    [1] = 'Gains {C:chips}+#1#{} Chips',
+                    [2] = 'if played hand',
+                    [3] = 'contains a {C:attention}Flush{}',
+                    [4] = '{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)'
+                }
+            },
 
             -- Exotic Jokers
 

@@ -3263,6 +3263,39 @@ create_joker({ -- Headache
     end
 })
 
+create_joker({ -- Jumper
+    name = 'Jumper', position = 58,
+    vars = {{bonus = 10}, {chips = 0}},
+    rarity = 'Common', cost = 5,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.before then
+            if context.poker_hands and next(context.poker_hands['Flush']) and not context.blueprint then
+                card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.bonus
+                return {
+                    message = localize('k_upgrade_ex'),
+                    colour = G.C.CHIPS,
+                    card = card
+                }
+            end
+        end
+        if context.joker_main then
+            if card.ability.extra.chips ~= 0 then
+                return {
+                    message = localize {
+                        type = 'variable',
+                        key = 'a_chips',
+                        vars = { card.ability.extra.chips }
+                    },
+                    chip_mod = card.ability.extra.chips,
+                    card = card
+                }
+            end
+        end
+    end
+})
+
 -- Exotic Jokers
 
 create_joker({ -- Zealous
