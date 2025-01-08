@@ -3087,13 +3087,13 @@ create_joker({ -- Domino
 
             local card_pos = context.pre_card_pos
             if card_pos then
-                if context.pre_card_left then
+                if context.pre_card_left and context.pre_card_left.area ~= G.consumeables then
                     if G.FUNCS.check_for_buy_space(context.pre_card_left) then
                         acquire(context.pre_card_left)
                     end
                     big_juice(card)
                 end
-                if context.pre_card_right then
+                if context.pre_card_right and context.pre_card_right.area ~= G.consumeables then
                     if G.FUNCS.check_for_buy_space(context.pre_card_right) then
                         acquire(context.pre_card_right)
                     end
