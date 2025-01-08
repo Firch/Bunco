@@ -6225,6 +6225,20 @@ SMODS.Edition{
         return {vars = {self.config.Xchips}}
     end,
 
+    calculate = function(self, card, context)
+        if context.post_joker or (context.main_scoring and context.cardarea == G.play) then
+            return {func = function()
+                local xchips = G.P_CENTERS.e_bunc_glitter.config.Xchips
+                hand_chips = mod_chips(hand_chips * xchips)
+                update_hand_text({delay = 0}, {chips = hand_chips})
+                card_eval_status_text(card, 'extra', nil, percent, nil,
+                {message = 'X'..xchips..' '..G.localization.misc.dictionary.bunc_chips,
+                edition = true,
+                x_chips = true})
+            end}
+        end
+    end,
+
     sound = {sound = 'bunc_glitter', per = 1.2, vol = 0.4},
     in_shop = true,
     weight = 9,
