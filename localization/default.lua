@@ -1352,6 +1352,10 @@ return {
                     [2] = '{C:attention}Boss Blind{}, add #1#',
                     [3] = 'random {C:bunco_exotic,T:bunc_exotic_cards}#2#',
                     [4] = 'to your deck'
+                },
+                ['unlock'] = {
+                    [1] = 'Play {E:1,C:attention}5 different suits',
+                    [2] = 'in a single hand'
                 }
             },
             b_bunc_digital = {
