@@ -680,9 +680,12 @@ SMODS.Atlas({key = 'bunco_jokers_exotic', path = 'Jokers/JokersExotic.png', px =
 SMODS.Atlas({key = 'bunco_jokers_legendary', path = 'Jokers/JokersLegendary.png', px = 71, py = 95})
 SMODS.Atlas({key = 'bunco_jokers_the_joker', path = 'Jokers/JokerBlind.png', px = 71, py = 95})
 SMODS.Atlas({key = 'bunco_jokers_taped', path = 'Jokers/JokerTaped.png', px = 127, py = 113})
+SMODS.Atlas({key = 'bunco_jokers_headache', path = 'Jokers/JokerHeadache.png', px = 71, py = 95})
 
 SMODS.Sound({key = 'gunshot', path = 'gunshot.ogg'})
 SMODS.Sound({key = 'mousetrap', path = 'mousetrap.ogg'})
+
+SMODS.Shader({key = 'headache', path = 'headache.fs'})
 
 local function create_joker(joker)
 
@@ -3111,7 +3114,7 @@ create_joker({ -- Glue Gun
     calculate = function(self, card, context)
         if context.selling_self and not context.blueprint then
             event({func = function()
-                if G.hand and G.hand.highlighted and #G.hand.highlighted == 4 then
+                if G.hand and G.hand.highlighted and #G.hand.highlighted == card.ability.extra.amount then
 
                     for i = 1, #G.hand.highlighted do
                         if G.hand.highlighted[i].ability.group then return true end
@@ -3205,6 +3208,37 @@ create_joker({ -- Rubber Band Ball
     custom_in_pool = function()
         return G.GAME.last_card_group
     end,
+})
+
+create_joker({ -- Headache
+    name = 'Headache', custom_atlas = 'bunco_jokers_headache', position = 1,
+    vars = {{amount = 4}, {destroyed = 0}},
+    rarity = 'Uncommon', cost = 4,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.remove_playing_cards then
+            card.ability.extra.destroyed = card.ability.extra.destroyed + #context.removed
+            while card.ability.extra.destroyed >= card.ability.extra.amount do
+                if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+                    G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+                    event({trigger = 'before',
+                        delay = 0.0,
+                        func = function()
+                            local polymino = create_card('Polymino', G.consumeables)
+                            polymino:add_to_deck()
+                            G.consumeables:emplace(polymino)
+                            G.GAME.consumeable_buffer = 0
+                    return true end})
+                    forced_message('+1 '..localize('k_polymino'), card, G.C.BUNCO_VIRTUAL)
+                    card.ability.extra.destroyed = card.ability.extra.destroyed - card.ability.extra.amount
+                else
+                    forced_message(localize('k_no_space_ex'), card, G.C.RED)
+                    card.ability.extra.destroyed = card.ability.extra.destroyed - card.ability.extra.amount
+                end
+            end
+        end
+    end
 })
 
 -- Exotic Jokers

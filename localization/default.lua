@@ -1035,6 +1035,15 @@ return {
                     [3] = '{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)'
                 }
             },
+            j_bunc_headache = {
+                ['name'] = 'Headache',
+                ['text'] = {
+                    [1] = 'Create a {C:bunco_virtual_dark}Polymino{} card',
+                    [2] = 'for each {C:attention}#1#{} playing cards',
+                    [3] = 'destroyed {C:inactive}(Must have room)',
+                    [4] = '{C:inactive}({C:attention}#2#{C:inactive}/#1# cards destroyed)'
+                }
+            },
 
             -- Exotic Jokers
 

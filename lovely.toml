@@ -1304,6 +1304,27 @@ end
 
 '''
 
+# Card:draw() (Headache)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''if (self.ability.set == 'Voucher' or self.config.center.demo) and (self.ability.name ~= 'Antimatter' or not (self.config.center.discovered or self.bypass_discovery_center)) then'''
+position = 'before'
+match_indent = true
+payload = '''
+
+if self.config.center.key == 'j_bunc_headache' then
+    local realw, realh = love.window.getMode()
+
+    self.children.center:draw_shader('bunc_headache', nil, {
+    [1] = (((self.tilt_var.mx) - realw / 2) * 0.3)   +   ((self.VT.x + G.ROOM.T.x + (self.VT.w / 2)) * G.TILESIZE * G.TILESCALE - realw / 2) * -0.2,
+    [2] = (((self.tilt_var.my) - realh / 2) * 0.8)   +   ((self.VT.y + G.ROOM.T.y + (self.VT.h / 2)) * G.TILESIZE * G.TILESCALE - realh / 2) * -0.4,
+    [3] = G.TIMERS.REAL
+    })
+end
+
+'''
+
 # function Card:is_suit (Myopia & Astigmatism)
 [[patches]]
 [patches.pattern]
