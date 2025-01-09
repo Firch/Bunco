@@ -5029,7 +5029,7 @@ SMODS.Blind{ -- The Tine
         return {vars = {localize('bunc_most_played_rank')}}
     end,
 
-    debuff_card = function(self, card, from_blind)
+    recalc_debuff = function(self, card, from_blind)
         if not G.GAME.blind.disabled and card.area ~= G.jokers then
             if card.base.value == G.GAME.current_round.most_played_rank then
                 card:set_debuff(true)
@@ -5116,7 +5116,7 @@ SMODS.Blind{ -- The Flame
     key = 'flame',
     boss = {min = 3},
 
-    debuff_card = function(self, card, from_blind)
+    recalc_debuff = function(self, card, from_blind)
         if not G.GAME.blind.disabled and card.area ~= G.jokers then
             if card.config.center ~= G.P_CENTERS.c_base then
                 card:set_debuff(true)
@@ -5492,7 +5492,7 @@ SMODS.Blind{ -- Chartreuse Crown
     key = 'final_crown',
     boss = {showdown = true, min = 10, max = 10},
 
-    debuff_card = function(self, card, from_blind)
+    recalc_debuff = function(self, card, from_blind)
         if not G.GAME.blind.disabled and card.area ~= G.jokers then
             if card.base.suit == ('Spades') or
             card.base.suit == ('Hearts') or
@@ -5551,7 +5551,7 @@ SMODS.Blind{ -- Indigo Tower
     key = 'final_tower',
     boss = {showdown = true, min = 10, max = 10},
 
-    debuff_card = function(self, card, from_blind)
+    recalc_debuff = function(self, card, from_blind)
         if not G.GAME.blind.disabled and card.area ~= G.jokers then
             if not card.ability.played_this_ante then
                 card:set_debuff(true)
