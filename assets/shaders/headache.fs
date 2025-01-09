@@ -61,8 +61,8 @@ vec4 layerTexel( Image texture, vec2 uv, int frame, vec2 displace, float paralla
     vec2 duv = uv + (displace * parallax * 0.0001);
     vec4 col = vec4(0.0);
     if (tile) {
-        duv = mod(duv + vec2(headache.z * 15.0) / image_details, vec2(71.0 / image_details.x, 90.0 / image_details.y));
-        vec2 fuv = duv + (vec2(frame * 71.0, 0.0) / image_details);
+        duv = mod(duv + vec2(headache.z * 10.0) / image_details, vec2(69.0 / image_details.x, 69.0 / image_details.y));
+        vec2 fuv = duv + (vec2((frame * 71.0) + 1.0, 1.0) / image_details);
         col = Texel(texture, fuv);
     }
     else {
