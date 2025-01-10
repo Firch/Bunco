@@ -1044,6 +1044,15 @@ return {
                     [4] = '{C:inactive}({C:attention}#2#{C:inactive}/#1# cards destroyed)'
                 }
             },
+            j_bunc_games_collector = {
+                ['name'] = 'Games Collector',
+                ['text'] = {
+                    [1] = 'Gains {C:chips}+#1#{} Chips',
+                    [2] = 'when a linked group',
+                    [3] = 'is {C:attention}drawn{} to hand',
+                    [4] = '{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)'
+                }
+            },
             j_bunc_jumper = {
                 ['name'] = 'Jumper',
                 ['text'] = {

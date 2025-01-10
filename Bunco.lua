@@ -3261,8 +3261,48 @@ create_joker({ -- Headache
     end
 })
 
+create_joker({ -- Games Collector
+    name = 'Games Collector', position = 58,
+    vars = {{bonus = 10}, {chips = 0}},
+    rarity = 'Common', cost = 5,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+
+        -- Note:
+        -- Due the way this is coded, it will only trigger
+        -- upon the group breaking the hand limit.
+        -- That means that if you managed to draw a group
+        -- "naturally" (so it didn't request other cards)
+        -- the Joker won't recieve its bonus
+
+        if context.groups_drawn and not context.blueprint then
+            for _, group in ipairs(context.groups_drawn) do
+                card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.bonus
+            end
+            forced_message(localize('k_upgrade_ex'), card, G.C.CHIPS)
+        end
+        if context.joker_main then
+            if card.ability.extra.chips ~= 0 then
+                return {
+                    message = localize {
+                        type = 'variable',
+                        key = 'a_chips',
+                        vars = { card.ability.extra.chips }
+                    },
+                    chip_mod = card.ability.extra.chips,
+                    card = card
+                }
+            end
+        end
+    end,
+    custom_in_pool = function()
+        return G.GAME.last_card_group
+    end
+})
+
 create_joker({ -- Jumper
-    name = 'Jumper', position = 58,
+    name = 'Jumper', position = 59,
     vars = {{bonus = 10}, {chips = 0}},
     rarity = 'Common', cost = 5,
     blueprint = true, eternal = true,
@@ -3915,6 +3955,8 @@ G.FUNCS.draw_from_deck_to_hand = function(e)
             end
         end
 
+        local drawn = false
+
         for i = 1, #cards_from_groups do
             local n = 0
             while n < #G.deck.cards do
@@ -3922,9 +3964,20 @@ G.FUNCS.draw_from_deck_to_hand = function(e)
 
                 if card == cards_from_groups[i] then
                     draw_card(G.deck, G.hand, i * 100 / #cards_from_groups, 'up', true, card)
+                    drawn = true
                 end
 
                 n = n + 1
+            end
+        end
+
+        if groups and drawn then
+            if G.jokers ~= nil then
+                for _, v in ipairs(G.jokers.cards) do
+                    if v.config.center.key == 'j_bunc_games_collector' and not v.debuff then
+                        v:calculate_joker({groups_drawn = groups})
+                    end
+                end
             end
         end
 
