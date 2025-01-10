@@ -7,7 +7,6 @@
 
 -- ToDo:
 -- (lame fix) Doorhanger doesn't shake when unlocked for some reason?
--- Make so unlocks actually count things
 -- Make configs apply immediately
 -- Shell Game should modify tables instead of replacing - see Blind Packs
 
@@ -788,6 +787,7 @@ local function create_joker(joker)
 
             return {vars = vars}
         end,
+        locked_loc_vars = joker.locked_vars,
 
         calculate = joker.calculate,
         update = joker.update,
@@ -901,7 +901,10 @@ create_joker({ -- Mosaic
 
 create_joker({ -- Voxel
     name = 'Voxel', position = 4,
-    vars = {{base = 3}, {bonus = 0.1}, {xmult = 3}, {tally = 0}},
+    vars = {{base = 3}, {bonus = 0.1}, {xmult = 3}, {tally = 0}, {unlock = 10}},
+    locked_vars = function(self, info_queue, card)
+        return {vars = {self.config.extra.unlock}}
+    end,
     rarity = 'Uncommon', cost = 5,
     blueprint = true, eternal = true,
     unlocked = false,
@@ -911,7 +914,7 @@ create_joker({ -- Voxel
             for _, v in pairs(G.playing_cards) do
                 if v.config.center ~= G.P_CENTERS.c_base then count = count + 1 end
             end
-            if count >= 10 then
+            if count >= self.config.extra.unlock then
                 unlock_card(self)
             end
         end
@@ -1052,12 +1055,15 @@ create_joker({ -- Xray
 
 create_joker({ -- Dread
     name = 'Dread', position = 7,
-    vars = {{trash_list = {}}, {level_up_list = {}}},
+    vars = {{levels = 2}, {trash_list = {}}, {level_up_list = {}}, {unlock = 10}},
+    locked_vars = function(self, info_queue, card)
+        return {vars = {self.config.extra.unlock}}
+    end,
     rarity = 'Rare', cost = 8,
     blueprint = false, eternal = true,
     unlocked = false,
     check_for_unlock = function(self, args)
-        if args.type == 'round_deck_size' and args.round_deck_size_diff <= -10 then
+        if args.type == 'round_deck_size' and args.round_deck_size_diff <= -self.config.extra.unlock then
             unlock_card(self)
         end
     end,
@@ -1084,9 +1090,9 @@ create_joker({ -- Dread
                 -- line copied from planet use
                 update_hand_text({sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3}, {handname=localize(context.scoring_name, 'poker_hands'),chips = G.GAME.hands[context.scoring_name].chips, mult = G.GAME.hands[context.scoring_name].mult, level=G.GAME.hands[context.scoring_name].level})
                 -- Has immediate effects
-                level_up_hand(card, context.scoring_name, false, 2)
+                level_up_hand(card, context.scoring_name, false, card.ability.extra.levels)
                 card.ability.extra.level_up_list[context.scoring_name] =
-                    (card.ability.extra.level_up_list[context.scoring_name] or 0) + 2
+                    (card.ability.extra.level_up_list[context.scoring_name] or 0) + card.ability.extra.levels
                 local trash_list = card.ability.extra.trash_list
                 ---- Event (3): start_dissolve() on every card to trash
                 -- start_dissolve() calls run concurrently with blocking events.
@@ -1367,11 +1373,15 @@ create_joker({ -- Knight
 
 create_joker({ -- JMJB
     name = 'JMJB', position = 15,
+    vars = {{unlock = 50}},
+    locked_vars = function(self, info_queue, card)
+        return {vars = {self.config.extra.unlock, G.PROFILES[G.SETTINGS.profile].booster_packs_opened or 0}}
+    end,
     rarity = 'Rare', cost = 5,
     blueprint = false, eternal = true,
     unlocked = false,
     check_for_unlock = function(self, args)
-        if args.type == 'open_pack' and args.packs_total >= 50 then
+        if args.type == 'open_pack' and args.packs_total >= self.config.extra.unlock then
             unlock_card(self)
         end
     end,
@@ -1442,11 +1452,15 @@ create_joker({ -- Dogs Playing Poker
 
 create_joker({ -- Righthook
     name = 'Righthook', position = 17,
+    vars = {{unlock = 5}},
+    locked_vars = function(self, info_queue, card)
+        return {vars = {self.config.extra.unlock}}
+    end,
     rarity = 'Rare', cost = 8,
     blueprint = true, eternal = true,
     unlocked = false,
     check_for_unlock = function(self, args)
-        if args.type == 'repetition' and args.repetition_amount >= 5 then
+        if args.type == 'repetition' and args.repetition_amount >= self.config.extra.unlock then
             unlock_card(self)
         end
     end,
@@ -2200,6 +2214,7 @@ create_joker({ -- Metallurgist
 
 create_joker({ -- Juggalo
     name = 'Juggalo', position = 35,
+    vars = {{unlock = 10}},
     custom_vars = function(self, info_queue, card)
         info_queue[#info_queue+1] = G.P_CENTERS.e_foil
         info_queue[#info_queue+1] = G.P_CENTERS.e_holo
@@ -2207,11 +2222,14 @@ create_joker({ -- Juggalo
         info_queue[#info_queue+1] = G.P_CENTERS.e_bunc_glitter
         return {}
     end,
+    locked_vars = function(self, info_queue, card)
+        return {vars = {self.config.extra.unlock}}
+    end,
     rarity = 'Rare', cost = 8,
     blueprint = true, eternal = true,
     unlocked = false,
     check_for_unlock = function(self, args)
-        if args.type == 'use_consumable_with_edition' and args.used_total >= 10 then
+        if args.type == 'use_consumable_with_edition' and args.used_total >= self.config.extra.unlock then
             unlock_card(self)
         end
     end,
@@ -2583,12 +2601,15 @@ create_joker({ -- Protester
 
 create_joker({ -- Doodle
     name = 'Doodle', position = 44,
-    vars = {{active = true}},
+    vars = {{active = true}, {unlock = 10}},
+    locked_vars = function(self, info_queue, card)
+        return {vars = {self.config.extra.unlock, G.PROFILES[G.SETTINGS.profile].career_stats.c_wins}}
+    end,
     rarity = 'Rare', cost = 10,
     blueprint = true, eternal = true,
     unlocked = false,
     check_for_unlock = function(self, args)
-        if args.type == 'win_custom' and (G.PROFILES[G.SETTINGS.profile].career_stats.c_wins + 1) >= 10 then
+        if args.type == 'win_custom' and (G.PROFILES[G.SETTINGS.profile].career_stats.c_wins + 1) >= self.config.extra.unlock then
             unlock_card(self)
         end
     end,
@@ -2861,17 +2882,20 @@ create_joker({ -- Wino
 
 create_joker({ -- Bounty Hunter
     name = 'Bounty Hunter', position = 52,
-    vars = {{bonus = 5}},
+    vars = {{bonus = 5}, {unlock = -20}},
     custom_vars = function(self, info_queue, card)
         local mult = math.abs(math.min(0, G.GAME.dollars)) * card.ability.extra.bonus
         return {vars = {card.ability.extra.bonus, mult}}
+    end,
+    locked_vars = function(self, info_queue, card)
+        return {vars = {self.config.extra.unlock}}
     end,
     rarity = 'Common', cost = 5,
     blueprint = true, eternal = true,
     unlocked = false,
     check_for_unlock = function(self, args)
         if args.type == 'money' then
-            if G.GAME.dollars < -20 then
+            if G.GAME.dollars < self.config.extra.unlock then
                 unlock_card(self)
             end
         end
@@ -6387,12 +6411,17 @@ SMODS.Voucher{ -- Lamination
 SMODS.Voucher{ -- Supercoating
     key = 'supercoating',
 
+    config = {unlock = 5},
+    locked_loc_vars = function(self, info_queue, card)
+        return {vars = {self.config.unlock, G.PROFILES[G.SETTINGS.profile].consumables_with_edition_used or 0}}
+    end,
+
     requires = {'v_bunc_lamination'},
 
     unlocked = false,
 
     check_for_unlock = function(self, args)
-        if args.type == 'use_consumable_with_edition' and args.used_total >= 5 then
+        if args.type == 'use_consumable_with_edition' and args.used_total >= self.config.unlock then
             unlock_card(self)
         end
     end,
@@ -6418,9 +6447,12 @@ SMODS.Voucher{ -- Hedge Trimmer
 SMODS.Voucher{ -- Chainsaw
     key = 'chainsaw',
 
-    config = {percent = 20},
+    config = {percent = 20, unlock = 20},
     loc_vars = function(self, info_queue)
         return {vars = {self.config.percent}}
+    end,
+    locked_loc_vars = function(self, info_queue, card)
+        return {vars = {self.config.unlock, G.PROFILES[G.SETTINGS.profile].hedge_trimmer_usage or 0}}
     end,
 
     requires = {'v_bunc_hedge_trimmer'},
@@ -6432,7 +6464,7 @@ SMODS.Voucher{ -- Chainsaw
     unlocked = false,
 
     check_for_unlock = function(self, args)
-        if args.type == 'hedge_trimmer_used' and args.used_total >= 20 then
+        if args.type == 'hedge_trimmer_used' and args.used_total >= self.config.unlock then
             unlock_card(self)
         end
     end,
@@ -6457,12 +6489,17 @@ SMODS.Voucher{ -- Cups 'n' Balls
 SMODS.Voucher{ -- Shell Game
     key = 'shell_game',
 
+    config = {unlock = 25},
+    locked_loc_vars = function(self, info_queue, card)
+        return {vars = {self.config.unlock, G.PROFILES[G.SETTINGS.profile].booster_packs_opened or 0}}
+    end,
+
     requires = {'v_bunc_cups_n_balls'},
 
     unlocked = false,
 
     check_for_unlock = function(self, args)
-        if args.type == 'open_pack' and args.packs_total >= 25 then
+        if args.type == 'open_pack' and args.packs_total >= self.config.unlock then
             unlock_card(self)
         end
     end,
@@ -6483,6 +6520,11 @@ SMODS.Voucher{ -- Disguise
 SMODS.Voucher{ -- Masquerade
     key = 'masquerade',
 
+    config = {unlock = 5},
+    locked_loc_vars = function(self, info_queue, card)
+        return {vars = {self.config.unlock, G.PROFILES[G.SETTINGS.profile].booster_packs_opened or 0}}
+    end,
+
     requires = {'v_bunc_disguise'},
 
     redeem = function(self)
@@ -6498,7 +6540,7 @@ SMODS.Voucher{ -- Masquerade
     unlocked = false,
 
     check_for_unlock = function(self, args)
-        if args.type == 'use_blind_card' and args.blinds_total >= 5 then
+        if args.type == 'use_blind_card' and args.blinds_total >= self.config.unlock then
             unlock_card(self)
         end
     end,
@@ -6533,9 +6575,13 @@ SMODS.Voucher{ -- Fanny Pack
 SMODS.Voucher{ -- Pin Collector
     key = 'pin_collector',
 
+    config = {unlock = 30},
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue+1] = {set = 'Tag', key = 'tag_bunc_triple'}
         return {}
+    end,
+    locked_loc_vars = function(self, info_queue, card)
+        return {vars = {self.config.unlock, G.PROFILES[G.SETTINGS.profile].skips_total or 0}}
     end,
 
     requires = {'v_bunc_fanny_pack'},
@@ -6543,7 +6589,7 @@ SMODS.Voucher{ -- Pin Collector
     unlocked = false,
 
     check_for_unlock = function(self, args)
-        if args.type == 'blind_skipped' and args.skips_total >= 30 then
+        if args.type == 'blind_skipped' and args.skips_total >= self.config.unlock then
             unlock_card(self)
         end
     end,
@@ -6564,12 +6610,17 @@ SMODS.Voucher{ -- Arcade Machine
 SMODS.Voucher{ -- Polybius
     key = 'polybius',
 
+    config = {unlock = 10},
+    locked_loc_vars = function(self, info_queue, card)
+        return {vars = {self.config.unlock, G.PROFILES[G.SETTINGS.profile].cards_linked or 0}}
+    end,
+
     requires = {'v_bunc_arcade_machine'},
 
     unlocked = false,
 
     check_for_unlock = function(self, args)
-        if args.type == 'link_cards' and args.links_total >= 10 then
+        if args.type == 'link_cards' and args.links_total >= self.config.unlock then
             unlock_card(self)
         end
     end,

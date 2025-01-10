@@ -441,10 +441,9 @@ return {
                     [3] = '{C:inactive}(Currently {X:mult,C:white}X#3#{C:inactive} Mult)'
                 },
                 ['unlock'] = {
-                    [1] = 'Have at least {C:attention}10',
+                    [1] = 'Have at least {C:attention}#1#',
                     [2] = '{E:1,C:attention}Enhanced{} cards in',
                     [3] = 'your deck'
-                    -- TODO localize number
                 }
             },
             j_bunc_crop_circles = {
@@ -479,16 +478,16 @@ return {
             j_bunc_dread = {
                 ['name'] = 'Dread',
                 ['text'] = {
-                    [1] = 'After scoring your {C:attention}last{} {C:blue}hand{},',
-                    [2] = 'upgrade it by {C:attention}2 levels{}',
+                    [1] = 'After scoring your {C:attention}last{} hand,',
+                    [2] = 'upgrade it by {C:attention}#1# levels{}',
                     [3] = 'and {C:attention}destroy{} scored cards',
-                    [4] = '{C:red}Lose{} all {C:attention}gained levels{} if you remove this Joker'
+                    [4] = '{C:inactive,s:0.8}All gained by this Joker levels',
+                    [5] = '{C:inactive,s:0.8}are lost on its removal'
                 },
                 ['unlock'] = {
                     [1] = 'Reduce your deck',
-                    [2] = 'by at least {E:1,C:attention}10{} cards',
+                    [2] = 'by at least {E:1,C:attention}#1#{} cards',
                     [3] = 'in one round'
-                    -- TODO localize number
                 }
             },
             j_bunc_prehistoric = {
@@ -577,9 +576,9 @@ return {
                     [2] = 'only {C:attention}Enhanced cards{}'
                 },
                 ['unlock'] = {
-                    [1] = 'Open {E:1,C:attention}50',
-                    [2] = 'Booster Packs'
-                    -- TODO localize number
+                    [1] = 'Open {E:1,C:attention}#1#',
+                    [2] = 'Booster Packs',
+                    [3] = '{C:inactive}(#2#)'
                 }
             },
             j_bunc_dogs_playing_poker = {
@@ -596,10 +595,9 @@ return {
                     [2] = 'one time per remaining {C:blue}hand{}',
                 },
                 ['unlock'] = {
-                    [1] = 'Retrigger a played',
+                    [1] = 'Retrigger played',
                     [2] = 'card at least',
-                    [3] = '{E:1,C:attention}5 times{}'
-                    -- TODO localize number
+                    [3] = '{E:1,C:attention}#1# times{}'
                 }
             },
             j_bunc_fiendish = {
@@ -800,9 +798,8 @@ return {
                     [4] = 'when {C:attention}Blind{} is selected'
                 },
                 ['unlock'] = {
-                    [1] = 'Use {C:attention,E:1}10{} consumables',
+                    [1] = 'Use {C:attention,E:1}#1#{} consumables',
                     [2] = 'with {C:attention,E:1}Editions'
-                    -- TODO localize number
                 }
             },
             j_bunc_head_in_the_clouds = {
@@ -897,8 +894,8 @@ return {
                     [3] = '{C:inactive}(Must have room)'
                 },
                 ['unlock'] = {
-                    [1] = 'Win {C:attention,E:1}10{} runs'
-                    -- TODO localize number
+                    [1] = 'Win {C:attention,E:1}#1#{} runs',
+                    [2] = '{C:inactive}(#2#)'
                 }
             },
             j_bunc_disproportionality = {
@@ -968,9 +965,8 @@ return {
                     [3] = '{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)'
                 },
                 ['unlock'] = {
-                    [1] = 'Have less than {E:1,C:attention}$-20',
+                    [1] = 'Have less than {E:1,C:attention}$#1#',
                     [2] = 'during a single run'
-                    -- TODO localize number
                 }
             },
             j_bunc_mousetrap = {
@@ -1563,9 +1559,9 @@ return {
                     [3] = 'appear with {C:dark_edition}Edition'
                 },
                 ['unlock'] = {
-                    [1] = 'Use {C:attention,E:1}5{} consumables',
-                    [2] = 'with {C:attention,E:1}Editions'
-                    -- TODO localize number
+                    [1] = 'Use {C:attention,E:1}#1#{} consumables',
+                    [2] = 'with {C:attention,E:1}Editions',
+                    [3] = '{C:inactive}(#2#)'
                 }
             },
             v_bunc_hedge_trimmer = {
@@ -1584,8 +1580,8 @@ return {
                 ['unlock'] = {
                     [1] = "Reduce blind's score using",
                     [2] = 'Hedge Trimmer',
-                    [3] = 'a total of {C:attention,E:1}20{} times'
-                    -- TODO localize number
+                    [3] = 'a total of {C:attention,E:1}#1#{} times',
+                    [4] = '{C:inactive}(#2#)'
                 }
             },
             v_bunc_cups_n_balls = {
@@ -1603,9 +1599,9 @@ return {
                     [3] = '{C:attention}1{} time per pack'
                 },
                 ['unlock'] = {
-                    [1] = 'Open {E:1,C:attention}25',
-                    [2] = 'Booster Packs'
-                    -- TODO localize number
+                    [1] = 'Open {E:1,C:attention}#1#',
+                    [2] = 'Booster Packs',
+                    [3] = '{C:inactive}(#2#)'
                 }
             },
             v_bunc_disguise = {
@@ -1622,10 +1618,10 @@ return {
                     [2] = 'the shop are free'
                 },
                 ['unlock'] = {
-                    [1] = 'Replace {E:1,C:attention}5{}',
+                    [1] = 'Replace {E:1,C:attention}#1#{}',
                     [2] = 'Blinds with Blinds',
-                    [3] = 'from Blind Pack'
-                    -- TODO localize number
+                    [3] = 'from Blind Pack',
+                    [4] = '{C:inactive}(#2#)'
                 }
             },
             v_bunc_fanny_pack = {
@@ -1645,8 +1641,8 @@ return {
                 },
                 ['unlock'] = {
                     [1] = 'Skip a total of',
-                    [2] = '{E:1,C:attention}30{} blinds'
-                    -- TODO localize number
+                    [2] = '{E:1,C:attention}#1#{} blinds',
+                    [3] = '{C:inactive}(#2#)'
                 }
             },
             v_bunc_arcade_machine = {
@@ -1665,8 +1661,8 @@ return {
                 },
                 ['unlock'] = {
                     [1] = 'Create a total of',
-                    [2] = '{E:1,C:attention}10{} linked groups'
-                    -- TODO localize number
+                    [2] = '{E:1,C:attention}#1#{} linked groups',
+                    [3] = '{C:inactive}(#2#)'
                 }
             }
         },
