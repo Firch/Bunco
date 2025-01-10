@@ -647,7 +647,7 @@ return {
                 ['unlock'] = {
                     [1] = 'Win a run without',
                     [2] = 'ever having',
-                    [3] = '{C:attention}Common{} Jokers' -- Sorry, no E:1! It doesn't work
+                    [3] = '{C:attention,E:1}Common{} Jokers'
                 }
             },
             j_bunc_fingerprints = {
