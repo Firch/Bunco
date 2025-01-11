@@ -6,7 +6,6 @@
 --- VERSION: 5.0
 
 -- ToDo:
--- (lame fix) Doorhanger doesn't shake when unlocked for some reason?
 -- Make configs apply immediately
 -- Shell Game should modify tables instead of replacing - see Blind Packs
 
@@ -297,6 +296,8 @@ SMODS.Consumable:take_ownership('eris', {
 SMODS.Atlas({key = 'bunco_resprites_jokers', path = 'Resprites/Jokers.png', px = 71, py = 95})
 SMODS.Atlas({key = 'bunco_resprites_consumables', path = 'Resprites/Consumables.png', px = 71, py = 95})
 
+SMODS.Shader({key = 'pinch', path = 'pinch.fs'})
+
 if config.fixed_sprites then
 
     -- High contrast
@@ -446,6 +447,11 @@ if config.fixed_sprites then
 
     SMODS.Consumable:take_ownership('incantation', {
         pos = coordinate(13),
+        atlas = 'bunco_resprites_consumables'
+    })
+
+    SMODS.Consumable:take_ownership('black_hole', {
+        pos = coordinate(14),
         atlas = 'bunco_resprites_consumables'
     })
 

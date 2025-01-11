@@ -174,6 +174,76 @@ position = 'at'
 match_indent = true
 payload = '''elseif G.GAME.won and not BUNCOMOD.content.config.colorful_finishers then'''
 
+# Black Hole 1/2
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = 'for k, v in pairs(self.I.POPUP) do'
+position = 'before'
+match_indent = true
+payload = '''
+
+G.FORCEFIELD_CARDS = G.FORCEFIELD_CARDS or {}
+
+for index, card in ipairs(G.FORCEFIELD_CARDS) do
+    if BUNCOMOD.content.config.colorful_finishers
+    and card
+    and not card.removed
+    and card.states.visible
+    and index <= 5 then
+
+        local w, h = love.graphics.getWidth(), love.graphics.getHeight() -- Get the size
+
+        card.pinch_canvas = love.graphics.newCanvas(realw, realh) -- Create the black hole canvas (size is important or else it will cut off on fullscreen)
+        love.graphics.setCanvas(card.pinch_canvas) -- Enable the black hole canvas
+
+        love.graphics.draw(self.CANVAS) -- Draw the old canvas onto the black hole one
+
+        local pinch = G.SHADERS['bunc_pinch']
+
+        local card_position = {
+        (card.VT.x + (card.VT.w / 2) + G.ROOM.T.x) * G.TILESCALE * G.TILESIZE * G.CANV_SCALE,
+        (card.VT.y + (card.VT.h / 2) + G.ROOM.T.y + 0.1) * G.TILESCALE * G.TILESIZE * G.CANV_SCALE}
+
+        pinch:send("position", card_position)
+        pinch:send("screen_size", {w, h})
+        pinch:send("radius", (card.config and card.config.forcefield and card.config.forcefield.radius or 160) * (1.2 + math.sin((index * 3.0) + G.TIMERS.REAL / 2.0) / 3.0))
+        pinch:send("strength", (card.config and card.config.forcefield and card.config.forcefield.strength or -0.5) * (0.8 - math.cos((index * 3.0) + G.TIMERS.REAL / 2.0) / 3.0))
+
+        love.graphics.setShader(pinch) -- Set the shader to the black hole canvas
+
+        love.graphics.setCanvas(self.CANVAS) -- Forget about the black hole canvas and switch back to the og canvas
+        love.graphics.draw(card.pinch_canvas) -- And draw the result of black hole canvas onto the og one
+
+        -- Reset shader:
+        love.graphics.setShader()
+
+    elseif (not card) or (card.removed) then
+        table.remove(G.FORCEFIELD_CARDS, index)
+    end
+end
+
+'''
+
+# Black Hole 2/2
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'function Card:set_sprites(_center, _front)'
+position = 'after'
+match_indent = true
+payload = '''
+
+if _center and _center.name == 'Black Hole' then
+    G.FORCEFIELD_CARDS = G.FORCEFIELD_CARDS or {}
+    self.config.forcefield = {}
+    self.config.forcefield.radius = 160
+    self.config.forcefield.strength = -0.5
+    table.insert(G.FORCEFIELD_CARDS, self)
+end
+
+'''
+
 # Text icons
 [[patches]]
 [patches.pattern]
