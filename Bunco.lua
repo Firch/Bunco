@@ -4074,14 +4074,21 @@ end
 local original_add_to_highlighted = CardArea.add_to_highlighted
 function CardArea:add_to_highlighted(card, silent)
     if card.ability.group and self then
-        local group_silent = false
+        local group = {}
         for i = 1, #self.cards do
             if self.cards[i].ability.group
             and self.cards[i].ability.group.id == card.ability.group.id then
                 if self.config.type == 'hand' and not self.cards[i].highlighted then
-                    original_add_to_highlighted(self, self.cards[i], (silent == nil) and group_silent or silent)
-                    group_silent = true
+                    table.insert(group, self.cards[i])
                 end
+            end
+        end
+        for i = 1, #group do
+            if i ~= #group then
+                self.highlighted[#self.highlighted+1] = group[i]
+                group[i].highlighted = true
+            else
+                original_add_to_highlighted(self, group[i], (silent == nil) and false or silent)
             end
         end
     else
@@ -4092,11 +4099,23 @@ end
 local original_remove_from_highlighted = CardArea.remove_from_highlighted
 function CardArea:remove_from_highlighted(card, force)
     if card.ability.group and self and not force then
+        local group = {}
         for i = 1, #self.cards do
             if self.config.type == 'hand'
             and self.cards[i].ability.group
             and self.cards[i].ability.group.id == card.ability.group.id then
-                original_remove_from_highlighted(self, self.cards[i], force)
+                table.insert(group, self.cards[i])
+            end
+        end
+        for i = 1, #group do
+            for index, highligthed in ipairs(self.highlighted) do
+                if highligthed == group[i] then
+                    table.remove(self.highlighted, index)
+                end
+            end
+            group[i].highlighted = false
+            if i == #group then
+                original_remove_from_highlighted(self, group[i], force)
             end
         end
     else
