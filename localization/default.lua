@@ -1058,6 +1058,14 @@ return {
                     [4] = '{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)'
                 }
             },
+            j_bunc_stylophone = {
+                ['name'] = 'Stylophone',
+                ['text'] = {
+                    [1] = 'Gives Mult equal',
+                    [2] = 'to the {C:attention}rank{} of',
+                    [3] = 'scored card'
+                }
+            },
 
             -- Exotic Jokers
 
