@@ -687,12 +687,13 @@ SMODS.Atlas({key = 'bunco_jokers_headache', path = 'Jokers/JokerHeadache.png', p
 
 SMODS.Sound({key = 'gunshot', path = 'gunshot.ogg'})
 SMODS.Sound({key = 'mousetrap', path = 'mousetrap.ogg'})
-SMODS.Sound({key = 'harpsichord', path = 'harpsichord.ogg'})
-SMODS.Sound({key = 'honkytonk', path = 'honkytonk.ogg'})
-SMODS.Sound({key = 'piano', path = 'piano.ogg'})
-SMODS.Sound({key = 'vibraphone', path = 'vibraphone.ogg'})
-SMODS.Sound({key = 'organ', path = 'organ.ogg'})
-SMODS.Sound({key = 'harp', path = 'harp.ogg'})
+SMODS.Sound({key = 'spade', path = 'spade.ogg'})
+SMODS.Sound({key = 'club', path = 'club.ogg'})
+SMODS.Sound({key = 'heart', path = 'heart.ogg'})
+SMODS.Sound({key = 'diamond', path = 'diamond.ogg'})
+SMODS.Sound({key = 'fleuron', path = 'fleuron.ogg'})
+SMODS.Sound({key = 'halberd', path = 'halberd.ogg'})
+SMODS.Sound({key = 'stone', path = 'stone.ogg'})
 
 SMODS.Shader({key = 'headache', path = 'headache.fs'})
 
@@ -3376,31 +3377,46 @@ create_joker({ -- Stylophone
     blueprint = true, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
+
+        local function play_stylophone(other_card)
+            local instrument = 'bunc_stone'
+
+            local function calculate_pitch(pitch)
+                return 2^(pitch / 12)
+            end
+
+            if other_card.config.center ~= G.P_CENTERS.m_stone then
+                if other_card.base.suit == 'Spades' then
+                    instrument = 'bunc_spade'
+                elseif other_card.base.suit == 'Clubs' then
+                    instrument = 'bunc_club'
+                elseif other_card.base.suit == 'Hearts' then
+                    instrument = 'bunc_heart'
+                elseif other_card.base.suit == 'Diamonds' then
+                    instrument = 'bunc_diamond'
+                elseif other_card.base.suit == 'bunc_Fleurons' then
+                    instrument = 'bunc_fleuron'
+                elseif other_card.base.suit == 'bunc_Halberds' then
+                    instrument = 'bunc_halberd'
+                end
+                event({trigger = 'after', func = function() play_sound(instrument, calculate_pitch(other_card:get_id()), 2.0) return true end})
+            else
+                event({trigger = 'after', func = function() play_sound(instrument, 1.0, 2.0) return true end})
+            end
+        end
+
         if context.individual and context.cardarea == G.play then
+            play_stylophone(context.other_card)
             if context.other_card.config.center ~= G.P_CENTERS.m_stone then
-                local function calculate_pitch(pitch)
-                    return 2^(pitch / 12)
-                end
-                local instrument = 'bunc_piano'
-                if context.other_card.base.suit == 'Spades' then
-                    instrument = 'bunc_harpsichord'
-                elseif context.other_card.base.suit == 'Clubs' then
-                    instrument = 'bunc_honkytonk'
-                elseif context.other_card.base.suit == 'Hearts' then
-                    instrument = 'bunc_piano'
-                elseif context.other_card.base.suit == 'Diamonds' then
-                    instrument = 'bunc_vibraphone'
-                elseif context.other_card.base.suit == 'bunc_Halberds' then
-                    instrument = 'bunc_organ'
-                elseif context.other_card.base.suit == 'bunc_Fleurons' then
-                    instrument = 'bunc_harp'
-                end
                 return {
                     mult = context.other_card:get_id(),
-                    card = card,
-                    func = function() event({trigger = 'after', func = function() play_sound(instrument, calculate_pitch(context.other_card:get_id()), 2.0) return true end}) end
+                    card = card
                 }
             end
+        end
+        if context.click and context.other_card.area == G.hand then
+            extra_juice(card)
+            play_stylophone(context.other_card)
         end
     end
 })

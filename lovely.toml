@@ -1395,6 +1395,25 @@ end
 
 '''
 
+# Card:click() (Stylophone)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''function Card:click()'''
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.jokers ~= nil then
+    for _, v in ipairs(G.jokers.cards) do
+        if v.config.center.key == 'j_bunc_stylophone' and not v.debuff then
+            v:calculate_joker({click = true, other_card = self})
+        end
+    end
+end
+
+'''
+
 # function Card:is_suit (Myopia & Astigmatism)
 [[patches]]
 [patches.pattern]
