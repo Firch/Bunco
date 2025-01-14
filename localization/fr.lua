@@ -310,8 +310,10 @@ return {
             c_bunc_the_8 = {
                 ['name'] = 'Le 8',
                 ['text'] = {
-                    [1] = '{C:attention}Lie ensemble{} toutes',
-                    [2] = 'les cartes non liées dans la main',
+                    [1] = "{C:attention}Lie ensembles{} n'importe",
+                    [2] = 'quel nombre de cartes non liées',
+                    [3] = 'sélectionnées dans la main',
+                    [4] = '{C:inactive,s:0.6}(Sélection illimitée pendant que Le 8 est sélectionné)'
                 }
             }
         },
@@ -1064,9 +1066,9 @@ return {
             j_bunc_stylophone = {
                 ['name'] = 'Stylophone',
                 ['text'] = {
-                    [1] = 'Donne du Multi. égal',
-                    [2] = 'à la {C:attention}valeur{} de',
-                    [3] = 'la carte marquant des points'
+                    [1] = 'Les cartes donnent {C:attention}X#1#{} du Multi.',
+                    [2] = 'de la {C:attention}valeur{}',
+                    [3] = "lorsqu'elles marquent des points"
                 }
             },
 
