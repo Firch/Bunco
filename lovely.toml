@@ -426,6 +426,15 @@ G.E_MANAGER:add_event(Event({func = function() G.DRAWING_CARDS = nil return true
 
 '''
 
+# Linked cards can discard
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = "if G.GAME.current_round.discards_left <= 0 or #G.hand.highlighted <= 0 then"
+position = "at"
+match_indent = true
+payload = '''if G.GAME.current_round.discards_left <= 0 or #G.hand.highlighted <= 0 or #G.hand.highlighted > G.hand.config.highlighted_limit then'''
+
 # Linked cards selection 1/2
 [[patches]]
 [patches.pattern]
@@ -434,6 +443,12 @@ pattern = 'function CardArea:can_highlight(card)'
 position = 'after'
 match_indent = true
 payload = '''
+
+-- Anything is selectable with The 8 active
+
+if card and self == G.hand and G.GAME and G.GAME.THE_8_BYPASS then
+    return true
+end
 
 -- Making so the player can't choose a group of linked cards if it'd bypass highlighted limit
 
@@ -488,7 +503,7 @@ target = 'cardarea.lua'
 pattern = 'if #self.highlighted >= self.config.highlighted_limit then'
 position = 'at'
 match_indent = true
-payload = '''if (#self.highlighted >= self.config.highlighted_limit) and (not card.ability.group) then'''
+payload = '''if (#self.highlighted >= self.config.highlighted_limit) and (not card.ability.group) and (G.GAME and not G.GAME.THE_8_BYPASS) then'''
 
 # Linked cards destruction 1/2
 [[patches]]

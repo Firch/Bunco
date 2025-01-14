@@ -561,6 +561,12 @@ local original_game_update = Game.update
 
 function Game:update(dt)
 
+    -- The 8
+
+    if G.GAME then
+        G.GAME.THE_8_BYPASS = false
+    end
+
     -- The Wind
 
     if G.GAME and G.GAME.blind and G.GAME.blind.name == 'bl_bunc_wind' and G.GAME.blind.ready and not G.GAME.blind.disabled then
@@ -4839,15 +4845,29 @@ SMODS.Consumable{ -- The 8
     soul_rate = 0.002,
     soul_set = 'Polymino',
 
+    update = function(self, card)
+        if card.highlighted then
+            if G.GAME then G.GAME.THE_8_BYPASS = true end
+        end
+    end,
+
     can_use = function(self, card)
-        if G.hand and #G.hand.cards >= 1 then
+        local cards = G.hand.highlighted
+
+        -- Group check:
+
+        for i = 1, #cards do
+            if cards[i].ability.group then return false end
+        end
+
+        if #cards > 1 then
             return true
         end
         return false
     end,
 
     use = function(self, card)
-        link_cards(G.hand.cards, self.key, true)
+        link_cards(G.hand.highlighted, self.key)
         card:juice_up(0.3, 0.5)
     end,
 
