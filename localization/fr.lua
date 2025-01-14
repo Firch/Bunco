@@ -54,12 +54,17 @@ return {
             bunc_most_played_rank = '(valeur la plus jouée)',
             bunc_least_played_hand = '(main la moins jouée)',
             bunc_blade = '(1.5X score de la blinde)',
-            bunc_exceeded_score = 'Limite dépassée!',
+            bunc_exceeded_score = 'Limite de score dépassée!',
 
             -- Consumable types
 
             k_polymino = 'Polymino',
-            b_polymino_cards = 'Cartes Polymino'
+            b_polymino_cards = 'Cartes Polymino',
+
+            -- Booster types
+
+            k_bunc_blind_pack = 'Paquet Blinde',
+            k_bunc_virtual_pack = 'Paquet Virtuel'
 
         },
 
@@ -109,7 +114,7 @@ return {
 
             -- Editions
 
-            bunc_glitter = 'Pailleté',
+            bunc_glitter = 'Pailletée',
             bunc_fluorescent = 'Fluorescent',
 
             -- Stickers
@@ -131,6 +136,30 @@ return {
                     [2] = 'les couleurs {C:bunc_fleurons}Fleuron{} ou {C:bunc_halberds}Hallebarde{}'
                 }
             },
+            bunc_consumable_edition_foil = {
+                ['name'] = 'Brillante',
+                ['text'] = {
+                    [1] = 'Crée un {C:attention}Badge jetons'
+                }
+            },
+            bunc_consumable_edition_holo = {
+                ['name'] = 'Holographique',
+                ['text'] = {
+                    [1] = 'Crée un {C:attention}Badge multi.'
+                }
+            },
+            bunc_consumable_edition_polychrome = {
+                ['name'] = 'Polychrome',
+                ['text'] = {
+                    [1] = 'Crée un {C:attention}Badge megamulti.'
+                }
+            },
+            bunc_consumable_edition_bunc_glitter = {
+                ['name'] = 'Pailletée',
+                ['text'] = {
+                    [1] = 'Crée un {C:attention}Badge ultrajetons'
+                }
+            },
 
             -- Undiscovered
 
@@ -147,7 +176,6 @@ return {
             -- Booster Packs
 
             p_bunc_blind = {
-                ['group_name'] = 'Paquet Blinde',
                 ['name'] = 'Paquet Blinde',
                 ['text'] = {
                     [1] = 'Choisissez parmis {C:attention}#1# Blindes{}',
@@ -156,7 +184,6 @@ return {
                 }
             },
             p_bunc_virtual_normal = {
-                ['group_name'] = 'Paquet Virtuel',
                 ['name'] = 'Paquet Virtuel',
                 ['text'] = {
                     [1] = 'Piochez tout votre jeu et',
@@ -166,7 +193,6 @@ return {
                 }
             },
             p_bunc_virtual_jumbo = {
-                ['group_name'] = 'Paquet Virtuel',
                 ['name'] = 'Paquet Jumbo Virtuel',
                 ['text'] = {
                     [1] = 'Piochez tout votre jeu et',
@@ -176,7 +202,6 @@ return {
                 }
             },
             p_bunc_virtual_mega = {
-                ['group_name'] = 'Paquet Virtuel',
                 ['name'] = 'Paquet Méga-Virtuel',
                 ['text'] = {
                     [1] = 'Piochez tout votre jeu et',
@@ -421,10 +446,9 @@ return {
                     [3] = '{C:inactive}(Actuellement {X:mult,C:white}X#3#{C:inactive} Multi.)'
                 },
                 ['unlock'] = {
-                    [1] = 'Ayez au moins {C:attention}10',
+                    [1] = 'Ayez au moins {C:attention}#1#',
                     [2] = '{E:1,C:attention}Cartes améliorées{} dans',
                     [3] = 'votre jeu'
-                    -- TODO localize number
                 }
             },
             j_bunc_crop_circles = {
@@ -459,16 +483,16 @@ return {
             j_bunc_dread = {
                 ['name'] = 'Effroi',
                 ['text'] = {
-                    [1] = 'Après avoir marqué votre {C:attention}dernière{} {C:blue}main{},',
-                    [2] = 'augmente la main de {C:attention}2 niveaux{}',
+                    [1] = 'Après avoir marqué votre {C:attention}dernière{} main,',
+                    [2] = 'augmente la main de {C:attention}#1# niveaux{}',
                     [3] = 'et {C:attention}détruit{} les cartes ayant marqué des points',
-                    [4] = '{C:red}Perdez{} tout les {C:attention}niveaux gagnés{} si vous retirez ce Joker'
+                    [4] = '{C:inactive,s:0.8}Tout les niveaux gagnés par ce Joker',
+                    [5] = '{C:inactive,s:0.8}sont perdus si le Joker est retiré'
                 },
                 ['unlock'] = {
                     [1] = 'Réduisez votre jeu',
-                    [2] = "d'au moins {E:1,C:attention}10{} cartes",
+                    [2] = "d'au moins {E:1,C:attention}#1#{} cartes",
                     [3] = 'en une manche'
-                    -- TODO localize number
                 }
             },
             j_bunc_prehistoric = {
@@ -557,9 +581,8 @@ return {
                     [2] = 'uniquement des {C:attention}Cartes améliorées{}'
                 },
                 ['unlock'] = {
-                    [1] = 'Ouvrez {E:1,C:attention}50',
-                    [2] = 'Paquets'
-                    -- TODO localize number
+                    [1] = 'Ouvrez {E:1,C:attention}#1#',
+                    [2] = 'Paquets',
                 }
             },
             j_bunc_dogs_playing_poker = {
@@ -577,8 +600,7 @@ return {
                 },
                 ['unlock'] = {
                     [1] = 'Déclencher à nouveau une carte',
-                    [2] = 'jouée au moins {E:1,C:attention}5 fois{}',
-                    -- TODO localize number
+                    [2] = 'jouée au moins {E:1,C:attention}#1# fois{}',
                 }
             },
             j_bunc_fiendish = {
@@ -628,7 +650,7 @@ return {
                 ['unlock'] = {
                     [1] = 'Gagnez une partie sans',
                     [2] = 'jamais avoir de',
-                    [3] = 'Jokers {C:attention}Communs{}' -- Sorry, no E:1! It doesn't work
+                    [3] = 'Jokers {C:attention,E:1}Communs{}'
                 }
             },
             j_bunc_fingerprints = {
@@ -774,14 +796,13 @@ return {
                 ['name'] = 'Jongleur',
                 ['text'] = {
                     [1] = 'Ajoute une édition {C:dark_edition}Brillante{}, {C:dark_edition}Holographique{},',
-                    [2] = '{C:dark_edition}Polychrome{}, ou {C:dark_edition}Pailleté{}',
+                    [2] = '{C:dark_edition}Polychrome{}, ou {C:dark_edition}Pailletée{}',
                     [3] = 'à un {C:attention}consommable{}',
                     [4] = 'lorsque la {C:attention}Blinde{} est sélectionnée'
                 },
                 ['unlock'] = {
-                    [1] = 'Utilisez {C:attention,E:1}10{} consommables',
+                    [1] = 'Utilisez {C:attention,E:1}#1#{} consommables',
                     [2] = 'ayant une {C:attention,E:1}Edition'
-                    -- TODO localize number
                 }
             },
             j_bunc_head_in_the_clouds = {
@@ -877,8 +898,7 @@ return {
                     [3] = '{C:inactive}(Selon la place disponible)'
                 },
                 ['unlock'] = {
-                    [1] = 'Gagnez {C:attention,E:1}10{} parties'
-                    -- TODO localize number
+                    [1] = 'Gagnez {C:attention,E:1}#1#{} parties',
                 }
             },
             j_bunc_disproportionality = {
@@ -948,9 +968,8 @@ return {
                     [3] = '{C:inactive}(Actuellement {C:mult}+#2#{C:inactive} Multi.)'
                 },
                 ['unlock'] = {
-                    [1] = 'Ayez moins de {E:1,C:attention}$-20',
+                    [1] = 'Ayez moins de {E:1,C:attention}$#1#',
                     [2] = 'pendant une seule partie'
-                    -- TODO localize number
                 }
             },
             j_bunc_mousetrap = {
@@ -988,6 +1007,66 @@ return {
                     [2] = "d'une carte depuis le magasin ou depuis",
                     [3] = 'un Paquet, obtenez {C:attention}2',
                     [4] = 'cartes adjacentes si possible'
+                }
+            },
+            j_bunc_glue_gun = {
+                ['name'] = 'Pistolet à colle',
+                ['text'] = {
+                    [1] = 'Vendez cette carte pour',
+                    [2] = '{C:attention}lier ensembles{} #1# cartes',
+                    [3] = 'sélectionnées'
+                }
+            },
+            j_bunc_taped = {
+                ['name'] = 'Jokers scotchés',
+                ['text'] = {
+                    [1] = '{C:attention}Lie ensembles{} toutes',
+                    [2] = 'les cartes jouées dans',
+                    [3] = 'la première main marquante',
+                    [4] = 'lors de la {C:attention}Blinde Boss{}'
+                }
+            },
+            j_bunc_rubber_band_ball = {
+                ['name'] = "Balle d'élastiques",
+                ['text'] = {
+                    [1] = '{X:mult,C:white}X#1#{} Multi. par {C:attention}liens{}',
+                    [2] = 'créés cette partie',
+                    [3] = '{C:inactive}(Actuellement {X:mult,C:white}X#2#{C:inactive} Multi.)'
+                }
+            },
+            j_bunc_headache = {
+                ['name'] = 'Migraine',
+                ['text'] = {
+                    [1] = 'Crée une carte {C:bunco_virtual_dark}Polymino{}',
+                    [2] = 'pour chaque {C:attention}#1#{} cartes',
+                    [3] = 'détruites {C:inactive}(Selon la place disponible)',
+                    [4] = '{C:inactive}({C:attention}#2#{C:inactive}/#1# cartes détruites)'
+                }
+            },
+            j_bunc_games_collector = {
+                ['name'] = 'Collectionneur de jeux',
+                ['text'] = {
+                    [1] = 'Gagnez {C:chips}+#1#{} Jetons',
+                    [2] = "lorsqu'un groupe lié",
+                    [3] = 'est {C:attention}pioché{}',
+                    [4] = '{C:inactive}(Actuellement {C:chips}+#2#{C:inactive} Jetons)'
+                }
+            },
+            j_bunc_jumper = {
+                ['name'] = 'Sauteur',
+                ['text'] = {
+                    [1] = 'Gagnez {C:chips}+#1#{} Jetons',
+                    [2] = 'si la main jouée',
+                    [3] = 'contient une {C:attention}Couleur{}',
+                    [4] = '{C:inactive}(Actuellement {C:chips}+#2#{C:inactive} Jetons)'
+                }
+            },
+            j_bunc_stylophone = {
+                ['name'] = 'Stylophone',
+                ['text'] = {
+                    [1] = 'Donne du Multi. égal',
+                    [2] = 'à la {C:attention}valeur{} de',
+                    [3] = 'la carte marquant des points'
                 }
             },
 
@@ -1048,7 +1127,7 @@ return {
                 ['text'] = {
                     [1] = '{X:mult,C:white}X#1#{} Multi. si la main',
                     [2] = 'jouée contient',
-                    [3] = 'u, {C:attention}Spectre'
+                    [3] = 'un {C:attention}Spectre'
                 }
             },
             j_bunc_magic_wand = {
@@ -1298,6 +1377,10 @@ return {
                     [2] = '{C:attention}Blinde Boss{}, ajoute #1#',
                     [3] = '{C:bunco_exotic,T:bunc_exotic_cards}#2#{} aléatoire',
                     [4] = 'à votre jeu'
+                },
+                ['unlock'] = {
+                    [1] = 'Jouez {E:1,C:attention}5 couleurs différentes',
+                    [2] = 'en une seule main'
                 }
             },
             b_bunc_digital = {
@@ -1361,7 +1444,7 @@ return {
                 ['text'] = {
                     [1] = 'Le prochain Joker en édition de base',
                     [2] = 'du magasin sera gratuit et',
-                    [3] = 'obtiendra le statut {C:dark_edition}Pailleté'
+                    [3] = 'obtiendra le statut {C:dark_edition}Pailletée'
                 }
             },
             tag_bunc_fluorescent = {
@@ -1457,7 +1540,7 @@ return {
         },
         Edition = {
             e_bunc_glitter = {
-                ['name'] = 'Pailleté',
+                ['name'] = 'Pailletée',
                 ['text'] = {
                     [1] = '{X:chips,C:white}X#1#{} Jetons'
                 }
@@ -1487,9 +1570,8 @@ return {
                     [3] = 'apparaîtront avec une {C:dark_edition}Édition'
                 },
                 ['unlock'] = {
-                    [1] = 'Utilisez {C:attention,E:1}5{} consommables',
-                    [2] = 'avec des {C:attention,E:1}Éditions'
-                    -- TODO localize number
+                    [1] = 'Utilisez {C:attention,E:1}#1#{} consommables',
+                    [2] = 'avec des {C:attention,E:1}Éditions',
                 }
             },
             v_bunc_hedge_trimmer = {
@@ -1508,8 +1590,7 @@ return {
                 ['unlock'] = {
                     [1] = "Réduisez un score de blinde avec",
                     [2] = 'Taille-haie',
-                    [3] = 'un total de {C:attention,E:1}20{} fois'
-                    -- TODO localize number
+                    [3] = 'un total de {C:attention,E:1}#1#{} fois',
                 }
             },
             v_bunc_cups_n_balls = {
@@ -1527,9 +1608,9 @@ return {
                     [3] = '{C:attention}1{} fois par paquet'
                 },
                 ['unlock'] = {
-                    [1] = 'Ouvrir {E:1,C:attention}25',
-                    [2] = 'Paquets'
-                    -- TODO localize number
+                    [1] = 'Ouvrir {E:1,C:attention}#1#',
+                    [2] = 'Paquets',
+                    [3] = '{C:inactive}(#2#)'
                 }
             },
             v_bunc_disguise = {
@@ -1546,10 +1627,10 @@ return {
                     [2] = 'le magasin sont gratuits'
                 },
                 ['unlock'] = {
-                    [1] = 'Remplacez {E:1,C:attention}5{}',
+                    [1] = 'Remplacez {E:1,C:attention}#1#{}',
                     [2] = 'Blindes avec des Blindes',
-                    [3] = 'des Paquets Blinde'
-                    -- TODO localize number
+                    [3] = 'des Paquets Blinde',
+                    [4] = '{C:inactive}(#2#)'
                 }
             },
             v_bunc_fanny_pack = {
@@ -1569,8 +1650,8 @@ return {
                 },
                 ['unlock'] = {
                     [1] = 'Passez un total de',
-                    [2] = '{E:1,C:attention}30{} blindes'
-                    -- TODO localize number
+                    [2] = '{E:1,C:attention}#1#{} blindes',
+                    [3] = '{C:inactive}(#2#)'
                 }
             },
             v_bunc_arcade_machine = {
@@ -1589,8 +1670,8 @@ return {
                 },
                 ['unlock'] = {
                     [1] = 'Créez un total de',
-                    [2] = '{E:1,C:attention}10{} groupes liés'
-                    -- TODO localize number
+                    [2] = '{E:1,C:attention}#1#{} groupes liés',
+                    [3] = '{C:inactive}(#2#)'
                 }
             }
         },
