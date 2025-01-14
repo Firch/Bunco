@@ -3379,6 +3379,7 @@ create_joker({ -- Jumper
 
 create_joker({ -- Stylophone
     name = 'Stylophone', position = 60,
+    vars = {{x = 0.3}},
     rarity = 'Uncommon', cost = 5,
     blueprint = true, eternal = true,
     unlocked = true,
@@ -3415,7 +3416,7 @@ create_joker({ -- Stylophone
             play_stylophone(context.other_card)
             if context.other_card.config.center ~= G.P_CENTERS.m_stone then
                 return {
-                    mult = context.other_card:get_id(),
+                    mult = context.other_card:get_id() * card.ability.extra.x,
                     card = card
                 }
             end

@@ -1063,9 +1063,9 @@ return {
             j_bunc_stylophone = {
                 ['name'] = 'Stylophone',
                 ['text'] = {
-                    [1] = 'Gives Mult equal',
-                    [2] = 'to the {C:attention}rank{} of',
-                    [3] = 'scored card'
+                    [1] = 'Cards give {C:attention}X#1#{} Mult',
+                    [2] = 'of the {C:attention}rank{}',
+                    [3] = 'when scored'
                 }
             },
 
