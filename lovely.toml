@@ -372,6 +372,60 @@ if (_c.set == 'Default' or _c.set == 'Enhanced') and card and card.ability and t
     localize{type = 'other', key = 'bunc_temporary_extra_chips', nodes = desc_nodes, vars = {card.ability.temporary_extra_chips}}
 end'''
 
+# Linked cards drawing 1/
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "if G.GAME.current_round.hands_played == 0 and"
+position = "before"
+match_indent = true
+payload = '''
+
+G.E_MANAGER:add_event(Event({func = function()
+
+'''
+
+# Linked cards drawing 2/
+[[patches]]
+[patches.regex]
+target = "game.lua"
+pattern = 'drawn_to_hand\(\)\n(.*)return true\n(.*)end\n(.*)'
+position = "after"
+match_indent = true
+payload = '''
+
+return true end}))
+
+'''
+
+# Linked cards drawing 3/4
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "G.FUNCS.draw_from_deck_to_hand()"
+position = "after"
+match_indent = true
+payload = '''
+
+-- TODO Add support for modded packs (this hinders the card clicking)
+
+G.DRAWING_CARDS = G.STATE
+
+'''
+
+# Linked cards drawing 4/4
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "G.CONTROLLER:recall_cardarea_focus('pack_cards')"
+position = "after"
+match_indent = true
+payload = '''
+
+G.E_MANAGER:add_event(Event({func = function() G.DRAWING_CARDS = nil return true end}))
+
+'''
+
 # Linked cards selection 1/2
 [[patches]]
 [patches.pattern]

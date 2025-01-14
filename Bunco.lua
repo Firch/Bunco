@@ -4073,26 +4073,28 @@ end
 
 local original_add_to_highlighted = CardArea.add_to_highlighted
 function CardArea:add_to_highlighted(card, silent)
-    if card.ability.group and self then
-        local group = {}
-        for i = 1, #self.cards do
-            if self.cards[i].ability.group
-            and self.cards[i].ability.group.id == card.ability.group.id then
-                if self.config.type == 'hand' and not self.cards[i].highlighted then
-                    table.insert(group, self.cards[i])
+    if G.STATE ~= G.STATES.DRAW_TO_HAND and not G.DRAWING_CARDS then
+        if card.ability.group and self then
+            local group = {}
+            for i = 1, #self.cards do
+                if self.cards[i].ability.group
+                and self.cards[i].ability.group.id == card.ability.group.id then
+                    if self.config.type == 'hand' and not self.cards[i].highlighted then
+                        table.insert(group, self.cards[i])
+                    end
                 end
             end
-        end
-        for i = 1, #group do
-            if i ~= #group then
-                self.highlighted[#self.highlighted+1] = group[i]
-                group[i].highlighted = true
-            else
-                original_add_to_highlighted(self, group[i], (silent == nil) and false or silent)
+            for i = 1, #group do
+                if i ~= #group then
+                    self.highlighted[#self.highlighted+1] = group[i]
+                    group[i].highlighted = true
+                else
+                    original_add_to_highlighted(self, group[i], (silent == nil) and false or silent)
+                end
             end
+        else
+            original_add_to_highlighted(self, card, silent)
         end
-    else
-        original_add_to_highlighted(self, card, silent)
     end
 end
 
