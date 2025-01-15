@@ -1,7 +1,7 @@
 [manifest]
 version = "1.0.0"
 dump_lua = true
-priority = 0
+priority = 10
 
 # Exotics toggle
 [[patches]]
@@ -2579,20 +2579,56 @@ payload = '''
 
 for i=1, BUNCOMOD and BUNCOMOD.vars and BUNCOMOD.vars.jokerlike_consumable_editions and 0 or #G.consumeables.cards do
     local _card = G.consumeables.cards[i]
-    local effects = eval_card(_card, {cardarea = G.jokers, full_hand = G.play.cards, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, joker_main = true, callback = function(_card, ret) effects = {jokers = ret}
+    local effects = {}
+    -- remove base game joker edition calc
+    local eval = eval_card(_card, {cardarea = G.jokers, full_hand = G.play.cards, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, edition = true, pre_joker = true})
+    
 
-    --Any Joker effects
-    if effects.jokers then
-        local extras = {mult = false, hand_chips = false}
-        if effects.jokers.mult_mod then mult = mod_mult(mult + effects.jokers.mult_mod);extras.mult = true end
-        if effects.jokers.chip_mod then hand_chips = mod_chips(hand_chips + effects.jokers.chip_mod);extras.hand_chips = true end
-        if effects.jokers.Xmult_mod then mult = mod_mult(mult*effects.jokers.Xmult_mod);extras.mult = true  end
-        update_hand_text({delay = 0}, {chips = extras.hand_chips and hand_chips, mult = extras.mult and mult})
-        card_eval_status_text(_card, 'jokers', nil, percent, nil, effects.jokers)
-        percent = percent+percent_delta
+    -- Calculate context.joker_main
+    local joker_eval, post = eval_card(_card, {cardarea = G.jokers, full_hand = G.play.cards, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, joker_main = true})
+    if next(joker_eval) then
+        table.insert(effects, joker_eval)
+        if next(post) then 
+            for _, v in ipairs(post) do
+                table.insert(effects, v) 
+            end
+        end
+        if joker_eval.retriggers then
+            for rt = 1, #joker_eval.retriggers do
+                local rt_eval, rt_post = eval_card(_card, {cardarea = G.jokers, full_hand = G.play.cards, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, joker_main = true, retrigger_joker = true})
+                table.insert(effects, {joker_eval.retriggers[rt]})
+                table.insert(effects, rt_eval)
+                if next(rt_post) then table.insert(effects, rt_post) end
+            end
+        end
     end
 
-    end})
+    -- Calculate context.other_joker effects
+    for k=1, #G.consumeables.cards do
+        local _joker = G.consumeables.cards[k]
+        local joker_eval,post = eval_card(_joker, {full_hand = G.play.cards, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, other_joker = _card.ability.set == 'Joker' and _card or false, other_consumeable = _card.ability.set ~= 'Joker' and _card or false})
+        if next(joker_eval) then
+            joker_eval.jokers.juice_card = _joker
+            table.insert(effects, joker_eval)
+            if next(post) then
+                for _, v in ipairs(post) do
+                    table.insert(effects, v) 
+                end
+            end
+            if joker_eval.retriggers then
+                for rt = 1, #joker_eval.retriggers do
+                    local rt_eval, rt_post = eval_card(_card, {full_hand = G.play.cards, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, other_joker = _card.ability.set == 'Joker' and _card or false, other_consumeable = _card.ability.set ~= 'Joker' and _card or false, retrigger_joker = true})
+                    table.insert(effects, {joker_eval.retriggers[rt]})
+                    table.insert(effects, rt_eval)
+                    if next(rt_post) then table.insert(effects, rt_post) end
+                end
+            end
+        end
+    end
+
+    SMODS.trigger_effects(effects, _card)
+    local deck_effect = G.GAME.selected_back:trigger_effect({full_hand = G.play.cards, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, other_joker = _card.ability.set == 'Joker' and _card or false, other_consumeable = _card.ability.set ~= 'Joker' and _card or false})
+    if deck_effect then SMODS.calculate_effect(deck_effect, G.deck.cards[1] or G.deck) end
 end
 
 '''
