@@ -2716,7 +2716,7 @@ create_joker({ -- Running Joke
     name = 'Running Joke', position = 46,
     custom_vars = function(self, info_queue, card)
         info_queue[#info_queue+1] = G.P_CENTERS.e_negative
-        info_queue[#info_queue+1] = {set = 'Joker', key = 'j_joker', specific_vars = {G.P_CENTERS['j_joker'].config.mult}}
+        info_queue[#info_queue+1] = G.P_CENTERS.j_joker
     end,
     rarity = 'Rare', cost = 8,
     blueprint = false, eternal = true,
