@@ -2642,7 +2642,7 @@ position = 'after'
 match_indent = true
 payload = '''
 
-local consumable_edition = {rate = G.GAME.used_vouchers['v_bunc_lamination'] and 2 or 0, forced = G.GAME.used_vouchers['v_bunc_supercoating']}
+consumable_edition = {rate = G.GAME.used_vouchers['v_bunc_lamination'] and 2 or 0, forced = G.GAME.used_vouchers['v_bunc_supercoating']}
 
 '''
 
@@ -2655,7 +2655,7 @@ position = 'before'
 match_indent = true
 payload = '''
 
-local edition = poll_edition('standard_edition'..G.GAME.round_resets.ante, consumable_edition.rate, true, consumable_edition.forced,
+local edition = poll_edition('standard_edition'..G.GAME.round_resets.ante, consumable_edition.rate or 0, true, consumable_edition.forced or false,
 {'e_holo', 'e_foil', 'e_polychrome', 'e_bunc_glitter'})
 if not card.edition then
     for _, card_type in ipairs(SMODS.ConsumableType.ctype_buffer) do
