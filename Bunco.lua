@@ -557,6 +557,41 @@ end
 
 -- Miscellaneous stuff
 
+-- Post-effect card eval (for specific cases)
+
+function post_eval_card(card, context)
+    if not card then return end
+    if card.ability.set ~= 'Joker' and card.debuff then return {} end
+    context = context or {}
+    local ret = {}
+
+    if card.ability.set == 'Enhanced' and card.config.center.post_effect then
+        local enhancement = card:calculate_enhancement(context)
+        if enhancement then
+            ret.enhancement = enhancement
+        end
+    end
+
+    return ret
+end
+
+local original_calculate_main_scoring = SMODS.calculate_main_scoring
+function SMODS.calculate_main_scoring(context, scoring_hand)
+    original_calculate_main_scoring(context, scoring_hand)
+
+    -- Post-scoring
+
+    for _, card in ipairs(scoring_hand or context.cardarea.cards) do
+        local post_context = context
+        post_context.main_scoring = true
+        post_context.post_effect = true
+        post_context.cardarea = G.play
+        post_context.full_hand = G.play.cards
+        post_context.scoring_hand = scoring_hand
+        SMODS.trigger_effects({post_eval_card(card, post_context)}, card)
+    end
+end
+
 local original_game_update = Game.update
 
 function Game:update(dt)
@@ -3741,6 +3776,17 @@ create_joker({ -- Rigoletto
 
 SMODS.Atlas({key = 'bunco_tarots', path = 'Consumables/Tarots.png', px = 71, py = 95})
 
+SMODS.Consumable{ -- The Art
+    set = 'Tarot', atlas = 'bunco_tarots',
+    key = 'art',
+
+    effect = 'Enhance',
+    config = {mod_conv = 'm_bunc_copper', max_highlighted = 2},
+    pos = coordinate(1),
+
+    loc_vars = function(self) return {vars = {self.config.max_highlighted, localize{type = 'name_text', set = 'Enhanced', key = self.config.mod_conv}}} end
+}
+
 SMODS.Consumable{ -- The Sky
     set = 'Tarot', atlas = 'bunco_tarots',
     key = 'sky',
@@ -3749,7 +3795,7 @@ SMODS.Consumable{ -- The Sky
     end,
 
     config = {max_highlighted = 3, suit_conv = 'bunc_Fleurons'},
-    pos = coordinate(1),
+    pos = coordinate(2),
 
     loc_vars = function(self) return {vars = {self.config.max_highlighted}} end,
 
@@ -3791,7 +3837,7 @@ SMODS.Consumable{ -- The Abyss
     end,
 
     config = {max_highlighted = 3, suit_conv = 'bunc_Halberds'},
-    pos = coordinate(2),
+    pos = coordinate(3),
 
     loc_vars = function(self) return {vars = {self.config.max_highlighted}} end,
 
@@ -6959,6 +7005,100 @@ for i = 1, 4 do -- Virtual
         atlas = 'bunco_booster_packs_virtual',
     }
 end
+
+-- Enhancements
+
+SMODS.Atlas({key = 'bunco_enhancements', path = 'Enhancements/Enhancements.png', px = 71, py = 95})
+
+SMODS.Enhancement({
+    key = 'copper',
+    post_effect = true,
+    rescore_amount = 1,
+    atlas = 'bunco_enhancements',
+    calculate = function(self, card, context, effect)
+        if context.post_effect
+        and context.cardarea == G.play
+        and context.main_scoring
+        and context.scoring_hand
+        and not context.copper_rescore
+        and ((not card.config.copper_rescored_times) or (card.config.copper_rescored_times < card.config.center.rescore_amount)) then
+
+            local card_position
+            for position, scoring_card in ipairs(context.scoring_hand) do
+                if scoring_card == card then
+                    card_position = position
+                    break
+                end
+            end
+
+            local last_in_streak = true
+            if context.scoring_hand[card_position + 1] and context.scoring_hand[card_position + 1].config.center == card.config.center then
+                last_in_streak = false
+            end
+
+            if last_in_streak then
+
+                local streak = false
+                if context.scoring_hand[card_position - 1] and context.scoring_hand[card_position - 1].config.center == card.config.center then
+                    streak = true
+                end
+
+                if streak then
+                    return {
+                        func = function()
+
+                            for _ = 1, card.config.center.rescore_amount do
+
+                                local streak_cards = {card}
+                                local i = 1
+
+                                while true do
+                                    if context.scoring_hand[card_position - i]
+                                    and context.scoring_hand[card_position - i].config.center == card.config.center then
+                                        table.insert(streak_cards, context.scoring_hand[card_position - i])
+                                    else
+                                        break
+                                    end
+                                    i = i + 1
+                                end
+
+                                for streak_index = #streak_cards, 1, -1 do
+
+                                    local streak_card = streak_cards[streak_index]
+                                    event({func = function() big_juice(streak_card) return true end})
+                                    --forced_message(localize('bunc_repeat'), streak_card, G.C.YELLOW, streak_index == 1)
+
+                                end
+
+                                play_area_status_text(localize('bunc_repeat'))
+
+                                for streak_index = #streak_cards, 1, -1 do
+
+                                    local streak_card = streak_cards[streak_index]
+                                    for _, play_card in ipairs(G.play.cards) do
+                                        if play_card == streak_card then
+                                            streak_card.config.copper_rescored_times = (streak_card.config.copper_rescored_times or 0) + 1
+                                            local passed_context = context
+                                            table.insert(passed_context, {copper_rescore = true})
+                                            SMODS.score_card(play_card, passed_context)
+                                        end
+                                    end
+
+                                end
+                            end
+                        end
+                    }
+                end
+            end
+        end
+        -- Reset the retrigger thingy
+        if context.after then
+            for _, other_card in ipairs(context.scoring_hand) do
+                other_card.config.copper_rescored_times = 0
+            end
+        end
+    end
+})
 
 -- Stickers
 

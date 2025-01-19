@@ -45,6 +45,7 @@ return {
             bunc_declined = 'Declined...',
             bunc_accepted = 'Accepted!',
             bunc_ouch = 'OUCH!',
+            bunc_repeat = 'Repeat!',
             bunc_mysterious_tarot = 'Tarot?',
             bunc_mysterious_polymino = 'Polymino?',
             bunc_most_played_rank = '(most played rank)',
@@ -263,6 +264,14 @@ return {
         -- Consumables
 
         Tarot = {
+            c_bunc_art = {
+                ['name'] = 'The Art',
+                ['text'] = {
+                    [1] = 'Enhances {C:attention}#1#{}',
+                    [2] = 'selected cards to',
+                    [3] = '{C:attention}#2#s'
+                }
+            },
             c_bunc_sky = {
                 ['name'] = 'The Sky',
                 ['text'] = {
@@ -1675,6 +1684,16 @@ return {
                     [3] = '{C:inactive}(#2#)'
                 }
             }
+        },
+        Enhanced = {
+            m_bunc_copper = {
+                ['name'] = 'Copper Card',
+                ['text'] = {
+                    [1] = 'Rescores if played',
+                    [2] = '{C:attention}adjacent{} to other',
+                    [3] = 'Copper Card'
+                },
+            },
         },
         Stake = {
             stake_bunc_cyan = {
