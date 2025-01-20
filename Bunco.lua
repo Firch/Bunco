@@ -3816,6 +3816,7 @@ create_joker({ -- Rigoletto
 -- Tarots
 
 SMODS.Atlas({key = 'bunco_tarots', path = 'Consumables/Tarots.png', px = 71, py = 95})
+SMODS.Atlas({key = 'bunco_tarots_exotic', path = 'Consumables/TarotsExotic.png', px = 71, py = 95})
 
 SMODS.Consumable{ -- The Art
     set = 'Tarot', atlas = 'bunco_tarots',
@@ -3836,14 +3837,14 @@ SMODS.Consumable{ -- The Art
 }
 
 SMODS.Consumable{ -- The Sky
-    set = 'Tarot', atlas = 'bunco_tarots',
+    set = 'Tarot', atlas = 'bunco_tarots_exotic',
     key = 'sky',
     set_card_type_badge = function(self, card, badges)
         badges[1] = create_badge(G.localization.misc.dictionary.bunc_mysterious_tarot, get_type_colour(self or card.config, card), nil, 1.2)
     end,
 
     config = {max_highlighted = 3, suit_conv = 'bunc_Fleurons'},
-    pos = coordinate(2),
+    pos = coordinate(1),
 
     loc_vars = function(self) return {vars = {self.config.max_highlighted}} end,
 
@@ -3878,14 +3879,14 @@ SMODS.Consumable{ -- The Sky
 }
 
 SMODS.Consumable{ -- The Abyss
-    set = 'Tarot', atlas = 'bunco_tarots',
+    set = 'Tarot', atlas = 'bunco_tarots_exotic',
     key = 'abyss',
     set_card_type_badge = function(self, card, badges)
         badges[1] = create_badge(G.localization.misc.dictionary.bunc_mysterious_tarot, get_type_colour(self or card.config, card), nil, 1.2)
     end,
 
     config = {max_highlighted = 3, suit_conv = 'bunc_Halberds'},
-    pos = coordinate(3),
+    pos = coordinate(2),
 
     loc_vars = function(self) return {vars = {self.config.max_highlighted}} end,
 
