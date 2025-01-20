@@ -3784,7 +3784,14 @@ SMODS.Consumable{ -- The Art
     config = {mod_conv = 'm_bunc_copper', max_highlighted = 2},
     pos = coordinate(1),
 
-    loc_vars = function(self) return {vars = {self.config.max_highlighted, localize{type = 'name_text', set = 'Enhanced', key = self.config.mod_conv}}} end
+    set_card_type_badge = function(self, card, badges)
+        badges[1] = create_badge(G.localization.misc.dictionary.bunc_thoth_tarot, get_type_colour(self or card.config, card), nil, 1.2)
+    end,
+
+    loc_vars = function(self, info_queue)
+        info_queue[#info_queue+1] = G.P_CENTERS.m_bunc_copper
+        return {vars = {self.config.max_highlighted, localize{type = 'name_text', set = 'Enhanced', key = self.config.mod_conv}}} 
+    end
 }
 
 SMODS.Consumable{ -- The Sky

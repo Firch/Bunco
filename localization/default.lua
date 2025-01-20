@@ -46,6 +46,7 @@ return {
             bunc_accepted = 'Accepted!',
             bunc_ouch = 'OUCH!',
             bunc_repeat = 'Repeat!',
+            bunc_thoth_tarot = 'Thoth Tarot',
             bunc_mysterious_tarot = 'Tarot?',
             bunc_mysterious_polymino = 'Polymino?',
             bunc_most_played_rank = '(most played rank)',
@@ -1691,7 +1692,7 @@ return {
                 ['text'] = {
                     [1] = 'Rescores if played',
                     [2] = '{C:attention}adjacent{} to other',
-                    [3] = 'Copper Card'
+                    [3] = 'scored Copper Card'
                 },
             },
         },
