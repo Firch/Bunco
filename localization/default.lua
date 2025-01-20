@@ -493,7 +493,7 @@ return {
                     [1] = 'After scoring your {C:attention}last{} hand,',
                     [2] = 'upgrade it by {C:attention}#1# levels{}',
                     [3] = 'and {C:attention}destroy{} scored cards',
-                    [4] = '{C:inactive,s:0.8}All gained by this Joker levels',
+                    [4] = '{C:inactive,s:0.8}All levels gained by this Joker',
                     [5] = '{C:inactive,s:0.8}are lost on its removal'
                 },
                 ['unlock'] = {
