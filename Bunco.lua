@@ -3463,6 +3463,47 @@ create_joker({ -- Stylophone
     end
 })
 
+create_joker({ -- Kite Experiment
+    name = 'Kite Experiment', position = 61,
+    vars = {{odds = 2}, {cards_rescored = {}}},
+    custom_vars = function(self, info_queue, card)
+        local vars
+        info_queue[#info_queue+1] = G.P_CENTERS.m_bunc_copper
+        if G.GAME and G.GAME.probabilities.normal then
+            vars = {G.GAME.probabilities.normal, card.ability.extra.odds}
+        else
+            vars = {1, card.ability.extra.odds}
+        end
+        return {vars = vars}
+    end,
+    rarity = 'Uncommon', cost = 5,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    calculate = function(self, card, context)
+        if context.rescore_card then
+            local condition = true
+
+            for i = 1, #card.ability.extra.cards_rescored do
+                if context.rescore_card == card.ability.extra.cards_rescored[i] then
+                    condition = false
+                end
+            end
+
+            if condition and pseudorandom('kite_experiment'..G.SEED) < G.GAME.probabilities.normal / card.ability.extra.odds then
+                context.rescore_card.config.copper_rescored_times = context.rescore_card.config.copper_rescored_times - 1
+                table.insert(card.ability.extra.cards_rescored, context.rescore_card)
+                return {
+                    message = '+1',
+                    card = card
+                }
+            end
+        end
+        if context.after then
+            card.ability.extra.cards_rescored = {}
+        end
+    end
+})
+
 -- Exotic Jokers
 
 create_joker({ -- Zealous
@@ -7027,7 +7068,6 @@ SMODS.Enhancement({
         and context.cardarea == G.play
         and context.main_scoring
         and context.scoring_hand
-        and not context.copper_rescore
         and ((not card.config.copper_rescored_times) or (card.config.copper_rescored_times < card.config.center.rescore_amount)) then
 
             local card_position
@@ -7054,7 +7094,7 @@ SMODS.Enhancement({
                     return {
                         func = function()
 
-                            for _ = 1, card.config.center.rescore_amount do
+                            while (card.config.copper_rescored_times or 0) < card.config.center.rescore_amount do
 
                                 local streak_cards = {card}
                                 local i = 1
@@ -7086,12 +7126,12 @@ SMODS.Enhancement({
                                         if play_card == streak_card then
                                             streak_card.config.copper_rescored_times = (streak_card.config.copper_rescored_times or 0) + 1
                                             local passed_context = context
-                                            table.insert(passed_context, {copper_rescore = true})
                                             SMODS.score_card(play_card, passed_context)
                                         end
                                     end
-
                                 end
+
+                                SMODS.calculate_context({rescore_card = card})
                             end
                         end
                     }

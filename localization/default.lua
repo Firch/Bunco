@@ -1078,6 +1078,14 @@ return {
                     [3] = 'when scored'
                 }
             },
+            j_bunc_kite_experiment = {
+                ['name'] = 'Kite Experiment',
+                ['text'] = {
+                    [1] = '{C:green}#1# in #2#{} chance to {C:attention}rescore',
+                    [2] = 'rescored {C:attention}Copper Cards',
+                    [3] = 'one additional time'
+                }
+            },
 
             -- Exotic Jokers
 
