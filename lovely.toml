@@ -255,10 +255,17 @@ payload = '''
 
 local function add_symbol(text, symbol)
     local leading_spaces = string.match(text, "^%s*")
-    if #leading_spaces > 0 then
-        return leading_spaces..symbol..string.sub(text, #leading_spaces + 1)
+
+    _, word_amount = text:gsub("%S+","")
+
+    if word_amount == 1 then
+        if #leading_spaces > 0 then
+            return leading_spaces..symbol..string.sub(text, #leading_spaces + 1)
+        else
+            return symbol..text
+        end
     else
-        return symbol..text
+        return text
     end
 end
 
