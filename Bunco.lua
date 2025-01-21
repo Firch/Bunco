@@ -3476,22 +3476,31 @@ create_joker({ -- Kite Experiment
         end
         return {vars = vars}
     end,
-    rarity = 'Uncommon', cost = 5,
+    rarity = 'Uncommon', cost = 6,
     blueprint = true, eternal = true,
     unlocked = true,
+    custom_in_pool = function()
+        local condition = false
+        if G.playing_cards then
+            for k, v in pairs(G.playing_cards) do
+                if v.config.center == G.P_CENTERS.m_bunc_copper then condition = true break end
+            end
+        end
+        return condition
+    end,
     calculate = function(self, card, context)
-        if context.rescore_card then
+        if context.rescore_cards then
             local condition = true
 
             for i = 1, #card.ability.extra.cards_rescored do
-                if context.rescore_card == card.ability.extra.cards_rescored[i] then
+                if context.rescore_cards[1] == card.ability.extra.cards_rescored[i] then
                     condition = false
                 end
             end
 
             if condition and pseudorandom('kite_experiment'..G.SEED) < G.GAME.probabilities.normal / card.ability.extra.odds then
-                context.rescore_card.config.copper_rescored_times = context.rescore_card.config.copper_rescored_times - 1
-                table.insert(card.ability.extra.cards_rescored, context.rescore_card)
+                context.rescore_cards[1].config.copper_rescored_times = context.rescore_cards[1].config.copper_rescored_times - 1
+                table.insert(card.ability.extra.cards_rescored, context.rescore_cards[1])
                 return {
                     message = '+1',
                     card = card
@@ -3500,6 +3509,51 @@ create_joker({ -- Kite Experiment
         end
         if context.after then
             card.ability.extra.cards_rescored = {}
+        end
+    end
+})
+
+create_joker({ -- Robot
+    name = 'Robot', position = 62,
+    vars = {{bonus = 3}, {mult = 0}},
+    custom_vars = function(self, info_queue, card)
+        info_queue[#info_queue+1] = G.P_CENTERS.m_bunc_copper
+        return {vars = {card.ability.extra.bonus, card.ability.extra.mult}}
+    end,
+    rarity = 'Uncommon', cost = 6,
+    blueprint = true, eternal = true,
+    unlocked = true,
+    custom_in_pool = function()
+        local condition = false
+        if G.playing_cards then
+            for k, v in pairs(G.playing_cards) do
+                if v.config.center == G.P_CENTERS.m_bunc_copper then condition = true break end
+            end
+        end
+        return condition
+    end,
+    calculate = function(self, card, context)
+        if context.rescore_cards and not context.blueprint then
+
+            card.ability.extra.mult = card.ability.extra.mult + (card.ability.extra.bonus * #context.rescore_cards)
+
+            return {
+                message = localize('k_upgrade_ex'),
+                card = card
+            }
+        end
+        if context.joker_main then
+            if card.ability.extra.mult ~= 0 then
+                return {
+                    message = localize {
+                        type = 'variable',
+                        key = 'a_mult',
+                        vars = { card.ability.extra.mult }
+                    },
+                    mult_mod = card.ability.extra.mult,
+                    card = card
+                }
+            end
         end
     end
 })
@@ -7132,7 +7186,7 @@ SMODS.Enhancement({
                                     end
                                 end
 
-                                SMODS.calculate_context({rescore_card = card})
+                                SMODS.calculate_context({rescore_cards = streak_cards})
                             end
                         end
                     }

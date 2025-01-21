@@ -1086,6 +1086,15 @@ return {
                     [3] = 'one additional time'
                 }
             },
+            j_bunc_robot = {
+                ['name'] = 'Robot',
+                ['text'] = {
+                    [1] = 'This Joker gains {C:mult}+#1#{} Mult',
+                    [2] = 'every time a {C:attention}Copper Card',
+                    [3] = 'is rescored',
+                    [4] = '{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)'
+                }
+            },
 
             -- Exotic Jokers
 
