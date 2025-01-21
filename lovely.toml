@@ -970,16 +970,19 @@ end
 # function evaluate_play (Nil Bill, Neon)
 [[patches]]
 [patches.pattern]
-target = 'functions/state_events.lua'
-pattern = "card_eval_status_text(scoring_hand[i], 'debuff')"
-position = 'after'
+target = 'functions/common_events.lua'
+pattern = 'if extra and extra.playing_cards_created then'
+position = 'before'
 match_indent = true
 payload = '''
 
-if G.jokers ~= nil then
-    for _, v in ipairs(G.jokers.cards) do
-        if (v.config.center.key == 'j_bunc_nil_bill' or v.config.center.key == 'j_bunc_neon') and not v.debuff then
-            v:calculate_joker({debuffed_card = scoring_hand[i]})
+-- TODO Jank temporary solution, result of better calc
+if eval_type == 'debuff' then
+    if G.jokers ~= nil then
+        for _, v in ipairs(G.jokers.cards) do
+            if (v.config.center.key == 'j_bunc_nil_bill' or v.config.center.key == 'j_bunc_neon') and not v.debuff then
+                v:calculate_joker({debuffed_card = card})
+            end
         end
     end
 end
