@@ -7247,6 +7247,11 @@ SMODS.Sticker{ -- Hindered
         card.ability[self.key] = val
         card.ability.bunc_hindered_sold = false
     end,
+    calculate = function(self, card, context)
+        if context.end_of_round and not context.repetition and not context.individual then
+            card:calculate_hindered()
+        end
+    end,
 
     badge_colour = HEX('e97720'),
 

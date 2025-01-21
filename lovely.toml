@@ -3242,7 +3242,7 @@ end
 
 '''
 
-# Hindered Sticker 1/5
+# Hindered Sticker 1/4
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
@@ -3261,7 +3261,7 @@ end
 
 '''
 
-# Hindered Sticker 2/5
+# Hindered Sticker 2/4
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
@@ -3270,7 +3270,7 @@ position = 'after'
 match_indent = true
 payload = '''not self.ability.bunc_hindered_sold and'''
 
-# Hindered Sticker 3/5
+# Hindered Sticker 3/4
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
@@ -3279,7 +3279,7 @@ position = 'before'
 match_indent = true
 payload = '''if self.ability.bunc_hindered_sold and self.children.use_button then self.children.use_button:remove(); self.children.use_button = nil end'''
 
-# Hindered Sticker 4/5
+# Hindered Sticker 4/4
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
@@ -3295,15 +3295,6 @@ function Card:calculate_hindered()
 end
 
 '''
-
-# Hindered Sticker 5/5
-[[patches]]
-[patches.pattern]
-target = 'functions/state_events.lua'
-pattern = 'G.jokers.cards[i]:calculate_perishable()'
-position = 'after'
-match_indent = true
-payload = 'G.jokers.cards[i]:calculate_hindered()'
 
 # Reactive Sticker 1/2
 [[patches]]
