@@ -2693,11 +2693,11 @@ end
 
 # function card_open() (Filigree Tag)
 [[patches]]
-[patches.regex]
+[patches.pattern]
 target = 'card.lua'
-pattern = "(?<indent>[\t ]*)for\\s+i\\s*=\\s*1,\\s*#G\\.jokers\\.cards\\s*do\\s*\\n[\\t ]*G\\.jokers\\.cards\\[i\\]:calculate_joker\\(\\{\\s*open_booster\\s*=\\s*true,\\s*card\\s*=\\s*self\\s*\\}\\)\\s*\\n[\\t ]*end"
+pattern = "SMODS.calculate_context({open_booster = true, card = self})"
 position = 'after'
-line_prepend = '$indent'
+match_indent = true
 payload = '''
 
 for i = 1, #G.GAME.tags do
