@@ -7269,6 +7269,11 @@ SMODS.Sticker{ -- Reactive
         card.ability[self.key] = val
         if G.GAME and G.GAME.blind then G.GAME.blind:debuff_card(card) end
     end,
+    calculate = function(self, card, context)
+        if context.skip_blind then
+            card:calculate_reactive()
+        end
+    end,
 
     badge_colour = HEX('8238c3'),
 

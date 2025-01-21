@@ -3296,7 +3296,7 @@ end
 
 '''
 
-# Reactive Sticker 1/2
+# Reactive Sticker
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
@@ -3320,15 +3320,6 @@ function Card:calculate_reactive()
 end
 
 '''
-
-# Reactive Sticker 2/2
-[[patches]]
-[patches.pattern]
-target = 'functions/button_callbacks.lua'
-pattern = 'G.jokers.cards[i]:calculate_joker({skip_blind = true})'
-position = 'before'
-match_indent = true
-payload = 'G.jokers.cards[i]:calculate_reactive()'
 
 # Eternal Sticker compat
 [[patches]]
