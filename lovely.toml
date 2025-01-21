@@ -1576,27 +1576,6 @@ position = 'at'
 match_indent = true
 payload = '''if not SMODS.config.seeded_unlocks and (G.GAME.seeded or (G.GAME.challenge and not card.challenge_bypass)) then return end'''
 
-# Repetition unlocking
-[[patches]]
-[patches.pattern]
-target = 'functions/state_events.lua'
-pattern = 'for j=1,#reps do'
-position = 'before'
-match_indent = true
-payload = '''
-
-local locked_card
-
-for i = 1, #G.P_LOCKED do
-    locked_card = G.P_LOCKED[i]
-
-    if not locked_card.unlocked and locked_card.check_for_unlock and type(locked_card.check_for_unlock) == 'function' then
-        locked_card:check_for_unlock({type = 'repetition', repetition_amount = #reps})
-    end
-end
-
-'''
-
 # Deck size unlocking (1/2)
 [[patches]]
 [patches.pattern]

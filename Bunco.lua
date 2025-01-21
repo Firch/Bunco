@@ -592,6 +592,23 @@ function SMODS.calculate_main_scoring(context, scoring_hand)
     end
 end
 
+-- Repetitions unlocking
+
+local original_calculate_repetitions = SMODS.calculate_repetitions
+SMODS.calculate_repetitions = function(card, context, reps)
+    original_calculate_repetitions(card, context, reps)
+
+    local locked_card
+
+    for i = 1, #G.P_LOCKED do
+        locked_card = G.P_LOCKED[i]
+
+        if not locked_card.unlocked and locked_card.check_for_unlock and type(locked_card.check_for_unlock) == 'function' then
+            locked_card:check_for_unlock({type = 'repetition', repetition_amount = #reps - 1})
+        end
+    end
+end
+
 local original_game_update = Game.update
 
 function Game:update(dt)
