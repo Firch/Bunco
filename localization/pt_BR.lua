@@ -1,6 +1,6 @@
 return {
     misc = {
-        dictionary = {   -- Brazilian Portuguese translation by PinkMaggit.
+        dictionary = {   -- Brazilian Portuguese translation by PinkMaggit. [Qualquer sugestão ou crítica, só me mandar mensagem no discord. Meu nick: pink.maggit]
 
             -- Config values
 
