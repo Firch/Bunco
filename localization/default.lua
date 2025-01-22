@@ -1103,6 +1103,14 @@ return {
                     [4] = '{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)'
                 }
             },
+            j_bunc_hardtack = {
+                ['name'] = 'Hardtack',
+                ['text'] = {
+                    [1] = '{C:attention}Cracker Cards{} are',
+                    [2] = 'no longer destroyed',
+                    [3] = 'when discarded'
+                }
+            },
 
             -- Exotic Jokers
 

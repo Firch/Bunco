@@ -3417,7 +3417,7 @@ payload = '''
 if G.hand.crackers_highlighted and #G.hand.crackers_highlighted >= 1 then
     for i = 1, #G.hand.crackers_highlighted do
         if not G.hand.crackers_highlighted[i].highlighted then
-            G.hand:add_to_highlighted(G.hand.crackers_highlighted[i])
+            G.hand:add_to_highlighted(G.hand.crackers_highlighted[i], true)
         end
         G.hand.crackers_highlighted[i].marked_cracker = true
     end
@@ -3447,7 +3447,7 @@ if G.hand.crackers_highlighted and #G.hand.crackers_highlighted >= 1 then
 
     for i = 1, #G.hand.crackers_highlighted do
         if not G.hand.crackers_highlighted[i].highlighted then
-            G.hand:add_to_highlighted(G.hand.crackers_highlighted[i])
+            G.hand:add_to_highlighted(G.hand.crackers_highlighted[i], true)
         end
         G.hand.crackers_highlighted[i].marked_cracker = true
     end
