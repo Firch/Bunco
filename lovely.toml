@@ -379,7 +379,7 @@ if (_c.set == 'Default' or _c.set == 'Enhanced') and card and card.ability and t
     localize{type = 'other', key = 'bunc_temporary_extra_chips', nodes = desc_nodes, vars = {card.ability.temporary_extra_chips}}
 end'''
 
-# Linked cards drawing 1/
+# Linked cards drawing 1/4
 [[patches]]
 [patches.pattern]
 target = "game.lua"
@@ -392,7 +392,7 @@ G.E_MANAGER:add_event(Event({func = function()
 
 '''
 
-# Linked cards drawing 2/
+# Linked cards drawing 2/4
 [[patches]]
 [patches.regex]
 target = "game.lua"
@@ -2314,11 +2314,15 @@ local function calculate_discard()
     end
 end
 
-if G.GAME.blind.antiscore then
-    ease_discard(-1)
-    calculate_discard()
+if not G.GAME.ignore_hand_played then
+    if G.GAME.blind.antiscore then
+        ease_discard(-1)
+        calculate_discard()
+    else
+        ease_hands_played(-1)
+    end
 else
-    ease_hands_played(-1)
+    G.GAME.ignore_hand_played = nil
 end
 
 '''
@@ -3381,3 +3385,79 @@ end
 
 '''
 
+# Cracker Cards 1/3
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "G.FUNCS.discard_cards_from_highlighted = function(e, hook)"
+position = 'after'
+match_indent = true
+payload = '''
+
+G.hand.crackers_highlighted = {}
+
+for i = 1, #G.hand.cards do
+    if G.hand.cards[i] and G.hand.cards[i].highlighted and G.hand.cards[i].config.center == G.P_CENTERS.m_bunc_cracker then
+        table.insert(G.hand.crackers_highlighted, G.hand.cards[i])
+        G.hand:remove_from_highlighted(G.hand.cards[i], true)
+    end
+end
+
+'''
+
+# Cracker Cards 2/3
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = 'G.GAME.current_round.discards_used = G.GAME.current_round.discards_used + 1'
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.hand.crackers_highlighted and #G.hand.crackers_highlighted >= 1 then
+    for i = 1, #G.hand.crackers_highlighted do
+        if not G.hand.crackers_highlighted[i].highlighted then
+            G.hand:add_to_highlighted(G.hand.crackers_highlighted[i])
+        end
+        G.hand.crackers_highlighted[i].marked_cracker = true
+    end
+
+    G.E_MANAGER:add_event(Event({func = function()
+        G.GAME.ignore_hand_played = true
+        G.FUNCS.play_cards_from_highlighted()
+    return true end}))
+
+    return
+end
+
+'''
+
+# Cracker Cards 3/3
+[[patches]]
+[patches.regex]
+target = 'functions/state_events.lua'
+pattern = 'end\n(.*)\}\)\)\n(.*)end\n(.*)end'
+position = "after"
+match_indent = true
+payload = '''
+
+if G.hand.crackers_highlighted and #G.hand.crackers_highlighted >= 1 then
+
+    ease_discard(-1)
+
+    for i = 1, #G.hand.crackers_highlighted do
+        if not G.hand.crackers_highlighted[i].highlighted then
+            G.hand:add_to_highlighted(G.hand.crackers_highlighted[i])
+        end
+        G.hand.crackers_highlighted[i].marked_cracker = true
+    end
+
+    G.E_MANAGER:add_event(Event({func = function()
+        G.GAME.ignore_hand_played = true
+        G.FUNCS.play_cards_from_highlighted()
+    return true end}))
+
+    return
+end
+
+'''

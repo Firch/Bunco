@@ -3889,13 +3889,31 @@ create_joker({ -- Rigoletto
 SMODS.Atlas({key = 'bunco_tarots', path = 'Consumables/Tarots.png', px = 71, py = 95})
 SMODS.Atlas({key = 'bunco_tarots_exotic', path = 'Consumables/TarotsExotic.png', px = 71, py = 95})
 
+SMODS.Consumable{ -- The Adjustment
+    set = 'Tarot', atlas = 'bunco_tarots',
+    key = 'adjustment',
+
+    effect = 'Enhance',
+    config = {mod_conv = 'm_bunc_cracker', max_highlighted = 2},
+    pos = coordinate(1),
+
+    set_card_type_badge = function(self, card, badges)
+        badges[1] = create_badge(G.localization.misc.dictionary.bunc_thoth_tarot, get_type_colour(self or card.config, card), nil, 1.2)
+    end,
+
+    loc_vars = function(self, info_queue)
+        info_queue[#info_queue+1] = G.P_CENTERS.m_bunc_cracker
+        return {vars = {self.config.max_highlighted, localize{type = 'name_text', set = 'Enhanced', key = self.config.mod_conv}}}
+    end
+}
+
 SMODS.Consumable{ -- The Art
     set = 'Tarot', atlas = 'bunco_tarots',
     key = 'art',
 
     effect = 'Enhance',
     config = {mod_conv = 'm_bunc_copper', max_highlighted = 2},
-    pos = coordinate(1),
+    pos = coordinate(2),
 
     set_card_type_badge = function(self, card, badges)
         badges[1] = create_badge(G.localization.misc.dictionary.bunc_thoth_tarot, get_type_colour(self or card.config, card), nil, 1.2)
@@ -7130,10 +7148,59 @@ end
 
 SMODS.Atlas({key = 'bunco_enhancements', path = 'Enhancements/Enhancements.png', px = 71, py = 95})
 
-SMODS.Enhancement({
+SMODS.Enhancement({ -- Cracker
+    key = 'cracker',
+    atlas = 'bunco_enhancements', pos = coordinate(1),
+    calculate = function(self, card, context, effect)
+        if context.after and context.full_hand and context.cardarea == G.play then
+            for _, cracker_card in ipairs(context.full_hand) do
+                if cracker_card.marked_cracker and not cracker_card.debuff then
+
+                    if not cracker_card.removed then
+                        forced_message(localize('k_eaten_ex'), cracker_card)
+                    end
+
+                    local dissolve_time_fac = 2
+                    event({
+                        trigger = 'before',
+                        delay = 0.7*dissolve_time_fac*1.051,
+                        func = function()
+                            if not cracker_card.removed then
+
+                                local dissolve_time = 0.7*(dissolve_time_fac or 1)
+                                local childParts = Particles(0, 0, 0,0, {
+                                    timer_type = 'TOTAL',
+                                    timer = 0.01 * dissolve_time,
+                                    scale = 1.4,
+                                    speed = 0.5,
+                                    lifespan = 3 * dissolve_time,
+                                    attach = cracker_card,
+                                    colours = {HEX('fab653'), HEX('ffce7c'), HEX('ffdfaa')},
+                                    fill = true
+                                })
+                                G.E_MANAGER:add_event(Event({
+                                    trigger = 'after',
+                                    blockable = false,
+                                    delay = 0.5 * dissolve_time,
+                                    func = (function() childParts:fade(0.5 * dissolve_time) return true end)
+                                }))
+
+                                cracker_card:start_dissolve(nil, nil, dissolve_time_fac)
+                            end
+                            return true
+                        end
+                    })
+                    cracker_card.destroyed = true
+                end
+            end
+        end
+    end
+})
+
+SMODS.Enhancement({ -- Copper
     key = 'copper',
     post_effect = true,
-    rescore_amount = 1,
+    rescore_amount = 1, pos = coordinate(2),
     atlas = 'bunco_enhancements',
     calculate = function(self, card, context, effect)
         if context.post_effect

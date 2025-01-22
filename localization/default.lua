@@ -265,10 +265,18 @@ return {
         -- Consumables
 
         Tarot = {
+            c_bunc_adjustment = {
+                ['name'] = 'The Adjustment',
+                ['text'] = {
+                    [1] = 'Enhances up to {C:attention}#1#{}',
+                    [2] = 'selected cards to',
+                    [3] = '{C:attention}#2#s'
+                }
+            },
             c_bunc_art = {
                 ['name'] = 'The Art',
                 ['text'] = {
-                    [1] = 'Enhances {C:attention}#1#{}',
+                    [1] = 'Enhances up to {C:attention}#1#{}',
                     [2] = 'selected cards to',
                     [3] = '{C:attention}#2#s'
                 }
@@ -1710,6 +1718,13 @@ return {
                     [1] = 'Rescores if played',
                     [2] = '{C:attention}adjacent{} to other',
                     [3] = 'scored Copper Card'
+                },
+            },
+            m_bunc_cracker = {
+                ['name'] = 'Cracker Card',
+                ['text'] = {
+                    [1] = '{C:attention}On discard{} the card is',
+                    [2] = 'played and then destroyed',
                 },
             },
         },
