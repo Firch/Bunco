@@ -839,6 +839,7 @@ local function create_joker(joker)
 
         blueprint_compat = joker.blueprint,
         eternal_compat = joker.eternal,
+        perishable_compat = joker.perishable,
 
         process_loc_text = joker.process_loc_text,
 
@@ -1093,7 +1094,7 @@ create_joker({ -- Xray
     name = 'Xray', position = 6,
     vars = {{bonus = 0.2}, {xmult = 1}},
     rarity = 'Common', cost = 4,
-    blueprint = true, eternal = true,
+    blueprint = true, eternal = true, perishable = false,
     unlocked = false,
     check_for_unlock = function(self, args)
         if args.type == 'win_challenge' and G.GAME.challenge == 'c_xray_1' then
@@ -1352,7 +1353,7 @@ create_joker({ -- Shepherd
     name = 'Shepherd', position = 13,
     vars = {{bonus = 6}, {chips = 0}},
     rarity = 'Common', cost = 5,
-    blueprint = true, eternal = true,
+    blueprint = true, eternal = true, perishable = false,
     unlocked = true,
     calculate = function(self, card, context)
         if context.after and context.poker_hands ~= nil and next(context.poker_hands['Pair']) and not context.blueprint then
@@ -1381,7 +1382,7 @@ create_joker({ -- Knight
     name = 'Knight', position = 14,
     vars = {{bonus = 6}, {mult = 0}},
     rarity = 'Uncommon', cost = 6,
-    blueprint = true, eternal = true,
+    blueprint = true, eternal = true, perishable = false,
     unlocked = false,
     check_for_unlock = function(self, args)
         if args.type == 'defeat_blind' and args.blind.name == 'Amber Acorn' then
@@ -1730,7 +1731,7 @@ create_joker({ -- Zero Shapiro
     name = 'Zero Shapiro', position = 23,
     vars = {{bonus = 0.3}, {amount = 1}},
     rarity = 'Uncommon', cost = 4,
-    blueprint = false, eternal = true,
+    blueprint = false, eternal = true, perishable = false,
     unlocked = true,
     calculate = function(self, card, context)
         if context.individual and context.cardarea == G.play then
@@ -1939,7 +1940,7 @@ create_joker({ -- Neon
     name = 'Neon', position = 28,
     vars = {{bonus = 0.2}, {xmult = 1}},
     rarity = 'Uncommon', cost = 5,
-    blueprint = true, eternal = true,
+    blueprint = true, eternal = true, perishable = false,
     unlocked = false,
     check_for_unlock = function(self, args)
         if args.type == 'hand_contents' then
@@ -2962,7 +2963,7 @@ create_joker({ -- Bounty Hunter
         return {vars = {self.config.extra.unlock}}
     end,
     rarity = 'Common', cost = 5,
-    blueprint = true, eternal = true,
+    blueprint = true, eternal = true, perishable = false,
     unlocked = false,
     check_for_unlock = function(self, args)
         if args.type == 'money' then
@@ -3300,7 +3301,7 @@ create_joker({ -- Rubber Band Ball
     name = 'Rubber Band Ball', position = 57,
     vars = {{bonus = 1}, {xmult = 1}},
     rarity = 'Uncommon', cost = 6,
-    blueprint = true, eternal = true,
+    blueprint = true, eternal = true, perishable = false,
     unlocked = true,
     calculate = function(self, card, context)
         if context.joker_main then
@@ -3360,7 +3361,7 @@ create_joker({ -- Games Collector
     name = 'Games Collector', position = 58,
     vars = {{bonus = 10}, {chips = 0}},
     rarity = 'Common', cost = 5,
-    blueprint = true, eternal = true,
+    blueprint = true, eternal = true, perishable = false,
     unlocked = true,
     calculate = function(self, card, context)
 
@@ -3400,7 +3401,7 @@ create_joker({ -- Jumper
     name = 'Jumper', position = 59,
     vars = {{bonus = 10}, {chips = 0}},
     rarity = 'Common', cost = 5,
-    blueprint = true, eternal = true,
+    blueprint = true, eternal = true, perishable = false,
     unlocked = true,
     calculate = function(self, card, context)
         if context.before then
@@ -3538,7 +3539,7 @@ create_joker({ -- Robot
         return {vars = {card.ability.extra.bonus, card.ability.extra.mult}}
     end,
     rarity = 'Uncommon', cost = 6,
-    blueprint = true, eternal = true,
+    blueprint = true, eternal = true, perishable = false,
     unlocked = true,
     custom_in_pool = function()
         local condition = false
@@ -3682,7 +3683,7 @@ create_joker({ -- Magic Wand
     name = 'Magic Wand', position = 8,
     vars = {{bonus = 0.3}, {xmult = 1}},
     rarity = 'Common', cost = 5,
-    blueprint = true, eternal = true,
+    blueprint = true, eternal = true, perishable = false,
     unlocked = true,
     calculate = function(self, card, context)
         if context.before and context.poker_hands ~= nil and next(context.poker_hands['bunc_Spectrum']) and not context.blueprint then
@@ -3853,7 +3854,7 @@ create_joker({ -- Rigoletto
         return {vars = {card.ability.extra.bonus, card.ability.extra.xmult}}
     end,
     rarity = 'Legendary', cost = 20,
-    blueprint = true, eternal = true,
+    blueprint = true, eternal = true, perishable = false,
     unlocked = false,
     unlock_condition = {hidden = true},
     calculate = function(self, card, context)
