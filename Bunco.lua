@@ -3595,6 +3595,25 @@ create_joker({ -- Hardtack
     end
 })
 
+create_joker({ -- Pica
+    name = 'Pica', position = 64,
+    custom_vars = function(self, info_queue, card)
+        info_queue[#info_queue+1] = G.P_CENTERS.m_bunc_cracker
+    end,
+    rarity = 'Uncommon', cost = 5,
+    blueprint = true, eternal = true, perishable = false,
+    unlocked = true,
+    custom_in_pool = function()
+        local condition = false
+        if G.playing_cards then
+            for k, v in pairs(G.playing_cards) do
+                if v.config.center == G.P_CENTERS.m_bunc_cracker then condition = true break end
+            end
+        end
+        return condition
+    end
+})
+
 -- Exotic Jokers
 
 create_joker({ -- Zealous
@@ -7175,7 +7194,7 @@ SMODS.Enhancement({ -- Cracker
     calculate = function(self, card, context, effect)
         if context.after and context.full_hand and context.cardarea == G.play and (#SMODS.find_card('j_bunc_hardtack', false) <= 0) then
             for _, cracker_card in ipairs(context.full_hand) do
-                if cracker_card.marked_cracker and not cracker_card.debuff then
+                if cracker_card.marked_cracker and cracker_card.config.center == card.config.center and not cracker_card.debuff then
                     if not cracker_card.destroyed then
                         forced_message(localize('k_eaten_ex'), cracker_card)
 

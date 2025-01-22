@@ -1111,6 +1111,14 @@ return {
                     [3] = 'when discarded'
                 }
             },
+            j_bunc_pica = {
+                ['name'] = 'Pica Joker',
+                ['text'] = {
+                    [1] = 'When a {C:attention}Cracker Card{}',
+                    [2] = 'is discarded, play',
+                    [3] = 'all discarded cards'
+                }
+            },
 
             -- Exotic Jokers
 
