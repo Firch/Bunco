@@ -3928,7 +3928,7 @@ create_joker({ -- Rigoletto
 SMODS.Atlas({key = 'bunco_tarots', path = 'Consumables/Tarots.png', px = 71, py = 95})
 SMODS.Atlas({key = 'bunco_tarots_exotic', path = 'Consumables/TarotsExotic.png', px = 71, py = 95})
 
-SMODS.Consumable{ -- The Adjustment
+SMODS.Consumable{ -- Adjustment
     set = 'Tarot', atlas = 'bunco_tarots',
     key = 'adjustment',
 

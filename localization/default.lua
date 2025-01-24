@@ -266,7 +266,7 @@ return {
 
         Tarot = {
             c_bunc_adjustment = {
-                ['name'] = 'The Adjustment',
+                ['name'] = 'Adjustment',
                 ['text'] = {
                     [1] = 'Enhances up to {C:attention}#1#{}',
                     [2] = 'selected cards to',
