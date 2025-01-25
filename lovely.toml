@@ -190,6 +190,7 @@ for index, card in ipairs(G.FORCEFIELD_CARDS) do
     and card
     and not card.removed
     and card.states.visible
+    and not card.dissolve
     and index <= 5 then
 
         local w, h = love.graphics.getWidth(), love.graphics.getHeight() -- Get the size
