@@ -7190,53 +7190,54 @@ SMODS.Sound({key = 'cracker', path = 'cracker.ogg'})
 
 SMODS.Enhancement({ -- Cracker
     key = 'cracker',
-    atlas = 'bunco_enhancements', pos = coordinate(1),
-    calculate = function(self, card, context, effect)
-        if context.after and context.full_hand and context.cardarea == G.play and (#SMODS.find_card('j_bunc_hardtack', false) <= 0) then
-            for _, cracker_card in ipairs(context.full_hand) do
-                if cracker_card.marked_cracker and cracker_card.config.center == card.config.center and not cracker_card.debuff then
-                    if not cracker_card.destroyed then
-                        forced_message(localize('k_eaten_ex'), cracker_card)
+    atlas = 'bunco_enhancements', pos = coordinate(1)
+})
 
-                        local dissolve_time_fac = 2
-                        event({
-                            trigger = 'before',
-                            delay = 0.7*dissolve_time_fac*1.051,
-                            func = function()
-                                if cracker_card and not cracker_card.removed then
+function calculate_cracker_cards(context)
+    if #SMODS.find_card('j_bunc_hardtack', false) <= 0 then
+        for _, cracker_card in ipairs(context.full_hand) do
+            if cracker_card.marked_cracker and cracker_card.config.center == G.P_CENTERS.m_bunc_cracker and not cracker_card.debuff then
+                if not cracker_card.destroyed then
+                    forced_message(localize('k_eaten_ex'), cracker_card)
 
-                                    play_sound('bunc_cracker', 1.0 + (math.random() * 0.1) - 0.05)
+                    local dissolve_time_fac = 2
+                    event({
+                        trigger = 'before',
+                        delay = 0.7*dissolve_time_fac*1.051,
+                        func = function()
+                            if cracker_card and not cracker_card.removed then
 
-                                    local dissolve_time = 0.7*(dissolve_time_fac or 1)
-                                    local childParts = Particles(0, 0, 0,0, {
-                                        timer_type = 'TOTAL',
-                                        timer = 0.01 * dissolve_time,
-                                        scale = 1.4,
-                                        speed = 0.5,
-                                        lifespan = 3 * dissolve_time,
-                                        attach = cracker_card,
-                                        colours = {HEX('fab653'), HEX('ffce7c'), HEX('ffdfaa')},
-                                        fill = true
-                                    })
-                                    event({
-                                        trigger = 'after',
-                                        blockable = false,
-                                        delay = 0.5 * dissolve_time,
-                                        func = (function() childParts:fade(0.5 * dissolve_time) return true end)
-                                    })
+                                play_sound('bunc_cracker', 1.0 + (math.random() * 0.1) - 0.05)
 
-                                    cracker_card:start_dissolve({HEX('ffdfaa')}, nil, dissolve_time_fac)
-                                end
-                                return true
+                                local dissolve_time = 0.7*(dissolve_time_fac or 1)
+                                local childParts = Particles(0, 0, 0,0, {
+                                    timer_type = 'TOTAL',
+                                    timer = 0.01 * dissolve_time,
+                                    scale = 1.4,
+                                    speed = 0.5,
+                                    lifespan = 3 * dissolve_time,
+                                    attach = cracker_card,
+                                    colours = {HEX('fab653'), HEX('ffce7c'), HEX('ffdfaa')},
+                                    fill = true
+                                })
+                                event({
+                                    trigger = 'after',
+                                    blockable = false,
+                                    delay = 0.5 * dissolve_time,
+                                    func = (function() childParts:fade(0.5 * dissolve_time) return true end)
+                                })
+
+                                cracker_card:start_dissolve({HEX('ffdfaa')}, nil, dissolve_time_fac)
                             end
-                        })
-                        cracker_card.destroyed = true
-                    end
+                            return true
+                        end
+                    })
+                    cracker_card.destroyed = true
                 end
             end
         end
     end
-})
+end
 
 SMODS.Enhancement({ -- Copper
     key = 'copper',

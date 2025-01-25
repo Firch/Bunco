@@ -3488,3 +3488,15 @@ if G.hand.crackers_highlighted and #G.hand.crackers_highlighted >= 1 then
 end
 
 '''
+
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = 'SMODS.calculate_context({full_hand = G.play.cards, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, after = true})'
+position = 'after'
+match_indent = true
+payload = '''
+
+calculate_cracker_cards({full_hand = G.play.cards, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, after = true})
+
+'''
