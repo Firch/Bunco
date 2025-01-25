@@ -3401,7 +3401,8 @@ local crackers_in_hand = false
 
 for i = 1, #G.hand.cards do
     if G.hand.cards[i] and G.hand.cards[i].highlighted
-    and G.hand.cards[i].config.center == G.P_CENTERS.m_bunc_cracker then
+    and G.hand.cards[i].config.center == G.P_CENTERS.m_bunc_cracker
+    and not G.hand.cards[i].debuff then
         crackers_in_hand = true
         break
     end
@@ -3409,7 +3410,7 @@ end
 
 for i = 1, #G.hand.cards do
     if G.hand.cards[i] and G.hand.cards[i].highlighted
-    and ((G.hand.cards[i].config.center == G.P_CENTERS.m_bunc_cracker) or (crackers_in_hand and #SMODS.find_card('j_bunc_pica', false) > 0)) then
+    and (((G.hand.cards[i].config.center == G.P_CENTERS.m_bunc_cracker) and not G.hand.cards[i].debuff) or (crackers_in_hand and #SMODS.find_card('j_bunc_pica', false) > 0)) then
         table.insert(G.hand.crackers_highlighted, G.hand.cards[i])
         G.hand:remove_from_highlighted(G.hand.cards[i], true)
     end
