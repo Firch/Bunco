@@ -621,6 +621,9 @@ if (_c.set == 'Default' or _c.set == 'Enhanced') and card and card.ability and t
             if k == 1 then play_sound('paper1', 0.95 + math.random() * 0.1, 0.3) end
             ease_value(group_card.T, 'scale', 0.25, nil, 'REAL', true, 0.2)
             cardarea:emplace(group_card)
+            if v.facing == 'back' then
+                group_card.sprite_facing = 'back'
+            end
         end
         table.insert(main_end, {n=G.UIT.R, config = {align = "cm", colour = G.C.CLEAR, r = 0.0}, nodes={
             {n=G.UIT.C, config = {align = "cm"}, nodes={
@@ -673,7 +676,7 @@ if #G.hand.highlighted <= (G.GAME.blind and G.GAME.blind.name == 'cry-Sapphire S
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
-pattern = '''if self.greyed then'''
+pattern = '''add_to_drawhash(self)'''
 position = 'before'
 match_indent = true
 payload = '''
