@@ -3465,9 +3465,23 @@ if G.hand.crackers_highlighted and #G.hand.crackers_highlighted >= 1 then
         G.hand.crackers_highlighted[i].marked_cracker = true
     end
 
+    if #G.play.cards ~= 0 then
+        for i=1, #G.hand.highlighted do
+            if G.hand.highlighted[i] and G.hand.highlighted[i].config.center == G.P_CENTERS.m_bunc_cracker then
+                if G.hand.highlighted[i]:is_face() then inc_career_stat('c_face_cards_played', 1) end
+                G.hand.highlighted[i].base.times_played = G.hand.highlighted[i].base.times_played + 1
+                G.hand.highlighted[i].ability.played_this_ante = true
+                G.GAME.round_scores.cards_played.amt = G.GAME.round_scores.cards_played.amt + 1
+                draw_card(G.hand, G.play, i*100/#G.hand.highlighted, 'up', nil, G.hand.highlighted[i])
+            end
+        end
+    end
+
     G.E_MANAGER:add_event(Event({func = function()
-        G.GAME.ignore_hand_played = true
-        G.FUNCS.play_cards_from_highlighted()
+        if #G.play.cards == 0 then
+            G.GAME.ignore_hand_played = true
+            G.FUNCS.play_cards_from_highlighted()
+        end
     return true end}))
 
     return
