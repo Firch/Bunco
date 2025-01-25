@@ -525,7 +525,7 @@ payload = '''
 local grouped, grouped_area_cards
 if self.ability.group then
     grouped = self
-    grouped_area_cards = self.area and self.area.cards or nil
+    grouped_area_cards = self.area and self.area.config.type ~= 'title' and self.area.cards or nil
 end
 
 '''
@@ -539,38 +539,36 @@ position = 'after'
 match_indent = true
 payload = '''
 
-G.E_MANAGER:add_event(Event({blocking = false, trigger = 'after', func = function()
-    if grouped and grouped_area_cards and #grouped_area_cards > 0 then
+if grouped and grouped_area_cards and #grouped_area_cards > 0 then
 
-        local next_card
-        local destroyed_cards = {}
-        for i=1, #grouped_area_cards do
-            if grouped_area_cards[i].ability.group and grouped_area_cards[i].ability.group then
-                if grouped_area_cards[i].ability.group.id == grouped.ability.group.id then
-                    table.insert(destroyed_cards, grouped_area_cards[i])
-                end
-            end
-        end
-
-        next_card = destroyed_cards[1]
-
-        if next_card then
-            if next_card.ability.name == 'Glass Card' then
-                next_card:shatter()
-            else
-                next_card:start_dissolve()
-            end
-
-            for i = 1, #G.jokers.cards do
-                eval_card(G.jokers.cards[i], {
-                    cardarea = G.jokers,
-                    remove_playing_cards = true,
-                    removed = {next_card}
-                })
+    local next_card
+    local destroyed_cards = {}
+    for i=1, #grouped_area_cards do
+        if grouped_area_cards[i].ability.group and grouped_area_cards[i].ability.group then
+            if grouped_area_cards[i].ability.group.id == grouped.ability.group.id then
+                table.insert(destroyed_cards, grouped_area_cards[i])
             end
         end
     end
-return true end}))
+
+    next_card = destroyed_cards[1]
+
+    if next_card then
+        if next_card.ability.name == 'Glass Card' then
+            next_card:shatter()
+        else
+            next_card:start_dissolve()
+        end
+
+        for i = 1, #G.jokers.cards do
+            eval_card(G.jokers.cards[i], {
+                cardarea = G.jokers,
+                remove_playing_cards = true,
+                removed = {next_card}
+            })
+        end
+    end
+end
 
 '''
 
