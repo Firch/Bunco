@@ -1093,9 +1093,13 @@ create_joker({ -- Voxel
 create_joker({ -- Crop Circles
     name = 'Crop Circles', position = 5,
     rarity = 'Common', cost = 4,
-    custom_vars = function(self)
-        if G.GAME and G.GAME.Exotic then
+    custom_vars = function(self, info_queue, card)
+        if card.area and card.area.config.collection and G.P_CENTERS['b_bunc_fairy'].unlocked then
             return {key = self.key..'_exotic'}
+        else
+            if G.GAME and G.GAME.Exotic then
+                return {key = self.key..'_exotic'}
+            end
         end
     end,
     blueprint = true, eternal = true,
