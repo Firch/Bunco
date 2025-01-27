@@ -680,7 +680,7 @@ position = 'before'
 match_indent = true
 payload = '''
 
-if self.ability.group then
+if self.ability.group and self.area ~= G.deck then
     if not self.children.link then
         local variant = self.ability.group.id
         variant = 1 + (variant - 1) % 5
