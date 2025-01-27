@@ -3820,13 +3820,13 @@ create_joker({ -- Magic Wand
 create_joker({ -- Starfruit
     type = 'Exotic',
     name = 'Starfruit', position = 9,
-    vars = {{level_odds = 3}, {destroy_odds = 6}, {condition = false}},
+    vars = {{odds = 4}},
     custom_vars = function(self, info_queue, card)
         local vars
         if G.GAME and G.GAME.probabilities.normal then
-            vars = {G.GAME.probabilities.normal, card.ability.extra.level_odds, card.ability.extra.destroy_odds}
+            vars = {G.GAME.probabilities.normal, card.ability.extra.odds}
         else
-            vars = {1, card.ability.extra.level_odds, card.ability.extra.destroy_odds}
+            vars = {1, card.ability.extra.odds}
         end
         return {vars = vars}
     end,
@@ -3835,20 +3835,12 @@ create_joker({ -- Starfruit
     unlocked = true,
     calculate = function(self, card, context)
         if context.before and context.poker_hands ~= nil and next(context.poker_hands['bunc_Spectrum']) and not context.blueprint then
-            if pseudorandom('starfruit'..G.SEED) < G.GAME.probabilities.normal / card.ability.extra.level_odds then
-
-                forced_message(localize('k_level_up_ex'), card, G.C.RED, true)
-                level_up_hand(card, context.scoring_name, false, 1)
-                --update_hand_text({delay = 0, sound = false})
-
-            end
-
-            card.ability.extra.condition = true
-
+            forced_message(localize('k_level_up_ex'), card, G.C.RED, true)
+            level_up_hand(card, context.scoring_name, false, 1)
         end
 
-        if context.end_of_round and not context.other_card and card.ability.extra.condition == true and not context.blueprint then
-            if pseudorandom('starfruit'..G.SEED) < G.GAME.probabilities.normal / card.ability.extra.destroy_odds then
+        if context.end_of_round and not context.other_card and not context.blueprint then
+            if pseudorandom('starfruit'..G.SEED) < G.GAME.probabilities.normal / card.ability.extra.odds then
 
                 forced_message(localize('k_eaten_ex'), card, G.C.FILTER, true)
                 card:start_dissolve()

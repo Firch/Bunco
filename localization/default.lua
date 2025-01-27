@@ -1227,11 +1227,10 @@ return {
             j_bunc_starfruit = {
                 ['name'] = 'Starfruit',
                 ['text'] = {
-                    [1] = '{C:green}#1# in #2#{} chance to level up played',
-                    [2] = '{C:attention}poker hand{} if it contains a {C:attention}Spectrum',
-                    [3] = '{C:green}#1# in #3#{} chance to destroy this Joker at end of round',
-                    [4] = 'if a {C:attention}Spectrum{}-containing hand was played this round'
-                    -- TODO this joker is way too long
+                    [1] = 'Level up played poker hand',
+                    [2] = 'if it contains a {C:attention}Spectrum',
+                    [3] = '{C:green}#1# in #2#{} chance this card is',
+                    [4] = 'destroyed at the end of round'
                 }
             },
             j_bunc_fondue = {
