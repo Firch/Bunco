@@ -302,7 +302,16 @@ end
 
 '''
 
-# Luchador Rework
+# Luchador Rework 1/2
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "if self.ability.name == 'Luchador' then"
+position = 'at'
+match_indent = true
+payload = '''if self.ability.name == 'Luchador' and not BUNCOMOD.content.config.gameplay_reworks then'''
+
+# Luchador Rework 2/2
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
