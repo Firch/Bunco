@@ -5498,7 +5498,7 @@ SMODS.Blind{ -- The Tine
     end,
 
     recalc_debuff = function(self, card, from_blind)
-        if not G.GAME.blind.disabled and card.area ~= G.jokers then
+        if not G.GAME.blind.disabled and card.area ~= G.jokers and card.config.center ~= G.P_CENTERS.m_stone then
             if card.base.value == G.GAME.current_round.most_played_rank then
                 card:set_debuff(true)
                 return true
