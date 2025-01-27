@@ -3691,7 +3691,7 @@ create_joker({ -- Zealous
     type = 'Exotic',
     name = 'Zealous', position = 1,
     custom_vars = function(self, info_queue, card) return {vars = {card.ability.t_mult}} end,
-    custom_config = {t_mult = 16, type = 'bunc_Spectrum'},
+    custom_config = {t_mult = 10, type = 'bunc_Spectrum'},
     rarity = 'Common', cost = 3,
     blueprint = true, eternal = true,
     unlocked = true
@@ -3701,7 +3701,7 @@ create_joker({ -- Lurid
     type = 'Exotic',
     name = 'Lurid', position = 2,
     custom_vars = function(self, info_queue, card) return {vars = {card.ability.t_chips}} end,
-    custom_config = {t_chips = 120, type = 'bunc_Spectrum'},
+    custom_config = {t_chips = 80, type = 'bunc_Spectrum'},
     rarity = 'Common', cost = 3,
     blueprint = true, eternal = true,
     unlocked = true
