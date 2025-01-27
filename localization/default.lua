@@ -727,8 +727,9 @@ return {
             j_bunc_nil_bill = {
                 ['name'] = 'Nil Bill',
                 ['text'] = {
-                    [1] = '{C:attention}Debuffed{} cards earn',
-                    [2] = '{C:money}$#1#{} when scored'
+                    [1] = 'Earn {C:money}$#1#{}',
+                    [2] = 'when a playing card',
+                    [3] = 'is destroyed'
                 }
             },
             j_bunc_bierdeckel = {

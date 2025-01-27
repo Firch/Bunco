@@ -1794,7 +1794,7 @@ create_joker({ -- Fingerprints
     end
 })
 
-create_joker({ -- Zero Shapiro
+--[[ create_joker({ -- Zero Shapiro
     name = 'Zero Shapiro', position = 23,
     vars = {{bonus = 0.3}, {amount = 1}},
     rarity = 'Uncommon', cost = 4,
@@ -1838,18 +1838,18 @@ create_joker({ -- Zero Shapiro
             card.ability.extra.amount = 1
         end
     end
-})
+}) ]]
 
 create_joker({ -- Nil Bill
     name = 'Nil Bill', position = 24,
-    vars = {{bonus = 5}},
+    vars = {{bonus = 2}},
     rarity = 'Uncommon', cost = 4,
     blueprint = true, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
-        if context.debuffed_card then
-            ease_dollars(card.ability.extra.bonus)
-            forced_message('$'..card.ability.extra.bonus, context.debuffed_card, G.C.MONEY, true, card)
+        if context.remove_playing_cards then
+            ease_dollars(card.ability.extra.bonus * #context.removed)
+            forced_message('$'..card.ability.extra.bonus, card, G.C.MONEY)
         end
     end
 })
