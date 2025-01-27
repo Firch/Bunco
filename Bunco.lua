@@ -916,20 +916,32 @@ create_joker({ -- Cassette
         }
 
         if card.ability.extra.side == 'A' then
-            if G.GAME and G.GAME.Exotic then
+
+            if card.area and card.area.config.collection and G.P_CENTERS['b_bunc_fairy'].unlocked then
                 info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_light_suits_exotic'}
             else
-                info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_light_suits'}
+                if G.GAME and G.GAME.Exotic then
+                    info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_light_suits_exotic'}
+                else
+                    info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_light_suits'}
+                end
             end
+
             return {key = self.key..'_a',
             main_end = main_end,
             vars = vars}
         else
-            if G.GAME and G.GAME.Exotic then
+
+            if card.area and card.area.config.collection and G.P_CENTERS['b_bunc_fairy'].unlocked then
                 info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_dark_suits_exotic'}
             else
-                info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_dark_suits'}
+                if G.GAME and G.GAME.Exotic then
+                    info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_dark_suits_exotic'}
+                else
+                    info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_dark_suits'}
+                end
             end
+
             return {key = self.key..'_b',
             main_end = main_end,
             vars = vars}
