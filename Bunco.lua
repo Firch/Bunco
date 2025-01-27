@@ -5268,8 +5268,8 @@ SMODS.PokerHand{ -- Spectrum (Referenced from SixSuits)
     visible = false,
     chips = 50,
     mult = 6,
-    l_chips = 25,
-    l_mult = 3,
+    l_chips = 15,
+    l_mult = 2,
     example = {
         { 'S_2',    true },
         { 'D_7',    true },
@@ -5287,8 +5287,8 @@ SMODS.PokerHand{ -- Straight Spectrum (Referenced from SixSuits)
     visible = false,
     chips = 120,
     mult = 10,
-    l_chips = 35,
-    l_mult = 5,
+    l_chips = 30,
+    l_mult = 3,
     example = {
         { 'S_Q',    true },
         { 'bunc_FLEURON_J', true },
@@ -5322,8 +5322,8 @@ SMODS.PokerHand{ -- Spectrum House (Referenced from SixSuits)
     visible = false,
     chips = 150,
     mult = 15,
-    l_chips = 50,
-    l_mult = 5,
+    l_chips = 35,
+    l_mult = 3,
     example = {
         { 'S_Q',    true },
         { 'bunc_FLEURON_Q', true },
@@ -5343,8 +5343,8 @@ SMODS.PokerHand{ -- Spectrum Five (Referenced from SixSuits)
     visible = false,
     chips = 180,
     mult = 18,
-    l_chips = 60,
-    l_mult = 5,
+    l_chips = 25,
+    l_mult = 2,
     example = {
         { 'S_7',    true },
         { 'D_7', true },
