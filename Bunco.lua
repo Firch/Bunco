@@ -2756,11 +2756,11 @@ create_joker({ -- Doodle
                 juice_card_until(card, eval, true)
             end
         end
-        if context.using_consumeable and card.ability.extra.active then
+        if context.using_consumeable and card.ability.extra.active and (context.consumeable.ability.set == 'Tarot' or context.consumeable.ability.set == 'Planet') then
             event({func = function ()
                 if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
-                    forced_message(localize('k_duplicated_ex'), context.blueprint_card or card, nil, true, copy)
                     local copy
+                    forced_message(localize('k_duplicated_ex'), context.blueprint_card or card, nil, true, copy)
                     card.ability.extra.active = false
                     copy = copy_card(context.consumeable)
                     copy:add_to_deck()
