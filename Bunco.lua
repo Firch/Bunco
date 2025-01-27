@@ -986,10 +986,14 @@ create_joker({ -- Cassette
         end
     end,
     set_sprites = function(self, card, front)
-        if card.ability.extra.side == 'A' then
-            card.children.center:set_sprite_pos(coordinate(1))
-        else
-            card.children.center:set_sprite_pos(coordinate(2))
+        if self.discovered or card.bypass_discovery_center then
+            if card.ability and card.ability.extra and card.ability.extra.side then
+                if card.ability.extra.side == 'A' then
+                    card.children.center:set_sprite_pos(coordinate(1))
+                else
+                    card.children.center:set_sprite_pos(coordinate(2))
+                end
+            end
         end
     end
 })
