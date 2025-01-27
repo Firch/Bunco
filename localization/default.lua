@@ -34,6 +34,8 @@ return {
 
             -- Miscellaneous
 
+            bunc_a_side = 'A Side',
+            bunc_b_side = 'B Side',
             bunc_copied = 'Copied!',
             bunc_nothing = 'Nothing',
             bunc_chips = 'Chips',
@@ -126,6 +128,32 @@ return {
             bunc_temporary_extra_chips = {['text'] = {[1] = '{C:chips}+#1#{} extra chips this round'}},
             bunc_linked_cards = {['text'] = {[1] = '{C:attention}Linked{} in this group:'}},
             bunc_drawn_linked_cards = {['text'] = {[1] = '{C:attention}Linked{} in drawn group'}},
+            bunc_light_suits = {
+                ['name'] = 'Light suits',
+                ['text'] = {
+                    [1] = '{C:hearts}Hearts{} and {C:diamonds}Diamonds'
+                }
+            },
+            bunc_light_suits_exotic = {
+                ['name'] = 'Light suits',
+                ['text'] = {
+                    [1] = '{C:hearts}Hearts{}, {C:diamonds}Diamonds,',
+                    [2] = 'and {C:bunc_fleurons}Fleurons'
+                }
+            },
+            bunc_dark_suits = {
+                ['name'] = 'Dark suits',
+                ['text'] = {
+                    [1] = '{C:spades}Spades{} and {C:clubs}Clubs'
+                }
+            },
+            bunc_dark_suits_exotic = {
+                ['name'] = 'Dark suits',
+                ['text'] = {
+                    [1] = '{C:spades}Spades{}, {C:clubs}Clubs,',
+                    [2] = 'and {C:bunc_halberds}Halberds'
+                }
+            },
             bunc_exotic_cards = {
                 ['name'] = 'Exotic cards',
                 ['text'] = {
@@ -428,16 +456,23 @@ return {
 
             -- Main Jokers
 
-            j_bunc_cassette = {
-                ['name'] = 'Cassette',
+            j_bunc_cassette_a = {
+                ['name'] = 'Cassette (A Side)',
                 ['text'] = {
-                    [1] = 'On discard, flip Joker to the other side',
-                    [2] = '{C:attention}A side:{} Cards with light suit',
-                    [3] = 'give {C:chips}+#1#{} Chips when scored',
-                    [4] = '{C:attention}B side:{} Cards with dark suit',
-                    [5] = 'give {C:mult}+#2#{} Mult when scored'
-                    -- TODO would be good to have a line for the side
-                    -- or colorize the active side
+                    [1] = 'Cards with {C:attention}light suit',
+                    [2] = 'give {C:chips}+#1#{} Chips when scored'
+                }
+            },
+            j_bunc_cassette_b = {
+                ['name'] = 'Cassette (B Side)',
+                ['text'] = {
+                    [1] = 'Cards with {C:attention}dark suit',
+                    [2] = 'give {C:mult}+#2#{} Mult when scored'
+                }
+            },
+            j_bunc_cassette_extra = {
+                ['text'] = {
+                    [1] = '{C:inactive}On discard, flip this Joker'
                 }
             },
             j_bunc_mosaic = {

@@ -880,6 +880,61 @@ end
 create_joker({ -- Cassette
     name = 'Cassette', position = 1,
     vars = {{chips = 45}, {mult = 6}, {side = 'A'}},
+    custom_vars = function(self, info_queue, card)
+        local vars = {card.ability.extra.chips, card.ability.extra.mult}
+
+        local scale = 0.75
+
+        local flip_nodes = {}
+        localize{type = 'descriptions', set = 'Joker', key = 'j_bunc_cassette_extra', nodes = flip_nodes, vars = {}, scale = scale}
+
+        local side_nodes = {}
+        localize{type = 'descriptions', set = 'Joker', key = 'j_bunc_cassette_'..(card.ability.extra.side == 'A' and 'b' or 'a'), nodes = side_nodes, vars = vars, scale = scale}
+
+        local main_end = {
+            {n = G.UIT.R, config = {align = "cm", padding = 0.08}, nodes = {
+                {n = G.UIT.R, config = {align = "cm"}, nodes =
+                    flip_nodes[1]
+                },
+                {n = G.UIT.R, config = {align = "cm", padding = 0.08, colour = G.C.UI.BACKGROUND_DARK, r = 0.05}, nodes = {
+                    {n = G.UIT.R, config = {align = "cm"}, nodes = {
+                        {n = G.UIT.O, config = {
+                            object = DynaText({string = {G.localization.misc.dictionary['bunc_'..(card.ability.extra.side == 'A' and 'b' or 'a')..'_side']}, colours = {G.C.WHITE},
+                            scale = 0.32 * (scale) * G.LANG.font.DESCSCALE})
+                        }},
+                    }},
+                    {n = G.UIT.R, config = {align = "cm", outline_colour = G.C.UI.BACKGROUND_WHITE, colour = G.C.UI.BACKGROUND_WHITE, outline = 1, r = 0.05, padding = 0.05}, nodes = {
+                        {n = G.UIT.R, config = {align = "cm"}, nodes =
+                            side_nodes[1]
+                        },
+                        {n = G.UIT.R, config = {align = "cm"}, nodes =
+                            side_nodes[2]
+                        }
+                    }}
+                }},
+            }}
+        }
+
+        if card.ability.extra.side == 'A' then
+            if G.GAME and G.GAME.Exotic then
+                info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_light_suits_exotic'}
+            else
+                info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_light_suits'}
+            end
+            return {key = self.key..'_a',
+            main_end = main_end,
+            vars = vars}
+        else
+            if G.GAME and G.GAME.Exotic then
+                info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_dark_suits_exotic'}
+            else
+                info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_dark_suits'}
+            end
+            return {key = self.key..'_b',
+            main_end = main_end,
+            vars = vars}
+        end
+    end,
     rarity = 'Uncommon', cost = 5,
     blueprint = true, eternal = true,
     unlocked = true,
@@ -889,6 +944,7 @@ create_joker({ -- Cassette
         end
 
         if context.flip then
+            forced_message(G.localization.misc.dictionary['bunc_'..(card.ability.extra.side == 'A' and 'b' or 'a')..'_side'], card, G.C.RED)
             if card.ability.extra.side == 'A' then
                 card.ability.extra.side = 'B'
             else
@@ -927,6 +983,13 @@ create_joker({ -- Cassette
             else
                 card.children.center:set_sprite_pos(coordinate(2))
             end
+        end
+    end,
+    set_sprites = function(self, card, front)
+        if card.ability.extra.side == 'A' then
+            card.children.center:set_sprite_pos(coordinate(1))
+        else
+            card.children.center:set_sprite_pos(coordinate(2))
         end
     end
 })
