@@ -3301,7 +3301,7 @@ create_joker({ -- Glue Gun
     calculate = function(self, card, context)
         if context.selling_self and not context.blueprint then
             event({func = function()
-                if G.hand and G.hand.highlighted and #G.hand.highlighted == card.ability.extra.amount then
+                if G.hand and G.hand.highlighted and (#G.hand.highlighted > 1) and (#G.hand.highlighted <= card.ability.extra.amount) then
 
                     for i = 1, #G.hand.highlighted do
                         if G.hand.highlighted[i].ability.group then return true end

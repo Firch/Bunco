@@ -1066,8 +1066,8 @@ return {
                 ['name'] = 'Glue Gun',
                 ['text'] = {
                     [1] = 'Sell this card to',
-                    [2] = '{C:attention}link together{} #1# selected',
-                    [3] = 'playing cards'
+                    [2] = '{C:attention}link together{} up to #1#',
+                    [3] = 'selected playing cards'
                 }
             },
             j_bunc_taped = {
