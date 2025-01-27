@@ -5551,7 +5551,7 @@ SMODS.Blind{ -- The Miser
     boss = {min = 2},
 
     defeat = function(self)
-        if not self.disabled then
+        if not G.GAME.blind.disabled then
             G.GAME.Miser = true
         end
     end,
