@@ -734,9 +734,9 @@ return {
             j_bunc_bierdeckel = {
                 ['name'] = 'Bierdeckel',
                 ['text'] = {
-                    [1] = 'Cards in hand gain',
-                    [2] = '{C:chips}+#1#{} Chips this round',
-                    [3] = 'after play or discard'
+                    [1] = 'After play or discard,',
+                    [2] = 'cards held in hand gain',
+                    [3] = '{C:chips}+#1#{} Chips until end of round'
                 }
             },
             j_bunc_registration_plate = {
