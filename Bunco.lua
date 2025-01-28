@@ -5973,6 +5973,8 @@ SMODS.Blind{ -- Chartreuse Crown
     key = 'final_crown',
     boss = {showdown = true, min = 10, max = 10},
 
+    dollars = 8,
+
     recalc_debuff = function(self, card, from_blind)
         if not G.GAME.blind.disabled and card.area ~= G.jokers then
             if card.base.suit == ('Spades') or
@@ -6018,6 +6020,8 @@ SMODS.Blind{ -- Vermilion Trident
     key = 'final_trident',
     boss = {showdown = true, min = 10, max = 10},
 
+    dollars = 8,
+
     defeat = function(self)
         G.GAME.Trident = false
     end,
@@ -6031,6 +6035,8 @@ SMODS.Blind{ -- Vermilion Trident
 SMODS.Blind{ -- Indigo Tower
     key = 'final_tower',
     boss = {showdown = true, min = 10, max = 10},
+
+    dollars = 8,
 
     recalc_debuff = function(self, card, from_blind)
         if not G.GAME.blind.disabled and card.area ~= G.jokers then
@@ -6052,6 +6058,8 @@ SMODS.Blind{ -- Magenta Dagger
     key = 'final_dagger',
     boss = {showdown = true, min = 10, max = 10},
 
+    dollars = 8,
+
     boss_colour = HEX('cb589f'),
 
     pos = {y = 3},
@@ -6061,6 +6069,8 @@ SMODS.Blind{ -- Magenta Dagger
 SMODS.Blind{ -- Turquoise Shield
     key = 'final_shield',
     boss = {showdown = true, min = 10, max = 10},
+
+    dollars = 8,
 
     set_blind = function(self, reset, silent)
         if not reset then
