@@ -2381,7 +2381,7 @@ create_joker({ -- Juggalo
     locked_vars = function(self, info_queue, card)
         return {vars = {self.config.extra.unlock}}
     end,
-    rarity = 'Rare', cost = 8,
+    rarity = 'Rare', cost = 5,
     blueprint = true, eternal = true,
     unlocked = false,
     check_for_unlock = function(self, args)
@@ -2974,7 +2974,7 @@ create_joker({ -- Critic
 create_joker({ -- Cellphone
     name = 'Cellphone', position = 50,
     vars = {{active = true}, {cards_to_hand = {}}},
-    rarity = 'Uncommon', cost = 6,
+    rarity = 'Uncommon', cost = 8,
     blueprint = false, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
@@ -3114,7 +3114,7 @@ create_joker({ -- The Joker
         end
         return {vars = vars}
     end,
-    rarity = 'Rare', cost = 6,
+    rarity = 'Rare', cost = 10,
     blueprint = false, eternal = true,
     unlocked = false,
     check_for_unlock = function(self, args)
@@ -3221,7 +3221,7 @@ create_joker({ -- Tangram
 
 create_joker({ -- Domino
     name = 'Domino', position = 55,
-    rarity = 'Rare', cost = 5,
+    rarity = 'Rare', cost = 12,
     blueprint = false, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
