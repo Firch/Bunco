@@ -1277,6 +1277,7 @@ create_joker({ -- Dread
                 for _, card_to_trash in ipairs(trash_list) do
                     card_to_trash.destroyed = true
                 end
+                SMODS.calculate_context({remove_playing_cards = true, removed = trash_list})
                 card.ability.extra.trash_list = {}
             end
         end
@@ -7270,9 +7271,12 @@ SMODS.Enhancement({ -- Cracker
 
 function calculate_cracker_cards(context)
     if #SMODS.find_card('j_bunc_hardtack', false) <= 0 then
+        local crackers_total = {}
         for _, cracker_card in ipairs(context.full_hand) do
             if cracker_card.marked_cracker and cracker_card.config.center == G.P_CENTERS.m_bunc_cracker and not cracker_card.debuff then
                 if not cracker_card.destroyed then
+                    table.insert(crackers_total, cracker_card)
+
                     forced_message(localize('k_eaten_ex'), cracker_card)
 
                     local dissolve_time_fac = 2
@@ -7310,6 +7314,9 @@ function calculate_cracker_cards(context)
                     cracker_card.destroyed = true
                 end
             end
+        end
+        if #crackers_total > 0 then
+            SMODS.calculate_context({remove_playing_cards = true, removed = crackers_total})
         end
     end
 end
