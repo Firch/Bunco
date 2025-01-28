@@ -6936,7 +6936,7 @@ SMODS.Voucher{ -- Masquerade
 
     config = {unlock = 5},
     locked_loc_vars = function(self, info_queue, card)
-        return {vars = {self.config.unlock, G.PROFILES[G.SETTINGS.profile].booster_packs_opened or 0}}
+        return {vars = {self.config.unlock, G.PROFILES[G.SETTINGS.profile].blind_cards_used or 0}}
     end,
 
     requires = {'v_bunc_disguise'},
