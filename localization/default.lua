@@ -708,9 +708,10 @@ return {
             j_bunc_fingerprints = {
                 ['name'] = 'Fingerprints',
                 ['text'] = {
-                    [1] = 'Scored cards in {C:attention}winning hand{}',
-                    [2] = 'gain {C:chips}+#1#{} Chips for',
-                    [3] = 'next round only',
+                    [1] = 'Scored cards',
+                    [2] = 'in {C:attention}winning hand{}',
+                    [3] = 'gain {C:chips}+#1#{} Chips until',
+                    [4] = 'end of the next round',
                 }
             },
             j_bunc_zero_shapiro = {
