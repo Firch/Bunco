@@ -716,12 +716,10 @@ return {
             j_bunc_zero_shapiro = {
                 ['name'] = 'Zero Shapiro',
                 ['text'] = {
-                    [1] = 'This Joker gains {C:attention}#1#X{} to',
-                    [2] = '{C:green,E:1,S:1.1}probabilities{} {C:attention}this round{} when a',
-                    [3] = 'card with {C:attention}no{}, {C:attention}zero{}, or {C:attention}non-count{}',
-                    [4] = 'rank scores {C:inactive}(K, Q, J, 0, Rankless)',
-                    [5] = '{C:inactive}(Currently {C:attention}X#2#{C:inactive} to {C:green,E:1,S:1.1}probabilities{C:inactive})'
-                    -- TODO not sure how to word non-countable
+                    [1] = 'Scored {C:attention}Ks{}, {C:attention}Qs{}, {C:attention}Js{},',
+                    [2] = 'or {C:attention}Rankless cards',
+                    [3] = 'have {C:green}#1# in #2#{} chance to',
+                    [4] = 'create a {C:attention}Shopping Tag',
                 }
             },
             j_bunc_nil_bill = {
@@ -1520,6 +1518,13 @@ return {
                     [1] = 'Gives two copies of the',
                     [2] = 'next selected {C:attention}Tag{}',
                     [3] = '{s:0.8,C:attention}Triple Tag{s:0.8} excluded'
+                }
+            },
+            tag_bunc_shopping = {
+                ['name'] = 'Shopping Tag',
+                ['text'] = {
+                    [1] = 'Gives {C:attention}1{} free',
+                    [2] = 'shop {C:green}Reroll'
                 }
             },
 

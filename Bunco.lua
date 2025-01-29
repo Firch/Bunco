@@ -1811,51 +1811,43 @@ create_joker({ -- Fingerprints
     end
 })
 
---[[ create_joker({ -- Zero Shapiro
+create_joker({ -- Zero Shapiro
     name = 'Zero Shapiro', position = 23,
-    vars = {{bonus = 0.3}, {amount = 1}},
+    vars = {{odds = 8}},
+    custom_vars = function(self, info_queue, card)
+        local vars
+
+        info_queue[#info_queue+1] = {set = 'Tag', key = 'tag_bunc_shopping'}
+
+        if G.GAME and G.GAME.probabilities.normal then
+            vars = {G.GAME.probabilities.normal, card.ability.extra.odds}
+        else
+            vars = {1, card.ability.extra.odds}
+        end
+        return {vars = vars}
+    end,
     rarity = 'Uncommon', cost = 4,
-    blueprint = false, eternal = true, perishable = false,
+    blueprint = true, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
         if context.individual and context.cardarea == G.play then
             if context.other_card.config.center.key == 'm_stone' or context.other_card:get_id() == 0 or not tonumber(context.other_card.base.value) and context.other_card.base.value ~= 'Ace' then
-
-                local old_amount = card.ability.extra.amount
-                card.ability.extra.amount = card.ability.extra.amount + card.ability.extra.bonus
-
-                for k, v in pairs(G.GAME.probabilities) do
-                    G.GAME.probabilities[k] = G.GAME.probabilities[k] / old_amount * card.ability.extra.amount
+                if pseudorandom('zero_shapiro'..G.SEED) < G.GAME.probabilities.normal / card.ability.extra.odds then
+                    return {
+                        extra = {message = '+'..localize{type = 'name_text', key = 'tag_bunc_shopping', set = 'Tag'}, colour = G.C.GREEN},
+                        card = card,
+                        func = function()
+                            event({func = function()
+                                add_tag(Tag('tag_bunc_shopping'))
+                                return true
+                            end})
+                        end
+                    }
                 end
-
-                return {
-                    extra = {message = '+X'..card.ability.extra.bonus..' '..G.localization.misc.dictionary.bunc_chance, colour = G.C.GREEN},
-                    card = card
-                }
             end
-        end
-
-        if context.end_of_round and not context.other_card then
-            if card.ability.extra.amount ~= 1 then
-                for k, v in pairs(G.GAME.probabilities) do
-                    G.GAME.probabilities[k] = v / card.ability.extra.amount
-                end
-
-                card.ability.extra.amount = 1
-
-                forced_message(localize('k_reset'), card, G.C.GREEN, true)
-            end
-        end
-
-        if context.selling_self then
-            for k, v in pairs(G.GAME.probabilities) do
-                G.GAME.probabilities[k] = v / card.ability.extra.amount
-            end
-
-            card.ability.extra.amount = 1
         end
     end
-}) ]]
+})
 
 create_joker({ -- Nil Bill
     name = 'Nil Bill', position = 24,
@@ -6304,6 +6296,31 @@ SMODS.Tag{ -- Triple
     atlas = 'bunco_tags',
 
     in_pool = function() return G.GAME.used_vouchers['v_bunc_pin_collector'] end
+}
+
+SMODS.Tag{ -- Shopping
+    key = 'shopping',
+
+    config = {type = 'shop_final_pass'},
+
+    apply = function(self, tag, context)
+        if context.type == self.config.type then
+            tag:yep('+', G.C.GREEN, function()
+                return true
+            end)
+
+            G.GAME.current_round.free_rerolls = G.GAME.current_round.free_rerolls + 1
+            calculate_reroll_cost(true)
+
+            tag.triggered = true
+            return true
+        end
+    end,
+
+    pos = coordinate(4),
+    atlas = 'bunco_tags',
+
+    in_pool = function() return false end
 }
 
 SMODS.Tag{ -- Glitter
