@@ -720,7 +720,7 @@ return {
                     [1] = 'Scored {C:attention}Ks{}, {C:attention}Qs{}, {C:attention}Js{},',
                     [2] = 'or {C:attention}Rankless cards',
                     [3] = 'have {C:green}#1# in #2#{} chance to',
-                    [4] = 'create a {C:attention}Shopping Tag',
+                    [4] = 'create a {C:attention}D6 Tag',
                 }
             },
             j_bunc_nil_bill = {

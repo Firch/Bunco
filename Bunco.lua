@@ -1817,7 +1817,7 @@ create_joker({ -- Zero Shapiro
     custom_vars = function(self, info_queue, card)
         local vars
 
-        info_queue[#info_queue+1] = {set = 'Tag', key = 'tag_bunc_shopping'}
+        info_queue[#info_queue+1] = {set = 'Tag', key = 'tag_d_six'}
 
         if G.GAME and G.GAME.probabilities.normal then
             vars = {G.GAME.probabilities.normal, card.ability.extra.odds}
@@ -1834,11 +1834,11 @@ create_joker({ -- Zero Shapiro
             if context.other_card.config.center.key == 'm_stone' or context.other_card:get_id() == 0 or not tonumber(context.other_card.base.value) and context.other_card.base.value ~= 'Ace' then
                 if pseudorandom('zero_shapiro'..G.SEED) < G.GAME.probabilities.normal / card.ability.extra.odds then
                     return {
-                        extra = {message = '+'..localize{type = 'name_text', key = 'tag_bunc_shopping', set = 'Tag'}, colour = G.C.GREEN},
+                        extra = {message = '+'..localize{type = 'name_text', key = 'tag_d_six', set = 'Tag'}, colour = G.C.GREEN},
                         card = card,
                         func = function()
                             event({func = function()
-                                add_tag(Tag('tag_bunc_shopping'))
+                                add_tag(Tag('tag_d_six'))
                                 return true
                             end})
                         end
@@ -6296,31 +6296,6 @@ SMODS.Tag{ -- Triple
     atlas = 'bunco_tags',
 
     in_pool = function() return G.GAME.used_vouchers['v_bunc_pin_collector'] end
-}
-
-SMODS.Tag{ -- Shopping
-    key = 'shopping',
-
-    config = {type = 'shop_final_pass'},
-
-    apply = function(self, tag, context)
-        if context.type == self.config.type then
-            tag:yep('+', G.C.GREEN, function()
-                return true
-            end)
-
-            G.GAME.current_round.free_rerolls = G.GAME.current_round.free_rerolls + 1
-            calculate_reroll_cost(true)
-
-            tag.triggered = true
-            return true
-        end
-    end,
-
-    pos = coordinate(4),
-    atlas = 'bunco_tags',
-
-    in_pool = function() return false end
 }
 
 SMODS.Tag{ -- Glitter
