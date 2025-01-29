@@ -2563,6 +2563,18 @@ create_joker({ -- Hopscotch
 
 create_joker({ -- Pawn
     name = 'Pawn', position = 40,
+    custom_vars = function(self, info_queue, card)
+        if G.playing_cards and #G.playing_cards > 0 then
+            local rank = math.huge
+            for _, deck_card in ipairs(G.playing_cards) do
+                if deck_card:get_id() < rank and deck_card.config.center ~= G.P_CENTERS.m_stone then
+                    rank = deck_card:get_id()
+                end
+            end
+            return {vars = {localize(tostring(rank), 'ranks')}}
+        end
+        return {vars = {localize('2', 'ranks')}}
+    end,
     rarity = 'Common', cost = 5,
     blueprint = false, eternal = true,
     unlocked = true,

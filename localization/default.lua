@@ -905,7 +905,8 @@ return {
                 ['text'] = {
                     [1] = 'Cards of the {C:attention}lowest{}',
                     [2] = 'rank in your full deck',
-                    [3] = '{C:attention}increase in rank{} when scored'
+                    [3] = '{C:attention}increase in rank{} when scored',
+                    [4] = '{C:inactive}(Current lowest rank: #1#)'
                     -- TODO "when scored" is only accurate
                     -- if the card's rank changes during scoring
                 }
