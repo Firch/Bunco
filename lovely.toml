@@ -554,28 +554,35 @@ if grouped and grouped_area_cards and #grouped_area_cards > 0 then
     local destroyed_cards = {}
     for i=1, #grouped_area_cards do
         if grouped_area_cards[i].ability.group and grouped_area_cards[i].ability.group then
-            if grouped_area_cards[i].ability.group.id == grouped.ability.group.id then
+            if (grouped_area_cards[i].ability.group.id == grouped.ability.group.id) and not grouped_area_cards[i].group_destroyed then
                 table.insert(destroyed_cards, grouped_area_cards[i])
             end
         end
     end
 
-    next_card = destroyed_cards[1]
+    -- next_card = destroyed_cards[1]
 
-    if next_card then
-        if next_card.ability.name == 'Glass Card' then
-            next_card:shatter()
-        else
-            next_card:start_dissolve()
-        end
+    for _, next_card in ipairs(destroyed_cards) do
+        next_card.group_destroyed = true
+        local dissolve_time_fac = 1
+        G.E_MANAGER:add_event(Event({
+            trigger = 'before',
+            blocking = 'true',
+            delay = 0.7*dissolve_time_fac*1.051,
+            func = function()
 
-        for i = 1, #G.jokers.cards do
-            eval_card(G.jokers.cards[i], {
-                cardarea = G.jokers,
-                remove_playing_cards = true,
-                removed = {next_card}
-            })
-        end
+                next_card:start_dissolve(nil, nil, dissolve_time_fac)
+
+                for i = 1, #G.jokers.cards do
+                    eval_card(G.jokers.cards[i], {
+                        cardarea = G.jokers,
+                        remove_playing_cards = true,
+                        removed = {next_card}
+                    })
+                end
+
+            return true end
+        }))
     end
 end
 
