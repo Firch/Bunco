@@ -309,6 +309,15 @@ return {
                     [3] = '{C:attention}#2#s'
                 }
             },
+            c_bunc_universe = {
+                ['name'] = 'The Universe',
+                ['text'] = {
+                    [1] = '{C:attention}Randomizes{} the suit,',
+                    [2] = 'rank, enhancement, edition,',
+                    [3] = 'and seal of up to {C:attention}#1#{}',
+                    [4] = 'selected cards'
+                }
+            },
             c_bunc_sky = {
                 ['name'] = 'The Sky',
                 ['text'] = {

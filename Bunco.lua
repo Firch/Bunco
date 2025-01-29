@@ -4044,6 +4044,64 @@ SMODS.Consumable{ -- The Art
     end
 }
 
+SMODS.Consumable{ -- The Universe
+    set = 'Tarot', atlas = 'bunco_tarots',
+    key = 'universe',
+
+    config = {max_highlighted = 3},
+    pos = coordinate(3),
+
+    set_card_type_badge = function(self, card, badges)
+        badges[1] = create_badge(G.localization.misc.dictionary.bunc_thoth_tarot, get_type_colour(self or card.config, card), nil, 1.2)
+    end,
+
+    loc_vars = function(self, info_queue)
+        return {vars = {self.config.max_highlighted}}
+    end,
+
+    can_use = function(self, card)
+        if G.hand and (#G.hand.highlighted >= 1) and (#G.hand.highlighted <= self.config.max_highlighted) then
+            return true
+        end
+    end,
+
+    use = function(self, card)
+        local i
+        for _, playing_card in ipairs(G.hand.cards) do
+            if playing_card.highlighted then
+
+                local new_seal = SMODS.poll_seal({guaranteed = true, key = 'universe'})
+                local new_enhancement = SMODS.poll_enhancement({guaranteed = true, key = 'universe'})
+                local new_edition = poll_edition('universe', nil, true, true)
+                local new_suit = pseudorandom_element(SMODS.Suits, pseudoseed('universe')).key
+                local new_rank = pseudorandom_element(SMODS.Ranks, pseudoseed('universe')).key
+
+                event({delay = 0.2, trigger = 'before', func = function()
+
+                    i = i and (i + 1) or 1
+                    play_sound('card1', 0.85 + (i * 0.05))
+                    big_juice(playing_card)
+
+                    if playing_card.seal then
+                        playing_card:set_seal(new_seal, true, true)
+                    end
+
+                    if playing_card.config.center ~= G.P_CENTERS.c_base then
+                        playing_card:set_ability(G.P_CENTERS[new_enhancement])
+                    end
+
+                    if playing_card.edition then
+                        playing_card:set_edition(new_edition, true)
+                    end
+
+                    SMODS.change_base(playing_card, new_suit, new_rank)
+
+                return true end})
+            end
+        end
+    end,
+}
+
 SMODS.Consumable{ -- The Sky
     set = 'Tarot', atlas = 'bunco_tarots_exotic',
     key = 'sky',
