@@ -318,6 +318,15 @@ return {
                     [4] = 'selected cards'
                 }
             },
+            c_bunc_lust = {
+                ['name'] = 'Lust',
+                ['text'] = {
+                    [1] = 'Gives {C:money}$#1#{} per every',
+                    [2] = 'playing card held',
+                    [3] = 'in hand {C:inactive}(Max of {C:money}$#2#{C:inactive})',
+                    [4] = '{C:inactive}(Currently {C:money}$#3#{C:inactive})'
+                }
+            },
             c_bunc_sky = {
                 ['name'] = 'The Sky',
                 ['text'] = {

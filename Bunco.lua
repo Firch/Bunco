@@ -4102,6 +4102,37 @@ SMODS.Consumable{ -- The Universe
     end,
 }
 
+SMODS.Consumable{ -- Lust
+    set = 'Tarot', atlas = 'bunco_tarots',
+    key = 'lust',
+
+    config = {bonus = 1, limit = 52},
+    pos = coordinate(4),
+
+    set_card_type_badge = function(self, card, badges)
+        badges[1] = create_badge(G.localization.misc.dictionary.bunc_thoth_tarot, get_type_colour(self or card.config, card), nil, 1.2)
+    end,
+
+    loc_vars = function(self, info_queue)
+        local reward = 0
+        if G.hand and G.hand.cards and (#G.hand.cards > 0) then
+            reward = #G.hand.cards * self.config.bonus
+        end
+        return {vars = {self.config.bonus, self.config.limit, (reward <= self.config.limit) and reward or self.config.limit}}
+    end,
+
+    can_use = function(self, card)
+        if G.hand and G.hand.cards and (#G.hand.cards > 0) then
+            return true
+        end
+    end,
+
+    use = function(self, card)
+        local reward = #G.hand.cards * self.config.bonus
+        ease_dollars((reward <= self.config.limit) and reward or self.config.limit)
+    end,
+}
+
 SMODS.Consumable{ -- The Sky
     set = 'Tarot', atlas = 'bunco_tarots_exotic',
     key = 'sky',
