@@ -2254,6 +2254,17 @@ match_indent = true
 payload = '''
 
 if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_veil' and not G.GAME.blind.disabled and is_higlighted and self.area == G.hand then
+
+    if self.ability.group then
+        for _, group_card in ipairs(G.hand.cards) do
+            if group_card.ability and group_card.ability.group and group_card.ability.group.id == self.ability.group.id then
+                if group_card ~= self and group_card.facing == 'front' then
+                    group_card:flip()
+                end
+            end
+        end
+    end
+
     if self.facing == 'front' then
         self:flip()
         G.GAME.blind:wiggle()
