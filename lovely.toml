@@ -636,7 +636,7 @@ if (_c.set == 'Default' or _c.set == 'Enhanced') and card and card.ability and t
             if k == 1 then play_sound('paper1', 0.95 + math.random() * 0.1, 0.3) end
             ease_value(group_card.T, 'scale', 0.25, nil, 'REAL', true, 0.2)
             cardarea:emplace(group_card)
-            if v.facing == 'back' then
+            if (v.facing == 'back') and v.area ~= G.deck then
                 group_card.sprite_facing = 'back'
             end
         end
