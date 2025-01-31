@@ -450,7 +450,7 @@ target = "functions/button_callbacks.lua"
 pattern = "if G.GAME.current_round.discards_left <= 0 or #G.hand.highlighted <= 0 then"
 position = "at"
 match_indent = true
-payload = '''if G.GAME.current_round.discards_left <= 0 or #G.hand.highlighted <= 0 or #G.hand.highlighted > G.hand.config.highlighted_limit then'''
+payload = '''if G.GAME.current_round.discards_left <= 0 or #G.hand.highlighted <= 0 or (G.GAME.THE_8_BYPASS and (#G.hand.highlighted > G.hand.config.highlighted_limit)) then'''
 
 # Linked cards selection 1/2
 [[patches]]
