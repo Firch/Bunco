@@ -536,6 +536,26 @@ if config.gameplay_reworks then
             end
         end
     })
+
+    SMODS.Tag:take_ownership('d_six', {
+        loc_vars = function(self, info_queue)
+            return {key = 'tag_bunc_d_six'}
+        end,
+        config = {type = 'shop_final_pass'},
+        apply = function(self, tag, context)
+            if context.type == self.config.type then
+                tag:yep('+', G.C.GREEN, function()
+                    return true
+                end)
+
+                G.GAME.current_round.free_rerolls = G.GAME.current_round.free_rerolls + 1
+                calculate_reroll_cost(true)
+
+                tag.triggered = true
+                return true
+            end
+        end
+    })
 end
 
 -- Temporary extra chips

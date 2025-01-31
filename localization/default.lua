@@ -1514,6 +1514,13 @@ return {
                     [3] = '{s:0.6,C:attention}Double and Triple Tags{s:0.8} excluded'
                 }
             },
+            tag_bunc_d_six = {
+                ['name'] = 'D6 Tag',
+                ['text'] = {
+                    [1] = 'Adds a free {C:green}Reroll',
+                    [2] = 'to next shop'
+                }
+            },
 
             -- Main Tags
 
