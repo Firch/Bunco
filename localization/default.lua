@@ -1518,7 +1518,7 @@ return {
                 ['name'] = 'D6 Tag',
                 ['text'] = {
                     [1] = 'Adds a free {C:green}Reroll',
-                    [2] = 'to next shop'
+                    [2] = 'to the next shop'
                 }
             },
 
