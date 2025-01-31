@@ -3092,7 +3092,8 @@ create_joker({ -- Bounty Hunter
                 card = card
             } end
         end
-    end
+    end,
+    custom_in_pool = function () return (G.GAME.dollars < 0) end
 })
 
 create_joker({ -- Mousetrap
