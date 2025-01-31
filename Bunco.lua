@@ -2666,11 +2666,16 @@ create_joker({ -- Puzzle Board
                         table.insert(cards, G.hand.highlighted[i])
                     end
                 end
-
-                if cards and #cards > 0 then
-                    big_juice(card)
-                    cards[math.random(#cards)]:set_edition(edition, true)
-                end
+                event({trigger = 'after', func = function()
+                    if cards and #cards > 0 then
+                        big_juice(card)
+                        cards[math.random(#cards)]:set_edition(edition, true)
+                    end
+                return true end})
+            else
+                event({trigger = 'after', func = function()
+                    forced_message(localize('k_nope_ex'), card, G.C.RED)
+                return true end})
             end
         end
     end
