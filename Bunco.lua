@@ -3513,7 +3513,7 @@ create_joker({ -- Games Collector
 
 create_joker({ -- Jumper
     name = 'Jumper', position = 59,
-    vars = {{bonus = 10}, {chips = 0}},
+    vars = {{bonus = 8}, {chips = 0}},
     rarity = 'Common', cost = 5,
     blueprint = true, eternal = true, perishable = false,
     unlocked = true,
