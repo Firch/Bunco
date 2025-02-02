@@ -872,7 +872,8 @@ return {
                 },
                 ['unlock'] = {
                     [1] = 'Use {C:attention,E:1}#1#{} consumables',
-                    [2] = 'with {C:attention,E:1}Editions'
+                    [2] = 'with {C:attention,E:1}Editions',
+                    [3] = '{C:inactive}(#2#)'
                 }
             },
             j_bunc_head_in_the_clouds = {
