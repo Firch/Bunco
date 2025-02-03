@@ -931,7 +931,7 @@ position = 'before'
 match_indent = true
 payload = '''if card.config.center.key == 'j_bunc_jmjb' then edition = poll_edition(nil, nil, true, true) end'''
 
-# function ease_dollars() (Fiendish)
+# function ease_dollars() (Fiendish, Bounty Hunter)
 [[patches]]
 [patches.pattern]
 target = 'functions/common_events.lua'
@@ -959,6 +959,17 @@ if G.jokers ~= nil then
                     nil, nil, nil,
                     {message = '$'..mod, colour = G.C.ORANGE, instant = true})
                 end
+            end
+        end
+        if v.config.center.key == 'j_bunc_bounty_hunter' and not v.debuff then
+            if mod > 0 then
+                v:calculate_joker({get_money = true})
+                mod = mod - 1
+                card_eval_status_text(
+                v,
+                'extra',
+                nil, nil, nil,
+                {message = G.localization.misc.dictionary.bunc_robbed, colour = G.C.ORANGE, instant = true})
             end
         end
     end

@@ -3067,11 +3067,7 @@ create_joker({ -- Wino
 
 create_joker({ -- Bounty Hunter
     name = 'Bounty Hunter', position = 52,
-    vars = {{bonus = 5}, {unlock = -20}},
-    custom_vars = function(self, info_queue, card)
-        local mult = math.abs(math.min(0, G.GAME.dollars)) * card.ability.extra.bonus
-        return {vars = {card.ability.extra.bonus, mult}}
-    end,
+    vars = {{bonus = 3}, {mult = 0}, {unlock = -20}},
     locked_vars = function(self, info_queue, card)
         return {vars = {self.config.extra.unlock}}
     end,
@@ -3086,19 +3082,21 @@ create_joker({ -- Bounty Hunter
         end
     end,
     calculate = function(self, card, context)
-        if context.joker_main then
-            if G.GAME.dollars < 0 then return {
+        if context.get_money then
+            card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.bonus
+        end
+        if context.joker_main and card.ability.extra.mult ~= 0 then
+            return {
                 message = localize {
                     type = 'variable',
                     key = 'a_mult',
-                    vars = {card.ability.extra.bonus * math.abs(G.GAME.dollars)}
+                    vars = {card.ability.extra.mult}
                 },
-                mult_mod = card.ability.extra.bonus * math.abs(G.GAME.dollars),
+                mult_mod = card.ability.extra.mult,
                 card = card
-            } end
+            }
         end
-    end,
-    custom_in_pool = function () return (G.GAME.dollars < 0) end
+    end
 })
 
 create_joker({ -- Mousetrap
