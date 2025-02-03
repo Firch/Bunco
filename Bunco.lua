@@ -3448,22 +3448,9 @@ create_joker({ -- Headache
         if context.remove_playing_cards then
             card.ability.extra.destroyed = card.ability.extra.destroyed + #context.removed
             while card.ability.extra.destroyed >= card.ability.extra.amount do
-                if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
-                    G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
-                    event({trigger = 'before',
-                        delay = 0.0,
-                        func = function()
-                            local polymino = create_card('Polymino', G.consumeables)
-                            polymino:add_to_deck()
-                            G.consumeables:emplace(polymino)
-                            G.GAME.consumeable_buffer = 0
-                    return true end})
-                    forced_message('+1 '..localize('k_polymino'), card, G.C.BUNCO_VIRTUAL)
-                    card.ability.extra.destroyed = card.ability.extra.destroyed - card.ability.extra.amount
-                else
-                    forced_message(localize('k_no_space_ex'), card, G.C.RED)
-                    card.ability.extra.destroyed = card.ability.extra.destroyed - card.ability.extra.amount
-                end
+                add_tag(Tag('tag_bunc_arcade'))
+                forced_message('+1 '..localize{type = 'name_text', key = 'tag_bunc_arcade', set = 'Tag'}, card, G.C.BUNCO_VIRTUAL)
+                card.ability.extra.destroyed = card.ability.extra.destroyed - card.ability.extra.amount
             end
         end
     end
