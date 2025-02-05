@@ -243,8 +243,8 @@ return {
                 ['name'] = 'Scattering',
                 ['text'] = {
                     [1] = 'Destroys random',
-                    [2] = 'Joker when sold',
-                    [3] = 'or destroyed'
+                    [2] = 'adjacent Joker',
+                    [3] = 'when removed'
                 }
             },
             bunc_hindered = {
@@ -1820,7 +1820,7 @@ return {
                 ['name'] = 'Cyan Stake',
                 ['text'] = {
                     [1] = 'Shop can have {C:attention}Scattering{} Jokers',
-                    [2] = '{C:inactive,s:0.8}(Destroys random Joker when sold or destroyed)'
+                    [2] = '{C:inactive,s:0.8}(Destroys random adjacent Joker when removed)'
                 }
             },
             stake_bunc_pink = {

@@ -3255,8 +3255,21 @@ position = 'before'
 match_indent = true
 payload = '''
 
-local scattering_sticker
-if self.ability.bunc_scattering and self.area == G.jokers then scattering_sticker = true end
+local scattered_jokers
+if self.ability.bunc_scattering and self.area == G.jokers then
+    local position
+    for index, joker in ipairs(G.jokers.cards) do
+        if joker == self then
+            position = index
+            break
+        end
+    end
+    if position then
+        scattered_jokers = {}
+        if G.jokers.cards[position - 1] then table.insert(scattered_jokers, G.jokers.cards[position - 1]) end
+        if G.jokers.cards[position + 1] then table.insert(scattered_jokers, G.jokers.cards[position + 1]) end
+    end
+end
 
 '''
 
@@ -3269,16 +3282,9 @@ position = 'after'
 match_indent = true
 payload = '''
 
-if scattering_sticker then
-    if G.jokers and G.jokers.cards and #G.jokers.cards > 0 then
-        local random_card
-        local joker_table = {}
-        for i=1, #G.jokers.cards do
-            if not G.jokers.cards[i].ability.eternal then
-                table.insert(joker_table, G.jokers.cards[i])
-            end
-        end
-        random_card = joker_table[math.random(#joker_table)]
+if scattered_jokers then
+    if G.jokers and G.jokers.cards and #G.jokers.cards > 0 and #scattered_jokers > 0 then
+        random_card = scattered_jokers[math.random(#scattered_jokers)]
 
         if random_card then random_card:start_dissolve() end
     end
