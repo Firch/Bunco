@@ -824,9 +824,8 @@ return {
             j_bunc_hierarchy_of_needs = {
                 ['name'] = 'Hierarchy of Needs',
                 ['text'] = {
-                    [1] = '{C:mult}+#1#{} Mult per',
-                    -- TODO do wilds count, or base suit only?
-                    [2] = '{C:attention}2-Ace{} of the same suit',
+                    [1] = '{C:mult}+#1#{} Mult per {C:attention}2 to Ace',
+                    [2] = 'sequence of the same suit',
                     [3] = 'in your {C:attention}full deck',
                     [4] = '{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)'
                 }
