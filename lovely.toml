@@ -2284,19 +2284,17 @@ end
 
 '''
 
-# G.FUNCS.cash_out (Vermilion Trident 1/2)
+# function ease_dollars() (Vermilion Trident 1/2)
 [[patches]]
 [patches.pattern]
-target = 'functions/button_callbacks.lua'
-pattern = 'G.STATE = G.STATES.SHOP'
-position = 'at'
+target = 'functions/common_events.lua'
+pattern = 'function ease_dollars(mod, instant)'
+position = 'after'
 match_indent = true
 payload = '''
 
-if G.GAME.Trident and not next(find_joker('Chicot')) then
-    G.STATE = G.STATES.BLIND_SELECT
-else
-    G.STATE = G.STATES.SHOP
+if G.GAME.Trident and (mod <= 0) then
+    G.GAME.ante_purchases = (G.GAME.ante_purchases or 0) + 1
 end
 
 '''
@@ -2314,6 +2312,7 @@ if G.GAME.round_resets.blind_choices and G.GAME.round_resets.blind_choices.Boss 
     G.GAME.Trident = true
 else
     G.GAME.Trident = false
+    G.GAME.ante_purchases = 0
 end
 
 '''

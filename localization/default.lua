@@ -1451,7 +1451,8 @@ return {
             bl_bunc_final_trident = {
                 ['name'] = 'Vermilion Trident',
                 ['text'] = {
-                    [1] = 'No shops this Ante'
+                    [1] = '+1X Base score for',
+                    [2] = 'every purchase this Ante'
                 }
             },
             bl_bunc_final_tower = {
