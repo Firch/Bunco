@@ -1820,21 +1820,24 @@ return {
                 ['name'] = 'Cyan Stake',
                 ['text'] = {
                     [1] = 'Shop can have {C:attention}Scattering{} Jokers',
-                    [2] = '{C:inactive,s:0.8}(Destroys random adjacent Joker when removed)'
+                    [2] = '{C:inactive,s:0.8}(Destroys random adjacent Joker when removed)',
+                    [3] = '{s:0.8}Applies all previous Stakes'
                 }
             },
             stake_bunc_pink = {
                 ['name'] = 'Pink Stake',
                 ['text'] = {
                     [1] = 'Shop can have {C:attention}Hindered{} Jokers',
-                    [2] = '{C:inactive,s:0.8}(Stays in place until the end of the round after being sold)'
+                    [2] = '{C:inactive,s:0.8}(Stays in place until the end of the round after being sold)',
+                    [3] = '{s:0.8}Applies all previous Stakes'
                 }
             },
             stake_bunc_magenta = {
                 ['name'] = 'Magenta Stake',
                 ['text'] = {
                     [1] = 'Shop can have {C:attention}Reactive{} Jokers',
-                    [2] = '{C:inactive,s:0.8}(Debuffed if no blinds are skipped this Ante)'
+                    [2] = '{C:inactive,s:0.8}(Debuffed if no blinds are skipped this Ante)',
+                    [3] = '{s:0.8}Applies all previous Stakes'
                 }
             }
         }
