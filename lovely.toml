@@ -2825,7 +2825,7 @@ if G.GAME.used_vouchers['v_bunc_hedge_trimmer'] then
         if G.GAME.blind.chips > final_chips then
             G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
             if step % 5 == 0 then
-                play_sound('chips1', 1.0 - (step * 0.005))
+                play_sound('chips1', math.max(1.0 - (step * 0.005), 0.001))
             end
             step = step + 1
         else
