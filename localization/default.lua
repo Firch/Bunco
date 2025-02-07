@@ -1406,7 +1406,8 @@ return {
             bl_bunc_cadaver = {
                 ['name'] = 'The Cadaver',
                 ['text'] = {
-                    [1] = 'Must not play face cards'
+                    [1] = 'Hand must contain',
+                    [2] = 'a face card'
                 }
             },
             bl_bunc_wind = {
