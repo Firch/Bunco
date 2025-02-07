@@ -5884,8 +5884,8 @@ SMODS.Blind{ -- The Sand
         G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
     end,
 
-    in_pool = function()
-        if G.GAME.round_resets.ante < 4 or (G.HUD_tags and #G.HUD_tags < 2) then
+    in_pool = function(self)
+        if (G.GAME.round_resets.ante < self.boss.min) or (G.HUD_tags and #G.HUD_tags < 2) then
             return false
         else
             return true
@@ -6034,8 +6034,8 @@ SMODS.Blind{ -- The Depths
         end
     end,
 
-    in_pool = function()
-        if G.GAME.round_resets.ante < 3 or get_deck_win_stake() < 7 then
+    in_pool = function(self)
+        if (G.GAME.round_resets.ante < self.boss.min) or get_deck_win_stake() < 7 then
             return false
         else
             return true
@@ -6064,8 +6064,8 @@ SMODS.Blind{ -- The Chasm
         end
     end,
 
-    in_pool = function()
-        if G.GAME.round_resets.ante < 3 or get_deck_win_stake() < 10 then
+    in_pool = function(self)
+        if (G.GAME.round_resets.ante < self.boss.min) or get_deck_win_stake() < 10 then
             return false
         else
             return true
