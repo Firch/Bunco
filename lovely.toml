@@ -190,8 +190,9 @@ for index, card in ipairs(G.FORCEFIELD_CARDS) do
     and card
     and not card.removed
     and card.states.visible
-    and not card.dissolve
     and index <= 5 then
+
+        love.graphics.setColor(G.C.WHITE)
 
         local w, h = love.graphics.getWidth(), love.graphics.getHeight() -- Get the size
 
@@ -206,10 +207,12 @@ for index, card in ipairs(G.FORCEFIELD_CARDS) do
         (card.VT.x + (card.VT.w / 2) + G.ROOM.T.x) * G.TILESCALE * G.TILESIZE * G.CANV_SCALE,
         (card.VT.y + (card.VT.h / 2) + G.ROOM.T.y + 0.1) * G.TILESCALE * G.TILESIZE * G.CANV_SCALE}
 
+        local dissolve_mult = 1 - (card.dissolve or 0)
+
         pinch:send("position", card_position)
         pinch:send("screen_size", {w, h})
-        pinch:send("radius", (card.config and card.config.forcefield and card.config.forcefield.radius or 160) * (1.2 + math.sin((index * 3.0) + G.TIMERS.REAL / 2.0) / 3.0))
-        pinch:send("strength", (card.config and card.config.forcefield and card.config.forcefield.strength or -0.5) * (0.8 - math.cos((index * 3.0) + G.TIMERS.REAL / 2.0) / 3.0))
+        pinch:send("radius", (card.config and card.config.forcefield and card.config.forcefield.radius or 160) * (1.2 + math.sin((index * 3.0) + G.TIMERS.REAL / 2.0) / 3.0) * dissolve_mult)
+        pinch:send("strength", (card.config and card.config.forcefield and card.config.forcefield.strength or -0.5) * (0.8 - math.cos((index * 3.0) + G.TIMERS.REAL / 2.0) / 3.0) * dissolve_mult)
 
         love.graphics.setShader(pinch) -- Set the shader to the black hole canvas
 
