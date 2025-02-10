@@ -1746,6 +1746,7 @@ create_joker({ -- Sledgehammer
         for _, deck_card in pairs(G.playing_cards) do
             if deck_card.config.center == G.P_CENTERS.m_glass then
                 deck_card.ability.Xmult = deck_card.ability.Xmult + card.ability.extra.plus_xmult
+                deck_card.ability.x_mult = deck_card.ability.x_mult + card.ability.extra.plus_xmult
             end
         end
         if #SMODS.find_card('j_bunc_sledgehammer') == 0 then
@@ -1763,6 +1764,7 @@ create_joker({ -- Sledgehammer
         for _, deck_card in pairs(G.playing_cards) do
             if deck_card.config.center == G.P_CENTERS.m_glass then
                 deck_card.ability.Xmult = deck_card.ability.Xmult - card.ability.extra.plus_xmult
+                deck_card.ability.x_mult = deck_card.ability.x_mult - card.ability.extra.plus_xmult
             end
         end
         if #SMODS.find_card('j_bunc_sledgehammer') == 0 then
