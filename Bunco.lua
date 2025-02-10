@@ -4498,6 +4498,13 @@ function CardArea:add_to_highlighted(card, silent)
                 if i ~= #group then
                     self.highlighted[#self.highlighted+1] = group[i]
                     group[i].highlighted = true
+
+                    -- The Gate fix
+
+                    if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_gate' and not G.GAME.blind.disabled and self == G.hand then
+                        group[i].ability.forced_selection = true
+                    end
+
                 else
                     original_add_to_highlighted(self, group[i], (silent == nil) and false or silent)
                 end
