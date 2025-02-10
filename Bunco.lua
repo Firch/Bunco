@@ -5573,7 +5573,7 @@ SMODS.Atlas({key = 'bunco_blinds_finisher', path = 'Blinds/BlindsFinisher.png', 
 
 SMODS.Blind{ -- The Paling
     key = 'paling',
-    boss = {min = 2},
+    boss = {min = 3},
 
     boss_colour = HEX('45d368'),
 
