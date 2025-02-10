@@ -3103,7 +3103,7 @@ create_joker({ -- Wino
 
 create_joker({ -- Bounty Hunter
     name = 'Bounty Hunter', position = 52,
-    vars = {{bonus = 3}, {mult = 0}, {unlock = -20}},
+    vars = {{bonus = 1}, {mult = 0}, {unlock = -20}},
     locked_vars = function(self, info_queue, card)
         return {vars = {self.config.extra.unlock}}
     end,
