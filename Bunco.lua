@@ -2071,9 +2071,11 @@ create_joker({ -- Slothful
 
 create_joker({ -- Neon
     name = 'Neon', position = 28,
-    vars = {{bonus = 0.2}, {xmult = 1}},
+    custom_vars = function(self, info_queue, card)
+        info_queue[#info_queue+1] = G.P_CENTERS.e_bunc_fluorescent
+    end,
     rarity = 'Uncommon', cost = 5,
-    blueprint = true, eternal = true, perishable = false,
+    blueprint = false, eternal = true,
     unlocked = false,
     check_for_unlock = function(self, args)
         if args.type == 'hand_contents' then
@@ -2089,25 +2091,14 @@ create_joker({ -- Neon
         end
     end,
     calculate = function(self, card, context)
-        if context.debuffed_card then
-            card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.bonus
-            forced_message(localize('k_upgrade_ex'), card, G.C.MULT, true)
-        end
-
-        if context.joker_main then
-            if card.ability.extra.xmult ~= 1 then
-                return {
-                    message = localize {
-                        type = 'variable',
-                        key = 'a_xmult',
-                        vars = { card.ability.extra.xmult }
-                    },
-                    Xmult_mod = card.ability.extra.xmult,
-                    card = card
-                }
+        if context.enhance_card and not context.blueprint then
+            if context.enhanced_card:get_edition() == nil then
+                context.enhanced_card:set_edition({bunc_fluorescent = true})
+                event({func = function() big_juice(card) return true end})
             end
         end
     end
+
 })
 
 create_joker({ -- Gameplan

@@ -817,9 +817,9 @@ return {
             j_bunc_neon = {
                 ['name'] = 'Neon Joker',
                 ['text'] = {
-                    [1] = 'This Joker gains {X:mult,C:white}X#1#{} Mult',
-                    [2] = 'per {C:attention}debuffed{} card scored',
-                    [3] = '{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)'
+                    [1] = 'Playing cards gain',
+                    [2] = '{C:dark_edition}Fluorescent{} edition',
+                    [3] = 'when {C:attention}enhanced'
                 },
                 ['unlock'] = {
                     [1] = 'Play a 5 card hand',

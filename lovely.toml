@@ -1005,7 +1005,7 @@ end
 
 '''
 
-# function evaluate_play (Nil Bill, Neon)
+# function evaluate_play (Nil Bill)
 [[patches]]
 [patches.pattern]
 target = 'functions/common_events.lua'
@@ -1023,6 +1023,21 @@ if eval_type == 'debuff' then
             end
         end
     end
+end
+
+'''
+
+# function Card:set_ability() (Neon Joker)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'self.config.center = center'
+position = 'after'
+match_indent = true
+payload = '''
+
+if center and (not initial) and (old_center ~= center) and center.set == 'Enhanced' then
+    SMODS.calculate_context({enhance_card = true, enhanced_card = self})
 end
 
 '''
