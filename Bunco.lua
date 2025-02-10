@@ -796,6 +796,7 @@ SMODS.Atlas({key = 'bunco_jokers_legendary', path = 'Jokers/JokersLegendary.png'
 SMODS.Atlas({key = 'bunco_jokers_the_joker', path = 'Jokers/JokerBlind.png', px = 71, py = 95})
 SMODS.Atlas({key = 'bunco_jokers_taped', path = 'Jokers/JokerTaped.png', px = 127, py = 113})
 SMODS.Atlas({key = 'bunco_jokers_headache', path = 'Jokers/JokerHeadache.png', px = 71, py = 95})
+SMODS.Atlas({key = 'bunco_jokers_winking', path = 'Jokers/JokerWinking.png', px = 71, py = 95})
 
 SMODS.Sound({key = 'gunshot', path = 'gunshot.ogg'})
 SMODS.Sound({key = 'mousetrap', path = 'mousetrap.ogg'})
@@ -2774,6 +2775,13 @@ create_joker({ -- Vandalism
             card.children.center.states.drag = card.states.drag
             card.children.center.states.collide.can = false
             card.children.center:set_role({major = card, role_type = 'Glued', draw_major = card})
+
+            card.children.back = Sprite(card.T.x, card.T.y, card.T.w, card.T.h, G.ASSET_ATLAS['bunc_bunco_jokers_winking'], coordinate(1))
+            card.children.back.states.hover = card.states.hover
+            card.children.back.states.click = card.states.click
+            card.children.back.states.drag = card.states.drag
+            card.children.back.states.collide.can = false
+            card.children.back:set_role({major = card, role_type = 'Glued', draw_major = card})
         end
     end
 })

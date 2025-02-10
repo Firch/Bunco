@@ -3540,3 +3540,14 @@ pattern = '''if _key == "wheel_of_fortune" or _key == "aura" then -- set base ga
 position = 'after'
 match_indent = true
 payload = '''   if BUNCOMOD.content.config.gameplay_reworks then table.insert(_options, 'e_bunc_glitter') end'''
+
+# Back sprite of a card check
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''if true then
+self.children.back = Sprite(self.T.x, self.T.y, self.T.w, self.T.h, G.ASSET_ATLAS[(G.GAME.viewed_back or G.GAME.selected_back) and ((G.GAME.viewed_back or G.GAME.selected_back)[G.SETTINGS.colourblind_option and 'hc_atlas' or 'lc_atlas'] or (G.GAME.viewed_back or G.GAME.selected_back).atlas) or 'centers'], self.params.bypass_back or (self.playing_card and G.GAME[self.back].pos or G.P_CENTERS['b_red'].pos))'''
+position = 'at'
+match_indent = true
+payload = '''if not self.children.back then
+    self.children.back = Sprite(self.T.x, self.T.y, self.T.w, self.T.h, G.ASSET_ATLAS[(G.GAME.viewed_back or G.GAME.selected_back) and ((G.GAME.viewed_back or G.GAME.selected_back)[G.SETTINGS.colourblind_option and 'hc_atlas' or 'lc_atlas'] or (G.GAME.viewed_back or G.GAME.selected_back).atlas) or 'centers'], self.params.bypass_back or (self.playing_card and G.GAME[self.back].pos or G.P_CENTERS['b_red'].pos))'''
