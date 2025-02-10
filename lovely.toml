@@ -3531,3 +3531,12 @@ payload = '''
 calculate_cracker_cards({full_hand = G.play.cards, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, after = true})
 
 '''
+
+# Glitter edition in poll_edition
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/overrides.lua"]'
+pattern = '''if _key == "wheel_of_fortune" or _key == "aura" then -- set base game edition polling'''
+position = 'after'
+match_indent = true
+payload = '''   if BUNCOMOD.content.config.gameplay_reworks then table.insert(_options, 'e_bunc_glitter') end'''

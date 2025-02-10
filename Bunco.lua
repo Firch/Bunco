@@ -556,6 +556,40 @@ if config.gameplay_reworks then
             end
         end
     })
+
+    -- Glitter-related
+
+    SMODS.Consumable:take_ownership('wheel_of_fortune', {
+        loc_vars = function(self, info_queue)
+
+            info_queue[#info_queue+1] = G.P_CENTERS.e_foil
+            info_queue[#info_queue+1] = G.P_CENTERS.e_holo
+            info_queue[#info_queue+1] = G.P_CENTERS.e_polychrome
+            info_queue[#info_queue+1] = G.P_CENTERS.e_bunc_glitter
+
+            local vars
+            if G.GAME and G.GAME.probabilities.normal then
+                vars = {G.GAME.probabilities.normal, self.config.extra}
+            else
+                vars = {1, self.config.extra}
+            end
+            return {key = 'c_bunc_wheel_of_fortune', vars = vars}
+        end,
+        pos = config.fixed_sprites and coordinate(4) or nil,
+        atlas = config.fixed_sprites and 'bunco_resprites_consumables' or nil
+    })
+
+    SMODS.Consumable:take_ownership('aura', {
+        loc_vars = function(self, info_queue)
+
+            info_queue[#info_queue+1] = G.P_CENTERS.e_foil
+            info_queue[#info_queue+1] = G.P_CENTERS.e_holo
+            info_queue[#info_queue+1] = G.P_CENTERS.e_polychrome
+            info_queue[#info_queue+1] = G.P_CENTERS.e_bunc_glitter
+
+            return {key = 'c_bunc_aura'}
+        end
+    })
 end
 
 -- Temporary extra chips
@@ -2645,6 +2679,7 @@ create_joker({ -- Puzzle Board
         info_queue[#info_queue+1] = G.P_CENTERS.e_foil
         info_queue[#info_queue+1] = G.P_CENTERS.e_holo
         info_queue[#info_queue+1] = G.P_CENTERS.e_polychrome
+        info_queue[#info_queue+1] = G.P_CENTERS.e_bunc_glitter
 
         local vars
         if G.GAME and G.GAME.probabilities.normal then
