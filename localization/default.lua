@@ -625,9 +625,10 @@ return {
             j_bunc_shepherd = {
                 ['name'] = 'Shepherd Joker',
                 ['text'] = {
-                    [1] = 'This Joker gains {C:chips}+#1#{} Chips',
-                    [2] = 'when played hand contains a {C:attention}Pair',
-                    [3] = '{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)'
+                    [1] = 'Gains {C:chips}+#1#{} Chips',
+                    [2] = 'when played hand',
+                    [3] = 'contains a {C:attention}Pair',
+                    [4] = '{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)'
                 }
             },
             j_bunc_knight = {

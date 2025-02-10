@@ -1460,7 +1460,7 @@ create_joker({ -- Shepherd
     blueprint = true, eternal = true, perishable = false,
     unlocked = true,
     calculate = function(self, card, context)
-        if context.after and context.poker_hands ~= nil and next(context.poker_hands['Pair']) and not context.blueprint then
+        if context.before and context.poker_hands ~= nil and next(context.poker_hands['Pair']) and not context.blueprint then
             card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.bonus
 
             forced_message('+'..tostring(card.ability.extra.chips)..' '..G.localization.misc.dictionary.bunc_chips, card, G.C.BLUE, true)
