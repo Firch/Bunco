@@ -3347,7 +3347,7 @@ create_joker({ -- Domino
                 or G.STATE == G.STATES.PLANET_PACK
                 or G.STATE == G.STATES.SPECTRAL_PACK
                 or G.STATE == G.STATES.SMODS_BOOSTER_OPENED then
-                    if #context.pre_cardarea.cards == 0 then
+                    if context.pre_cardarea == G.pack_cards and #context.pre_cardarea.cards == 0 then
                         G.GAME.pack_choices = 0
                     end
                 end
