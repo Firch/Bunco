@@ -1089,6 +1089,21 @@ payload = '''
 if hand == 'bunc_Deal' then return end
 '''
 
+# Deal hand crash fix for Blue Seal
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "local card = create_card(card_type,G.consumeables, nil, nil, nil, nil, _planet, 'blusl')"
+position = 'before'
+match_indent = true
+payload = '''
+
+if _planet == 0 then
+    _planet = 'c_pluto'
+end
+
+'''
+
 # function level_up_hand (Head in the Clouds)
 [[patches]]
 [patches.pattern]
