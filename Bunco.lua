@@ -3111,7 +3111,7 @@ create_joker({ -- Bounty Hunter
         end
     end,
     calculate = function(self, card, context)
-        if context.get_money then
+        if context.get_money and not context.blueprint then
             card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.bonus
         end
         if context.joker_main and card.ability.extra.mult ~= 0 then

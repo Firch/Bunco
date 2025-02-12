@@ -948,18 +948,24 @@ if G.jokers ~= nil then
             if mod > 0 then
                 if pseudorandom('fiendish'..G.SEED) < G.GAME.probabilities.normal / v.ability.extra.odds then
                     mod = 1
-                    card_eval_status_text(
-                    v,
-                    'extra',
-                    nil, nil, nil,
-                    {message = '$'..(mod or '1'), colour = G.C.RED, instant = true})
+                    local message = mod
+                    G.E_MANAGER:add_event(Event{func = function()
+                        card_eval_status_text(
+                        v,
+                        'extra',
+                        nil, nil, nil,
+                        {message = '$'..(message or '1'), colour = G.C.RED, instant = true})
+                    return true end})
                 else
                     mod = mod * 2
-                    card_eval_status_text(
-                    v,
-                    'extra',
-                    nil, nil, nil,
-                    {message = '$'..mod, colour = G.C.ORANGE, instant = true})
+                    local message = mod
+                    G.E_MANAGER:add_event(Event{func = function()
+                        card_eval_status_text(
+                        v,
+                        'extra',
+                        nil, nil, nil,
+                        {message = '$'..message, colour = G.C.ORANGE, instant = true})
+                    return true end})
                 end
             end
         end
@@ -967,15 +973,19 @@ if G.jokers ~= nil then
             if mod > 0 then
                 v:calculate_joker({get_money = true})
                 mod = mod - 1
-                card_eval_status_text(
-                v,
-                'extra',
-                nil, nil, nil,
-                {message = G.localization.misc.dictionary.bunc_robbed, colour = G.C.ORANGE, instant = true})
+                G.E_MANAGER:add_event(Event{func = function()
+                    card_eval_status_text(
+                    v,
+                    'extra',
+                    nil, nil, nil,
+                    {message = G.localization.misc.dictionary.bunc_robbed, colour = G.C.ORANGE, instant = true})
+                return true end})
             end
         end
     end
 end
+
+if mod == 0 then return end
 
 '''
 
