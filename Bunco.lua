@@ -3992,8 +3992,11 @@ create_joker({ -- ROYGBIV
                     end
 
                     if cards and #cards > 0 then
-                        big_juice(card)
-                        cards[math.random(#cards)]:set_edition({polychrome = true}, true)
+                        forced_message('+'..localize{type = 'name_text', key = 'e_polychrome', set = 'Edition'}, card)
+                        for i = 1, #cards do
+                            local other_card = cards[i]
+                            other_card:set_edition({polychrome = true})
+                        end
                     end
                 end
             end

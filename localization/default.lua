@@ -1312,7 +1312,7 @@ return {
                 ['text'] = {
                     [1] = '{C:green}#1# in #2#{} chance to add',
                     [2] = '{C:dark_edition}Polychrome{} edition',
-                    [3] = 'to a random scored card if',
+                    [3] = 'to all scored cards if',
                     [4] = 'hand contains a {C:attention}Spectrum'
                 }
             },
