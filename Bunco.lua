@@ -2485,7 +2485,7 @@ create_joker({ -- Head in the Clouds
     custom_in_pool = function()
         local condition = false
         if G.GAME and G.GAME.hands then
-            if G.GAME.hands['High Card'].level > 1 then condition = true end
+            if G.GAME.hands['High Card'].level > to_big(1) then condition = true end
         end
         return condition
     end,
