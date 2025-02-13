@@ -396,7 +396,7 @@ end'''
 [[patches]]
 [patches.pattern]
 target = "game.lua"
-pattern = "if G.GAME.current_round.hands_played == 0 and"
+pattern = "-- removed first hand drawn context"
 position = "before"
 match_indent = true
 payload = '''
