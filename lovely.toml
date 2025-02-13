@@ -3293,8 +3293,8 @@ if self.ability.bunc_scattering and self.area == G.jokers then
     end
     if position then
         scattered_jokers = {}
-        if G.jokers.cards[position - 1] then table.insert(scattered_jokers, G.jokers.cards[position - 1]) end
-        if G.jokers.cards[position + 1] then table.insert(scattered_jokers, G.jokers.cards[position + 1]) end
+        if G.jokers.cards[position - 1] and (not G.jokers.cards[position - 1].ability.eternal) then table.insert(scattered_jokers, G.jokers.cards[position - 1]) end
+        if G.jokers.cards[position + 1] and (not G.jokers.cards[position + 1].ability.eternal) then table.insert(scattered_jokers, G.jokers.cards[position + 1]) end
     end
 end
 
