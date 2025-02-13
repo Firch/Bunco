@@ -2728,39 +2728,37 @@ end
 
 '''
 
-# Info queue for consumables
+# Info queue for consumables 1/2
 [[patches]]
 [patches.pattern]
 target = 'functions/common_events.lua'
-pattern = "info_queue[#info_queue + 1] = G.P_CENTERS['e_'..v]"
-position = 'at'
+pattern = "local t = {key = 'e_'..v, set = 'Edition', config = {}}"
+position = 'before'
 match_indent = true
 payload = '''
-
-if not _c.consumeable then
-    info_queue[#info_queue + 1] = G.P_CENTERS['e_'..v]
-else
-    if v == 'foil'
-    or v == 'holo'
-    or v == 'polychrome'
-    or v == 'bunc_glitter' then
-        info_queue[#info_queue + 1] = G.P_CENTERS['bunc_consumable_edition_'..v]
-        info_queue[#info_queue + 1] = {
-        key = (v == 'foil') and 'tag_bunc_chips'
+if _c.consumeable and (v == 'foil' or v == 'holo' or v == 'polychrome' or v == 'bunc_glitter') then
+    info_queue[#info_queue + 1] = G.P_CENTERS['bunc_consumable_edition_'..v]
+    info_queue[#info_queue + 1] = {
+    key = (v == 'foil') and 'tag_bunc_chips'
         or (v == 'holo') and 'tag_bunc_mult'
         or (v == 'polychrome') and 'tag_bunc_xmult'
         or (v == 'bunc_glitter') and 'tag_bunc_xchips',
-        set = 'Tag',
-        specific_vars = (v == 'foil') and {G.P_CENTERS.e_foil.config.extra}
+    set = 'Tag',
+    specific_vars = (v == 'foil') and {G.P_CENTERS.e_foil.config.extra}
         or (v == 'holo') and {G.P_CENTERS.e_holo.config.extra}
         or (v == 'polychrome') and {G.P_CENTERS.e_polychrome.config.extra}
         or (v == 'bunc_glitter') and {G.P_CENTERS.e_bunc_glitter.config.Xchips}}
-    else
-        info_queue[#info_queue + 1] = G.P_CENTERS['e_'..v]
-    end
-end
-
+else
 '''
+
+# Info queue for consumables 2/2
+[[patches]]
+[patches.regex]
+target = 'functions/common_events.lua'
+pattern = "local t = \\{key = 'e_'\\.\\.v, set = 'Edition', config = \\{\\}\\}((.|\n)*?)(?<indent>[\t ]*)end\n"
+position = 'after'
+line_prepend = "$indent"
+payload = '''end'''
 
 # function card_open() (Filigree Tag)
 [[patches]]
