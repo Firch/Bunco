@@ -3591,3 +3591,18 @@ position = 'at'
 match_indent = true
 payload = '''if not self.children.back then
     self.children.back = Sprite(self.T.x, self.T.y, self.T.w, self.T.h, G.ASSET_ATLAS[(G.GAME.viewed_back or G.GAME.selected_back) and ((G.GAME.viewed_back or G.GAME.selected_back)[G.SETTINGS.colourblind_option and 'hc_atlas' or 'lc_atlas'] or (G.GAME.viewed_back or G.GAME.selected_back).atlas) or 'centers'], self.params.bypass_back or (self.playing_card and G.GAME[self.back].pos or G.P_CENTERS['b_red'].pos))'''
+
+# Min Ante for Blind's collection UI
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''ability_text[1] and {n=G.UIT.R, config={align = "cm", padding = 0.08, colour = mix_colours(blind.boss_colour, G.C.GREY, 0.4), r = 0.1, emboss = 0.05, minw = 2.5, minh = 0.9}, nodes=ability_text} or nil'''
+position = 'after'
+match_indent = true
+payload = ''',
+
+ability_text[1] and blind.boss and {n=G.UIT.R, config={align = "cm"}, nodes={
+    {n=G.UIT.T, config={text = blind.boss.showdown and localize('bunc_final_blind') or (localize('bunc_min_ante')..' '..(blind.boss.min or '?')), scale = 0.3, colour = G.C.UI.TEXT_INACTIVE}}
+}},
+
+'''
