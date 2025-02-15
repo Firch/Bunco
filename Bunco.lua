@@ -302,16 +302,6 @@ if config.fixed_sprites then
 
     -- High contrast
 
-    SMODS.Atlas{key = 'cards_2', path = 'Resprites/EnhancedContrast.png', px = 71, py = 95, prefix_config = {key = false}}
-    SMODS.Atlas{key = 'ui_2', path = 'Resprites/EnhancedUIContrast.png', px = 18, py = 18, prefix_config = {key = false}}
-
-    G.C['SO_2'] = {
-        Hearts = HEX('ee151b'),
-        Diamonds = HEX('e56b10'),
-        Spades = HEX('5d55a6'),
-        Clubs = HEX('197f77')
-    }
-
     G.C['SO_1']['Spades'] = HEX('3c4368')
 
     G.C.SUITS = G.C["SO_" .. (G.SETTINGS.colourblind_option and 2 or 1)]
@@ -5373,6 +5363,156 @@ SMODS.Suit{ -- Halberds
         end
         return BUNCOMOD.funcs.exotic_in_pool()
     end
+}
+
+table.insert(SMODS.Suit.obj_buffer, 1, table.remove(SMODS.Suit.obj_buffer, #SMODS.Suit.obj_buffer)) -- Sort suits
+table.insert(SMODS.Suit.obj_buffer, 1, table.remove(SMODS.Suit.obj_buffer, #SMODS.Suit.obj_buffer))
+table.insert(SMODS.Suit.obj_buffer, 1, table.remove(SMODS.Suit.obj_buffer, 2))
+
+-- Skins and deck resprites
+
+SMODS.Atlas{key = 'bunco_resprites_enhanced_contrast', path = 'Resprites/EnhancedContrast.png', px = 71, py = 95}
+SMODS.Atlas{key = 'bunco_resprites_enhanced_contrast_ui', path = 'Resprites/EnhancedUIContrast.png', px = 18, py = 18}
+
+SMODS.DeckSkin.add_palette(SMODS.DeckSkins['default_Spades'], {
+    key = 'recast_contrast',
+    ranks = {'2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace'},
+    display_ranks = {'King', 'Queen', 'Jack'},
+    atlas = 'bunc_bunco_resprites_enhanced_contrast',
+    pos_style = 'deck',
+    colour = HEX('5d55a6'),
+    suit_icon = {
+        atlas = 'bunc_bunco_resprites_enhanced_contrast_ui'
+    }
+})
+
+SMODS.DeckSkin.add_palette(SMODS.DeckSkins['default_Hearts'], {
+    key = 'recast_contrast',
+    ranks = {'2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace'},
+    display_ranks = {'King', 'Queen', 'Jack'},
+    atlas = 'bunc_bunco_resprites_enhanced_contrast',
+    pos_style = 'deck',
+    colour = HEX('ee151b'),
+    suit_icon = {
+        atlas = 'bunc_bunco_resprites_enhanced_contrast_ui'
+    }
+})
+
+SMODS.DeckSkin.add_palette(SMODS.DeckSkins['default_Clubs'], {
+    key = 'recast_contrast',
+    ranks = {'2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace'},
+    display_ranks = {'King', 'Queen', 'Jack'},
+    atlas = 'bunc_bunco_resprites_enhanced_contrast',
+    pos_style = 'deck',
+    colour = HEX('197f77'),
+    suit_icon = {
+        atlas = 'bunc_bunco_resprites_enhanced_contrast_ui'
+    }
+})
+
+SMODS.DeckSkin.add_palette(SMODS.DeckSkins['default_Diamonds'], {
+    key = 'recast_contrast',
+    ranks = {'2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace'},
+    display_ranks = {'King', 'Queen', 'Jack'},
+    atlas = 'bunc_bunco_resprites_enhanced_contrast',
+    pos_style = 'deck',
+    colour = HEX('e56b10'),
+    suit_icon = {
+        atlas = 'bunc_bunco_resprites_enhanced_contrast_ui'
+    }
+})
+
+SMODS.Atlas({key = 'bunco_skins_duckgame_lc', path = 'Skins/SkinDuckGameLC.png', px = 71, py = 95})
+SMODS.Atlas({key = 'bunco_skins_duckgame_hc', path = 'Skins/SkinDuckGameHC.png', px = 71, py = 95})
+SMODS.Atlas({key = 'bunco_skins_lisa_the_painful_lc', path = 'Skins/SkinLISAThePainfulLC.png', px = 71, py = 95})
+SMODS.Atlas({key = 'bunco_skins_lisa_the_painful_hc', path = 'Skins/SkinLISAThePainfulHC.png', px = 71, py = 95})
+SMODS.Atlas({key = 'bunco_skins_fiend_folio_lc', path = 'Skins/SkinFiendFolioLC.png', px = 71, py = 95})
+SMODS.Atlas({key = 'bunco_skins_fiend_folio_hc', path = 'Skins/SkinFiendFolioHC.png', px = 71, py = 95})
+SMODS.Atlas({key = 'bunco_skins_lisa_the_pointless_lc', path = 'Skins/SkinLISAThePointlessLC.png', px = 71, py = 95})
+SMODS.Atlas({key = 'bunco_skins_lisa_the_pointless_hc', path = 'Skins/SkinLISAThePointlessHC.png', px = 71, py = 95})
+
+SMODS.DeckSkin{
+    key = 'duck_game',
+    suit = 'bunc_Fleurons',
+    palettes = {
+        {
+            key = 'lc',
+            ranks = {'Jack', 'Queen', 'King'},
+            display_ranks = {'King', 'Queen', 'Jack'},
+            pos_style = 'ranks',
+            atlas = 'bunc_bunco_skins_duckgame_lc'
+        },
+        {
+            key = 'hc',
+            ranks = {'Jack', 'Queen', 'King'},
+            display_ranks = {'King', 'Queen', 'Jack'},
+            pos_style = 'ranks',
+            atlas = 'bunc_bunco_skins_duckgame_hc'
+        }
+    }
+}
+
+SMODS.DeckSkin{
+    key = 'lisa_the_painful',
+    suit = 'bunc_Fleurons',
+    palettes = {
+        {
+            key = 'lc',
+            ranks = {'Jack', 'Queen', 'King'},
+            display_ranks = {'King', 'Queen', 'Jack'},
+            pos_style = 'ranks',
+            atlas = 'bunc_bunco_skins_lisa_the_painful_lc'
+        },
+        {
+            key = 'hc',
+            ranks = {'Jack', 'Queen', 'King'},
+            display_ranks = {'King', 'Queen', 'Jack'},
+            pos_style = 'ranks',
+            atlas = 'bunc_bunco_skins_lisa_the_painful_hc'
+        }
+    }
+}
+
+SMODS.DeckSkin{
+    key = 'fiend_folio',
+    suit = 'bunc_Halberds',
+    palettes = {
+        {
+            key = 'lc',
+            ranks = {'Jack', 'Queen', 'King'},
+            display_ranks = {'King', 'Queen', 'Jack'},
+            pos_style = 'ranks',
+            atlas = 'bunc_bunco_skins_fiend_folio_lc'
+        },
+        {
+            key = 'hc',
+            ranks = {'Jack', 'Queen', 'King'},
+            display_ranks = {'King', 'Queen', 'Jack'},
+            pos_style = 'ranks',
+            atlas = 'bunc_bunco_skins_fiend_folio_hc'
+        }
+    }
+}
+
+SMODS.DeckSkin{
+    key = 'lisa_the_pointless',
+    suit = 'bunc_Halberds',
+    palettes = {
+        {
+            key = 'lc',
+            ranks = {'Jack', 'Queen', 'King'},
+            display_ranks = {'King', 'Queen', 'Jack'},
+            pos_style = 'ranks',
+            atlas = 'bunc_bunco_skins_lisa_the_pointless_lc'
+        },
+        {
+            key = 'hc',
+            ranks = {'Jack', 'Queen', 'King'},
+            display_ranks = {'King', 'Queen', 'Jack'},
+            pos_style = 'ranks',
+            atlas = 'bunc_bunco_skins_lisa_the_pointless_hc'
+        }
+    }
 }
 
 -- Exotic system toggle logic

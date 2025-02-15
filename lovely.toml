@@ -3606,3 +3606,14 @@ ability_text[1] and blind.boss and {n=G.UIT.R, config={align = "cm"}, nodes={
 }},
 
 '''
+
+# Remove exotic suit customization while locked
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''if G.COLLABS.options[suit.key] then'''
+position = 'at'
+match_indent = true
+payload = '''if G.COLLABS.options[suit.key] and
+(suit.key ~= 'bunc_Fleurons' or (suit.key == 'bunc_Fleurons' and G.P_CENTERS['b_bunc_fairy'].unlocked)) and
+(suit.key ~= 'bunc_Halberds' or (suit.key == 'bunc_Halberds' and G.P_CENTERS['b_bunc_fairy'].unlocked)) then'''

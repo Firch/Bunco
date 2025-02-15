@@ -124,6 +124,32 @@ return {
             bunc_scattering = 'Scattering',
             bunc_hindered = 'Hindered',
             bunc_reactive = 'Reactive'
+        },
+        collab_palettes = {
+            default_Spades = {
+                ['3'] = 'Recast Contrast'
+            },
+            default_Hearts = {
+                ['3'] = 'Recast Contrast'
+            },
+            default_Clubs = {
+                ['3'] = 'Recast Contrast'
+            },
+            default_Diamonds = {
+                ['3'] = 'Recast Contrast'
+            }
+        },
+        collabs = {
+            bunc_Fleurons = {
+                ['1'] = 'Default',
+                ['2'] = 'Duck Game',
+                ['3'] = 'LISA: The Painful'
+            },
+            bunc_Halberds = {
+                ['1'] = 'Default',
+                ['2'] = 'Fiend Folio',
+                ['3'] = 'LISA: The Pointless'
+            }
         }
     },
     descriptions = {
