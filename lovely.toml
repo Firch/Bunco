@@ -3617,3 +3617,33 @@ match_indent = true
 payload = '''if G.COLLABS.options[suit.key] and
 (suit.key ~= 'bunc_Fleurons' or (suit.key == 'bunc_Fleurons' and G.P_CENTERS['b_bunc_fairy'].unlocked)) and
 (suit.key ~= 'bunc_Halberds' or (suit.key == 'bunc_Halberds' and G.P_CENTERS['b_bunc_fairy'].unlocked)) then'''
+
+# Infinite redebuff fix
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''if self.ability.name == 'Credit Card' then
+G.GAME.bankrupt_at = G.GAME.bankrupt_at - self.ability.extra'''
+position = 'before'
+match_indent = true
+payload = '''if not from_debuff then
+'''
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''if self.ability.name == 'Credit Card' then
+G.GAME.bankrupt_at = G.GAME.bankrupt_at + self.ability.extra'''
+position = 'before'
+match_indent = true
+payload = '''if not from_debuff then
+'''
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "if G.GAME.blind and G.GAME.blind.in_blind then G.E_MANAGER:add_event(Event({ func = function() G.GAME.blind:set_blind(nil, true, nil); return true end })) end"
+position = 'before'
+match_indent = true
+payload = '''end
+'''

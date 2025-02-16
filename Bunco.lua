@@ -989,11 +989,11 @@ create_joker({ -- Cassette
     blueprint = true, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
-        if context.pre_discard then
+        if context.pre_discard and not context.blueprint then
             card:flip()
         end
 
-        if context.flip then
+        if context.flip and not context.blueprint then
             forced_message(G.localization.misc.dictionary['bunc_'..(card.ability.extra.side == 'A' and 'b' or 'a')..'_side'], card, G.C.RED)
             if card.ability.extra.side == 'A' then
                 card.ability.extra.side = 'B'
