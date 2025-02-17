@@ -3355,6 +3355,20 @@ create_joker({ -- Domino
 create_joker({ -- Glue Gun
     name = 'Glue Gun', position = 56,
     vars = {{amount = 4}},
+    custom_vars = function (self, info_queue, card)
+
+        info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_linked_group'}
+
+        local active = (G.hand and G.hand.highlighted and (#G.hand.highlighted > 1) and (#G.hand.highlighted <= card.ability.extra.amount)) or false
+        local main_end = {
+            {n=G.UIT.C, config={align = "bm", minh = 0.4}, nodes={
+                {n=G.UIT.C, config={ref_table = self, align = "m", colour = active and G.C.GREEN or G.C.RED, r = 0.05, padding = 0.06}, nodes={
+                    {n=G.UIT.T, config={text = ' '..localize(active and 'k_active' or 'bunc_inactive')..' ',colour = G.C.UI.TEXT_LIGHT, scale = 0.32*0.9}},
+                }}
+            }}
+        }
+        return {vars = {card.ability.extra.amount}, main_end = main_end}
+    end,
     rarity = 'Uncommon', cost = 4,
     blueprint = false, eternal = false,
     unlocked = true,
@@ -3379,6 +3393,9 @@ create_joker({ -- Glue Gun
 
 create_joker({ -- Taped
     name = 'Taped', custom_atlas = 'bunco_jokers_taped', position = 1,
+    custom_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_linked_group'}
+    end,
     rarity = 'Rare', cost = 6,
     blueprint = false, eternal = true,
     unlocked = true,
@@ -3431,6 +3448,10 @@ create_joker({ -- Taped
 create_joker({ -- Rubber Band Ball
     name = 'Rubber Band Ball', position = 57,
     vars = {{bonus = 1}, {xmult = 1}},
+    custom_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_linked_group'}
+        return {vars = {card.ability.extra.bonus, card.ability.extra.xmult}}
+    end,
     rarity = 'Uncommon', cost = 6,
     blueprint = true, eternal = true, perishable = false,
     unlocked = true,
@@ -3478,6 +3499,10 @@ create_joker({ -- Headache
 create_joker({ -- Games Collector
     name = 'Games Collector', position = 58,
     vars = {{bonus = 10}, {chips = 0}},
+    custom_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_linked_group'}
+        return {vars = {card.ability.extra.bonus, card.ability.extra.chips}}
+    end,
     rarity = 'Common', cost = 5,
     blueprint = true, eternal = true, perishable = false,
     unlocked = true,
@@ -4587,6 +4612,9 @@ SMODS.Consumable{ -- The I
     key = 'the_i',
 
     loc_vars = function(self, info_queue, card)
+
+        info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_linked_group'}
+
         local example = {
             {'S_2', true},
             {'S_6', true},
@@ -4648,6 +4676,9 @@ SMODS.Consumable{ -- The O
     key = 'the_o',
 
     loc_vars = function(self, info_queue, card)
+
+        info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_linked_group'}
+
         local example = {
             {'D_Q', true},
             {'D_Q', true},
@@ -4725,6 +4756,9 @@ SMODS.Consumable{ -- The T
     key = 'the_t',
 
     loc_vars = function(self, info_queue, card)
+
+        info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_linked_group'}
+
         local example = {
             {'H_7', true},
             {'C_7', true},
@@ -4812,6 +4846,9 @@ SMODS.Consumable{ -- The S
     key = 'the_s',
 
     loc_vars = function(self, info_queue, card)
+
+        info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_linked_group'}
+
         local example = {
             {'D_2', true},
             {'C_2', true},
@@ -4901,6 +4938,9 @@ SMODS.Consumable{ -- The Z
     key = 'the_z',
 
     loc_vars = function(self, info_queue, card)
+
+        info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_linked_group'}
+
         local example = {
             {'S_4', true},
             {'S_A', true},
@@ -4987,6 +5027,9 @@ SMODS.Consumable{ -- The J
     key = 'the_j',
 
     loc_vars = function(self, info_queue, card)
+
+        info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_linked_group'}
+
         local example = {
             {'D_Q', true},
             {'H_Q', true},
@@ -5086,6 +5129,9 @@ SMODS.Consumable{ -- The L
     key = 'the_l',
 
     loc_vars = function(self, info_queue, card)
+
+        info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_linked_group'}
+
         local example = {
             {'S_2', true},
             {'S_3', true},
@@ -5181,6 +5227,9 @@ SMODS.Consumable{ -- The /
     key = 'the_slash',
 
     loc_vars = function(self, info_queue, card)
+
+        info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_linked_group'}
+
         local example = {
             {'S_2', true},
             {'C_T', true},
@@ -5273,6 +5322,10 @@ SMODS.Consumable{ -- The /
 SMODS.Consumable{ -- The 8
     set = 'Spectral', atlas = 'bunco_polyminoes',
     key = 'the_8',
+
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_linked_group'}
+    end,
 
     hidden = true,
     soul_rate = 0.002,

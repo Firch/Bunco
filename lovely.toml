@@ -647,6 +647,7 @@ if (_c.set == 'Default' or _c.set == 'Enhanced') and card and card.ability and t
                 {n=G.UIT.O, config = {object = cardarea}}
             }}
         }})
+        info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_linked_group'}
     end
 end'''
 
