@@ -5963,12 +5963,27 @@ SMODS.Blind{ -- The Knoll
     boss = {min = 4},
 
     stay_flipped = function(self, area, card)
-        if not G.GAME.blind.disabled and card.area ~= G.jokers and
+        if not G.GAME.blind.disabled and (area == G.hand) and
         G.GAME.current_round.hands_played == 0 and G.GAME.current_round.discards_used == 0 then
             if G.GAME.dollars > 5 then
+                G.GAME.Knoll = G.GAME.Knoll or {}
+                table.insert(G.GAME.Knoll, card)
                 card:set_debuff(true)
             end
         end
+    end,
+    recalc_debuff = function(self, card, from_blind)
+        if not G.GAME.blind.disabled and G.GAME.Knoll then
+            for _, debuffed_card in ipairs(G.GAME.Knoll) do
+                if debuffed_card == card then
+                    return true
+                end
+            end
+            return false
+        end
+    end,
+    defeat = function(self)
+        G.GAME.Knoll = nil
     end,
 
     boss_colour = HEX('6d8f2d'),
