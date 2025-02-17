@@ -3481,6 +3481,11 @@ create_joker({ -- Rubber Band Ball
 create_joker({ -- Headache
     name = 'Headache', custom_atlas = 'bunco_jokers_headache', position = 1,
     vars = {{amount = 4}, {destroyed = 0}},
+    custom_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = {set = 'Tag', key = 'tag_bunc_arcade'}
+        info_queue[#info_queue + 1] = {key = 'p_bunc_virtual_mega', set = 'Other', vars = {G.P_CENTERS.p_bunc_virtual_mega.config.choose, G.P_CENTERS.p_bunc_virtual_mega.config.extra}}
+        return {vars = {card.ability.extra.amount, card.ability.extra.destroyed}}
+    end,
     rarity = 'Uncommon', cost = 4,
     blueprint = true, eternal = true,
     unlocked = true,
