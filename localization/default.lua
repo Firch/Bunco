@@ -760,7 +760,6 @@ return {
                     [2] = '{C:attention}destroy{} a random Joker to',
                     [3] = 'go one Ante back, next time',
                     [4] = 'works only on a greater Ante'
-                    -- TODO needs a line for whether it's active / ante it will be active
                 },
                 ['unlock'] = {
                     [1] = 'Reach Ante',
