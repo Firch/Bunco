@@ -7758,14 +7758,14 @@ SMODS.Enhancement({ -- Copper
             end
 
             local last_in_streak = true
-            if context.scoring_hand[card_position + 1] and context.scoring_hand[card_position + 1].config.center == card.config.center then
+            if context.scoring_hand[card_position + 1] and context.scoring_hand[card_position + 1].config.center == card.config.center and not (context.scoring_hand[card_position + 1].debuff) then
                 last_in_streak = false
             end
 
             if last_in_streak then
 
                 local streak = false
-                if context.scoring_hand[card_position - 1] and context.scoring_hand[card_position - 1].config.center == card.config.center then
+                if context.scoring_hand[card_position - 1] and context.scoring_hand[card_position - 1].config.center == card.config.center and not (context.scoring_hand[card_position - 1].debuff) then
                     streak = true
                 end
 
@@ -7780,7 +7780,8 @@ SMODS.Enhancement({ -- Copper
 
                                 while true do
                                     if context.scoring_hand[card_position - i]
-                                    and context.scoring_hand[card_position - i].config.center == card.config.center then
+                                    and context.scoring_hand[card_position - i].config.center == card.config.center
+                                    and not (context.scoring_hand[card_position - i].debuff) then
                                         table.insert(streak_cards, context.scoring_hand[card_position - i])
                                     else
                                         break
