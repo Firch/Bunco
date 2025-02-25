@@ -5610,7 +5610,6 @@ SMODS.PokerHandPart{ -- Spectrum base (Referenced from SixSuits)
         -- < 5 hand cant be a spectrum
         if #hand < 5 then return {} end
 
-
         local nonwilds = {}
         for i = 1, #hand do
             local cardsuits = {}
