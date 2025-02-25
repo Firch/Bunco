@@ -48,6 +48,7 @@ return {
             bunc_accepted = 'Accepted!',
             bunc_robbed = 'Robbed!',
             bunc_ouch = 'OUCH!',
+            bunc_inactive = 'inactive',
             bunc_repeat = 'Repeat!',
             bunc_thoth_tarot = 'Thoth Tarot',
             bunc_mysterious_tarot = 'Tarot?',
@@ -56,6 +57,8 @@ return {
             bunc_least_played_hand = '(least played hand)',
             bunc_blade = '(1.5X blind score)',
             bunc_exceeded_score = 'Exceeded the limit!',
+            bunc_min_ante = 'Minimum Ante:',
+            bunc_final_blind = 'Final Blind',
 
             -- Consumable types
 
@@ -122,12 +125,46 @@ return {
             bunc_scattering = 'Scattering',
             bunc_hindered = 'Hindered',
             bunc_reactive = 'Reactive'
+        },
+        collab_palettes = {
+            default_Spades = {
+                ['3'] = 'Recast Contrast'
+            },
+            default_Hearts = {
+                ['3'] = 'Recast Contrast'
+            },
+            default_Clubs = {
+                ['3'] = 'Recast Contrast'
+            },
+            default_Diamonds = {
+                ['3'] = 'Recast Contrast'
+            }
+        },
+        collabs = {
+            bunc_Fleurons = {
+                ['1'] = 'Default',
+                ['2'] = 'Duck Game',
+                ['3'] = 'LISA: The Painful'
+            },
+            bunc_Halberds = {
+                ['1'] = 'Default',
+                ['2'] = 'Fiend Folio',
+                ['3'] = 'LISA: The Pointless'
+            }
         }
     },
     descriptions = {
         Other = {
             bunc_temporary_extra_chips = {['text'] = {[1] = '{C:chips}+#1#{} extra chips this round'}},
             bunc_linked_cards = {['text'] = {[1] = '{C:attention}Linked{} in this group:'}},
+            bunc_linked_group = {
+                ['name'] = 'Linked group',
+                ['text'] = {
+                    [1] = 'Linked cards in group',
+                    [2] = 'are drawn, selected',
+                    [3] = 'and destroyed {C:attention}together'
+                }
+            },
             bunc_drawn_linked_cards = {['text'] = {[1] = '{C:attention}Linked{} in drawn group'}},
             bunc_light_suits = {
                 ['name'] = 'Light suits',
@@ -723,7 +760,6 @@ return {
                     [2] = '{C:attention}destroy{} a random Joker to',
                     [3] = 'go one Ante back, next time',
                     [4] = 'works only on a greater Ante'
-                    -- TODO needs a line for whether it's active / ante it will be active
                 },
                 ['unlock'] = {
                     [1] = 'Reach Ante',
@@ -1312,7 +1348,7 @@ return {
                 ['text'] = {
                     [1] = '{C:green}#1# in #2#{} chance to add',
                     [2] = '{C:dark_edition}Polychrome{} edition',
-                    [3] = 'to a random scored card if',
+                    [3] = 'to all scored cards if',
                     [4] = 'hand contains a {C:attention}Spectrum'
                 }
             },

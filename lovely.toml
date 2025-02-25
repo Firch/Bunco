@@ -396,7 +396,7 @@ end'''
 [[patches]]
 [patches.pattern]
 target = "game.lua"
-pattern = "if G.GAME.current_round.hands_played == 0 and"
+pattern = "-- removed first hand drawn context"
 position = "before"
 match_indent = true
 payload = '''
@@ -647,6 +647,7 @@ if (_c.set == 'Default' or _c.set == 'Enhanced') and card and card.ability and t
                 {n=G.UIT.O, config = {object = cardarea}}
             }}
         }})
+        info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_linked_group'}
     end
 end'''
 
@@ -948,18 +949,24 @@ if G.jokers ~= nil then
             if mod > 0 then
                 if pseudorandom('fiendish'..G.SEED) < G.GAME.probabilities.normal / v.ability.extra.odds then
                     mod = 1
-                    card_eval_status_text(
-                    v,
-                    'extra',
-                    nil, nil, nil,
-                    {message = '$'..(mod or '1'), colour = G.C.RED, instant = true})
+                    local message = mod
+                    G.E_MANAGER:add_event(Event{func = function()
+                        card_eval_status_text(
+                        v,
+                        'extra',
+                        nil, nil, nil,
+                        {message = '$'..(message or '1'), colour = G.C.RED, instant = true})
+                    return true end})
                 else
                     mod = mod * 2
-                    card_eval_status_text(
-                    v,
-                    'extra',
-                    nil, nil, nil,
-                    {message = '$'..mod, colour = G.C.ORANGE, instant = true})
+                    local message = mod
+                    G.E_MANAGER:add_event(Event{func = function()
+                        card_eval_status_text(
+                        v,
+                        'extra',
+                        nil, nil, nil,
+                        {message = '$'..message, colour = G.C.ORANGE, instant = true})
+                    return true end})
                 end
             end
         end
@@ -967,15 +974,19 @@ if G.jokers ~= nil then
             if mod > 0 then
                 v:calculate_joker({get_money = true})
                 mod = mod - 1
-                card_eval_status_text(
-                v,
-                'extra',
-                nil, nil, nil,
-                {message = G.localization.misc.dictionary.bunc_robbed, colour = G.C.ORANGE, instant = true})
+                G.E_MANAGER:add_event(Event{func = function()
+                    card_eval_status_text(
+                    v,
+                    'extra',
+                    nil, nil, nil,
+                    {message = G.localization.misc.dictionary.bunc_robbed, colour = G.C.ORANGE, instant = true})
+                return true end})
             end
         end
     end
 end
+
+if mod == 0 then return end
 
 '''
 
@@ -1077,6 +1088,21 @@ position = 'after'
 match_indent = true
 payload = '''
 if hand == 'bunc_Deal' then return end
+'''
+
+# Deal hand crash fix for Blue Seal
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "local card = create_card(card_type,G.consumeables, nil, nil, nil, nil, _planet, 'blusl')"
+position = 'before'
+match_indent = true
+payload = '''
+
+if _planet == 0 then
+    _planet = 'c_pluto'
+end
+
 '''
 
 # function level_up_hand (Head in the Clouds)
@@ -2593,13 +2619,18 @@ end
 # Edition tags 4/5
 [[patches]]
 [patches.pattern]
-target = 'functions/state_events.lua'
-pattern = 'for i=1, #G.jokers.cards + #G.consumeables.cards do'
-position = 'at'
+target = '=[SMODS _ "src/utils.lua"]'
+pattern = '-- TARGET: add your own CardAreas for joker evaluation'
+position = 'before'
 match_indent = true
 payload = '''
 
-for i=1, #G.jokers.cards + (BUNCOMOD and BUNCOMOD.vars and BUNCOMOD.vars.jokerlike_consumable_editions and #G.consumeables.cards or 0) do
+for k, v in ipairs(t) do
+    if v == G.consumeables and (BUNCOMOD and BUNCOMOD.vars and not BUNCOMOD.vars.jokerlike_consumable_editions) then
+        table.remove(t, k)
+        break
+    end
+end
 
 '''
 
@@ -2617,45 +2648,42 @@ for i=1, BUNCOMOD and BUNCOMOD.vars and BUNCOMOD.vars.jokerlike_consumable_editi
     local effects = {}
     -- remove base game joker edition calc
     local eval = eval_card(_card, {cardarea = G.jokers, full_hand = G.play.cards, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, edition = true, pre_joker = true})
-    
 
     -- Calculate context.joker_main
     local joker_eval, post = eval_card(_card, {cardarea = G.jokers, full_hand = G.play.cards, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, joker_main = true})
     if next(joker_eval) then
         table.insert(effects, joker_eval)
-        if next(post) then 
-            for _, v in ipairs(post) do
-                table.insert(effects, v) 
-            end
-        end
+        for _, v in ipairs(post) do effects[#effects+1] = v end
         if joker_eval.retriggers then
             for rt = 1, #joker_eval.retriggers do
                 local rt_eval, rt_post = eval_card(_card, {cardarea = G.jokers, full_hand = G.play.cards, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, joker_main = true, retrigger_joker = true})
                 table.insert(effects, {joker_eval.retriggers[rt]})
                 table.insert(effects, rt_eval)
-                if next(rt_post) then table.insert(effects, rt_post) end
+                for _, v in ipairs(rt_post) do effects[#effects+1] = v end
             end
         end
     end
 
     -- Calculate context.other_joker effects
-    for k=1, #G.consumeables.cards do
-        local _joker = G.consumeables.cards[k]
-        local joker_eval,post = eval_card(_joker, {full_hand = G.play.cards, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, other_joker = _card.ability.set == 'Joker' and _card or false, other_consumeable = _card.ability.set ~= 'Joker' and _card or false})
-        if next(joker_eval) then
-            joker_eval.jokers.juice_card = _joker
-            table.insert(effects, joker_eval)
-            if next(post) then
-                for _, v in ipairs(post) do
-                    table.insert(effects, v) 
-                end
-            end
-            if joker_eval.retriggers then
-                for rt = 1, #joker_eval.retriggers do
-                    local rt_eval, rt_post = eval_card(_card, {full_hand = G.play.cards, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, other_joker = _card.ability.set == 'Joker' and _card or false, other_consumeable = _card.ability.set ~= 'Joker' and _card or false, retrigger_joker = true})
-                    table.insert(effects, {joker_eval.retriggers[rt]})
-                    table.insert(effects, rt_eval)
-                    if next(rt_post) then table.insert(effects, rt_post) end
+    for _, _area in ipairs(SMODS.get_card_areas('jokers')) do
+        for _, _joker in ipairs(_area.cards) do
+            local other_key = 'other_unknown'
+            if _card.ability.set == 'Joker' then other_key = 'other_joker' end
+            if _card.ability.consumeable then other_key = 'other_consumeable' end
+            if _card.ability.set == 'Voucher' then other_key = 'other_voucher' end
+            -- TARGET: add context.other_something identifier to your cards
+            local joker_eval,post = eval_card(_joker, {full_hand = G.play.cards, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, [other_key] = _card, other_main = _card })
+            if next(joker_eval) then
+                joker_eval.jokers.juice_card = _joker
+                table.insert(effects, joker_eval)
+                for _, v in ipairs(post) do effects[#effects+1] = v end
+                if joker_eval.retriggers then
+                    for rt = 1, #joker_eval.retriggers do
+                        local rt_eval, rt_post = eval_card(_card, {full_hand = G.play.cards, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, [other_key] = _card, retrigger_joker = true})
+                        table.insert(effects, {joker_eval.retriggers[rt]})
+                        table.insert(effects, rt_eval)
+                        for _, v in ipairs(rt_post) do effects[#effects+1] = v end
+                    end
                 end
             end
         end
@@ -2703,39 +2731,37 @@ end
 
 '''
 
-# Info queue for consumables
+# Info queue for consumables 1/2
 [[patches]]
 [patches.pattern]
 target = 'functions/common_events.lua'
-pattern = "info_queue[#info_queue + 1] = G.P_CENTERS['e_'..v]"
-position = 'at'
+pattern = "local t = {key = 'e_'..v, set = 'Edition', config = {}}"
+position = 'before'
 match_indent = true
 payload = '''
-
-if not _c.consumeable then
-    info_queue[#info_queue + 1] = G.P_CENTERS['e_'..v]
-else
-    if v == 'foil'
-    or v == 'holo'
-    or v == 'polychrome'
-    or v == 'bunc_glitter' then
-        info_queue[#info_queue + 1] = G.P_CENTERS['bunc_consumable_edition_'..v]
-        info_queue[#info_queue + 1] = {
-        key = (v == 'foil') and 'tag_bunc_chips'
+if _c.consumeable and (v == 'foil' or v == 'holo' or v == 'polychrome' or v == 'bunc_glitter') then
+    info_queue[#info_queue + 1] = G.P_CENTERS['bunc_consumable_edition_'..v]
+    info_queue[#info_queue + 1] = {
+    key = (v == 'foil') and 'tag_bunc_chips'
         or (v == 'holo') and 'tag_bunc_mult'
         or (v == 'polychrome') and 'tag_bunc_xmult'
         or (v == 'bunc_glitter') and 'tag_bunc_xchips',
-        set = 'Tag',
-        specific_vars = (v == 'foil') and {G.P_CENTERS.e_foil.config.extra}
+    set = 'Tag',
+    specific_vars = (v == 'foil') and {G.P_CENTERS.e_foil.config.extra}
         or (v == 'holo') and {G.P_CENTERS.e_holo.config.extra}
         or (v == 'polychrome') and {G.P_CENTERS.e_polychrome.config.extra}
         or (v == 'bunc_glitter') and {G.P_CENTERS.e_bunc_glitter.config.Xchips}}
-    else
-        info_queue[#info_queue + 1] = G.P_CENTERS['e_'..v]
-    end
-end
-
+else
 '''
+
+# Info queue for consumables 2/2
+[[patches]]
+[patches.regex]
+target = 'functions/common_events.lua'
+pattern = "local t = \\{key = 'e_'\\.\\.v, set = 'Edition', config = \\{\\}\\}((.|\n)*?)(?<indent>[\t ]*)end\n"
+position = 'after'
+line_prepend = "$indent"
+payload = '''end'''
 
 # function card_open() (Filigree Tag)
 [[patches]]
@@ -3268,8 +3294,8 @@ if self.ability.bunc_scattering and self.area == G.jokers then
     end
     if position then
         scattered_jokers = {}
-        if G.jokers.cards[position - 1] then table.insert(scattered_jokers, G.jokers.cards[position - 1]) end
-        if G.jokers.cards[position + 1] then table.insert(scattered_jokers, G.jokers.cards[position + 1]) end
+        if G.jokers.cards[position - 1] and (not G.jokers.cards[position - 1].ability.eternal) then table.insert(scattered_jokers, G.jokers.cards[position - 1]) end
+        if G.jokers.cards[position + 1] and (not G.jokers.cards[position + 1].ability.eternal) then table.insert(scattered_jokers, G.jokers.cards[position + 1]) end
     end
 end
 
@@ -3566,3 +3592,59 @@ position = 'at'
 match_indent = true
 payload = '''if not self.children.back then
     self.children.back = Sprite(self.T.x, self.T.y, self.T.w, self.T.h, G.ASSET_ATLAS[(G.GAME.viewed_back or G.GAME.selected_back) and ((G.GAME.viewed_back or G.GAME.selected_back)[G.SETTINGS.colourblind_option and 'hc_atlas' or 'lc_atlas'] or (G.GAME.viewed_back or G.GAME.selected_back).atlas) or 'centers'], self.params.bypass_back or (self.playing_card and G.GAME[self.back].pos or G.P_CENTERS['b_red'].pos))'''
+
+# Min Ante for Blind's collection UI
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''ability_text[1] and {n=G.UIT.R, config={align = "cm", padding = 0.08, colour = mix_colours(blind.boss_colour, G.C.GREY, 0.4), r = 0.1, emboss = 0.05, minw = 2.5, minh = 0.9}, nodes=ability_text} or nil'''
+position = 'after'
+match_indent = true
+payload = ''',
+
+ability_text[1] and blind.boss and {n=G.UIT.R, config={align = "cm"}, nodes={
+    {n=G.UIT.T, config={text = blind.boss.showdown and localize('bunc_final_blind') or (localize('bunc_min_ante')..' '..(blind.boss.min or '?')), scale = 0.3, colour = G.C.UI.TEXT_INACTIVE}}
+}},
+
+'''
+
+# Remove exotic suit customization while locked
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''if G.COLLABS.options[suit.key] then'''
+position = 'at'
+match_indent = true
+payload = '''if G.COLLABS.options[suit.key] and
+(suit.key ~= 'bunc_Fleurons' or (suit.key == 'bunc_Fleurons' and G.P_CENTERS['b_bunc_fairy'].unlocked)) and
+(suit.key ~= 'bunc_Halberds' or (suit.key == 'bunc_Halberds' and G.P_CENTERS['b_bunc_fairy'].unlocked)) then'''
+
+# Infinite redebuff fix
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''if self.ability.name == 'Credit Card' then
+G.GAME.bankrupt_at = G.GAME.bankrupt_at - self.ability.extra'''
+position = 'before'
+match_indent = true
+payload = '''if not from_debuff then
+'''
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''if self.ability.name == 'Credit Card' then
+G.GAME.bankrupt_at = G.GAME.bankrupt_at + self.ability.extra'''
+position = 'before'
+match_indent = true
+payload = '''if not from_debuff then
+'''
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "if G.GAME.blind and G.GAME.blind.in_blind then G.E_MANAGER:add_event(Event({ func = function() G.GAME.blind:set_blind(nil, true, nil); return true end })) end"
+position = 'before'
+match_indent = true
+payload = '''end
+'''

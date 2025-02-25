@@ -302,16 +302,6 @@ if config.fixed_sprites then
 
     -- High contrast
 
-    SMODS.Atlas{key = 'cards_2', path = 'Resprites/EnhancedContrast.png', px = 71, py = 95, prefix_config = {key = false}}
-    SMODS.Atlas{key = 'ui_2', path = 'Resprites/EnhancedUIContrast.png', px = 18, py = 18, prefix_config = {key = false}}
-
-    G.C['SO_2'] = {
-        Hearts = HEX('ee151b'),
-        Diamonds = HEX('e56b10'),
-        Spades = HEX('5d55a6'),
-        Clubs = HEX('197f77')
-    }
-
     G.C['SO_1']['Spades'] = HEX('3c4368')
 
     G.C.SUITS = G.C["SO_" .. (G.SETTINGS.colourblind_option and 2 or 1)]
@@ -781,13 +771,6 @@ SMODS.Tag:take_ownership('double', {
     end,
 })
 
-SMODS.Challenge:take_ownership('c_mad_world_1', {
-    register = function(self)
-        SMODS.Challenge.register(self)
-        table.insert(self.restrictions.banned_other, {id = 'bl_bunc_cadaver', type = 'blind'})
-    end
-})
-
 -- Joker creation setup
 
 SMODS.Atlas({key = 'bunco_jokers', path = 'Jokers/Jokers.png', px = 71, py = 95})
@@ -1006,11 +989,11 @@ create_joker({ -- Cassette
     blueprint = true, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
-        if context.pre_discard then
+        if context.pre_discard and not context.blueprint then
             card:flip()
         end
 
-        if context.flip then
+        if context.flip and not context.blueprint then
             forced_message(G.localization.misc.dictionary['bunc_'..(card.ability.extra.side == 'A' and 'b' or 'a')..'_side'], card, G.C.RED)
             if card.ability.extra.side == 'A' then
                 card.ability.extra.side = 'B'
@@ -1716,6 +1699,17 @@ create_joker({ -- Fiendish
 create_joker({ -- Carnival
     name = 'Carnival', position = 19,
     vars = {{ante = -huge_number}},
+    custom_vars = function (self, info_queue, card)
+        local active = (G.GAME and G.GAME.round_resets and (G.GAME.round_resets.ante > card.ability.extra.ante)) or false
+        local main_end = {
+            {n=G.UIT.C, config={align = "bm", minh = 0.4}, nodes={
+                {n=G.UIT.C, config={ref_table = self, align = "m", colour = active and G.C.GREEN or G.C.RED, r = 0.05, padding = 0.06}, nodes={
+                    {n=G.UIT.T, config={text = ' '..localize(active and 'k_active' or 'bunc_inactive')..' ',colour = G.C.UI.TEXT_LIGHT, scale = 0.32*0.9}},
+                }}
+            }}
+        }
+        return {main_end = main_end}
+    end,
     rarity = 'Rare', cost = 10,
     blueprint = false, eternal = true,
     unlocked = false,
@@ -3118,7 +3112,7 @@ create_joker({ -- Bounty Hunter
         end
     end,
     calculate = function(self, card, context)
-        if context.get_money then
+        if context.get_money and not context.blueprint then
             card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.bonus
         end
         if context.joker_main and card.ability.extra.mult ~= 0 then
@@ -3372,6 +3366,20 @@ create_joker({ -- Domino
 create_joker({ -- Glue Gun
     name = 'Glue Gun', position = 56,
     vars = {{amount = 4}},
+    custom_vars = function (self, info_queue, card)
+
+        info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_linked_group'}
+
+        local active = (G.hand and G.hand.highlighted and (#G.hand.highlighted > 1) and (#G.hand.highlighted <= card.ability.extra.amount)) or false
+        local main_end = {
+            {n=G.UIT.C, config={align = "bm", minh = 0.4}, nodes={
+                {n=G.UIT.C, config={ref_table = self, align = "m", colour = active and G.C.GREEN or G.C.RED, r = 0.05, padding = 0.06}, nodes={
+                    {n=G.UIT.T, config={text = ' '..localize(active and 'k_active' or 'bunc_inactive')..' ',colour = G.C.UI.TEXT_LIGHT, scale = 0.32*0.9}},
+                }}
+            }}
+        }
+        return {vars = {card.ability.extra.amount}, main_end = main_end}
+    end,
     rarity = 'Uncommon', cost = 4,
     blueprint = false, eternal = false,
     unlocked = true,
@@ -3396,6 +3404,9 @@ create_joker({ -- Glue Gun
 
 create_joker({ -- Taped
     name = 'Taped', custom_atlas = 'bunco_jokers_taped', position = 1,
+    custom_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_linked_group'}
+    end,
     rarity = 'Rare', cost = 6,
     blueprint = false, eternal = true,
     unlocked = true,
@@ -3448,6 +3459,10 @@ create_joker({ -- Taped
 create_joker({ -- Rubber Band Ball
     name = 'Rubber Band Ball', position = 57,
     vars = {{bonus = 1}, {xmult = 1}},
+    custom_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_linked_group'}
+        return {vars = {card.ability.extra.bonus, card.ability.extra.xmult}}
+    end,
     rarity = 'Uncommon', cost = 6,
     blueprint = true, eternal = true, perishable = false,
     unlocked = true,
@@ -3477,6 +3492,11 @@ create_joker({ -- Rubber Band Ball
 create_joker({ -- Headache
     name = 'Headache', custom_atlas = 'bunco_jokers_headache', position = 1,
     vars = {{amount = 4}, {destroyed = 0}},
+    custom_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = {set = 'Tag', key = 'tag_bunc_arcade'}
+        info_queue[#info_queue + 1] = {key = 'p_bunc_virtual_mega', set = 'Other', vars = {G.P_CENTERS.p_bunc_virtual_mega.config.choose, G.P_CENTERS.p_bunc_virtual_mega.config.extra}}
+        return {vars = {card.ability.extra.amount, card.ability.extra.destroyed}}
+    end,
     rarity = 'Uncommon', cost = 4,
     blueprint = true, eternal = true,
     unlocked = true,
@@ -3495,6 +3515,10 @@ create_joker({ -- Headache
 create_joker({ -- Games Collector
     name = 'Games Collector', position = 58,
     vars = {{bonus = 10}, {chips = 0}},
+    custom_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_linked_group'}
+        return {vars = {card.ability.extra.bonus, card.ability.extra.chips}}
+    end,
     rarity = 'Common', cost = 5,
     blueprint = true, eternal = true, perishable = false,
     unlocked = true,
@@ -3999,8 +4023,11 @@ create_joker({ -- ROYGBIV
                     end
 
                     if cards and #cards > 0 then
-                        big_juice(card)
-                        cards[math.random(#cards)]:set_edition({polychrome = true}, true)
+                        forced_message('+'..localize{type = 'name_text', key = 'e_polychrome', set = 'Edition'}, card)
+                        for i = 1, #cards do
+                            local other_card = cards[i]
+                            other_card:set_edition({polychrome = true})
+                        end
                     end
                 end
             end
@@ -4601,6 +4628,9 @@ SMODS.Consumable{ -- The I
     key = 'the_i',
 
     loc_vars = function(self, info_queue, card)
+
+        info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_linked_group'}
+
         local example = {
             {'S_2', true},
             {'S_6', true},
@@ -4662,6 +4692,9 @@ SMODS.Consumable{ -- The O
     key = 'the_o',
 
     loc_vars = function(self, info_queue, card)
+
+        info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_linked_group'}
+
         local example = {
             {'D_Q', true},
             {'D_Q', true},
@@ -4739,6 +4772,9 @@ SMODS.Consumable{ -- The T
     key = 'the_t',
 
     loc_vars = function(self, info_queue, card)
+
+        info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_linked_group'}
+
         local example = {
             {'H_7', true},
             {'C_7', true},
@@ -4826,6 +4862,9 @@ SMODS.Consumable{ -- The S
     key = 'the_s',
 
     loc_vars = function(self, info_queue, card)
+
+        info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_linked_group'}
+
         local example = {
             {'D_2', true},
             {'C_2', true},
@@ -4915,6 +4954,9 @@ SMODS.Consumable{ -- The Z
     key = 'the_z',
 
     loc_vars = function(self, info_queue, card)
+
+        info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_linked_group'}
+
         local example = {
             {'S_4', true},
             {'S_A', true},
@@ -5001,6 +5043,9 @@ SMODS.Consumable{ -- The J
     key = 'the_j',
 
     loc_vars = function(self, info_queue, card)
+
+        info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_linked_group'}
+
         local example = {
             {'D_Q', true},
             {'H_Q', true},
@@ -5100,6 +5145,9 @@ SMODS.Consumable{ -- The L
     key = 'the_l',
 
     loc_vars = function(self, info_queue, card)
+
+        info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_linked_group'}
+
         local example = {
             {'S_2', true},
             {'S_3', true},
@@ -5195,6 +5243,9 @@ SMODS.Consumable{ -- The /
     key = 'the_slash',
 
     loc_vars = function(self, info_queue, card)
+
+        info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_linked_group'}
+
         local example = {
             {'S_2', true},
             {'C_T', true},
@@ -5288,6 +5339,10 @@ SMODS.Consumable{ -- The 8
     set = 'Spectral', atlas = 'bunco_polyminoes',
     key = 'the_8',
 
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_linked_group'}
+    end,
+
     hidden = true,
     soul_rate = 0.002,
     soul_set = 'Polymino',
@@ -5377,6 +5432,156 @@ SMODS.Suit{ -- Halberds
         end
         return BUNCOMOD.funcs.exotic_in_pool()
     end
+}
+
+table.insert(SMODS.Suit.obj_buffer, 1, table.remove(SMODS.Suit.obj_buffer, #SMODS.Suit.obj_buffer)) -- Sort suits
+table.insert(SMODS.Suit.obj_buffer, 1, table.remove(SMODS.Suit.obj_buffer, #SMODS.Suit.obj_buffer))
+table.insert(SMODS.Suit.obj_buffer, 1, table.remove(SMODS.Suit.obj_buffer, 2))
+
+-- Skins and deck resprites
+
+SMODS.Atlas{key = 'bunco_resprites_enhanced_contrast', path = 'Resprites/EnhancedContrast.png', px = 71, py = 95}
+SMODS.Atlas{key = 'bunco_resprites_enhanced_contrast_ui', path = 'Resprites/EnhancedUIContrast.png', px = 18, py = 18}
+
+SMODS.DeckSkin.add_palette(SMODS.DeckSkins['default_Spades'], {
+    key = 'recast_contrast',
+    ranks = {'2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace'},
+    display_ranks = {'King', 'Queen', 'Jack'},
+    atlas = 'bunc_bunco_resprites_enhanced_contrast',
+    pos_style = 'deck',
+    colour = HEX('5d55a6'),
+    suit_icon = {
+        atlas = 'bunc_bunco_resprites_enhanced_contrast_ui'
+    }
+})
+
+SMODS.DeckSkin.add_palette(SMODS.DeckSkins['default_Hearts'], {
+    key = 'recast_contrast',
+    ranks = {'2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace'},
+    display_ranks = {'King', 'Queen', 'Jack'},
+    atlas = 'bunc_bunco_resprites_enhanced_contrast',
+    pos_style = 'deck',
+    colour = HEX('ee151b'),
+    suit_icon = {
+        atlas = 'bunc_bunco_resprites_enhanced_contrast_ui'
+    }
+})
+
+SMODS.DeckSkin.add_palette(SMODS.DeckSkins['default_Clubs'], {
+    key = 'recast_contrast',
+    ranks = {'2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace'},
+    display_ranks = {'King', 'Queen', 'Jack'},
+    atlas = 'bunc_bunco_resprites_enhanced_contrast',
+    pos_style = 'deck',
+    colour = HEX('197f77'),
+    suit_icon = {
+        atlas = 'bunc_bunco_resprites_enhanced_contrast_ui'
+    }
+})
+
+SMODS.DeckSkin.add_palette(SMODS.DeckSkins['default_Diamonds'], {
+    key = 'recast_contrast',
+    ranks = {'2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace'},
+    display_ranks = {'King', 'Queen', 'Jack'},
+    atlas = 'bunc_bunco_resprites_enhanced_contrast',
+    pos_style = 'deck',
+    colour = HEX('e56b10'),
+    suit_icon = {
+        atlas = 'bunc_bunco_resprites_enhanced_contrast_ui'
+    }
+})
+
+SMODS.Atlas({key = 'bunco_skins_duckgame_lc', path = 'Skins/SkinDuckGameLC.png', px = 71, py = 95})
+SMODS.Atlas({key = 'bunco_skins_duckgame_hc', path = 'Skins/SkinDuckGameHC.png', px = 71, py = 95})
+SMODS.Atlas({key = 'bunco_skins_lisa_the_painful_lc', path = 'Skins/SkinLISAThePainfulLC.png', px = 71, py = 95})
+SMODS.Atlas({key = 'bunco_skins_lisa_the_painful_hc', path = 'Skins/SkinLISAThePainfulHC.png', px = 71, py = 95})
+SMODS.Atlas({key = 'bunco_skins_fiend_folio_lc', path = 'Skins/SkinFiendFolioLC.png', px = 71, py = 95})
+SMODS.Atlas({key = 'bunco_skins_fiend_folio_hc', path = 'Skins/SkinFiendFolioHC.png', px = 71, py = 95})
+SMODS.Atlas({key = 'bunco_skins_lisa_the_pointless_lc', path = 'Skins/SkinLISAThePointlessLC.png', px = 71, py = 95})
+SMODS.Atlas({key = 'bunco_skins_lisa_the_pointless_hc', path = 'Skins/SkinLISAThePointlessHC.png', px = 71, py = 95})
+
+SMODS.DeckSkin{
+    key = 'duck_game',
+    suit = 'bunc_Fleurons',
+    palettes = {
+        {
+            key = 'lc',
+            ranks = {'Jack', 'Queen', 'King'},
+            display_ranks = {'King', 'Queen', 'Jack'},
+            pos_style = 'ranks',
+            atlas = 'bunc_bunco_skins_duckgame_lc'
+        },
+        {
+            key = 'hc',
+            ranks = {'Jack', 'Queen', 'King'},
+            display_ranks = {'King', 'Queen', 'Jack'},
+            pos_style = 'ranks',
+            atlas = 'bunc_bunco_skins_duckgame_hc'
+        }
+    }
+}
+
+SMODS.DeckSkin{
+    key = 'lisa_the_painful',
+    suit = 'bunc_Fleurons',
+    palettes = {
+        {
+            key = 'lc',
+            ranks = {'Jack', 'Queen', 'King'},
+            display_ranks = {'King', 'Queen', 'Jack'},
+            pos_style = 'ranks',
+            atlas = 'bunc_bunco_skins_lisa_the_painful_lc'
+        },
+        {
+            key = 'hc',
+            ranks = {'Jack', 'Queen', 'King'},
+            display_ranks = {'King', 'Queen', 'Jack'},
+            pos_style = 'ranks',
+            atlas = 'bunc_bunco_skins_lisa_the_painful_hc'
+        }
+    }
+}
+
+SMODS.DeckSkin{
+    key = 'fiend_folio',
+    suit = 'bunc_Halberds',
+    palettes = {
+        {
+            key = 'lc',
+            ranks = {'Jack', 'Queen', 'King'},
+            display_ranks = {'King', 'Queen', 'Jack'},
+            pos_style = 'ranks',
+            atlas = 'bunc_bunco_skins_fiend_folio_lc'
+        },
+        {
+            key = 'hc',
+            ranks = {'Jack', 'Queen', 'King'},
+            display_ranks = {'King', 'Queen', 'Jack'},
+            pos_style = 'ranks',
+            atlas = 'bunc_bunco_skins_fiend_folio_hc'
+        }
+    }
+}
+
+SMODS.DeckSkin{
+    key = 'lisa_the_pointless',
+    suit = 'bunc_Halberds',
+    palettes = {
+        {
+            key = 'lc',
+            ranks = {'Jack', 'Queen', 'King'},
+            display_ranks = {'King', 'Queen', 'Jack'},
+            pos_style = 'ranks',
+            atlas = 'bunc_bunco_skins_lisa_the_pointless_lc'
+        },
+        {
+            key = 'hc',
+            ranks = {'Jack', 'Queen', 'King'},
+            display_ranks = {'King', 'Queen', 'Jack'},
+            pos_style = 'ranks',
+            atlas = 'bunc_bunco_skins_lisa_the_pointless_hc'
+        }
+    }
 }
 
 -- Exotic system toggle logic
@@ -5827,12 +6032,27 @@ SMODS.Blind{ -- The Knoll
     boss = {min = 4},
 
     stay_flipped = function(self, area, card)
-        if not G.GAME.blind.disabled and card.area ~= G.jokers and
+        if not G.GAME.blind.disabled and (area == G.hand) and
         G.GAME.current_round.hands_played == 0 and G.GAME.current_round.discards_used == 0 then
             if G.GAME.dollars > 5 then
+                G.GAME.Knoll = G.GAME.Knoll or {}
+                table.insert(G.GAME.Knoll, card)
                 card:set_debuff(true)
             end
         end
+    end,
+    recalc_debuff = function(self, card, from_blind)
+        if not G.GAME.blind.disabled and G.GAME.Knoll then
+            for _, debuffed_card in ipairs(G.GAME.Knoll) do
+                if debuffed_card == card then
+                    return true
+                end
+            end
+            return false
+        end
+    end,
+    defeat = function(self)
+        G.GAME.Knoll = nil
     end,
 
     boss_colour = HEX('6d8f2d'),
@@ -7538,14 +7758,14 @@ SMODS.Enhancement({ -- Copper
             end
 
             local last_in_streak = true
-            if context.scoring_hand[card_position + 1] and context.scoring_hand[card_position + 1].config.center == card.config.center then
+            if context.scoring_hand[card_position + 1] and context.scoring_hand[card_position + 1].config.center == card.config.center and not (context.scoring_hand[card_position + 1].debuff) then
                 last_in_streak = false
             end
 
             if last_in_streak then
 
                 local streak = false
-                if context.scoring_hand[card_position - 1] and context.scoring_hand[card_position - 1].config.center == card.config.center then
+                if context.scoring_hand[card_position - 1] and context.scoring_hand[card_position - 1].config.center == card.config.center and not (context.scoring_hand[card_position - 1].debuff) then
                     streak = true
                 end
 
@@ -7560,7 +7780,8 @@ SMODS.Enhancement({ -- Copper
 
                                 while true do
                                     if context.scoring_hand[card_position - i]
-                                    and context.scoring_hand[card_position - i].config.center == card.config.center then
+                                    and context.scoring_hand[card_position - i].config.center == card.config.center
+                                    and not (context.scoring_hand[card_position - i].debuff) then
                                         table.insert(streak_cards, context.scoring_hand[card_position - i])
                                     else
                                         break
