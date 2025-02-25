@@ -5602,33 +5602,79 @@ SMODS.PokerHandPart{ -- Spectrum base (Referenced from SixSuits)
     key = 'spectrum',
     func = function(hand)
         local suits = {}
+
+        -- determine suits to be used
         for _, v in ipairs(SMODS.Suit.obj_buffer) do
-            suits[v] = 0
+            suits[v] = 1
         end
+        -- < 5 hand cant be a spectrum
         if #hand < 5 then return {} end
+
+
+        local nonwilds = {}
         for i = 1, #hand do
+            -- wild cards don't have to be counted since they fill up the rest
             if hand[i].ability.name ~= 'Wild Card' then
-                for k, v in pairs(suits) do
-                    if hand[i]:is_suit(k, nil, true) and v == 0 then
-                        suits[k] = v + 1; break
+                local cardsuits = {}
+                for _, v in ipairs(SMODS.Suit.obj_buffer) do
+                    -- determine table of suits for each card (for future faster calculations)
+                    if hand[i]:is_suit(v, nil, true) then
+                        table.insert(cardsuits, v)
                     end
+                end
+
+                -- if somehow no suits: spectrum is impossible
+                if #cardsuits == 0 then
+                    return {}
+                -- if only 1 suit: can be handled immediately
+                elseif #cardsuits == 1 then
+                    -- if suit is already present, not a spectrum, otherwise remove suit from "already used suits"
+                    if suits[cardsuits[1]] == 0 then return {} end
+                    suits[cardsuits[1]] = 0
+                -- add all cards with 2-4 suits to a table to be looked at
+                elseif #cardsuits < 5 then
+                    table.insert(nonwilds, cardsuits)
                 end
             end
         end
-        for i = 1, #hand do
-            if hand[i].ability.name == 'Wild Card' then
-                for k, v in pairs(suits) do
-                    if hand[i]:is_suit(k, nil, true) and v == 0 then
-                        suits[k] = v + 1; break
+
+        -- recursive function for iterating over combinations
+        local isSpectrum 
+        isSpectrum = function(i, remaining)
+            -- traversed all the cards, found spectrum
+            if i == #nonwilds + 1 then
+                return true
+            end
+
+            -- copy remaining suits
+            local newremaining = {}
+            for k, v in pairs(remaining) do
+                newremaining[k] = v
+            end
+
+            -- for every suit of the current card: 
+            for _, suit in ipairs(nonwilds[i]) do
+                -- do nothing if suit has already been used
+                if remaining[suit] == 1 then
+                    -- use up suit on this card and check next card
+                    newremaining[suit] = 0
+                    if isSpectrum(i + 1, newremaining) then
+                        return true
                     end
+                    -- reset suit before continuing
+                    newremaining[suit] = 1
                 end
             end
+
+            return false
         end
-        local num_suits = 0
-        for _, v in pairs(suits) do
-            if v > 0 then num_suits = num_suits + 1 end
+
+        -- begin iteration from first (not already considered) card
+        if isSpectrum(1, suits) then
+            return {hand}
+        else
+            return {}
         end
-        return (num_suits >= 5) and {hand} or {}
     end
 }
 
