@@ -5613,28 +5613,25 @@ SMODS.PokerHandPart{ -- Spectrum base (Referenced from SixSuits)
 
         local nonwilds = {}
         for i = 1, #hand do
-            -- wild cards don't have to be counted since they fill up the rest
-            if hand[i].ability.name ~= 'Wild Card' then
-                local cardsuits = {}
-                for _, v in ipairs(SMODS.Suit.obj_buffer) do
-                    -- determine table of suits for each card (for future faster calculations)
-                    if hand[i]:is_suit(v, nil, true) then
-                        table.insert(cardsuits, v)
-                    end
+            local cardsuits = {}
+            for _, v in ipairs(SMODS.Suit.obj_buffer) do
+                -- determine table of suits for each card (for future faster calculations)
+                if hand[i]:is_suit(v, nil, true) then
+                    table.insert(cardsuits, v)
                 end
+            end
 
-                -- if somehow no suits: spectrum is impossible
-                if #cardsuits == 0 then
-                    return {}
-                -- if only 1 suit: can be handled immediately
-                elseif #cardsuits == 1 then
-                    -- if suit is already present, not a spectrum, otherwise remove suit from "already used suits"
-                    if suits[cardsuits[1]] == 0 then return {} end
-                    suits[cardsuits[1]] = 0
-                -- add all cards with 2-4 suits to a table to be looked at
-                elseif #cardsuits < 5 then
-                    table.insert(nonwilds, cardsuits)
-                end
+            -- if somehow no suits: spectrum is impossible
+            if #cardsuits == 0 then
+                return {}
+            -- if only 1 suit: can be handled immediately
+            elseif #cardsuits == 1 then
+                -- if suit is already present, not a spectrum, otherwise remove suit from "already used suits"
+                if suits[cardsuits[1]] == 0 then return {} end
+                suits[cardsuits[1]] = 0
+            -- add all cards with 2-4 suits to a table to be looked at
+            elseif #cardsuits < 5 then
+                table.insert(nonwilds, cardsuits)
             end
         end
 
