@@ -7297,7 +7297,8 @@ SMODS.Voucher{ -- Cups 'n' Balls
     key = 'cups_n_balls',
 
     redeem = function(self)
-        change_booster_amount(1)
+        G.GAME.modifiers.extra_boosters = (G.GAME.modifiers.extra_boosters or 0) + 1
+        SMODS.add_booster_to_shop()
     end,
 
     unlocked = true,

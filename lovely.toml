@@ -2879,69 +2879,7 @@ end
 
 '''
 
-# Cups 'n' Balls (1/3)
-[[patches]]
-[patches.pattern]
-target = 'game.lua'
-pattern = 'joker_max = 2,'
-position = 'after'
-match_indent = true
-payload = '''booster_max = 2,'''
-
-# Cups 'n' Balls (2/3)
-[[patches]]
-[patches.pattern]
-target = 'functions/common_events.lua'
-pattern = 'function change_shop_size(mod)'
-position = 'before'
-match_indent = true
-payload = '''
-
-function change_booster_amount(mod)
-    if not G.GAME.shop then return end
-    G.GAME.shop.booster_max = G.GAME.shop.booster_max + mod
-    if G.shop_jokers and G.shop_jokers.cards then
-        if mod < 0 then
-            --Remove jokers in shop
-            for i = #G.shop_booster.cards, G.GAME.shop.booster_max + 1, -1 do
-                if G.shop_booster.cards[i] then
-                    G.shop_booster.cards[i]:remove()
-                end
-            end
-        end
-        G.shop_booster.config.card_limit = G.GAME.shop.booster_max
-        G.shop:recalculate()
-        if mod > 0 then
-            for i = 1, G.GAME.shop.booster_max - #G.shop_booster.cards do
-                if G.GAME.current_round.used_packs[i] ~= 'USED' then
-                    G.GAME.current_round.used_packs = G.GAME.current_round.used_packs or {}
-                    if not G.GAME.current_round.used_packs[i] then
-                        G.GAME.current_round.used_packs[i] = get_pack('shop_pack').key
-                    end
-                    local card = Card(G.shop_booster.T.x + G.shop_booster.T.w/2,
-                    G.shop_booster.T.y, G.CARD_W*1.27, G.CARD_H*1.27, G.P_CARDS.empty, G.P_CENTERS[G.GAME.current_round.used_packs[i]], {bypass_discovery_center = true, bypass_discovery_ui = true})
-                    create_shop_card_ui(card, 'Booster', G.shop_booster)
-                    card:start_materialize()
-                    G.shop_booster:emplace(card)
-                    card:align()
-                end
-            end
-        end
-    end
-end
-
-'''
-
-# Cups 'n' Balls (3/3)
-[[patches]]
-[patches.pattern]
-target = 'game.lua'
-pattern = 'for i = 1, 2 do'
-position = 'at'
-match_indent = true
-payload = '''for i = 1, G.GAME.shop.booster_max - #G.shop_booster.cards do'''
-
-# Shell Game (1/9)
+# Shell Game (1/10)
 [[patches]]
 [patches.pattern]
 target = 'functions/UI_definitions.lua'
@@ -2957,7 +2895,23 @@ G.GAME.used_vouchers['v_bunc_shell_game'] and {n=G.UIT.R,config = {minh = 0.07},
 
 '''
 
-# Shell Game (2/9)
+# Shell Game (2/10)
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/game_object.lua"]'
+pattern = '''{n=G.UIT.R,config={align = "tm",padding = 0.2, minh = 1.2, minw = 1.8, r=0.15,colour = G.C.GREY, one_press = true, button = 'skip_booster', hover = true,shadow = true, func = 'can_skip_booster'}, nodes = {'''
+position = 'at'
+match_indent = true
+payload = '''
+
+(G.GAME.used_vouchers['v_bunc_shell_game'] and not G.GAME.rerolled_pack and
+UIBox_button({label = {localize('k_reroll')}, padding = 0.07, minh = 0.7, minw = 1.8, r = 0.15, one_press = true, button = 'reroll_booster_pack', func = 'reroll_booster_pack_button'}) or nil),
+G.GAME.used_vouchers['v_bunc_shell_game'] and {n=G.UIT.R,config = {minh = 0.07}, nodes={}},
+{n=G.UIT.R, config = {align = G.GAME.used_vouchers['v_bunc_shell_game'] and 'cm' or 'tm', padding = G.GAME.used_vouchers['v_bunc_shell_game'] and 0.07 or 0.2, minh = G.GAME.used_vouchers['v_bunc_shell_game'] and 0.7 or 1.2, minw = 1.8, r = 0.15, colour = G.C.GREY, one_press = true, button = 'skip_booster', hover = true, shadow = true, func = 'can_skip_booster'}, nodes = {
+
+'''
+
+# Shell Game (3/10)
 [[patches]]
 [patches.pattern]
 target = 'functions/button_callbacks.lua'
@@ -3006,7 +2960,7 @@ end
 
 '''
 
-# Shell Game (3/9)
+# Shell Game (4/10)
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
@@ -3020,7 +2974,7 @@ G.GAME.rerolled_pack = self.rerolled
 
 '''
 
-# Shell Game (4/9)
+# Shell Game (5/10)
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
@@ -3029,16 +2983,16 @@ position = 'after'
 match_indent = true
 payload = '''if not G.GAME.rerolled_pack then'''
 
-# Shell Game (5/9) (UNSTABLE)
+# Shell Game (6/10) (UNSTABLE)
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
-pattern = 'G.GAME.pack_choices = self.config.center.config.choose or 1'
+pattern = 'G.GAME.pack_choices = self.ability.choose or self.config.center.config.choose or 1'
 position = 'after'
 match_indent = true
 payload = '''end local skip_animation = G.GAME.rerolled_pack and 0 or nil'''
 
-# Shell Game (6/9) (UNSTABLE)
+# Shell Game (7/10) (UNSTABLE)
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
@@ -3048,7 +3002,7 @@ match_indent = true
 payload = '''G.E_MANAGER:add_event(Event({trigger = 'after', delay = skip_animation or 0.4, func = function()'''
 
 
-# Shell Game (7/9)
+# Shell Game (8/10)
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
@@ -3057,7 +3011,7 @@ position = 'at'
 match_indent = true
 payload = '''if not G.GAME.rerolled_pack then self:explode() end'''
 
-# Shell Game (8/9) (UNSTABLE)
+# Shell Game (9/10) (UNSTABLE)
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
@@ -3066,7 +3020,7 @@ position = 'at'
 match_indent = true
 payload = '''G.E_MANAGER:add_event(Event({trigger = 'after', delay = skip_animation or (1.3*math.sqrt(G.SETTINGS.GAMESPEED)), blockable = false, blocking = false, func = function()'''
 
-# Shell Game (9/9)
+# Shell Game (10/10)
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
