@@ -3602,3 +3602,12 @@ position = 'before'
 match_indent = true
 payload = '''end
 '''
+
+# Locked tarots sprite
+# [[patches]]
+# [patches.pattern]
+# target = 'card.lua'
+# pattern = '''elseif self.config.center.consumeable and self.config.center.demo then'''
+# position = 'at'
+# match_indent = true
+# payload = '''elseif self.config.center.consumeable and (self.config.center.demo or (not self.config.center.unlocked and not self.params.bypass_discovery_center)) then '''

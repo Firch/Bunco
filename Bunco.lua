@@ -4079,12 +4079,108 @@ create_joker({ -- Rigoletto
 
 -- Tarots
 
+local thoth_unlock_amount = 100
+
+function create_UIBox_thoth_tarots_unlock(card_centers)
+    G.your_collection = CardArea(
+        0,
+        0,
+        2.85 * G.CARD_W,
+        0.75 * G.CARD_H,
+        {card_limit = 4, type = 'title', highlight_limit = 0}
+    )
+
+    for i, card_center in ipairs(card_centers) do
+        local card = Card(G.your_collection.T.x + G.your_collection.T.w/2 - G.CARD_W/2, G.your_collection.T.y, G.CARD_W, G.CARD_H, G.P_CARDS.empty, card_center, {bypass_discovery_center = true, bypass_discovery_ui = true})
+        card.states.click.can = false
+        card.states.visible = false
+        G.your_collection:emplace(card)
+        event({
+            timer = 'REAL',
+            blockable = false,
+            blocking = false,
+            trigger = 'after',
+            delay = 0.1 * i,
+            func = (function() 
+                card:start_materialize({G.C.SECONDARY_SET.Tarot})
+            return true end)
+        })
+    end
+
+    local criteria = {}
+
+    localize{
+        type = 'descriptions',
+        key = 'deck_locked_discover',
+        set = "Other",
+        nodes = criteria,
+        vars = {thoth_unlock_amount}
+    }
+
+    local criteria_cols = {}
+    for k, v in ipairs(criteria) do
+        if k > 1 then criteria_cols[#criteria_cols+1] = {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={}} end
+        criteria_cols[#criteria_cols+1] = {n=G.UIT.R, config={align = "cm", padding = 0}, nodes=v}
+    end
+
+    local t = create_UIBox_generic_options({padding = 0,back_label = localize('b_continue'), no_pip = true, snap_back = true, back_func = 'continue_unlock', minw = 4.5, contents = {
+        {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+            {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
+                {n=G.UIT.R, config={align = "cm", padding = 0.2}, nodes={
+                    {n=G.UIT.O, config={object = DynaText({string = {{string = localize('bunc_thoth_tarots'), suffix = ' '..localize('k_unlocked_ex'), outer_colour = G.C.UI.TEXT_LIGHT}}, colours = {G.C.SECONDARY_SET.Tarot},shadow = true, rotate = true, float = true, scale = 0.7, pop_in = 0.1})}}
+                }},
+                {n=G.UIT.R, config={align = "cm", padding = 0.3, draw_layer = 1}, nodes={
+                    {n=G.UIT.O, config={object = G.your_collection}}
+                }},
+                {n=G.UIT.R, config={align = "cm", padding = 0, draw_layer = 2}, nodes={
+                    {n=G.UIT.R, config={align = "cm", padding = 0.0}, nodes={
+                        {n=G.UIT.R, config={align = "cm", padding = 0.05, emboss = 0.05, colour = G.C.WHITE, r = 0.1}, nodes={
+                            {n=G.UIT.R, config={align = "cm", padding = 0.05, emboss = 0.05, colour = G.C.WHITE, r = 0.1}, nodes={
+                                {n=G.UIT.R, config={align = "cm", padding = 0}, nodes=criteria_cols}
+                            }}
+                        }}
+                    }}
+                }}
+            }}
+        }}
+        }})
+    return t
+end
+
+-- SMODS.Keybind{
+--     key_pressed = 'l',
+--     event = 'pressed',
+--     action = function(self)
+--         G.E_MANAGER:add_event(Event({
+--             trigger = 'immediate',
+--             no_delete = true,
+--             func = (function()
+--                 if not G.OVERLAY_MENU then 
+--                     G.SETTINGS.paused = true
+--                     G.FUNCS.overlay_menu{
+--                         definition = create_UIBox_thoth_tarots_unlock({
+--                             G.P_CENTERS['c_bunc_adjustment'],
+--                             G.P_CENTERS['c_bunc_art'],
+--                             G.P_CENTERS['c_bunc_universe'],
+--                             G.P_CENTERS['c_bunc_lust']
+--                         }),
+--                     }
+--                     play_sound('foil1', 0.7, 0.3)
+--                     play_sound('gong', 1.4, 0.15)
+--                     return true
+--                 end
+--             end)
+--         }), 'unlock')
+--     end
+-- }
+
 SMODS.Atlas({key = 'bunco_tarots', path = 'Consumables/Tarots.png', px = 71, py = 95})
 SMODS.Atlas({key = 'bunco_tarots_exotic', path = 'Consumables/TarotsExotic.png', px = 71, py = 95})
 
 SMODS.Consumable{ -- Adjustment
     set = 'Tarot', atlas = 'bunco_tarots',
     key = 'adjustment',
+    --unlocked = false,
 
     effect = 'Enhance',
     config = {mod_conv = 'm_bunc_cracker', max_highlighted = 2},
@@ -4097,12 +4193,16 @@ SMODS.Consumable{ -- Adjustment
     loc_vars = function(self, info_queue)
         info_queue[#info_queue+1] = G.P_CENTERS.m_bunc_cracker
         return {vars = {self.config.max_highlighted, localize{type = 'name_text', set = 'Enhanced', key = self.config.mod_conv}}}
+    end,
+    locked_loc_vars = function(self, info_queue, card)
+        return {vars = {thoth_unlock_amount}}
     end
 }
 
 SMODS.Consumable{ -- The Art
     set = 'Tarot', atlas = 'bunco_tarots',
     key = 'art',
+    --unlocked = false,
 
     effect = 'Enhance',
     config = {mod_conv = 'm_bunc_copper', max_highlighted = 2},
@@ -4115,12 +4215,16 @@ SMODS.Consumable{ -- The Art
     loc_vars = function(self, info_queue)
         info_queue[#info_queue+1] = G.P_CENTERS.m_bunc_copper
         return {vars = {self.config.max_highlighted, localize{type = 'name_text', set = 'Enhanced', key = self.config.mod_conv}}} 
+    end,
+    locked_loc_vars = function(self, info_queue, card)
+        return {vars = {thoth_unlock_amount}}
     end
 }
 
 SMODS.Consumable{ -- The Universe
     set = 'Tarot', atlas = 'bunco_tarots',
     key = 'universe',
+    --unlocked = false,
 
     config = {max_highlighted = 3},
     pos = coordinate(3),
@@ -4131,6 +4235,9 @@ SMODS.Consumable{ -- The Universe
 
     loc_vars = function(self, info_queue)
         return {vars = {self.config.max_highlighted}}
+    end,
+    locked_loc_vars = function(self, info_queue, card)
+        return {vars = {thoth_unlock_amount}}
     end,
 
     can_use = function(self, card)
@@ -4179,6 +4286,7 @@ SMODS.Consumable{ -- The Universe
 SMODS.Consumable{ -- Lust
     set = 'Tarot', atlas = 'bunco_tarots',
     key = 'lust',
+    --unlocked = false,
 
     config = {bonus = 1, limit = 52},
     pos = coordinate(4),
@@ -4193,6 +4301,9 @@ SMODS.Consumable{ -- Lust
             reward = #G.hand.cards * self.config.bonus
         end
         return {vars = {self.config.bonus, self.config.limit, (reward <= self.config.limit) and reward or self.config.limit}}
+    end,
+    locked_loc_vars = function(self, info_queue, card)
+        return {vars = {thoth_unlock_amount}}
     end,
 
     can_use = function(self, card)

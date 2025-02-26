@@ -51,6 +51,7 @@ return {
             bunc_inactive = 'inactive',
             bunc_repeat = 'Repeat!',
             bunc_thoth_tarot = 'Thoth Tarot',
+            bunc_thoth_tarots = 'Thoth Tarots',
             bunc_mysterious_tarot = 'Tarot?',
             bunc_mysterious_polymino = 'Polymino?',
             bunc_most_played_rank = '(most played rank)',
@@ -352,6 +353,11 @@ return {
                     [1] = 'Enhances up to {C:attention}#1#{}',
                     [2] = 'selected cards to',
                     [3] = '{C:attention}#2#s'
+                },
+                ['unlock'] = {
+                    [1] = 'Discover at least',
+                    [2] = '{C:attention}#1#{} items from',
+                    [3] = 'your collection'
                 }
             },
             c_bunc_art = {
@@ -360,6 +366,11 @@ return {
                     [1] = 'Enhances up to {C:attention}#1#{}',
                     [2] = 'selected cards to',
                     [3] = '{C:attention}#2#s'
+                },
+                ['unlock'] = {
+                    [1] = 'Discover at least',
+                    [2] = '{C:attention}#1#{} items from',
+                    [3] = 'your collection'
                 }
             },
             c_bunc_universe = {
@@ -369,6 +380,11 @@ return {
                     [2] = 'rank, enhancement, edition,',
                     [3] = 'and seal of up to {C:attention}#1#{}',
                     [4] = 'selected cards'
+                },
+                ['unlock'] = {
+                    [1] = 'Discover at least',
+                    [2] = '{C:attention}#1#{} items from',
+                    [3] = 'your collection'
                 }
             },
             c_bunc_lust = {
@@ -378,6 +394,11 @@ return {
                     [2] = 'playing card held',
                     [3] = 'in hand {C:inactive}(Max of {C:money}$#2#{C:inactive})',
                     [4] = '{C:inactive}(Currently {C:money}$#3#{C:inactive})'
+                },
+                ['unlock'] = {
+                    [1] = 'Discover at least',
+                    [2] = '{C:attention}#1#{} items from',
+                    [3] = 'your collection'
                 }
             },
             c_bunc_sky = {
