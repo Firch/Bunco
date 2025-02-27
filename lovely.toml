@@ -534,10 +534,9 @@ position = 'before'
 match_indent = true
 payload = '''
 
-local grouped, grouped_area_cards
-if self.ability.group then
+local grouped
+if self.ability.group and not self.fake_card then
     grouped = self
-    grouped_area_cards = self.area and self.area.config.type ~= 'title' and self.area.cards or nil
 end
 
 '''
@@ -551,14 +550,14 @@ position = 'after'
 match_indent = true
 payload = '''
 
-if grouped and grouped_area_cards and #grouped_area_cards > 0 then
+if grouped and G.playing_cards and #G.playing_cards > 0 then
 
     local next_card
     local destroyed_cards = {}
-    for i=1, #grouped_area_cards do
-        if grouped_area_cards[i].ability.group and grouped_area_cards[i].ability.group then
-            if (grouped_area_cards[i].ability.group.id == grouped.ability.group.id) and (not grouped_area_cards[i].destroyed) and (not grouped_area_cards[i].shattered) then
-                table.insert(destroyed_cards, grouped_area_cards[i])
+    for i=1, #G.playing_cards do
+        if G.playing_cards[i].ability.group then
+            if (G.playing_cards[i].ability.group.id == grouped.ability.group.id) and (not G.playing_cards[i].destroyed) and (not G.playing_cards[i].shattered) then
+                table.insert(destroyed_cards, G.playing_cards[i])
             end
         end
     end
@@ -633,6 +632,7 @@ if (_c.set == 'Default' or _c.set == 'Enhanced') and card and card.ability and t
         )
         for k, v in ipairs(all_cards_from_group) do
             local group_card = copy_card(v, nil, 0.5)
+            group_card.fake_card = true
             group_card.states.hover.can = false
             group_card:juice_up(0.3, 0.2)
             if k == 1 then play_sound('paper1', 0.95 + math.random() * 0.1, 0.3) end
