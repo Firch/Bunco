@@ -262,6 +262,8 @@ end
 
 -- Shaders
 
+SMODS.Shader({key = 'pinch', path = 'pinch.fs'})
+
 if config.high_quality_shaders then
     local background_shader = NFS.read(BUNCOMOD.content.path..'assets/shaders/background.fs')
     local splash_shader = NFS.read(BUNCOMOD.content.path..'assets/shaders/splash.fs')
@@ -296,8 +298,6 @@ SMODS.Consumable:take_ownership('eris', {
 SMODS.Atlas({key = 'bunco_resprites_jokers', path = 'Resprites/Jokers.png', px = 71, py = 95})
 SMODS.Atlas({key = 'bunco_resprites_consumables', path = 'Resprites/Consumables.png', px = 71, py = 95})
 
-SMODS.Shader({key = 'pinch', path = 'pinch.fs'})
-
 if config.fixed_sprites then
 
     -- High contrast
@@ -306,144 +306,148 @@ if config.fixed_sprites then
 
     G.C.SUITS = G.C["SO_" .. (G.SETTINGS.colourblind_option and 2 or 1)]
 
-    -- Jokers
+    if not (SMODS.Mods["malverk"] or {}).can_load then
 
-    SMODS.Joker:take_ownership('juggler', {
-        pos = coordinate(1),
-        atlas = 'bunco_resprites_jokers'
-    })
+        -- Jokers
 
-    SMODS.Joker:take_ownership('drunkard', {
-        pos = coordinate(2),
-        atlas = 'bunco_resprites_jokers'
-    })
+        SMODS.Joker:take_ownership('juggler', {
+            pos = coordinate(1),
+            atlas = 'bunco_resprites_jokers'
+        })
 
-    SMODS.Joker:take_ownership('acrobat', {
-        pos = coordinate(3),
-        atlas = 'bunco_resprites_jokers'
-    })
+        SMODS.Joker:take_ownership('drunkard', {
+            pos = coordinate(2),
+            atlas = 'bunco_resprites_jokers'
+        })
 
-    SMODS.Joker:take_ownership('credit_card', {
-        pos = coordinate(4),
-        atlas = 'bunco_resprites_jokers'
-    })
+        SMODS.Joker:take_ownership('acrobat', {
+            pos = coordinate(3),
+            atlas = 'bunco_resprites_jokers'
+        })
 
-    SMODS.Joker:take_ownership('troubadour', {
-        pos = coordinate(5),
-        atlas = 'bunco_resprites_jokers'
-    })
+        SMODS.Joker:take_ownership('credit_card', {
+            pos = coordinate(4),
+            atlas = 'bunco_resprites_jokers'
+        })
 
-    SMODS.Joker:take_ownership('even_steven', {
-        pos = coordinate(6),
-        atlas = 'bunco_resprites_jokers'
-    })
+        SMODS.Joker:take_ownership('troubadour', {
+            pos = coordinate(5),
+            atlas = 'bunco_resprites_jokers'
+        })
 
-    SMODS.Joker:take_ownership('odd_todd', {
-        pos = coordinate(7),
-        atlas = 'bunco_resprites_jokers'
-    })
+        SMODS.Joker:take_ownership('even_steven', {
+            pos = coordinate(6),
+            atlas = 'bunco_resprites_jokers'
+        })
 
-    SMODS.Joker:take_ownership('fibonacci', {
-        pos = coordinate(8),
-        atlas = 'bunco_resprites_jokers'
-    })
+        SMODS.Joker:take_ownership('odd_todd', {
+            pos = coordinate(7),
+            atlas = 'bunco_resprites_jokers'
+        })
 
-    SMODS.Joker:take_ownership('drivers_license', {
-        pos = coordinate(9),
-        atlas = 'bunco_resprites_jokers'
-    })
+        SMODS.Joker:take_ownership('fibonacci', {
+            pos = coordinate(8),
+            atlas = 'bunco_resprites_jokers'
+        })
 
-    SMODS.Joker:take_ownership('gift', {
-        pos = coordinate(10),
-        atlas = 'bunco_resprites_jokers'
-    })
+        SMODS.Joker:take_ownership('drivers_license', {
+            pos = coordinate(9),
+            atlas = 'bunco_resprites_jokers'
+        })
 
-    SMODS.Joker:take_ownership('flash', {
-        pos = coordinate(11),
-        atlas = 'bunco_resprites_jokers'
-    })
+        SMODS.Joker:take_ownership('gift', {
+            pos = coordinate(10),
+            atlas = 'bunco_resprites_jokers'
+        })
 
-    SMODS.Joker:take_ownership('ramen', {
-        pos = coordinate(12),
-        atlas = 'bunco_resprites_jokers'
-    })
+        SMODS.Joker:take_ownership('flash', {
+            pos = coordinate(11),
+            atlas = 'bunco_resprites_jokers'
+        })
 
-    SMODS.Joker:take_ownership('selzer', {
-        pos = coordinate(13),
-        atlas = 'bunco_resprites_jokers'
-    })
+        SMODS.Joker:take_ownership('ramen', {
+            pos = coordinate(12),
+            atlas = 'bunco_resprites_jokers'
+        })
 
-    -- Consumables
+        SMODS.Joker:take_ownership('selzer', {
+            pos = coordinate(13),
+            atlas = 'bunco_resprites_jokers'
+        })
 
-    SMODS.Consumable:take_ownership('fool', {
-        pos = coordinate(1),
-        atlas = 'bunco_resprites_consumables'
-    })
+        -- Consumables
 
-    SMODS.Consumable:take_ownership('lovers', {
-        pos = coordinate(2),
-        atlas = 'bunco_resprites_consumables'
-    })
+        SMODS.Consumable:take_ownership('fool', {
+            pos = coordinate(1),
+            atlas = 'bunco_resprites_consumables'
+        })
 
-    SMODS.Consumable:take_ownership('chariot', {
-        pos = coordinate(3),
-        atlas = 'bunco_resprites_consumables'
-    })
+        SMODS.Consumable:take_ownership('lovers', {
+            pos = coordinate(2),
+            atlas = 'bunco_resprites_consumables'
+        })
 
-    SMODS.Consumable:take_ownership('wheel_of_fortune', {
-        pos = coordinate(4),
-        atlas = 'bunco_resprites_consumables'
-    })
+        SMODS.Consumable:take_ownership('chariot', {
+            pos = coordinate(3),
+            atlas = 'bunco_resprites_consumables'
+        })
 
-    SMODS.Consumable:take_ownership('tower', {
-        pos = coordinate(5),
-        atlas = 'bunco_resprites_consumables'
-    })
+        SMODS.Consumable:take_ownership('wheel_of_fortune', {
+            pos = coordinate(4),
+            atlas = 'bunco_resprites_consumables'
+        })
 
-    SMODS.Consumable:take_ownership('moon', {
-        pos = coordinate(6),
-        atlas = 'bunco_resprites_consumables'
-    })
+        SMODS.Consumable:take_ownership('tower', {
+            pos = coordinate(5),
+            atlas = 'bunco_resprites_consumables'
+        })
 
-    SMODS.Consumable:take_ownership('world', {
-        pos = coordinate(7),
-        atlas = 'bunco_resprites_consumables'
-    })
+        SMODS.Consumable:take_ownership('moon', {
+            pos = coordinate(6),
+            atlas = 'bunco_resprites_consumables'
+        })
 
-    SMODS.Consumable:take_ownership('soul', {
-        pos = coordinate(8),
-        atlas = 'bunco_resprites_consumables'
-    })
+        SMODS.Consumable:take_ownership('world', {
+            pos = coordinate(7),
+            atlas = 'bunco_resprites_consumables'
+        })
 
-    SMODS.Consumable:take_ownership('ceres', {
-        pos = coordinate(9),
-        atlas = 'bunco_resprites_consumables'
-    })
+        SMODS.Consumable:take_ownership('soul', {
+            pos = coordinate(8),
+            atlas = 'bunco_resprites_consumables'
+        })
 
-    SMODS.Consumable:take_ownership('mercury', {
-        pos = coordinate(10),
-        atlas = 'bunco_resprites_consumables'
-    })
+        SMODS.Consumable:take_ownership('ceres', {
+            pos = coordinate(9),
+            atlas = 'bunco_resprites_consumables'
+        })
 
-    SMODS.Consumable:take_ownership('uranus', {
-        pos = coordinate(11),
-        atlas = 'bunco_resprites_consumables'
-    })
+        SMODS.Consumable:take_ownership('mercury', {
+            pos = coordinate(10),
+            atlas = 'bunco_resprites_consumables'
+        })
 
-    SMODS.Consumable:take_ownership('pluto', {
-        pos = coordinate(12),
-        atlas = 'bunco_resprites_consumables'
-    })
+        SMODS.Consumable:take_ownership('uranus', {
+            pos = coordinate(11),
+            atlas = 'bunco_resprites_consumables'
+        })
 
-    SMODS.Consumable:take_ownership('incantation', {
-        pos = coordinate(13),
-        atlas = 'bunco_resprites_consumables'
-    })
+        SMODS.Consumable:take_ownership('pluto', {
+            pos = coordinate(12),
+            atlas = 'bunco_resprites_consumables'
+        })
 
-    SMODS.Consumable:take_ownership('black_hole', {
-        pos = coordinate(14),
-        atlas = 'bunco_resprites_consumables'
-    })
+        SMODS.Consumable:take_ownership('incantation', {
+            pos = coordinate(13),
+            atlas = 'bunco_resprites_consumables'
+        })
+
+        SMODS.Consumable:take_ownership('black_hole', {
+            pos = coordinate(14),
+            atlas = 'bunco_resprites_consumables'
+        })
+
+    end
 
 end
 
