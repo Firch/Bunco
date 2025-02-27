@@ -1976,7 +1976,11 @@ payload = '''
 
 if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_paling' and not G.GAME.blind.disabled then
     for i=1, highlighted_count do
-        G.E_MANAGER:add_event(Event({func = function() G.hand.highlighted[i]:juice_up(); return true end })) 
+        G.E_MANAGER:add_event(Event({func = function()
+            if G.hand.highlighted[i] and not G.hand.highlighted[i].removed then
+                G.hand.highlighted[i]:juice_up()
+            end
+        return true end }))
         ease_dollars(-1)
         delay(0.23)
     end
