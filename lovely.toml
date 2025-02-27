@@ -1002,7 +1002,9 @@ payload = '''
 if G.jokers ~= nil then
     for _, v in ipairs(G.jokers.cards) do
         if v.config.center.key == 'j_bunc_doorhanger' and not v.debuff then
-            if _rarity == nil or _rarity < 0.9 then
+            if _rarity == nil
+            or ((type(_rarity) == 'number') and (_rarity < 0.9))
+            or ((type(_rarity) == 'string') and (_rarity == 'Common')) then
 
                 _rarity = 0.9
 
