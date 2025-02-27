@@ -186,7 +186,7 @@ payload = '''
 G.FORCEFIELD_CARDS = G.FORCEFIELD_CARDS or {}
 
 for index, card in ipairs(G.FORCEFIELD_CARDS) do
-    if BUNCOMOD.content.config.colorful_finishers
+    if BUNCOMOD.content.config.high_quality_shaders
     and card
     and not card.removed
     and card.states.visible
@@ -233,12 +233,12 @@ end
 [[patches]]
 [patches.pattern]
 target = 'card.lua'
-pattern = 'function Card:set_sprites(_center, _front)'
+pattern = 'Moveable.init(self,X, Y, W, H)'
 position = 'after'
 match_indent = true
 payload = '''
 
-if _center and _center.name == 'Black Hole' then
+if center and center.name == 'Black Hole' then
     G.FORCEFIELD_CARDS = G.FORCEFIELD_CARDS or {}
     self.config.forcefield = {}
     self.config.forcefield.radius = 160
