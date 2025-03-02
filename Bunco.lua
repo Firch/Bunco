@@ -784,6 +784,7 @@ SMODS.Atlas({key = 'bunco_jokers_the_joker', path = 'Jokers/JokerBlind.png', px 
 SMODS.Atlas({key = 'bunco_jokers_taped', path = 'Jokers/JokerTaped.png', px = 127, py = 113})
 SMODS.Atlas({key = 'bunco_jokers_headache', path = 'Jokers/JokerHeadache.png', px = 71, py = 95})
 SMODS.Atlas({key = 'bunco_jokers_winking', path = 'Jokers/JokerWinking.png', px = 71, py = 95})
+SMODS.Atlas({key = 'bunco_jokers_border', path = 'Jokers/JokerBorder.png', px = 71, py = 95})
 
 SMODS.Sound({key = 'gunshot', path = 'gunshot.ogg'})
 SMODS.Sound({key = 'mousetrap', path = 'mousetrap.ogg'})
@@ -914,6 +915,12 @@ local function create_joker(joker)
 
         effect = joker.effect
         }
+    end
+    if joker.drawsteps then
+        for index, drawstep in ipairs(joker.drawsteps) do
+            drawstep.key = key..'_'..index
+            SMODS.DrawStep(drawstep)
+        end
     end
 end
 
@@ -2772,7 +2779,25 @@ create_joker({ -- Vandalism
             card.children.back.states.collide.can = false
             card.children.back:set_role({major = card, role_type = 'Glued', draw_major = card})
         end
-    end
+        card.draw_bypass = {floating_sprite = true}
+    end,
+    drawsteps = {
+        {
+            order = 61,
+            func = function(card, layer)
+                if card.config.center.key == 'j_bunc_vandalism' and (card.config.center.discovered or card.bypass_discovery_center) then
+                    card.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, card.children.center, 0, 0)
+                    if card.edition then
+                        for k, v in pairs(G.P_CENTER_POOLS.Edition) do
+                            if card.edition[v.key:sub(3)] and v.shader then
+                                card.children.floating_sprite:draw_shader(v.shader, nil, card.ARGS.send_to_shader, nil, card.children.center, 0, 0)
+                            end
+                        end
+                    end
+                end
+            end
+        }
+    }
 })
 
 create_joker({ -- Protester
@@ -3513,7 +3538,50 @@ create_joker({ -- Headache
                 card.ability.extra.destroyed = card.ability.extra.destroyed - card.ability.extra.amount
             end
         end
-    end
+    end,
+    set_sprites = function(self, card, front)
+        if card.config.center.discovered or card.bypass_discovery_center then
+            card.children.floating_sprite = Sprite(card.T.x, card.T.y, card.T.w, card.T.h, G.ASSET_ATLAS['bunc_bunco_jokers_border'], coordinate(1))
+            card.children.floating_sprite.states.hover = card.states.hover
+            card.children.floating_sprite.states.click = card.states.click
+            card.children.floating_sprite.states.drag = card.states.drag
+            card.children.floating_sprite.states.collide.can = false
+            card.children.floating_sprite:set_role({major = card, role_type = 'Glued', draw_major = card})
+        end
+        card.draw_bypass = {floating_sprite = true}
+    end,
+    drawsteps = {
+        {
+            order = 21,
+            func = function(card, layer)
+                if card.config.center.key == 'j_bunc_headache' and (card.config.center.discovered or card.bypass_discovery_center) then
+
+                    local realw, realh = love.window.getMode()
+
+                    card.children.center:draw_shader('bunc_headache', nil, {
+                    [1] = (((card.tilt_var.mx) - realw / 2) * 0.3)   +   ((card.VT.x + G.ROOM.T.x + (card.VT.w / 2)) * G.TILESIZE * G.TILESCALE - realw / 2) * -0.2,
+                    [2] = (((card.tilt_var.my) - realh / 2) * 0.8)   +   ((card.VT.y + G.ROOM.T.y + (card.VT.h / 2)) * G.TILESIZE * G.TILESCALE - realh / 2) * -0.4,
+                    [3] = G.TIMERS.REAL
+                    })
+                end
+            end
+        },
+        {
+            order = 61,
+            func = function(card, layer)
+                if card.config.center.key == 'j_bunc_headache' and (card.config.center.discovered or card.bypass_discovery_center) then
+                    card.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, card.children.center, 0, 0)
+                    if card.edition then
+                        for k, v in pairs(G.P_CENTER_POOLS.Edition) do
+                            if card.edition[v.key:sub(3)] and v.shader then
+                                card.children.floating_sprite:draw_shader(v.shader, nil, card.ARGS.send_to_shader, nil, card.children.center, 0, 0)
+                            end
+                        end
+                    end
+                end
+            end
+        }
+    }
 })
 
 create_joker({ -- Games Collector

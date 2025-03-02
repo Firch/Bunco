@@ -1167,103 +1167,7 @@ end
 
 '''
 
-# function Card:draw (Vandalism 2/7 - Vanilla)
-[[patches]]
-[patches.pattern]
-target = 'card.lua'
-pattern = '''if (self.edition and self.edition.negative) or (self.ability.name == 'Antimatter' and (self.config.center.discovered or self.bypass_discovery_center)) then'''
-position = 'before'
-match_indent = true
-payload = '''
-
-if self.config.center.key == 'j_bunc_vandalism' and (self.config.center.discovered or self.bypass_discovery_center) then
-    self.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, self.children.center, 0, 0)
-    if self.edition then
-        for k, v in pairs(G.P_CENTER_POOLS.Edition) do
-            if self.edition[v.key:sub(3)] and v.shader then
-                self.children.floating_sprite:draw_shader(v.shader, nil, self.ARGS.send_to_shader, nil, self.children.center, 0, 0)
-            end
-        end
-    end
-end
-
-'''
-
-# function Card:draw (Vandalism 2/7 - Cryptid Compat)
-[[patches]]
-[patches.pattern]
-target = 'card.lua'
-pattern = '''if (self.edition and (self.edition.negative or self.edition.cry_oversat)) or (self.ability.name == 'Antimatter' and (self.config.center.discovered or self.bypass_discovery_center)) then'''
-position = 'before'
-match_indent = true
-payload = '''
-
-if self.config.center.key == 'j_bunc_vandalism' and (self.config.center.discovered or self.bypass_discovery_center) then
-    self.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, self.children.center, 0, 0)
-    if self.edition then
-        for k, v in pairs(G.P_CENTER_POOLS.Edition) do
-            if self.edition[v.key:sub(3)] and v.shader then
-                self.children.floating_sprite:draw_shader(v.shader, nil, self.ARGS.send_to_shader, nil, self.children.center, 0, 0)
-            end
-        end
-    end
-end
-
-'''
-
-# function Card:draw (Vandalism 3/7)
-[[patches]]
-[patches.pattern]
-target = 'card.lua'
-pattern = '''self.children.center:draw_shader('negative_shine', nil, self.ARGS.send_to_shader)'''
-position = 'after'
-match_indent = true
-payload = '''
-
-if self.config.center.key == 'j_bunc_vandalism' and (self.config.center.discovered or self.bypass_discovery_center) then
-    self.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, self.children.center, 0, 0)
-    if self.edition then
-        for k, v in pairs(G.P_CENTER_POOLS.Edition) do
-            if self.edition[v.key:sub(3)] and v.shader then
-                self.children.floating_sprite:draw_shader(v.shader, nil, self.ARGS.send_to_shader, nil, self.children.center, 0, 0)
-            end
-        end
-    end
-end
-
-'''
-
-# function Card:draw (Vandalism 4/7)
-[[patches]]
-[patches.pattern]
-target = 'card.lua'
-pattern = '''self.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, self.children.center, scale_mod, rotate_mod)'''
-position = 'at'
-match_indent = true
-payload = '''
-
-if self.ability.name ~= 'Vandalism' then
-    self.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, self.children.center, scale_mod, rotate_mod)
-end
-
-'''
-
-# function Card:draw (Vandalism 5/7)
-[[patches]]
-[patches.pattern]
-target = 'card.lua'
-pattern = '''self.children.floating_sprite:draw_shader('dissolve',0, nil, nil, self.children.center,scale_mod, rotate_mod,nil, 0.1 + 0.03*math.sin(1.8*G.TIMERS.REAL),nil, 0.6)'''
-position = 'at'
-match_indent = true
-payload = '''
-
-if self.ability.name ~= 'Vandalism' then
-    self.children.floating_sprite:draw_shader('dissolve',0, nil, nil, self.children.center,scale_mod, rotate_mod,nil, 0.1 + 0.03*math.sin(1.8*G.TIMERS.REAL),nil, 0.6)
-end
-
-'''
-
-# function Blind:stay_flipped (Vandalism 6/7)
+# function Blind:stay_flipped (Vandalism 2/3)
 [[patches]]
 [patches.pattern]
 target = 'blind.lua'
@@ -1285,7 +1189,7 @@ end
 
 '''
 
-# G.FUNCS.play_cards_from_highlighted (Vandalism 7/7)
+# G.FUNCS.play_cards_from_highlighted (Vandalism 3/3)
 [[patches]]
 [patches.pattern]
 target = 'functions/state_events.lua'
@@ -1523,27 +1427,6 @@ for k, card in ipairs(self.cards) do
             card.T.y = card.T.y - (0.01 * card.T.h)
         end
     end
-end
-
-'''
-
-# Card:draw() (Headache)
-[[patches]]
-[patches.pattern]
-target = 'card.lua'
-pattern = '''if (self.ability.set == 'Voucher' or self.config.center.demo) and (self.ability.name ~= 'Antimatter' or not (self.config.center.discovered or self.bypass_discovery_center)) then'''
-position = 'before'
-match_indent = true
-payload = '''
-
-if self.config.center.key == 'j_bunc_headache' and (self.config.center.discovered or self.bypass_discovery_center) then
-    local realw, realh = love.window.getMode()
-
-    self.children.center:draw_shader('bunc_headache', nil, {
-    [1] = (((self.tilt_var.mx) - realw / 2) * 0.3)   +   ((self.VT.x + G.ROOM.T.x + (self.VT.w / 2)) * G.TILESIZE * G.TILESCALE - realw / 2) * -0.2,
-    [2] = (((self.tilt_var.my) - realh / 2) * 0.8)   +   ((self.VT.y + G.ROOM.T.y + (self.VT.h / 2)) * G.TILESIZE * G.TILESCALE - realh / 2) * -0.4,
-    [3] = G.TIMERS.REAL
-    })
 end
 
 '''
@@ -3608,6 +3491,15 @@ position = 'before'
 match_indent = true
 payload = '''end
 '''
+
+# Drawstep bypassing
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/card_draw.lua"]'
+pattern = '''if SMODS.DrawSteps[k]:check_conditions(self, layer) then SMODS.DrawSteps[k].func(self, layer) end'''
+position = 'at'
+match_indent = true
+payload = '''if SMODS.DrawSteps[k]:check_conditions(self, layer) and not (self.draw_bypass and self.draw_bypass[k]) then SMODS.DrawSteps[k].func(self, layer) end'''
 
 # Locked tarots sprite
 # [[patches]]
