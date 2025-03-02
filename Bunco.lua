@@ -4652,6 +4652,23 @@ function link_cards(cards, source, ignore_groups)
     end
 end
 
+SMODS.DrawStep({
+    key = 'linked_group',
+    order = 500,
+    func = function(card, layer)
+        if card.ability.group and card.area ~= G.deck then
+            if not card.children.link then
+                local variant = card.ability.group.id
+                variant = 1 + (variant - 1) % 5
+                card.children.link = Sprite(card.T.x, card.T.y, card.T.w, card.T.h, G.ASSET_ATLAS['bunc_bunco_link'], {x = variant - 1, y = 0})
+                card.children.link.states.visible = false
+            end
+            card.children.link:draw_shader('dissolve', nil, nil, nil, card.children.center, 0, 0)
+            card.children.link.role.draw_major = card
+        end
+    end
+})
+
 -- Pseudoinjections for Polyminoes
 
 local original_draw_from_deck_to_hand = G.FUNCS.draw_from_deck_to_hand
