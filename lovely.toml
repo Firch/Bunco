@@ -535,7 +535,7 @@ match_indent = true
 payload = '''
 
 local grouped
-if self.ability.group and not self.fake_card then
+if self.ability.group and (not self.fake_card) and not (self.area and self.area.config and self.area.config.view_deck) then
     grouped = self
 end
 
