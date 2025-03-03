@@ -3105,7 +3105,7 @@ match_indent = true
 payload = '''
 
 local scattered_jokers
-if self.ability.bunc_scattering and self.area == G.jokers then
+if G.jokers and G.jokers.cards and self.ability.bunc_scattering and self.area == G.jokers then
     local position
     for index, joker in ipairs(G.jokers.cards) do
         if joker == self then
