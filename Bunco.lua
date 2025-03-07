@@ -7918,6 +7918,18 @@ for i = 1, 4 do -- Virtual
     }
 end
 
+SMODS.Sound({
+    key = 'music_virtual',
+    path = 'music_virtual.ogg',
+    select_music_track = function(self)
+        local booster = G.pack_cards and G.pack_cards.cards and SMODS.OPENED_BOOSTER
+
+        if booster and booster.config.center_key:find('p_bunc_virtual') then
+            return 'bunc_music_virtual'
+        end
+    end
+})
+
 -- Enhancements
 
 SMODS.Atlas({key = 'bunco_enhancements', path = 'Enhancements/Enhancements.png', px = 71, py = 95})
