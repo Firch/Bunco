@@ -1359,11 +1359,6 @@ create_joker({ -- Prehistoric
                 and (v:is_suit(context.other_card.base.suit) or context.other_card.config.center == G.P_CENTERS.m_wild)
                 and context.other_card.config.center ~= G.P_CENTERS.m_stone then
                     return {
-                        message = localize {
-                            type = 'variable',
-                            key = 'a_mult',
-                            vars = {card.ability.extra.mult}
-                        },
                         mult = card.ability.extra.mult,
                         card = card
                     }
