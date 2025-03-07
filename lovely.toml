@@ -654,7 +654,7 @@ end'''
 # Linked cards undiscovered sprite
 [[patches]]
 [patches.pattern]
-target = 'card.lua'
+target = '=[SMODS _ "src/card_draw.lua"]'
 pattern = '''local shared_sprite = (self.ability.set == 'Edition' or self.ability.set == 'Joker') and G.shared_undiscovered_joker or G.shared_undiscovered_tarot'''
 position = 'after'
 match_indent = true
