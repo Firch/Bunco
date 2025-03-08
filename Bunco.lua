@@ -384,6 +384,11 @@ if config.fixed_sprites then
             atlas = 'bunco_resprites_jokers'
         })
 
+        SMODS.Joker:take_ownership('scholar', {
+            pos = coordinate(14),
+            atlas = 'bunco_resprites_jokers'
+        })
+
         -- Consumables
 
         SMODS.Consumable:take_ownership('fool', {
@@ -1368,11 +1373,6 @@ create_joker({ -- Prehistoric
                 and (v:is_suit(context.other_card.base.suit) or context.other_card.config.center == G.P_CENTERS.m_wild)
                 and context.other_card.config.center ~= G.P_CENTERS.m_stone then
                     return {
-                        message = localize {
-                            type = 'variable',
-                            key = 'a_mult',
-                            vars = {card.ability.extra.mult}
-                        },
                         mult = card.ability.extra.mult,
                         card = card
                     }
@@ -5834,7 +5834,7 @@ SMODS.PokerHandPart{ -- Spectrum base (Referenced from SixSuits)
                 return {}
             -- if only 1 suit: can be handled immediately
             elseif #cardsuits == 1 then
-                -- if suit is already present, not a spectrum, otherwise remove suit from "already used suits"
+                -- if suit is already present, not a spectrum, otherwise remove suit from "not yet used suits"
                 if suits[cardsuits[1]] == 0 then return {} end
                 suits[cardsuits[1]] = 0
             -- add all cards with 2-4 suits to a table to be looked at
@@ -7926,6 +7926,18 @@ for i = 1, 4 do -- Virtual
         atlas = 'bunco_booster_packs_virtual',
     }
 end
+
+SMODS.Sound({
+    key = 'music_virtual',
+    path = 'music_virtual.ogg',
+    select_music_track = function(self)
+        local booster = G.pack_cards and G.pack_cards.cards and SMODS.OPENED_BOOSTER
+
+        if booster and booster.config.center_key:find('p_bunc_virtual') then
+            return 'bunc_music_virtual'
+        end
+    end
+})
 
 -- Enhancements
 
