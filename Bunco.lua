@@ -20,6 +20,15 @@ local function say(message)
     sendDebugMessage('[BUNCO] - '..(message or '???'))
 end
 
+--Talisman compatibility compatibility
+to_big = to_big or function(x) 
+    return x
+end
+
+to_number = to_number or function(x)
+    return x
+end
+
 -- Index-based coordinates generation
 
 local function get_coordinates(position, width)
@@ -2490,7 +2499,7 @@ create_joker({ -- Head in the Clouds
     custom_in_pool = function()
         local condition = false
         if G.GAME and G.GAME.hands then
-            if G.GAME.hands['High Card'].level > 1 then condition = true end
+            if G.GAME.hands['High Card'].level > to_big(1) then condition = true end
         end
         return condition
     end,

@@ -924,10 +924,10 @@ payload = '''
 if G.jokers ~= nil then
     for _, v in ipairs(G.jokers.cards) do
         if v.config.center.key == 'j_bunc_fiendish' and not v.debuff then
-            if mod > 0 then
+            if to_big(mod) > to_big(0) then
                 if pseudorandom('fiendish'..G.SEED) < G.GAME.probabilities.normal / v.ability.extra.odds then
-                    mod = 1
-                    local message = mod
+                    mod = to_big(1)
+                    local message = to_number(mod)
                     G.E_MANAGER:add_event(Event{func = function()
                         card_eval_status_text(
                         v,
@@ -936,8 +936,8 @@ if G.jokers ~= nil then
                         {message = '$'..(message or '1'), colour = G.C.RED, instant = true})
                     return true end})
                 else
-                    mod = mod * 2
-                    local message = mod
+                    mod = to_big(mod) * to_big(2)
+                    local message = to_number(mod)
                     G.E_MANAGER:add_event(Event{func = function()
                         card_eval_status_text(
                         v,
@@ -949,9 +949,9 @@ if G.jokers ~= nil then
             end
         end
         if v.config.center.key == 'j_bunc_bounty_hunter' and not v.debuff then
-            if mod > 0 then
+            if to_big(mod) > to_big(0) then
                 v:calculate_joker({get_money = true})
-                mod = mod - 1
+                mod = to_big(mod) - to_big(1)
                 G.E_MANAGER:add_event(Event{func = function()
                     card_eval_status_text(
                     v,
@@ -964,7 +964,7 @@ if G.jokers ~= nil then
     end
 end
 
-if mod == 0 then return end
+if to_big(mod) == to_big(0) then return end
 
 '''
 
@@ -1575,7 +1575,7 @@ payload = '''
 
 G.GAME.money_spend_this_round = G.GAME.money_spend_this_round or 0
 
-if mod < 0 then
+if to_big(mod) < to_big(0) then
     G.GAME.money_spend_this_round = G.GAME.money_spend_this_round - mod
 
     local locked_card
@@ -1678,7 +1678,7 @@ position = 'after'
 match_indent = true
 payload = '''
 
-if mod < 0 then
+if to_big(mod) < to_big(0) then
     G.GAME.money_spend_this_round = G.GAME.money_spend_this_round - mod
 
     local locked_card
@@ -2189,7 +2189,7 @@ position = 'after'
 match_indent = true
 payload = '''
 
-if G.GAME.Trident and (mod <= 0) then
+if G.GAME.Trident and (mod <= to_big(0)) then
     G.GAME.ante_purchases = (G.GAME.ante_purchases or 0) + 1
 end
 
