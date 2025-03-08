@@ -375,6 +375,11 @@ if config.fixed_sprites then
             atlas = 'bunco_resprites_jokers'
         })
 
+        SMODS.Joker:take_ownership('scholar', {
+            pos = coordinate(14),
+            atlas = 'bunco_resprites_jokers'
+        })
+
         -- Consumables
 
         SMODS.Consumable:take_ownership('fool', {
