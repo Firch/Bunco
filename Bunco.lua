@@ -2484,14 +2484,14 @@ create_joker({ -- Head in the Clouds
     unlocked = false,
     check_for_unlock = function(self, args)
         if args.type == 'win_custom' then
-            local handname, level, order = 'High Card', -1, 100
+            local handname, level, order = 'High Card', to_big(-1), 100
             for k, v in pairs(G.GAME.hands) do
                 if v.level > level or (v.level == level and order > v.order) then
                     level = v.level
                     handname = k
                 end
             end
-            if handname == 'High Card' and level > 0 then
+            if handname == 'High Card' and level > to_big(0) then
                 unlock_card(self)
             end
         end
