@@ -6285,7 +6285,7 @@ SMODS.Blind{ -- The Knoll
     stay_flipped = function(self, area, card)
         if not G.GAME.blind.disabled and (area == G.hand) and
         G.GAME.current_round.hands_played == 0 and G.GAME.current_round.discards_used == 0 then
-            if G.GAME.dollars > 5 then
+            if G.GAME.dollars > to_big(5) then
                 G.GAME.Knoll = G.GAME.Knoll or {}
                 table.insert(G.GAME.Knoll, card)
                 card:set_debuff(true)
@@ -6320,8 +6320,8 @@ SMODS.Blind{ -- The Stone
         if not reset then
             G.GAME.blind.original_chips = G.GAME.blind.chips
         end
-        if not reset and not G.GAME.blind.disabled and G.GAME.dollars >= 10 then
-            local final_chips = (G.GAME.blind.chips / G.GAME.blind.mult) * (math.floor(G.GAME.dollars / 10) + G.GAME.blind.mult)
+        if not reset and not G.GAME.blind.disabled and to_big(G.GAME.dollars) >= to_big(10) then
+            local final_chips = (G.GAME.blind.chips / G.GAME.blind.mult) * (math.floor(to_number(G.GAME.dollars) / 10) + G.GAME.blind.mult)
             local chip_mod -- iterate over ~120 ticks
             if type(G.GAME.blind.chips) ~= 'table' then
                 chip_mod = math.ceil((final_chips - G.GAME.blind.chips) / 120)
