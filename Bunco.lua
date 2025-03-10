@@ -1457,7 +1457,7 @@ create_joker({ -- Loan Shark
     blueprint = false, eternal = true,
     unlocked = false,
     check_for_unlock = function(self, args)
-        if args.type == 'round_spend_money' and args.round_spend_money >= 100 then
+        if args.type == 'round_spend_money' and to_number(args.round_spend_money) >= 100 then
             unlock_card(self)
         end
     end,
