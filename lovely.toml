@@ -2189,7 +2189,7 @@ position = 'after'
 match_indent = true
 payload = '''
 
-if G.GAME.Trident and (mod <= 0) then
+if G.GAME.Trident and (to_big(mod) <= to_big(0)) then
     G.GAME.ante_purchases = (G.GAME.ante_purchases or 0) + 1
 end
 
