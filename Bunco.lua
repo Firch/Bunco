@@ -20,6 +20,15 @@ local function say(message)
     sendDebugMessage('[BUNCO] - '..(message or '???'))
 end
 
+--Talisman compatibility compatibility
+to_big = to_big or function(x) 
+    return x
+end
+
+to_number = to_number or function(x)
+    return x
+end
+
 -- Index-based coordinates generation
 
 local function get_coordinates(position, width)
@@ -2475,14 +2484,14 @@ create_joker({ -- Head in the Clouds
     unlocked = false,
     check_for_unlock = function(self, args)
         if args.type == 'win_custom' then
-            local handname, level, order = 'High Card', -1, 100
+            local handname, level, order = 'High Card', to_big(-1), 100
             for k, v in pairs(G.GAME.hands) do
                 if v.level > level or (v.level == level and order > v.order) then
                     level = v.level
                     handname = k
                 end
             end
-            if handname == 'High Card' and level > 0 then
+            if handname == 'High Card' and level > to_big(0) then
                 unlock_card(self)
             end
         end
@@ -2490,7 +2499,7 @@ create_joker({ -- Head in the Clouds
     custom_in_pool = function()
         local condition = false
         if G.GAME and G.GAME.hands then
-            if G.GAME.hands['High Card'].level > 1 then condition = true end
+            if G.GAME.hands['High Card'].level > to_big(1) then condition = true end
         end
         return condition
     end,
@@ -3135,7 +3144,7 @@ create_joker({ -- Bounty Hunter
     unlocked = false,
     check_for_unlock = function(self, args)
         if args.type == 'money' then
-            if G.GAME.dollars < self.config.extra.unlock then
+            if G.GAME.dollars < to_big(self.config.extra.unlock) then
                 unlock_card(self)
             end
         end
@@ -6276,7 +6285,7 @@ SMODS.Blind{ -- The Knoll
     stay_flipped = function(self, area, card)
         if not G.GAME.blind.disabled and (area == G.hand) and
         G.GAME.current_round.hands_played == 0 and G.GAME.current_round.discards_used == 0 then
-            if G.GAME.dollars > 5 then
+            if G.GAME.dollars > to_big(5) then
                 G.GAME.Knoll = G.GAME.Knoll or {}
                 table.insert(G.GAME.Knoll, card)
                 card:set_debuff(true)
@@ -6311,8 +6320,8 @@ SMODS.Blind{ -- The Stone
         if not reset then
             G.GAME.blind.original_chips = G.GAME.blind.chips
         end
-        if not reset and not G.GAME.blind.disabled and G.GAME.dollars >= 10 then
-            local final_chips = (G.GAME.blind.chips / G.GAME.blind.mult) * (math.floor(G.GAME.dollars / 10) + G.GAME.blind.mult)
+        if not reset and not G.GAME.blind.disabled and to_big(G.GAME.dollars) >= to_big(10) then
+            local final_chips = (G.GAME.blind.chips / G.GAME.blind.mult) * (math.floor(to_number(G.GAME.dollars) / 10) + G.GAME.blind.mult)
             local chip_mod -- iterate over ~120 ticks
             if type(G.GAME.blind.chips) ~= 'table' then
                 chip_mod = math.ceil((final_chips - G.GAME.blind.chips) / 120)
