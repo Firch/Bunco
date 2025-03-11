@@ -6,13 +6,12 @@ extern vec4 colour_3;
 extern number contrast;
 extern number spin_amount;
 
-#define PIXEL_SIZE_FAC 2560.
 #define SPIN_EASE 0.5
 
 vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords )
 {
     //Convert to UV coords (0-1) and floor for pixel effect
-    number pixel_size = length(love_ScreenSize.xy)/PIXEL_SIZE_FAC;
+    number pixel_size = 1.0;
     vec2 uv = (floor(screen_coords.xy*(1./pixel_size))*pixel_size - 0.5*love_ScreenSize.xy)/length(love_ScreenSize.xy) - vec2(0.12, 0.);
     number uv_len = length(uv);
 
