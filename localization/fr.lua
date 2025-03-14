@@ -1328,10 +1328,10 @@ return {
             j_bunc_magic_wand = {
                 ['name'] = 'Baguette magique',
                 ['text'] = {
-                    [1] = 'Ce Joker obtient {X:mult,C:white}X#1#{} Multi.',
+                    [1] = 'Ce Joker obtient {C:mult}+#1#{} Multi.',
                     [2] = 'par mains jouées {C:attention}consecutives{}',
                     [3] = 'contenant un {C:attention}Spectre{}',
-                    [4] = '{C:inactive}(Actuellement {X:mult,C:white}X#2#{C:inactive} Multi.)'
+                    [4] = '{C:inactive}(Actuellement {C:mult}+#2#{C:inactive} Multi.)'
                 }
             },
             j_bunc_starfruit = {

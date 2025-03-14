@@ -3950,30 +3950,25 @@ create_joker({ -- Dynasty
 create_joker({ -- Magic Wand
     type = 'Exotic',
     name = 'Magic Wand', position = 8,
-    vars = {{bonus = 0.3}, {xmult = 1}},
+    vars = {{bonus = 3}, {mult = 0}},
     rarity = 'Common', cost = 5,
     blueprint = true, eternal = true, perishable = false,
     unlocked = true,
     calculate = function(self, card, context)
         if context.before and context.poker_hands ~= nil and next(context.poker_hands['bunc_Spectrum']) and not context.blueprint then
-            card.ability.extra.xmult = card.ability.extra.xmult + 0.3
+            card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.bonus
         elseif context.after and context.poker_hands ~= nil and not next(context.poker_hands['bunc_Spectrum']) and not context.blueprint then
-            if card.ability.extra.xmult ~= 1 then
-                card.ability.extra.xmult = 1
+            if card.ability.extra.mult ~= 0 then
+                card.ability.extra.mult = 0
 
                 forced_message(localize('k_reset'), card, G.C.RED)
             end
         end
 
         if context.joker_main then
-            if card.ability.extra.xmult ~= 1 then
+            if card.ability.extra.mult ~= 0 then
                 return {
-                    message = localize {
-                        type = 'variable',
-                        key = 'a_xmult',
-                        vars = { card.ability.extra.xmult }
-                    },
-                    Xmult_mod = card.ability.extra.xmult,
+                    mult = card.ability.extra.mult,
                     card = card
                 }
             end

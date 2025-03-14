@@ -1327,10 +1327,10 @@ return {
             j_bunc_magic_wand = {
                 ['name'] = 'Magic Wand',
                 ['text'] = {
-                    [1] = 'This Joker gains {X:mult,C:white}X#1#{} Mult',
+                    [1] = 'This Joker gains {C:mult}+#1#{} Mult',
                     [2] = 'per {C:attention}consecutive{} played hand',
                     [3] = 'containing a {C:attention}Spectrum{}',
-                    [4] = '{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)'
+                    [4] = '{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)'
                 }
             },
             j_bunc_starfruit = {
