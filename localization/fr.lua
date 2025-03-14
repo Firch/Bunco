@@ -38,6 +38,8 @@ return {
 
             -- Miscellaneous
 
+            bunc_a_side = 'Face A',
+            bunc_b_side = 'Face B', 
             bunc_copied = 'Copié!',
             bunc_nothing = 'Rien',
             bunc_chips = 'Jetons',
@@ -48,13 +50,20 @@ return {
             bunc_pew = 'Pan!',
             bunc_declined = 'Refusé...',
             bunc_accepted = 'Accepté!',
+            bunc_robbed = 'Volé!',
             bunc_ouch = 'AÏE!',
+            bunc_inactive = 'inactif',
+            bunc_repeat = "Répétition!",
+            bunc_thoth_tarot = 'Tarot de Thoth',
+            bunc_thoth_tarots = 'Tarots de Thoth',
             bunc_mysterious_tarot = 'Tarot?',
             bunc_mysterious_polymino = 'Polymino?',
             bunc_most_played_rank = '(valeur la plus jouée)',
             bunc_least_played_hand = '(main la moins jouée)',
             bunc_blade = '(1.5X score de la blinde)',
             bunc_exceeded_score = 'Limite de score dépassée!',
+            bunc_min_ante = 'Mise Minimale :',
+            bunc_final_blind = 'Blinde Finale',
 
             -- Consumable types
 
@@ -122,13 +131,73 @@ return {
             bunc_scattering = 'Diffus',
             bunc_hindered = 'Entravé',
             bunc_reactive = 'Réactif'
+        },
+        collab_palettes = {
+            default_Spades = {
+                ['3'] = 'Couleurs Nouveau Contraste'
+            },
+            default_Hearts = {
+                ['3'] = 'Couleurs Nouveau Contraste'
+            },
+            default_Clubs = {
+                ['3'] = 'Couleurs Nouveau Contraste'
+            },
+            default_Diamonds = {
+                ['3'] = 'Couleurs Nouveau Contraste'
+            }
+        },
+        collabs = {
+            bunc_Fleurons = {
+                ['1'] = 'Défaut',
+                ['2'] = 'Duck Game',
+                ['3'] = 'LISA: The Painful'
+            },
+            bunc_Halberds = {
+                ['1'] = 'Defaut',
+                ['2'] = 'Fiend Folio',
+                ['3'] = 'LISA: The Pointless'
+            }
         }
     },
     descriptions = {
         Other = {
             bunc_temporary_extra_chips = {['text'] = {[1] = '{C:chips}+#1#{} Jetons supplémentaire cette manche'}},
             bunc_linked_cards = {['text'] = {[1] = '{C:attention}Liés{} dans ce groupe:'}},
+            bunc_linked_group = {
+                ['name'] = 'Groupe Lié',
+                ['text'] = {
+                    [1] = 'Les cartes liées dans un groupe',
+                    [2] = 'sont piochées, sélectionnées',
+                    [3] = 'et détruites {C:attention}ensembles'
+                }
+            },
             bunc_drawn_linked_cards = {['text'] = {[1] = '{C:attention}Liés{} dans le groupe pioché'}},
+            bunc_light_suits = {
+                ['name'] = 'Couleurs Claires',
+                ['text'] = {
+                    [1] = '{C:hearts}Cœurs{} et {C:diamonds}Carreaux'
+                }
+            },
+            bunc_light_suits_exotic = {
+                ['name'] = 'Couleurs Claires',
+                ['text'] = {
+                    [1] = '{C:hearts}Cœurs{}, {C:diamonds}Carreaux,',
+                    [2] = 'et {C:bunc_fleurons}Fleurons'
+                }
+            },
+            bunc_dark_suits = {
+                ['name'] = 'Couleurs Sombres',
+                ['text'] = {
+                    [1] = '{C:spades}Piques{} et {C:clubs}Tréfles'
+                }
+            },
+            bunc_dark_suits_exotic = {
+                ['name'] = 'Couleurs Sombres',
+                ['text'] = {
+                    [1] = '{C:spades}Piques{}, {C:clubs}Tréfles,',
+                    [2] = 'et {C:bunc_halberds}Hallebardes'
+                }
+            },
             bunc_exotic_cards = {
                 ['name'] = 'cartes Éxotiques',
                 ['text'] = {
@@ -217,8 +286,8 @@ return {
                 ['name'] = 'Diffus',
                 ['text'] = {
                     [1] = 'Détruit un Joker',
-                    [2] = 'aléatoire quand vendu',
-                    [3] = 'ou détruit'
+                    [2] = 'adjacent quand',
+                    [3] = 'retiré'
                 }
             },
             bunc_hindered = {
@@ -268,6 +337,75 @@ return {
         -- Consumables
 
         Tarot = {
+
+            -- Reworked Tarots
+ 
+            c_bunc_wheel_of_fortune = {
+                ['name'] = 'La Roue de Fortune',
+                ['text'] = {
+                    [1] = "{C:green}#1# chance(s) sur #2#{} d'ajouter une édition",
+                    [2] = '{C:dark_edition}Brillante{}, {C:dark_edition}Holographique{},',
+                    [3] = '{C:dark_edition}Polychrome{}, ou {C:dark_edition}Pailletée{}',
+                    [4] = 'à un {C:attention}Joker au hasard'
+                }
+            },
+
+            -- Main Tarots
+
+            c_bunc_adjustment = {
+                ['name'] = "Ajustement",
+                ['text'] = {
+                    [1] = "Améliore jusqu'à {C:attention}#1#{}",
+                    [2] = 'cartes sélectionnées en',
+                    [3] = '{C:attention}#2#'
+                },
+                ['unlock'] = {
+                    [1] = 'Découvrez au moins',
+                    [2] = '{C:attention}#1#{} objets de',
+                    [3] = 'votre collection'
+                }
+            },
+            c_bunc_art = {
+                ['name'] = "L'Art",
+                ['text'] = {
+                    [1] = "Améliore jusqu'à {C:attention}#1#{}",
+                    [2] = 'cartes sélectionnées en',
+                    [3] = '{C:attention}#2#'
+                },
+                ['unlock'] = {
+                    [1] = 'Découvrez au moins',
+                    [2] = '{C:attention}#1#{} objets de',
+                    [3] = 'votre collection'
+                }
+            },
+            c_bunc_universe = {
+                ['name'] = "L'Univers",
+                ['text'] = {
+                    [1] = 'Change {C:attention}aléatoirement{} la couleur,',
+                    [2] = "la valeur, l'amélioration, l'édition,",
+                    [3] = "et sceau de jusqu'à {C:attention}#1#{}",
+                    [4] = 'cartes sélectionnées'
+                },
+                ['unlock'] = {
+                    [1] = 'Découvrez au moins',
+                    [2] = '{C:attention}#1#{} objets de',
+                    [3] = 'votre collection'
+                }
+            },
+            c_bunc_lust = {
+                ['name'] = 'Luxure',
+                ['text'] = {
+                    [1] = 'Donne {C:money}$#1#{} pour chaque',
+                    [2] = 'carte tenue en main',
+                    [3] = ' {C:inactive}({C:money}$#2#{} {C:inactive}au maximum){}',
+                    [4] = '{C:inactive}(Actuellement {C:money}$#3#{C:inactive}){}'
+                },
+                ['unlock'] = {
+                    [1] = 'Découvrez au moins',
+                    [2] = '{C:attention}#1#{} objets de',
+                    [3] = 'votre collection'
+                }
+            },
             c_bunc_sky = {
                 ['name'] = 'Le Ciel',
                 ['text'] = {
@@ -300,6 +438,21 @@ return {
             },
         },
         Spectral = {
+
+
+             -- Reworked Spectrals
+ 
+             c_bunc_aura = {
+                ['name'] = 'Aura',
+                ['text'] = {
+                    [1] = "Ajoute un effet {C:dark_edition}Brillant{}, {C:dark_edition}Holographique{}",
+                    [2] = '{C:dark_edition}Polychrome{}, ou {C:dark_edition}Pailletée{} à',
+                    [3] = '{C:attention}1{} carte choisie dans votre main'
+                }
+            },
+
+            -- Main Spectrals
+
             c_bunc_cleanse = {
                 ['name'] = 'Purification',
                 ['text'] = {
@@ -415,16 +568,23 @@ return {
 
             -- Main Jokers
 
-            j_bunc_cassette = {
-                ['name'] = 'Cassette',
+            j_bunc_cassette_a = {
+                ['name'] = 'Cassette (Face A)',
                 ['text'] = {
-                    [1] = "À la défausse, retournez ce Joker de l'autre côté",
-                    [2] = '{C:attention}côté A:{} les cartes ayant une couleur claire',
-                    [3] = "donnent {C:chips}+#1#{} Jetons lorsqu'elles marquent des points",
-                    [4] = '{C:attention}côté B:{} les cartes ayant une couleur sombre',
-                    [5] = "donnent {C:mult}+#2#{} Multi. lorsqu'elles marquent des points"
-                    -- TODO would be good to have a line for the side
-                    -- or colorize the active side
+                    [1] = 'Les cartes de {C:attention}Couleurs Claires',
+                    [2] = "donnent {C:chips}+#1#{} Jetons lorsqu'elles marquent"
+                }
+            },
+            j_bunc_cassette_b = {
+                ['name'] = 'Cassette (Face B)',
+                ['text'] = {
+                    [1] = 'Les cartes de {C:attention}Couleurs Sombres',
+                    [2] = "donnent {C:mult}+#2#{} Multi. lorsqu'elles marquent"
+                }
+            },
+            j_bunc_cassette_extra = {
+                ['text'] = {
+                    [1] = "{C:inactive}Lorsqu'il y a une défausse, retournez ce Joker"
                 }
             },
             j_bunc_mosaic = {
@@ -558,9 +718,10 @@ return {
             j_bunc_shepherd = {
                 ['name'] = 'Joker berger',
                 ['text'] = {
-                    [1] = 'Ce Joker gagne {C:chips}+#1#{} Jetons',
-                    [2] = 'quand la main jouée contient une {C:attention}Paire',
-                    [3] = '{C:inactive}(Actuellement {C:chips}+#2#{C:inactive} Jetons)'
+                    [1] = 'Gagnez {C:chips}+#1#{} Jetons',
+                    [2] = 'quand la main jouée',
+                    [3] = 'contient une {C:attention}Paire',
+                    [4] = "{C:inactive}(Actuellement {C:chips}+#2#{C:inactive} Jetons)"
                 }
             },
             j_bunc_knight = {
@@ -624,7 +785,6 @@ return {
                     [2] = '{C:attention}détruit{} un Joker aléatoire pour',
                     [3] = "reculer d'une Mise initiale, la prochaine fois",
                     [4] = 'fonctionne uniquement sur une Mise initiale supérieure'
-                    -- TODO needs a line for whether it's active / ante it will be active
                 },
                 ['unlock'] = {
                     [1] = 'Atteindre la Mise initiale',
@@ -658,35 +818,34 @@ return {
             j_bunc_fingerprints = {
                 ['name'] = 'Empreintes digitales',
                 ['text'] = {
-                    [1] = 'Les cartes marquant des points dans la {C:attention}main gagnante{}',
-                    [2] = 'gagnent {C:chips}+#1#{} Jetons pour',
-                    [3] = 'la prochaine manche uniquement',
+                    [1] = 'Les cartes marquant des points',
+                    [2] = 'dans la {C:attention}main gagnante{}',
+                    [3] = "gagnent {C:chips}+#1#{} Jetons jusqu'à",
+                    [4] = 'la fin de la manche'
                 }
             },
             j_bunc_zero_shapiro = {
                 ['name'] = 'Zero Shapiro',
                 ['text'] = {
-                    [1] = 'Ce Joker ajoute {C:attention}#1#X{} aux',
-                    [2] = "{C:green,E:1,S:1.1}probabilités{} {C:attention}cette manche{} lorsqu'une",
-                    [3] = 'carte avec une valeur {C:attention}nulle{}, {C:attention}égale à zero{}, ou {C:attention}non-numérale{}',
-                    [4] = 'marque des points {C:inactive}(K, Q, J, 0, Sans valeur)',
-                    [5] = '{C:inactive}(Actuellement {C:attention}X#2#{C:inactive} aux {C:green,E:1,S:1.1}probabilités{C:inactive})'
-                    -- TODO not sure how to word non-countable
+                    [1] = "Les {C:attention}K{}, {C:attention}Q{}, {C:attention}J{},",
+                    [2] = "ou {C:attention}Cartes sans valeurs{}", 
+                    [3] = "ont {C:green}#1# chances sur #2#{} de",
+                    [4] = "créer un Badge D6"
                 }
             },
             j_bunc_nil_bill = {
                 ['name'] = 'Nil Bill',
                 ['text'] = {
-                    [1] = 'Les cartes {C:attention}Affaiblies{} font gagner',
-                    [2] = "{C:money}$#1#{} lorsqu'elles marquent"
+                    [1] = 'Gagnez {C:money}$#1#{}',
+                    [2] = "lorsqu'une carte est détruite"
                 }
             },
             j_bunc_bierdeckel = {
                 ['name'] = 'Bierdeckel',
                 ['text'] = {
-                    [1] = 'Les cartes en main gagnent',
-                    [2] = '{C:chips}+#1#{} Jetons cette manche',
-                    [3] = 'après avoir joué ou défaussé'
+                    [1] = 'Après avoir joué ou défaussé',
+                    [2] = 'Les cartes tenues en main gagnent',
+                    [3] = "{C:chips}+#1#{} Jetons jusqu'à la fin de la manche"
                 }
             },
             j_bunc_registration_plate = {
@@ -718,9 +877,9 @@ return {
             j_bunc_neon = {
                 ['name'] = 'Joker néon',
                 ['text'] = {
-                    [1] = 'Ce Joker gagne {X:mult,C:white}X#1#{} Multi.',
-                    [2] = 'par cartes {C:attention}affaiblies{} qui marquent',
-                    [3] = '{C:inactive}(Actuellement {X:mult,C:white}X#2#{C:inactive} Multi.)'
+                    [1] = "Les cartes gagnent",
+                    [2] = "une édition {C:dark_edition}Fluorescent{}",
+                    [3] = "lorsqu'elles sont améliorées"
                 },
                 ['unlock'] = {
                     [1] = 'Jouez une main de 5 cartes',
@@ -755,9 +914,8 @@ return {
             j_bunc_hierarchy_of_needs = {
                 ['name'] = 'Hiérarchie des besoins',
                 ['text'] = {
-                    [1] = '{C:mult}+#1#{} Multi. par',
-                    -- TODO do wilds count, or base suit only?
-                    [2] = '{C:attention}As-2{} de la même couleur',
+                    [1] = '{C:mult}+#1#{} Multi. par suite de',
+                    [2] = '{C:attention}2 à As{} de la même couleur',
                     [3] = 'dans votre {C:attention}jeu complet',
                     [4] = '{C:inactive}(Actuellement {C:mult}+#2#{C:inactive} Multi.)'
                 }
@@ -804,7 +962,8 @@ return {
                 },
                 ['unlock'] = {
                     [1] = 'Utilisez {C:attention,E:1}#1#{} consommables',
-                    [2] = 'ayant une {C:attention,E:1}Edition'
+                    [2] = 'ayant une {C:attention,E:1}Edition',
+                    [3] = '{C:inactive}(#2#)'
                 }
             },
             j_bunc_head_in_the_clouds = {
@@ -855,9 +1014,8 @@ return {
                     [1] = 'Les cartes avec la valeur',
                     [2] = 'la plus {C:attention}basse{} de votre jeu complet',
                     [3] = "{C:attention}augmentent de valeur{} lorsqu'elles",
-                    [4] = "marquent des points"
-                    -- TODO "when scored" is only accurate
-                    -- if the card's rank changes during scoring
+                    [4] = "marquent des points",
+                    [5] = "{C:inactive}(Rank le plus bas actuel : #1#)"
                 }
             },
             j_bunc_puzzle_board = {
@@ -865,9 +1023,9 @@ return {
                 ['text'] = {
                     [1] = "Lorsqu'une carte {C:tarot}Tarot{} est utilisée,",
                     [2] = "{C:green}#1# chance sur #2#{} d'ajouter",
-                    [3] = 'une édition {C:dark_edition}Brillante{}, {C:dark_edition}Holographique{}, ou',
-                    [4] = '{C:dark_edition}Polychrome{} à une carte sélectionnée',
-                    [5] = 'aléatoire'
+                    [3] = 'une édition {C:dark_edition}Brillante{}, {C:dark_edition}Holographique{},',
+                    [4] = '{C:dark_edition}Polychrome{} ou {C:dark_edition}Pailletée{}',
+                    [5] = 'à une carte sélectionnée aléatoire'
                 }
             },
             j_bunc_vandalism = {
@@ -895,8 +1053,8 @@ return {
             j_bunc_doodle = {
                 ['name'] = 'Gribouilli',
                 ['text'] = {
-                    [1] = '{C:attention}Copie{} le premier consommable',
-                    [2] = 'utilisé cette manche',
+                    [1] = '{C:attention}Copie{} la première carte {C:tarot}Tarot{} ou {C:planet}Planète{}',
+                    [2] = 'utilisée cette manche',
                     [3] = '{C:inactive}(Selon la place disponible)'
                 },
                 ['unlock'] = {
@@ -965,9 +1123,11 @@ return {
             j_bunc_bounty_hunter = {
                 ['name'] = 'Chasseur de prime',
                 ['text'] = {
-                    [1] = '{C:mult}+#1#{} Multi. pour',
-                    [2] = 'chaque {C:money}$1{} en dessous de {C:money}$0',
-                    [3] = '{C:inactive}(Actuellement {C:mult}+#2#{C:inactive} Multi.)'
+                    [1] = "Toutes les sources d'argent",
+                    [2] = "donnent {C:money}1${} de moins et ce Joker",
+                    [3] = "gagne {C:mult}+#1#{} Multi. à chaque fois",
+                    [4] = "que vous gagnez de l'argent",
+                    [5] = "{C:inactive}(Actuellement {C:mult}+#2#{C:inactive} Multi.)"
                 },
                 ['unlock'] = {
                     [1] = 'Ayez moins de {E:1,C:attention}$#1#',
@@ -1015,8 +1175,8 @@ return {
                 ['name'] = 'Pistolet à colle',
                 ['text'] = {
                     [1] = 'Vendez cette carte pour',
-                    [2] = '{C:attention}lier ensembles{} #1# cartes',
-                    [3] = 'sélectionnées'
+                    [2] = "{C:attention}lier ensembles{} jusqu'à #1#",
+                    [3] = 'cartes sélectionnées'
                 }
             },
             j_bunc_taped = {
@@ -1039,9 +1199,9 @@ return {
             j_bunc_headache = {
                 ['name'] = 'Migraine',
                 ['text'] = {
-                    [1] = 'Crée une carte {C:bunco_virtual_dark}Polymino{}',
-                    [2] = 'pour chaque {C:attention}#1#{} cartes',
-                    [3] = 'détruites {C:inactive}(Selon la place disponible)',
+                    [1] = 'Crée un {C:bunco_virtual_dark}Badge Arcade{}',
+                    [2] = 'pour chaque {C:attention}#1#{}',
+                    [3] = 'cartes détruites',
                     [4] = '{C:inactive}({C:attention}#2#{C:inactive}/#1# cartes détruites)'
                 }
             },
@@ -1069,6 +1229,39 @@ return {
                     [1] = 'Les cartes donnent {C:attention}X#1#{} du Multi.',
                     [2] = 'de la {C:attention}valeur{}',
                     [3] = "lorsqu'elles marquent des points"
+                }
+            },
+            j_bunc_kite_experiment = {
+                ['name'] = 'Expérience du cerf-volant',
+                ['text'] = {
+                    [1] = '{C:green}#1# chance sur #2#{} de {C:attention}refaire',
+                    [2] = '{C:attention}marquer des points{} aux {C:attention}Cartes Cuivre',
+                    [3] = 'une nouvelle fois'
+                }
+            },
+            j_bunc_robot = {
+                ['name'] = 'Robot',
+                ['text'] = {
+                    [1] = 'Ce Joker gagne {C:mult}+#1#{} Multi.',
+                    [2] = "à chaque fois qu'une {C:attention}Carte Cuivre",
+                    [3] = 'remarque des points',
+                    [4] = '{C:inactive}(Actuellement {C:mult}+#2#{C:inactive} Multi.)'
+                }
+            },
+            j_bunc_hardtack = {
+                ['name'] = 'Biscuit de mer',
+                ['text'] = {
+                    [1] = 'Les {C:attention}Cartes Biscuits{}',
+                    [2] = 'ne sont plus détruites',
+                    [3] = "lorsqu'elles sont défaussées"
+                }
+            },
+            j_bunc_pica = {
+                ['name'] = 'Joker pica',
+                ['text'] = {
+                    [1] = "Lorsq'une {C:attention}Carte Biscuit{}",
+                    [2] = 'est défaussée, toutes les',
+                    [3] = 'cartes défaussées sont jouées'
                 }
             },
 
@@ -1144,11 +1337,10 @@ return {
             j_bunc_starfruit = {
                 ['name'] = 'Carambole',
                 ['text'] = {
-                    [1] = "{C:green}#1# chance sur #2#{} d'augmenter le niveau de la",
-                    [2] = '{C:attention}main de poker{} jouée si elle contient un {C:attention}Spectre',
-                    [3] = '{C:green}#1# chance sur #3#{} de détruire ce Joker à la fin de la manche',
-                    [4] = 'si une main contenant un {C:attention}Spectre{} a été jouée pendant cette manche'
-                    -- TODO this joker is way too long (YES)
+                    [1] = "La main jouée gagne un niveau",
+                    [2] = 'si elle contient un {C:attention}Spectre{}',
+                    [3] = '{C:green}#1# chance sur #2#{} que ce Joker soit détruit',
+                    [4] = 'à la fin de la manche'
                 }
             },
             j_bunc_fondue = {
@@ -1178,7 +1370,7 @@ return {
                 ['text'] = {
                     [1] = "{C:green}#1# chance sur #2#{} d'ajouter",
                     [2] = 'une édition {C:dark_edition}Polychrome{}',
-                    [3] = 'a une carte marquante aléatoire si',
+                    [3] = 'à toutes les cartes marquantes si',
                     [4] = 'la main jouée contient un {C:attention}Spectre'
                 }
             },
@@ -1198,8 +1390,8 @@ return {
             bl_bunc_paling = {
                 ['name'] = 'Le pâle',
                 ['text'] = {
-                    [1] = 'Jouer ou Défausser coûtent',
-                    [2] = 'tout les deux main et défausse'
+                    [1] = 'Perdez 1$ par',
+                    [2] = 'carte défaussée'
                 }
             },
             bl_bunc_umbrella = {
@@ -1275,7 +1467,7 @@ return {
                 ['name'] = 'Le sable',
                 ['text'] = {
                     [1] = '+1X le score de base pour',
-                    [2] = 'chaque badge tenu'
+                    [2] = 'chaque Badge tenu'
                 }
             },
             bl_bunc_blade = {
@@ -1302,7 +1494,8 @@ return {
             bl_bunc_cadaver = {
                 ['name'] = 'La carcasse',
                 ['text'] = {
-                    [1] = 'Ne jouez pas de cartes figures'
+                    [1] = 'La main jouée doit',
+                    [2] = 'contenir une carte figure'
                 }
             },
             bl_bunc_wind = {
@@ -1346,7 +1539,8 @@ return {
             bl_bunc_final_trident = {
                 ['name'] = 'Trident vermillon',
                 ['text'] = {
-                    [1] = 'Pas de magasins cette Mise initiale'
+                    [1] = '+1X le score de base pour',
+                    [2] = 'chaque achat cette Mise initiale'
                 }
             },
             bl_bunc_final_tower = {
@@ -1411,6 +1605,13 @@ return {
                     [1] = 'Octroie une copie du',
                     [2] = 'prochain {C:attention}Badge{} sélectionné',
                     [3] = '{s:0.6,C:attention}Badge double et triple{s:0.8} exclus'
+                }
+            },
+            tag_bunc_d_six = {
+                ['name'] = 'Badge D6',
+                ['text'] = {
+                    [1] = 'Octroie un {C:green}renouvellement{} gratuit',
+                    [2] = 'au prochain magasin'
                 }
             },
 
@@ -1677,26 +1878,46 @@ return {
                 }
             }
         },
+        Enhanced = {
+            m_bunc_copper = {
+                ['name'] = 'Carte Cuivre',
+                ['text'] = {
+                    [1] = 'Marque une nouvelle fois',
+                    [2] = 'si jouée avec une Carte Cuivre',
+                    [3] = '{C:attention}adjacente{} marquant des points'
+                },
+            },
+            m_bunc_cracker = {
+                ['name'] = 'Carte Biscuit',
+                ['text'] = {
+                    [1] = 'Lorsque la carte est {C:attention}défaussée{}',
+                    [2] = 'la carte est jouée puis détruite',
+                },
+            },
+        },
         Stake = {
             stake_bunc_cyan = {
                 ['name'] = 'Mise cyan',
                 ['text'] = {
                     [1] = 'Les magasins peuvent posséder des Jokers {C:attention}diffus{}',
-                    [2] = '{C:inactive,s:0.8}(Détruit un Joker aléatoire quand vendu ou détruit)'
+                    [2] = '{C:inactive,s:0.8}(Détruit un Joker adjacent quand retiré)',
+                    [3] = '{s:0.8}Applique toutes les mises précédentes'
                 }
             },
             stake_bunc_pink = {
                 ['name'] = 'Mise rose',
                 ['text'] = {
                     [1] = 'Les magasins peuvent posséder des Jokers {C:attention}entravé{}',
-                    [2] = "{C:inactive,s:0.8}(Reste dans son emplacement jusqu'à la fin du tour où il a été vendu)"
+                    [2] = "{C:inactive,s:0.8}(Reste dans son emplacement jusqu'à la fin du tour où il a été vendu)",
+                    [3] = '{s:0.8}Applique toutes les mises précédentes'
                 }
             },
             stake_bunc_magenta = {
                 ['name'] = 'Mise magenta',
                 ['text'] = {
                     [1] = 'Les magasins peuvent posséder des Jokers {C:attention}réactif{}',
-                    [2] = "{C:inactive,s:0.8}(Affaibli si aucune blinde n'est passée durant cette Mise initiale)"
+                    [2] = "{C:inactive,s:0.8}(Affaibli si aucune blinde n'est passée durant cette Mise initiale)",
+                    [3] = '{s:0.8}Applique toutes les mises précédentes'
                 }
             }
         }

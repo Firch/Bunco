@@ -5,13 +5,12 @@ extern vec4 colour_2;
 extern number mid_flash;
 extern number vort_offset;
 
-#define PIXEL_SIZE_FAC 2560.
 #define BLACK 0.6*vec4(79./255.,99./255., 103./255., 1./0.6)
 
 vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords )
 {
     //Convert to UV coords (0-1) and floor for pixel effect
-    number pixel_size = length(love_ScreenSize.xy)/PIXEL_SIZE_FAC;
+    number pixel_size = 1.0;
     vec2 uv = (floor(screen_coords.xy*(1./pixel_size))*pixel_size - 0.5*love_ScreenSize.xy)/length(love_ScreenSize.xy);
     number uv_len = length(uv);
 
