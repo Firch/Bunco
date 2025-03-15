@@ -459,8 +459,8 @@ return {
             c_bunc_the_8 = {
                 ['name'] = 'The 8',
                 ['text'] = {
-                    [1] = '{C:attention}Link together{} any',
-                    [2] = 'number of selected',
+                    [1] = '{C:attention}Link together{}',
+                    [2] = '{C:attention}any number{} of selected',
                     [3] = 'unlinked cards in hand',
                     [4] = '{C:inactive,s:0.6}(Unlimited selection while The 8 is selected)'
                 }
