@@ -5,19 +5,19 @@ return {
             -- Config values
 
             bunc_colorful_finishers = 'Colorful Final Blinds',
-            bunc_colorful_finishers_desc = 'Enables colorful backgrounds for the final blinds',
-            bunc_colorful_finishers_desc_2 = 'and removes gray background in the Endless Mode',
+            bunc_colorful_finishers_desc = 'Enables colorful backgrounds for final blinds',
+            bunc_colorful_finishers_desc_2 = 'and removes gray background in Endless Mode',
 
             bunc_high_quality_shaders = 'High Quality Shaders',
-            bunc_high_quality_shaders_desc = 'Makes some of the vanilla shaders',
-            bunc_high_quality_shaders_desc_2 = 'render in higher quality (might cause lag)',
+            bunc_high_quality_shaders_desc = 'Makes some vanilla shaders render',
+            bunc_high_quality_shaders_desc_2 = 'in higher quality (might cause lag)',
 
             bunc_fixed_sprites = 'Fixed Sprites',
-            bunc_fixed_sprites_desc = 'Tweaks some sprites in a minor way by removing',
-            bunc_fixed_sprites_desc_2 = 'stray pixels, improving consistency and high contrast',
+            bunc_fixed_sprites_desc = 'Tweaks some sprites by removing stray pixels,',
+            bunc_fixed_sprites_desc_2 = 'improving consistency and high contrast',
 
             bunc_gameplay_reworks = 'Gameplay Reworks',
-            bunc_gameplay_reworks_desc = 'Reworks some of the vanilla mechanics',
+            bunc_gameplay_reworks_desc = 'Reworks some vanilla mechanics',
             bunc_gameplay_reworks_desc_2 = 'to make the game more enjoyable',
 
             bunc_fixed_badges = 'Fixed Badges',
@@ -460,7 +460,7 @@ return {
                 ['name'] = 'The 8',
                 ['text'] = {
                     [1] = '{C:attention}Link together{} any',
-                    [2] = 'amount of selected',
+                    [2] = 'number of selected',
                     [3] = 'unlinked cards in hand',
                     [4] = '{C:inactive,s:0.6}(Unlimited selection while The 8 is selected)'
                 }
