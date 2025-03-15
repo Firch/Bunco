@@ -673,7 +673,26 @@ end
 
 --ease_dollars() hook:
 local dollarhook = function(mod)
-    if G.jokers ~= nil then
+    if G.GAME.Trident and (to_big(mod) <= to_big(0)) then --Vermilion Trident 1/2
+        G.GAME.ante_purchases = (G.GAME.ante_purchases or 0) + 1
+    end
+
+    G.GAME.money_spend_this_round = G.GAME.money_spend_this_round or 0 --Money spent in one shop unlock 1/2
+    if to_big(mod) < to_big(0) then
+        G.GAME.money_spend_this_round = G.GAME.money_spend_this_round - mod
+    
+        local locked_card
+    
+        for i = 1, #G.P_LOCKED do
+            locked_card = G.P_LOCKED[i]
+    
+            if not locked_card.unlocked and locked_card.check_for_unlock and type(locked_card.check_for_unlock) == 'function' then
+                locked_card:check_for_unlock({type = 'round_spend_money', round_spend_money = G.GAME.money_spend_this_round})
+            end
+        end
+    end
+
+    if G.jokers ~= nil then --Jokers that affect money income
         for _, v in ipairs(G.jokers.cards) do
             if v.config.center.key == 'j_bunc_fiendish' and not v.debuff then
                 if to_big(mod) > to_big(0) then

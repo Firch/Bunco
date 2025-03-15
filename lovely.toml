@@ -1508,33 +1508,6 @@ G.GAME.last_deck_size = deck_size
 
 '''
 
-# Money spending unlocking (1/2)
-[[patches]]
-[patches.pattern]
-target = 'functions/common_events.lua'
-pattern = 'function ease_dollars(mod, instant)'
-position = 'after'
-match_indent = true
-payload = '''
-
-G.GAME.money_spend_this_round = G.GAME.money_spend_this_round or 0
-
-if to_big(mod) < to_big(0) then
-    G.GAME.money_spend_this_round = G.GAME.money_spend_this_round - mod
-
-    local locked_card
-
-    for i = 1, #G.P_LOCKED do
-        locked_card = G.P_LOCKED[i]
-
-        if not locked_card.unlocked and locked_card.check_for_unlock and type(locked_card.check_for_unlock) == 'function' then
-            locked_card:check_for_unlock({type = 'round_spend_money', round_spend_money = G.GAME.money_spend_this_round})
-        end
-    end
-end
-
-'''
-
 # Money spending unlocking (2/2)
 [[patches]]
 [patches.pattern]
@@ -2120,21 +2093,6 @@ if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_veil' and not G.GAME.blind.dis
         self:flip()
         G.GAME.blind:wiggle()
     end
-end
-
-'''
-
-# function ease_dollars() (Vermilion Trident 1/2)
-[[patches]]
-[patches.pattern]
-target = 'functions/common_events.lua'
-pattern = 'function ease_dollars(mod, instant)'
-position = 'after'
-match_indent = true
-payload = '''
-
-if G.GAME.Trident and (to_big(mod) <= to_big(0)) then
-    G.GAME.ante_purchases = (G.GAME.ante_purchases or 0) + 1
 end
 
 '''
