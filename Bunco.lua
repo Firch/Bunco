@@ -671,6 +671,60 @@ SMODS.calculate_repetitions = function(card, context, reps)
     end
 end
 
+--ease_dollars() hook:
+local dollarhook = function(mod)
+    if G.jokers ~= nil then
+        for _, v in ipairs(G.jokers.cards) do
+            if v.config.center.key == 'j_bunc_fiendish' and not v.debuff then
+                if to_big(mod) > to_big(0) then
+                    if pseudorandom('fiendish'..G.SEED) < G.GAME.probabilities.normal / v.ability.extra.odds then
+                        mod = to_big(1)
+                        local message = to_number(mod)
+                        G.E_MANAGER:add_event(Event{func = function()
+                            card_eval_status_text(
+                            v,
+                            'extra',
+                            nil, nil, nil,
+                            {message = '$'..(message or '1'), colour = G.C.RED, instant = true})
+                        return true end})
+                    else
+                        mod = to_big(mod) * to_big(2)
+                        local message = to_number(mod)
+                        G.E_MANAGER:add_event(Event{func = function()
+                            card_eval_status_text(
+                            v,
+                            'extra',
+                            nil, nil, nil,
+                            {message = '$'..message, colour = G.C.ORANGE, instant = true})
+                        return true end})
+                    end
+                end
+            end
+            if v.config.center.key == 'j_bunc_bounty_hunter' and not v.debuff then
+                if to_big(mod) > to_big(0) then
+                    v:calculate_joker({get_money = true})
+                    mod = to_big(mod) - to_big(1)
+                    G.E_MANAGER:add_event(Event{func = function()
+                        card_eval_status_text(
+                        v,
+                        'extra',
+                        nil, nil, nil,
+                        {message = G.localization.misc.dictionary.bunc_robbed, colour = G.C.ORANGE, instant = true})
+                    return true end})
+                end
+            end
+        end
+    end
+    return(mod)
+end
+
+local edo = ease_dollars
+function ease_dollars(mod, instant)
+    mod = dollarhook(mod)
+    if to_big(mod) == to_big(0) then return end
+    return edo(mod, instant)
+end
+
 local original_game_update = Game.update
 
 function Game:update(dt)
