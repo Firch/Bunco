@@ -3,6 +3,7 @@
 --- MOD_ID: Bunco
 --- MOD_AUTHOR: [Firch, RENREN, Peas, minichibis, J.D., Guwahavel, Ciirulean, ejwu]
 --- MOD_DESCRIPTION: Mod aiming for vanilla style, a lot of new Jokers, Blinds, other stuff and Exotic Suits system!
+--- CONFLICTS: [Talisman<=2.0.3]
 --- VERSION: 5.0
 
 -- ToDo:
