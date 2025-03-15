@@ -1583,7 +1583,7 @@ return {
             b_bunc_digital = {
                 ['name'] = 'Digital Deck',
                 ['text'] = {
-                    [1] = '{C:bunco_virtual_dark}Polymino{} cards can',
+                    [1] = '{C:bunco_virtual_dark}Polymino{} cards may',
                     [2] = 'appear in the shop,',
                     [3] = "start with {C:bunco_virtual_dark,T:c_bunc_the_i}The I{}"
                 }
@@ -1829,7 +1829,7 @@ return {
             v_bunc_disguise = {
                 ['name'] = 'Disguise',
                 ['text'] = {
-                    [1] = '{C:attention}Blind Packs{} can',
+                    [1] = '{C:attention}Blind Packs{} may',
                     [2] = 'appear in the shop'
                 }
             },
