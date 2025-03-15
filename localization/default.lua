@@ -1790,19 +1790,19 @@ return {
             v_bunc_hedge_trimmer = {
                 ['name'] = 'Hedge Trimmer',
                 ['text'] = {
-                    [1] = "Reduce blind's score",
+                    [1] = "Reduce blind's score requirement",
                     [2] = 'by {C:attention}#1#%{} every hand played'
                 }
             },
             v_bunc_chainsaw = {
                 ['name'] = 'Chainsaw',
                 ['text'] = {
-                    [1] = 'All required scores',
-                    [2] = 'are reduced by {C:attention}#1#%{}'
+                    [1] = 'Reduce all score requirements',
+                    [2] = 'by {C:attention}#1#%{}'
                 },
                 ['unlock'] = {
-                    [1] = "Reduce blind's score using",
-                    [2] = 'Hedge Trimmer',
+                    [1] = "Reduce blind's score requirement",
+                    [2] = 'using Hedge Trimmer',
                     [3] = 'a total of {C:attention,E:1}#1#{} times',
                     [4] = '{C:inactive}(#2#)'
                 }
