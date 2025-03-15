@@ -804,8 +804,9 @@ return {
             j_bunc_doorhanger = {
                 ['name'] = 'Doorhanger',
                 ['text'] = {
-                    [1] = '{C:blue}Common{} Jokers do not appear',
-                    [2] = '{s:0.8}Different rarities appear instead'
+                    [1] = '{C:blue}Common{} Jokers no longer',
+                    [2] = 'appear in the shop',
+                    [3] = '{s:0.8}Different rarities appear instead'
                 },
                 ['unlock'] = {
                     [1] = 'Win a run without',
@@ -1870,8 +1871,9 @@ return {
             v_bunc_arcade_machine = {
                 ['name'] = 'Arcade Machine',
                 ['text'] = {
-                    [1] = '{C:bunco_virtual_dark}Virtual Packs',
-                    [2] = 'appear {C:attention}4X{} more often'
+                    [1] = '{C:bunco_virtual_dark}Virtual Packs appear',
+                    [2] = '{C:attention}4X{} more often',
+                    [3] = 'in the shop'
                 }
             },
             v_bunc_polybius = {
