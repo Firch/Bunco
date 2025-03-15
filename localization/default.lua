@@ -21,12 +21,13 @@ return {
             bunc_gameplay_reworks_desc_2 = 'to make the game more enjoyable',
 
             bunc_fixed_badges = 'Fixed Badges',
-            bunc_fixed_badges_desc = 'Changes the badges on consumables by replacing confusing',
-            bunc_fixed_badges_desc_2 = 'flavor text with indication of their way of obtaining',
+            bunc_fixed_badges_desc = 'Changes the badges on Planet cards: replaces confusing',
+            bunc_fixed_badges_desc_2 = 'flavor text with an indicator for secret hands',
 
-            bunc_jokerlike_consumable_editions = 'Editions in Consumables Slot',
-            bunc_jokerlike_consumable_editions_desc = 'Reverts the vanilla behavior of consumables with',
-            bunc_jokerlike_consumable_editions_desc_2 = 'editions acting like Jokers (for other conflicting mods)',
+            bunc_jokerlike_consumable_editions = 'Vanilla Editioned Consumables',
+            bunc_jokerlike_consumable_editions_desc = 'Keep the vanilla behavior of editioned consumables:',
+            bunc_jokerlike_consumable_editions_desc_2 = 'editions give Chips/Mult like Jokers',
+            bunc_jokerlike_consumable_editions_desc_3 = '(for other conflicting mods)',
 
             bunc_default_true = 'Enabled by default',
             bunc_default_false = 'Disabled by default',
@@ -1581,7 +1582,7 @@ return {
             b_bunc_digital = {
                 ['name'] = 'Digital Deck',
                 ['text'] = {
-                    [1] = '{C:bunco_virtual_dark}Polymino{} cards may',
+                    [1] = '{C:bunco_virtual_dark}Polymino{} cards can',
                     [2] = 'appear in the shop,',
                     [3] = "start with {C:bunco_virtual_dark,T:c_bunc_the_i}The I{}"
                 }
