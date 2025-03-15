@@ -244,8 +244,8 @@ return {
                 ['name'] = 'Blind Pack',
                 ['text'] = {
                     [1] = 'Choose {C:attention}#1#{} of up to',
-                    [2] = '{C:attention}#2# Boss Blinds{} to',
-                    [3] = 'replace this Ante\'s {C:attention}Boss Blind{}'
+                    [2] = '{C:attention}#2# Boss Blinds{} to replace',
+                    [3] = 'this Ante\'s {C:attention}Boss Blind{}'
                 }
             },
             p_bunc_virtual_normal = {
@@ -297,9 +297,9 @@ return {
             bunc_reactive = {
                 ['name'] = 'Reactive',
                 ['text'] = {
-                    [1] = 'Debuffed until a blind',
-                    [2] = 'is skipped this Ante'
-                    -- unsure about this wording
+                    [1] = 'Each Ante, debuffed',
+                    [2] = 'until you\'ve',
+                    [3] = 'skipped a blind'
                 }
             },
 
@@ -1928,7 +1928,7 @@ return {
                 ['name'] = 'Magenta Stake',
                 ['text'] = {
                     [1] = 'Shop can have {C:attention}Reactive{} Jokers',
-                    [2] = '{C:inactive,s:0.8}(Debuffed if no blinds are skipped this Ante)',
+                    [2] = '{C:inactive,s:0.8}(Each Ante, debuffed until you\'ve skipped a blind)',
                     [3] = '{s:0.8}Applies all previous Stakes'
                 }
             }
