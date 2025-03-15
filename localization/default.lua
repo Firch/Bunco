@@ -243,9 +243,9 @@ return {
             p_bunc_blind = {
                 ['name'] = 'Blind Pack',
                 ['text'] = {
-                    [1] = 'Choose one of up to',
-                    [2] = '{C:attention}#1# Boss Blinds{} to',
-                    [3] = 'replace on this Ante'
+                    [1] = 'Choose {C:attention}#1#{} of up to',
+                    [2] = '{C:attention}#2# Boss Blinds{} to',
+                    [3] = 'replace this Ante\'s {C:attention}Boss Blind{}'
                 }
             },
             p_bunc_virtual_normal = {
@@ -297,8 +297,9 @@ return {
             bunc_reactive = {
                 ['name'] = 'Reactive',
                 ['text'] = {
-                    [1] = 'Debuffed if no blinds',
-                    [2] = 'are skipped this Ante'
+                    [1] = 'Debuffed until a blind',
+                    [2] = 'is skipped this Ante'
+                    -- unsure about this wording
                 }
             },
 
@@ -1769,7 +1770,7 @@ return {
                 ['text'] = {
                     [1] = 'Consumables in',
                     [2] = '{C:attention}Booster Packs{} may',
-                    [3] = 'appear with {C:dark_edition}Edition'
+                    [3] = 'have an {C:dark_edition}Edition'
                 }
             },
             v_bunc_supercoating = {
@@ -1777,7 +1778,7 @@ return {
                 ['text'] = {
                     [1] = 'All consumables in',
                     [2] = '{C:attention}Booster Packs{} will',
-                    [3] = 'appear with {C:dark_edition}Edition'
+                    [3] = 'have an {C:dark_edition}Edition'
                 },
                 ['unlock'] = {
                     [1] = 'Use {C:attention,E:1}#1#{} consumables',
@@ -1796,7 +1797,7 @@ return {
                 ['name'] = 'Chainsaw',
                 ['text'] = {
                     [1] = 'All required scores',
-                    [2] = 'reduced by {C:attention}#1#%{}'
+                    [2] = 'are reduced by {C:attention}#1#%{}'
                 },
                 ['unlock'] = {
                     [1] = "Reduce blind's score using",
@@ -1828,7 +1829,7 @@ return {
             v_bunc_disguise = {
                 ['name'] = 'Disguise',
                 ['text'] = {
-                    [1] = '{C:attention}Blind Packs{} may',
+                    [1] = '{C:attention}Blind Packs{} can',
                     [2] = 'appear in the shop'
                 }
             },
