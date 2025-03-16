@@ -21,8 +21,9 @@ local function say(message)
     sendDebugMessage('[BUNCO] - '..(message or '???'))
 end
 
---Talisman compatibility compatibility
-to_big = to_big or function(x) 
+-- Talisman-related functions
+
+to_big = to_big or function(x)
     return x
 end
 
@@ -672,8 +673,9 @@ SMODS.calculate_repetitions = function(card, context, reps)
     end
 end
 
---ease_dollars() hook:
-BUNCOMOD.funcs.dollarhook = function(mod)
+-- Various on-money-gain functions
+
+BUNCOMOD.funcs.ease_dollars = function(mod)
     if G.GAME.Trident and (to_big(mod) <= to_big(0)) then --Vermilion Trident 1/2
         G.GAME.ante_purchases = (G.GAME.ante_purchases or 0) + 1
     end
@@ -681,12 +683,12 @@ BUNCOMOD.funcs.dollarhook = function(mod)
     G.GAME.money_spend_this_round = G.GAME.money_spend_this_round or 0 --Money spent in one shop unlock 1/2
     if to_big(mod) < to_big(0) then
         G.GAME.money_spend_this_round = G.GAME.money_spend_this_round - mod
-    
+
         local locked_card
-    
+
         for i = 1, #G.P_LOCKED do
             locked_card = G.P_LOCKED[i]
-    
+
             if not locked_card.unlocked and locked_card.check_for_unlock and type(locked_card.check_for_unlock) == 'function' then
                 locked_card:check_for_unlock({type = 'round_spend_money', round_spend_money = G.GAME.money_spend_this_round})
             end

@@ -3296,6 +3296,34 @@ calculate_cracker_cards({full_hand = G.play.cards, scoring_hand = scoring_hand, 
 
 '''
 
+# Money gain effects
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = 'function ease_dollars(mod, instant)'
+position = 'after'
+match_indent = true
+payload = '''
+
+    mod = BUNCOMOD.funcs.ease_dollars(mod)
+    if to_big(mod) == to_big(0) then return end
+
+'''
+
+# Money gain (Talisman skipping is on)
+[[patches]]
+[patches.pattern]
+target = 'main.lua'
+pattern = 'mod = mod or 0'
+position = 'after'
+match_indent = true
+payload = '''
+
+    mod = BUNCOMOD.funcs.ease_dollars(mod)
+    if to_big(mod) == to_big(0) then return end
+
+'''
+
 # Glitter edition in poll_edition
 [[patches]]
 [patches.pattern]
@@ -3389,29 +3417,3 @@ payload = '''if SMODS.DrawSteps[k]:check_conditions(self, layer) and not (self.d
 # position = 'at'
 # match_indent = true
 # payload = '''elseif self.config.center.consumeable and (self.config.center.demo or (not self.config.center.unlocked and not self.params.bypass_discovery_center)) then '''
-
-# Money effects
-[[patches]]
-[patches.pattern]
-target = 'functions/common_events.lua'
-pattern = 'function ease_dollars(mod, instant)'
-position = 'after'
-match_indent = true
-payload = '''
--- Bunco money effects
-    mod = BUNCOMOD.funcs.dollarhook(mod)
-    if to_big(mod) == to_big(0) then return end
-'''
-
-# Money effects if Talisman is skipping animations
-[[patches]]
-[patches.pattern]
-target = 'main.lua'
-pattern = 'mod = mod or 0'
-position = "after"
-payload = '''
--- Bunco money effects
-    mod = BUNCOMOD.funcs.dollarhook(mod)
-    if to_big(mod) == to_big(0) then return end
-'''
-match_indent = true
