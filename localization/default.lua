@@ -804,9 +804,8 @@ return {
             j_bunc_doorhanger = {
                 ['name'] = 'Doorhanger',
                 ['text'] = {
-                    [1] = '{C:blue}Common{} Jokers no longer',
-                    [2] = 'appear in the shop',
-                    [3] = '{s:0.8}Different rarities appear instead'
+                    [1] = '{C:blue}Common{} Jokers no longer appear',
+                    [2] = '{s:0.8}Different rarities appear instead'
                 },
                 ['unlock'] = {
                     [1] = 'Win a run without',
