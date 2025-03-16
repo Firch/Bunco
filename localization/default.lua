@@ -290,7 +290,7 @@ return {
                 ['name'] = 'Hindered',
                 ['text'] = {
                     [1] = 'Stays in place until',
-                    [2] = 'the end of the round',
+                    [2] = 'end of round',
                     [3] = 'after being sold'
                 }
             },
@@ -1914,7 +1914,7 @@ return {
                 ['name'] = 'Pink Stake',
                 ['text'] = {
                     [1] = 'Shop can have {C:attention}Hindered{} Jokers',
-                    [2] = '{C:inactive,s:0.8}(Stays in place until the end of the round after being sold)',
+                    [2] = '{C:inactive,s:0.8}(Stays in place until end of round after being sold)',
                     [3] = '{s:0.8}Applies all previous Stakes'
                 }
             },
