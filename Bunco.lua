@@ -1,14 +1,3 @@
---- STEAMODDED HEADER
---- MOD_NAME: Bunco
---- MOD_ID: Bunco
---- MOD_AUTHOR: [Firch, RENREN, Peas, minichibis, J.D., Guwahavel, Ciirulean, ejwu]
---- MOD_DESCRIPTION: Mod aiming for vanilla style, a lot of new Jokers, Blinds, other stuff and Exotic Suits system!
---- VERSION: 5.0
-
--- ToDo:
--- Make configs apply immediately
--- Shell Game should modify tables instead of replacing - see Blind Packs
-
 BUNCOMOD = {vars = {}, funcs = {}, content = SMODS.current_mod}
 local filesystem = NFS or love.filesystem
 
@@ -87,6 +76,15 @@ function BUNCOMOD.content.process_loc_text()
     G.P_CENTERS['bunc_consumable_edition_polychrome'] = {key = 'bunc_consumable_edition_polychrome', set = 'Other'}
     G.P_CENTERS['bunc_consumable_edition_bunc_glitter'] = {key = 'bunc_consumable_edition_bunc_glitter', set = 'Other'}
 end
+
+-- Mod icon
+
+SMODS.Atlas({
+    key = 'modicon',
+    path = 'Icon/Icon.png',
+    px = 34,
+    py = 34
+})
 
 -- Config globals
 
@@ -258,6 +256,158 @@ function BUNCOMOD.content.config_tab()
             }
         }
     }}
+end
+
+-- Credits tab
+
+SMODS.current_mod.extra_tabs = function()
+    local text_scale = 0.6
+	return {
+		{
+			label = G.localization.misc.dictionary.b_credits,
+			tab_definition_function = function()
+				return {n = G.UIT.ROOT, config = {r = 0.1, minw = 4, align = "tm", padding = 0.2, colour = G.C.BLACK}, nodes = {
+                {n=G.UIT.R, config={align = "cm", padding = 0.1, outline_colour = G.C.JOKER_GREY, r = 0.1, outline = 1}, nodes={
+                    {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                        {n=G.UIT.T, config={text = G.localization.misc.dictionary.b_credits, scale = text_scale*0.6, colour = G.C.ORANGE, shadow = true}},
+                    }},
+                    {n=G.UIT.R, config={align = "tm", padding = 0}, nodes={
+                        {n=G.UIT.C, config={align = "tl", padding = 0.05, minw = 2.0}, nodes={
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'Firch', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'RENREN', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'Peas', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'minichibis', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'J.D.', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'Guwahavel', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'Ciirulean', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'ejwu', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'sadlyjustal', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'Domique', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'Haloway', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'hapty', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'Joey', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'hellfirejune', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'Oroshibu', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'women', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'cometz', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'ferrium', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'hippocrunchy', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'Biverom', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'Just_Shrimmp', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                        }},
+                        {n=G.UIT.C, config={align = "tl", padding = 0.05, minw = 2.0}, nodes={
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'Mikadoe', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'Lyman', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'jostro', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'kingbobson', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'aure__', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'itayfeder', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'autumnmood', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'arachneii', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'mysthaps', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'iwas_nevergood', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'chromapie', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'kaishi_', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'Victin', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'sdm_0', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'PinkMaggit', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'Ardub23', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'nh6574', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'jumbocarrot0', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'weird_autumn', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'unascribed', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+                                {n=G.UIT.T, config={text = 'itsmythie', scale = text_scale*0.5, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                            }},
+                        }},
+                    }},
+                    }}
+				}}
+			end,
+		}
+	}
 end
 
 -- Shaders
