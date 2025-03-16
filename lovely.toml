@@ -912,62 +912,6 @@ position = 'before'
 match_indent = true
 payload = '''if card.config.center.key == 'j_bunc_jmjb' then edition = poll_edition(nil, nil, true, true) end'''
 
-# function ease_dollars() (Fiendish, Bounty Hunter)
-[[patches]]
-[patches.pattern]
-target = 'functions/common_events.lua'
-pattern = 'function ease_dollars(mod, instant)'
-position = 'after'
-match_indent = true
-payload = '''
-
-if G.jokers ~= nil then
-    for _, v in ipairs(G.jokers.cards) do
-        if v.config.center.key == 'j_bunc_fiendish' and not v.debuff then
-            if mod > 0 then
-                if pseudorandom('fiendish'..G.SEED) < G.GAME.probabilities.normal / v.ability.extra.odds then
-                    mod = 1
-                    local message = mod
-                    G.E_MANAGER:add_event(Event{func = function()
-                        card_eval_status_text(
-                        v,
-                        'extra',
-                        nil, nil, nil,
-                        {message = '$'..(message or '1'), colour = G.C.RED, instant = true})
-                    return true end})
-                else
-                    mod = mod * 2
-                    local message = mod
-                    G.E_MANAGER:add_event(Event{func = function()
-                        card_eval_status_text(
-                        v,
-                        'extra',
-                        nil, nil, nil,
-                        {message = '$'..message, colour = G.C.ORANGE, instant = true})
-                    return true end})
-                end
-            end
-        end
-        if v.config.center.key == 'j_bunc_bounty_hunter' and not v.debuff then
-            if mod > 0 then
-                v:calculate_joker({get_money = true})
-                mod = mod - 1
-                G.E_MANAGER:add_event(Event{func = function()
-                    card_eval_status_text(
-                    v,
-                    'extra',
-                    nil, nil, nil,
-                    {message = G.localization.misc.dictionary.bunc_robbed, colour = G.C.ORANGE, instant = true})
-                return true end})
-            end
-        end
-    end
-end
-
-if mod == 0 then return end
-
-'''
-
 # function create_card() (Doorhanger)
 [[patches]]
 [patches.pattern]
@@ -1564,33 +1508,6 @@ G.GAME.last_deck_size = deck_size
 
 '''
 
-# Money spending unlocking (1/2)
-[[patches]]
-[patches.pattern]
-target = 'functions/common_events.lua'
-pattern = 'function ease_dollars(mod, instant)'
-position = 'after'
-match_indent = true
-payload = '''
-
-G.GAME.money_spend_this_round = G.GAME.money_spend_this_round or 0
-
-if mod < 0 then
-    G.GAME.money_spend_this_round = G.GAME.money_spend_this_round - mod
-
-    local locked_card
-
-    for i = 1, #G.P_LOCKED do
-        locked_card = G.P_LOCKED[i]
-
-        if not locked_card.unlocked and locked_card.check_for_unlock and type(locked_card.check_for_unlock) == 'function' then
-            locked_card:check_for_unlock({type = 'round_spend_money', round_spend_money = G.GAME.money_spend_this_round})
-        end
-    end
-end
-
-'''
-
 # Money spending unlocking (2/2)
 [[patches]]
 [patches.pattern]
@@ -1678,7 +1595,7 @@ position = 'after'
 match_indent = true
 payload = '''
 
-if mod < 0 then
+if to_big(mod) < to_big(0) then
     G.GAME.money_spend_this_round = G.GAME.money_spend_this_round - mod
 
     local locked_card
@@ -2176,21 +2093,6 @@ if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_veil' and not G.GAME.blind.dis
         self:flip()
         G.GAME.blind:wiggle()
     end
-end
-
-'''
-
-# function ease_dollars() (Vermilion Trident 1/2)
-[[patches]]
-[patches.pattern]
-target = 'functions/common_events.lua'
-pattern = 'function ease_dollars(mod, instant)'
-position = 'after'
-match_indent = true
-payload = '''
-
-if G.GAME.Trident and (mod <= 0) then
-    G.GAME.ante_purchases = (G.GAME.ante_purchases or 0) + 1
 end
 
 '''
@@ -3391,6 +3293,34 @@ match_indent = true
 payload = '''
 
 calculate_cracker_cards({full_hand = G.play.cards, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, after = true})
+
+'''
+
+# Money gain effects
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = 'function ease_dollars(mod, instant)'
+position = 'after'
+match_indent = true
+payload = '''
+
+    mod = BUNCOMOD.funcs.ease_dollars(mod)
+    if to_big(mod) == to_big(0) then return end
+
+'''
+
+# Money gain (Talisman skipping is on)
+[[patches]]
+[patches.pattern]
+target = 'main.lua'
+pattern = 'mod = mod or 0'
+position = 'after'
+match_indent = true
+payload = '''
+
+    mod = BUNCOMOD.funcs.ease_dollars(mod)
+    if to_big(mod) == to_big(0) then return end
 
 '''
 

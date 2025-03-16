@@ -9,6 +9,16 @@ local function say(message)
     sendDebugMessage('[BUNCO] - '..(message or '???'))
 end
 
+-- Talisman-related functions
+
+to_big = to_big or function(x)
+    return x
+end
+
+to_number = to_number or function(x)
+    return x
+end
+
 -- Index-based coordinates generation
 
 local function get_coordinates(position, width)
@@ -812,6 +822,73 @@ SMODS.calculate_repetitions = function(card, context, reps)
     end
 end
 
+-- Various on-money-gain functions
+
+BUNCOMOD.funcs.ease_dollars = function(mod)
+    if G.GAME.Trident and (to_big(mod) <= to_big(0)) then --Vermilion Trident 1/2
+        G.GAME.ante_purchases = (G.GAME.ante_purchases or 0) + 1
+    end
+
+    G.GAME.money_spend_this_round = G.GAME.money_spend_this_round or 0 --Money spent in one shop unlock 1/2
+    if to_big(mod) < to_big(0) then
+        G.GAME.money_spend_this_round = G.GAME.money_spend_this_round - mod
+
+        local locked_card
+
+        for i = 1, #G.P_LOCKED do
+            locked_card = G.P_LOCKED[i]
+
+            if not locked_card.unlocked and locked_card.check_for_unlock and type(locked_card.check_for_unlock) == 'function' then
+                locked_card:check_for_unlock({type = 'round_spend_money', round_spend_money = G.GAME.money_spend_this_round})
+            end
+        end
+    end
+
+    if G.jokers ~= nil then --Jokers that affect money income
+        for _, v in ipairs(G.jokers.cards) do
+            if v.config.center.key == 'j_bunc_fiendish' and not v.debuff then
+                if to_big(mod) > to_big(0) then
+                    if pseudorandom('fiendish'..G.SEED) < G.GAME.probabilities.normal / v.ability.extra.odds then
+                        mod = to_big(1)
+                        local message = to_number(mod)
+                        G.E_MANAGER:add_event(Event{func = function()
+                            card_eval_status_text(
+                            v,
+                            'extra',
+                            nil, nil, nil,
+                            {message = '$'..(message or '1'), colour = G.C.RED, instant = true})
+                        return true end})
+                    else
+                        mod = to_big(mod) * to_big(2)
+                        local message = to_number(mod)
+                        G.E_MANAGER:add_event(Event{func = function()
+                            card_eval_status_text(
+                            v,
+                            'extra',
+                            nil, nil, nil,
+                            {message = '$'..message, colour = G.C.ORANGE, instant = true})
+                        return true end})
+                    end
+                end
+            end
+            if v.config.center.key == 'j_bunc_bounty_hunter' and not v.debuff then
+                if to_big(mod) > to_big(0) then
+                    v:calculate_joker({get_money = true})
+                    mod = to_big(mod) - to_big(1)
+                    G.E_MANAGER:add_event(Event{func = function()
+                        card_eval_status_text(
+                        v,
+                        'extra',
+                        nil, nil, nil,
+                        {message = G.localization.misc.dictionary.bunc_robbed, colour = G.C.ORANGE, instant = true})
+                    return true end})
+                end
+            end
+        end
+    end
+    return(mod)
+end
+
 local original_game_update = Game.update
 
 function Game:update(dt)
@@ -1598,7 +1675,7 @@ create_joker({ -- Loan Shark
     blueprint = false, eternal = true,
     unlocked = false,
     check_for_unlock = function(self, args)
-        if args.type == 'round_spend_money' and args.round_spend_money >= 100 then
+        if args.type == 'round_spend_money' and to_number(args.round_spend_money) >= 100 then
             unlock_card(self)
         end
     end,
@@ -2625,14 +2702,14 @@ create_joker({ -- Head in the Clouds
     unlocked = false,
     check_for_unlock = function(self, args)
         if args.type == 'win_custom' then
-            local handname, level, order = 'High Card', -1, 100
+            local handname, level, order = 'High Card', to_big(-1), 100
             for k, v in pairs(G.GAME.hands) do
                 if v.level > level or (v.level == level and order > v.order) then
                     level = v.level
                     handname = k
                 end
             end
-            if handname == 'High Card' and level > 0 then
+            if handname == 'High Card' and level > to_big(0) then
                 unlock_card(self)
             end
         end
@@ -2640,7 +2717,7 @@ create_joker({ -- Head in the Clouds
     custom_in_pool = function()
         local condition = false
         if G.GAME and G.GAME.hands then
-            if G.GAME.hands['High Card'].level > 1 then condition = true end
+            if G.GAME.hands['High Card'].level > to_big(1) then condition = true end
         end
         return condition
     end,
@@ -3285,7 +3362,7 @@ create_joker({ -- Bounty Hunter
     unlocked = false,
     check_for_unlock = function(self, args)
         if args.type == 'money' then
-            if G.GAME.dollars < self.config.extra.unlock then
+            if G.GAME.dollars < to_big(self.config.extra.unlock) then
                 unlock_card(self)
             end
         end
@@ -6421,7 +6498,7 @@ SMODS.Blind{ -- The Knoll
     stay_flipped = function(self, area, card)
         if not G.GAME.blind.disabled and (area == G.hand) and
         G.GAME.current_round.hands_played == 0 and G.GAME.current_round.discards_used == 0 then
-            if G.GAME.dollars > 5 then
+            if G.GAME.dollars > to_big(5) then
                 G.GAME.Knoll = G.GAME.Knoll or {}
                 table.insert(G.GAME.Knoll, card)
                 card:set_debuff(true)
@@ -6456,8 +6533,8 @@ SMODS.Blind{ -- The Stone
         if not reset then
             G.GAME.blind.original_chips = G.GAME.blind.chips
         end
-        if not reset and not G.GAME.blind.disabled and G.GAME.dollars >= 10 then
-            local final_chips = (G.GAME.blind.chips / G.GAME.blind.mult) * (math.floor(G.GAME.dollars / 10) + G.GAME.blind.mult)
+        if not reset and not G.GAME.blind.disabled and to_big(G.GAME.dollars) >= to_big(10) then
+            local final_chips = (G.GAME.blind.chips / G.GAME.blind.mult) * (math.floor(to_number(G.GAME.dollars) / 10) + G.GAME.blind.mult)
             local chip_mod -- iterate over ~120 ticks
             if type(G.GAME.blind.chips) ~= 'table' then
                 chip_mod = math.ceil((final_chips - G.GAME.blind.chips) / 120)
