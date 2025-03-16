@@ -8,6 +8,7 @@
 	"main_file": "Bunco.lua",
 	"version": "5.0",
 	"conflicts": [
-        "Lovely (<<0.7.1)"
+        "Lovely (<<0.7.1)",
+		"Talisman (<=2.0.3)"
     ]
 }
