@@ -8004,9 +8004,9 @@ for i = 1, 4 do -- Blind
         key = 'blind_'..i,
 
         loc_vars = function(self, info_queue, card)
-            return {key = 'p_bunc_blind', vars = {self.config.choose, self.config.extra}}
+            return {key = 'p_bunc_blind', vars = {self.config.extra}}
         end,
-        config = {extra = 3, choose = 1},
+        config = {extra = 3},
 
         cost = 8,
         weight = 1,

@@ -243,8 +243,8 @@ return {
             p_bunc_blind = {
                 ['name'] = 'Blind Pack',
                 ['text'] = {
-                    [1] = 'Choose {C:attention}#1#{} of up to',
-                    [2] = '{C:attention}#2# Boss Blinds{} to replace',
+                    [1] = 'Choose {C:attention}1{} of up to {C:attention}#1#',
+                    [2] = '{C:attention}Boss Blinds{} to replace',
                     [3] = 'this Ante\'s {C:attention}Boss Blind{}'
                 }
             },
@@ -393,8 +393,8 @@ return {
                 ['name'] = 'Lust',
                 ['text'] = {
                     [1] = 'Gives {C:money}$#1#{} for every',
-                    [2] = 'playing card held',
-                    [3] = 'in hand {C:inactive}(Max of {C:money}$#2#{C:inactive})',
+                    [2] = 'playing card held in',
+                    [3] = 'hand {C:inactive}(Max of {C:money}$#2#{C:inactive})',
                     [4] = '{C:inactive}(Currently {C:money}$#3#{C:inactive})'
                 },
                 ['unlock'] = {
@@ -1895,15 +1895,15 @@ return {
             m_bunc_copper = {
                 ['name'] = 'Copper Card',
                 ['text'] = {
-                    [1] = 'Rescores if played',
+                    [1] = '{C:attention}Rescores{} if played',
                     [2] = '{C:attention}adjacent{} to another',
-                    [3] = 'scored Copper Card'
+                    [3] = 'scoring Copper Card'
                 },
             },
             m_bunc_cracker = {
                 ['name'] = 'Cracker Card',
                 ['text'] = {
-                    [1] = '{C:attention}On discard{} this card is',
+                    [1] = 'On {C:attention}discard{}, this card is',
                     [2] = 'played and then destroyed',
                 },
             },
