@@ -1642,13 +1642,6 @@ return {
                     [3] = '{s:0.8,C:attention}Triple Tag{s:0.8} excluded'
                 }
             },
-            tag_bunc_shopping = {
-                ['name'] = 'Shopping Tag',
-                ['text'] = {
-                    [1] = 'Gives {C:attention}1{} free',
-                    [2] = 'shop {C:green}Reroll'
-                }
-            },
 
             -- Edition tags
 
