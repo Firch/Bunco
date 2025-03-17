@@ -620,7 +620,7 @@ end
 
 local font_replacement = NFS.read(BUNCOMOD.content.path..'assets/fonts/font.ttf')
 love.filesystem.write('font_replacement.ttf', font_replacement)
-G.LANG.font.FONT = love.graphics.newFont('font_replacement.ttf', G.TILESIZE * 10)
+G.FONTS[1].FONT = love.graphics.newFont('font_replacement.ttf', G.TILESIZE * 10)
 love.filesystem.remove('font_replacement.ttf')
 
 -- Gameplay reworks
