@@ -1,4 +1,4 @@
-return {
+return { -- Translation by Shinosan
     misc = {
         dictionary = {
 
