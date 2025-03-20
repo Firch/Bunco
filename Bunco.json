@@ -6,7 +6,7 @@
 	"description": "A mod that aims to add more content in a way that'd seamlessly exist within the vanilla Balatro!",
 	"prefix": "bunc",
 	"main_file": "Bunco.lua",
-	"version": "5.0",
+	"version": "5.1",
 	"conflicts": [
         "Lovely (<<0.7.1)",
 		"Talisman (<=2.0.3)"
