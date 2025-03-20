@@ -3472,10 +3472,15 @@ create_joker({ -- The Joker
                             event({blocking = false, blockable = false, trigger = 'after', delay = 0.06*G.SETTINGS.GAMESPEED, func = function()
                                 play_sound('tarot2', 0.96, 0.4)
                             return true end})
+                            local destroyed_cards = {}
                             for _, card_to_trash in ipairs(trash_list) do
                                 if not card_to_trash.removed then
                                     card_to_trash:start_dissolve(nil, nil, dissolve_time_fac)
+                                    table.insert(destroyed_cards, card_to_trash)
                                 end
+                            end
+                            if next(destroyed_cards) then
+                                SMODS.calculate_context({remove_playing_cards = true, removed = destroyed_cards})
                             end
                             return true
                         end
