@@ -2153,7 +2153,7 @@ create_joker({ -- Nil Bill
     calculate = function(self, card, context)
         if context.remove_playing_cards then
             ease_dollars(card.ability.extra.bonus * #context.removed)
-            forced_message('$'..card.ability.extra.bonus, card, G.C.MONEY)
+            forced_message('$'..card.ability.extra.bonus * #context.removed, card, G.C.MONEY)
         end
     end
 })
