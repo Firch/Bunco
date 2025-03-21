@@ -1886,18 +1886,18 @@ return {
         },
         Enhanced = {
             m_bunc_copper = {
-                ['name'] = 'Copper Card',
+                ['name'] = '쿠퍼 카드',
                 ['text'] = {
-                    [1] = 'Rescores if played',
-                    [2] = '{C:attention}adjacent{} to other',
-                    [3] = 'scored Copper Card'
+                    [1] = '{C:attention}인접한{} 쿠퍼 카드가',
+                    [2] = '득점 하면',
+                    [3] = '다시 득점합니다'
                 },
             },
             m_bunc_cracker = {
-                ['name'] = 'Cracker Card',
+                ['name'] = '크래커 카드',
                 ['text'] = {
-                    [1] = '{C:attention}On discard{} the card is',
-                    [2] = 'played and then destroyed',
+                    [1] = '{C:attention}버리기{} 시 카드가',
+                    [2] = '플레이되고 그 후 파괴됩니다',
                 },
             },
         },
