@@ -6,17 +6,17 @@ return {
             bunc_colorful_finishers_desc = 'Enables colorful backgrounds for the final blinds',
             bunc_colorful_finishers_desc_2 = 'and removes gray background in the Endless Mode',
 
-            bunc_high_quality_shaders = 'High Quality Shaders',
-            bunc_high_quality_shaders_desc = 'Makes some of the vanilla shaders',
-            bunc_high_quality_shaders_desc_2 = 'render in higher quality (might cause lag)',
+            bunc_high_quality_shaders = '고퀄리티 쉐이더',
+            bunc_high_quality_shaders_desc = '바닐라 쉐이더들을',
+            bunc_high_quality_shaders_desc_2 = '조금 더 높은 품질로 렌더링합니다 (랙이 발생할 수 있습니다.)',
 
             bunc_fixed_sprites = 'Fixed Sprites',
             bunc_fixed_sprites_desc = 'Tweaks some sprites in a minor way by removing',
             bunc_fixed_sprites_desc_2 = 'stray pixels, improving consistency and high contrast',
 
-            bunc_gameplay_reworks = 'Gameplay Reworks',
-            bunc_gameplay_reworks_desc = 'Reworks some of the vanilla mechanics',
-            bunc_gameplay_reworks_desc_2 = 'to make the game more enjoyable',
+            bunc_gameplay_reworks = '게임플레이 리워크',
+            bunc_gameplay_reworks_desc = '게임 플레이가 더욱 즐거워 지도록',
+            bunc_gameplay_reworks_desc_2 = '바닐라 발라트로의 일부 동작을 재설계했습니다',
 
             bunc_fixed_badges = 'Fixed Badges',
             bunc_fixed_badges_desc = 'Changes the badges on consumables by replacing confusing',
@@ -26,48 +26,48 @@ return {
             bunc_jokerlike_consumable_editions_desc = 'Reverts the vanilla behavior of consumables with',
             bunc_jokerlike_consumable_editions_desc_2 = 'editions acting like Jokers (for other conflicting mods)',
 
-            bunc_default_true = 'Enabled by default',
-            bunc_default_false = 'Disabled by default',
+            bunc_default_true = '기본으로 활성화됨',
+            bunc_default_false = '기본으로 비활성화됨',
             bunc_requires_restart = '게임 재시작이 필요합니다',
 
             -- Miscellaneous
 
-            bunc_a_side = 'A Side',
-            bunc_b_side = 'B Side',
+            bunc_a_side = 'A 사이드',
+            bunc_b_side = 'B 사이드',
             bunc_copied = '복사됨!',
             bunc_nothing = '없습니다',
-            bunc_chips = 'Chips',
+            bunc_chips = '칩',
             bunc_loop = 'Loop!',
-            bunc_chance = 'Chance',
-            bunc_word_and = 'and',
+            bunc_chance = '기회',
+            bunc_word_and = ',',
             bunc_debuffed = '디버프됨!',
-            bunc_pew = 'Pew!',
-            bunc_declined = '거절됨...',
-            bunc_accepted = '승락됨!',
+            bunc_pew = '휴!',
+            bunc_declined = '거부됨...',
+            bunc_accepted = '승인됨!',
             bunc_robbed = '도둑맞음!',
             bunc_ouch = '으악!',
             bunc_inactive = '비활성화됨',
             bunc_repeat = '반복!',
-            bunc_thoth_tarot = 'Thoth Tarot',
-            bunc_thoth_tarots = 'Thoth Tarots',
-            bunc_mysterious_tarot = 'Tarot?',
-            bunc_mysterious_polymino = 'Polymino?',
-            bunc_most_played_rank = '(most played rank)',
-            bunc_least_played_hand = '(least played hand)',
-            bunc_blade = '(1.5X blind score)',
-            bunc_exceeded_score = 'Exceeded the limit!',
-            bunc_min_ante = 'Minimum Ante:',
-            bunc_final_blind = 'Final Blind',
+            bunc_thoth_tarot = '토스 타로',
+            bunc_thoth_tarots = '토스 타로',
+            bunc_mysterious_tarot = '타로?',
+            bunc_mysterious_polymino = '폴리미노?',
+            bunc_most_played_rank = '(가장 많이 플레이된 핸드)',
+            bunc_least_played_hand = '(가장 적게 플레이된 핸드)',
+            bunc_blade = '(1.5X 점수)',
+            bunc_exceeded_score = '한도 초과!',
+            bunc_min_ante = '최소 앤티:',
+            bunc_final_blind = '마지막 블라인드',
 
             -- Consumable types
 
-            k_polymino = 'Polymino',
-            b_polymino_cards = 'Polymino Cards',
+            k_polymino = '폴리미노',
+            b_polymino_cards = '폴리미노 카드',
 
             -- Booster types
 
-            k_bunc_blind_pack = 'Blind Pack',
-            k_bunc_virtual_pack = 'Virtual Pack'
+            k_bunc_blind_pack = '블라인드 팩',
+            k_bunc_virtual_pack = '버츄얼 팩'
         },
 
         -- Suits
@@ -84,12 +84,12 @@ return {
         -- Poker hands
 
         poker_hands = {
-            ['bunc_Spectrum'] = 'Spectrum',
-            ['bunc_Straight Spectrum'] = 'Straight Spectrum',
-            ['bunc_Straight Spectrum (Royal)'] = 'Royal Spectrum',
-            ['bunc_Spectrum House'] = 'Spectrum House',
-            ['bunc_Spectrum Five'] = 'Spectrum Five',
-            ['bunc_Deal'] = 'Deal'
+            ['bunc_Spectrum'] = '스펙트럼',
+            ['bunc_Straight Spectrum'] = '스트레이트 스펙트럼',
+            ['bunc_Straight Spectrum (Royal)'] = '로열 스펙트럼',
+            ['bunc_Spectrum House'] = '스펙트럼 하우스',
+            ['bunc_Spectrum Five'] = '스펙트럼 파이브',
+            ['bunc_Deal'] = '딜'
         },
         poker_hand_descriptions = {
             ['bunc_Spectrum'] = {
