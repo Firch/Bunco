@@ -2,23 +2,23 @@ return {
     misc = {
         dictionary = {
             -- Config values
-            bunc_colorful_finishers = 'Colorful Final Blinds',
-            bunc_colorful_finishers_desc = 'Enables colorful backgrounds for the final blinds',
-            bunc_colorful_finishers_desc_2 = 'and removes gray background in the Endless Mode',
+            bunc_colorful_finishers = '컬러풀한 마지막 보스 블라인드',
+            bunc_colorful_finishers_desc = '마지막 보스 블라인드에서 멋진 배경 색상을 추가했습니다.',
+            bunc_colorful_finishers_desc_2 = '그리고 무한 모드에서 회색 배경을 제거했습니다.',
 
             bunc_high_quality_shaders = '고퀄리티 쉐이더',
-            bunc_high_quality_shaders_desc = '바닐라 쉐이더들을',
-            bunc_high_quality_shaders_desc_2 = '조금 더 높은 품질로 렌더링합니다 (랙이 발생할 수 있습니다.)',
+            bunc_high_quality_shaders_desc = '바닐라 쉐이더들을 더욱 고퀄리티로',
+            bunc_high_quality_shaders_desc_2 = '렌더링합니다 (랙이 발생할 수 있습니다.)',
 
-            bunc_fixed_sprites = 'Fixed Sprites',
-            bunc_fixed_sprites_desc = 'Tweaks some sprites in a minor way by removing',
-            bunc_fixed_sprites_desc_2 = 'stray pixels, improving consistency and high contrast',
+            bunc_fixed_sprites = '스프라이트 개선',
+            bunc_fixed_sprites_desc = '불필요한 픽셀들을 제거하여 일관성과 가시성을 향상시켰습니다.',
+            bunc_fixed_sprites_desc_2 = '',
 
             bunc_gameplay_reworks = '게임플레이 리워크',
             bunc_gameplay_reworks_desc = '게임 플레이가 더욱 즐거워 지도록',
             bunc_gameplay_reworks_desc_2 = '바닐라 발라트로의 일부 동작을 재설계했습니다',
 
-            bunc_fixed_badges = 'Fixed Badges',
+            bunc_fixed_badges = '뱃지 시스템 개선',
             bunc_fixed_badges_desc = 'Changes the badges on consumables by replacing confusing',
             bunc_fixed_badges_desc_2 = 'flavor text with indication of their way of obtaining',
 
@@ -73,12 +73,12 @@ return {
         -- Suits
 
         suits_singular = {
-            bunc_Fleurons = 'Fleuron',
-            bunc_Halberds = 'Halberd'
+            bunc_Fleurons = '꽃무늬',
+            bunc_Halberds = '할버드'
         },
         suits_plural = {
-            bunc_Fleurons = 'Fleurons',
-            bunc_Halberds = 'Halberds'
+            bunc_Fleurons = '꽃무늬',
+            bunc_Halberds = '할버드'
         },
 
         -- Poker hands
@@ -93,11 +93,11 @@ return {
         },
         poker_hand_descriptions = {
             ['bunc_Spectrum'] = {
-                [1] = '5 cards with different suits'
+                [1] = '다른 수트를 가진 5장의 카드'
             },
             ['bunc_Straight Spectrum'] = {
-                [1] = '5 cards in a row (consecutive ranks),',
-                [2] = 'each with a different suit'
+                [1] = '5장의 연속된 랭크를 가진 카드',
+                [2] = '각각의 카드는 다른 수트여야 합니다.'
             },
             ['bunc_Spectrum House'] = {
                 [1] = 'A Three of a Kind and a Pair with',
@@ -116,14 +116,14 @@ return {
 
             -- Editions
 
-            bunc_glitter = 'Glitter',
-            bunc_fluorescent = 'Fluorescent',
+            bunc_glitter = '반짝반짝',
+            bunc_fluorescent = '형광',
 
             -- Stickers
 
-            bunc_scattering = 'Scattering',
-            bunc_hindered = 'Hindered',
-            bunc_reactive = 'Reactive'
+            bunc_scattering = '흩어진',
+            bunc_hindered = '방해받는',
+            bunc_reactive = '반응하는'
         },
         collab_palettes = {
             default_Spades = {
@@ -154,7 +154,7 @@ return {
     },
     descriptions = {
         Other = {
-            bunc_temporary_extra_chips = {['text'] = {[1] = '{C:chips}+#1#{} extra chips this round'}},
+            bunc_temporary_extra_chips = {['text'] = {[1] = '{C:chips}이번 라운드에서 +#1#{}개의 칩을 얻습니다.'}},
             bunc_linked_cards = {['text'] = {[1] = '{C:attention}Linked{} in this group:'}},
             bunc_linked_group = {
                 ['name'] = 'Linked group',
@@ -199,19 +199,19 @@ return {
                 }
             },
             bunc_consumable_edition_foil = {
-                ['name'] = 'Foil',
+                ['name'] = '포일',
                 ['text'] = {
                     [1] = 'Create a {C:attention}Chips Tag'
                 }
             },
             bunc_consumable_edition_holo = {
-                ['name'] = 'Holographic',
+                ['name'] = '홀로그래픽',
                 ['text'] = {
                     [1] = 'Create a {C:attention}Mult Tag'
                 }
             },
             bunc_consumable_edition_polychrome = {
-                ['name'] = 'Polychrome',
+                ['name'] = '폴리크롬',
                 ['text'] = {
                     [1] = 'Create a {C:attention}Megamult Tag'
                 }
