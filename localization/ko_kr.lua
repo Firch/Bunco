@@ -1644,7 +1644,7 @@ return {
             -- Edition tags
 
             tag_bunc_glitter = {
-                ['name'] = 'Glitter Tag',
+                ['name'] = '반짝반짝 태그',
                 ['text'] = {
                     [1] = 'Next base edition shop',
                     [2] = 'Joker is free and',
@@ -1652,7 +1652,7 @@ return {
                 }
             },
             tag_bunc_fluorescent = {
-                ['name'] = 'Fluorescent Tag',
+                ['name'] = '형광 태그',
                 ['text'] = {
                     [1] = 'Next base edition shop',
                     [2] = 'Joker is free and',
@@ -1690,27 +1690,27 @@ return {
             -- Exotic tags
 
             tag_bunc_filigree = {
-                ['name'] = 'Filigree Tag',
+                ['name'] = '금세공 태그',
                 ['text'] = {
-                    [1] = 'Next {C:attention}Standard Pack{} opened',
-                    [2] = 'has only {C:bunco_exotic}Exotic cards'
+                    [1] = '다음 {C:attention} 표준 카드 팩{} 이 열리면',
+                    [2] = '카드 팩에 {C:bunco_exotic} 엑조틱 카드만 들어 있습니다'
                 }
             },
 
             -- Anti-tags
 
             tag_bunc_eternal = {
-                ['name'] = 'Eternal Tag',
+                ['name'] = '이터널 태그',
                 ['text'] = {
-                    [1] = 'Next shop Joker',
-                    [2] = 'will gain {C:attention}Eternal{} sticker'
+                    [1] = '다음에 구매하는 조커가',
+                    [2] = '{C:attention}이터널{} 스티커를 가집니다'
                 }
             },
             tag_bunc_perishable = {
-                ['name'] = 'Perishable Tag',
+                ['name'] = '부패 태그',
                 ['text'] = {
-                    [1] = 'Next shop Joker',
-                    [2] = 'will gain {C:attention}Perishable{} sticker'
+                    [1] = '다음에 구매하는 조커가',
+                    [2] = '{C:attention}부패{} 스티커를 가집니다'
                 }
             },
             tag_bunc_scattering = {
