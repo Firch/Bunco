@@ -86,7 +86,7 @@ return {
         poker_hands = {
             ['bunc_Spectrum'] = '스펙트럼',
             ['bunc_Straight Spectrum'] = '스트레이트 스펙트럼',
-            ['bunc_Straight Spectrum (Royal)'] = '로열 스펙트럼',
+            ['bunc_Straight Spectrum (Royal)'] = '로열 스트레이트 스펙트럼',
             ['bunc_Spectrum House'] = '스펙트럼 하우스',
             ['bunc_Spectrum Five'] = '스펙트럼 파이브',
             ['bunc_Deal'] = '딜'
@@ -113,14 +113,11 @@ return {
             }
         },
         labels = {
-
             -- Editions
-
             bunc_glitter = '반짝반짝',
             bunc_fluorescent = '형광',
 
             -- Stickers
-
             bunc_scattering = '흩어진',
             bunc_hindered = '방해받는',
             bunc_reactive = '반응하는'
@@ -141,85 +138,85 @@ return {
         },
         collabs = {
             bunc_Fleurons = {
-                ['1'] = 'Default',
-                ['2'] = 'Duck Game',
-                ['3'] = 'LISA: The Painful'
+                ['1'] = '기본',
+                ['2'] = '덕 게임',
+                ['3'] = '고통의 리사'
             },
             bunc_Halberds = {
-                ['1'] = 'Default',
-                ['2'] = 'Fiend Folio',
-                ['3'] = 'LISA: The Pointless'
+                ['1'] = '기본',
+                ['2'] = '피엔드 폴리오',
+                ['3'] = '무의미한 리사'
             }
         }
     },
     descriptions = {
         Other = {
             bunc_temporary_extra_chips = {['text'] = {[1] = '{C:chips}이번 라운드에서 +#1#{}개의 칩을 얻습니다.'}},
-            bunc_linked_cards = {['text'] = {[1] = '{C:attention}Linked{} in this group:'}},
+            bunc_linked_cards = {['text'] = {[1] = '{C:attention}연결됨{} 그룹:'}},
             bunc_linked_group = {
-                ['name'] = 'Linked group',
+                ['name'] = '연결된 그룹',
                 ['text'] = {
-                    [1] = 'Linked cards in group',
-                    [2] = 'are drawn, selected',
-                    [3] = 'and destroyed {C:attention}together'
+                    [1] = '그룹 내 연결된 카드들은',
+                    [2] = '같이 드로 되고, 선택되어 같이 {C:attention}파괴됩니다.',
+                    [3] = ''
                 }
             },
             bunc_drawn_linked_cards = {['text'] = {[1] = '{C:attention}Linked{} in drawn group'}},
             bunc_light_suits = {
-                ['name'] = 'Light suits',
+                ['name'] = '라이트 수트',
                 ['text'] = {
                     [1] = '{C:hearts}Hearts{} and {C:diamonds}Diamonds'
                 }
             },
             bunc_light_suits_exotic = {
-                ['name'] = 'Light suits',
+                ['name'] = '라이트 수트',
                 ['text'] = {
                     [1] = '{C:hearts}Hearts{}, {C:diamonds}Diamonds,',
                     [2] = 'and {C:bunc_fleurons}Fleurons'
                 }
             },
             bunc_dark_suits = {
-                ['name'] = 'Dark suits',
+                ['name'] = '다크 수트',
                 ['text'] = {
                     [1] = '{C:spades}Spades{} and {C:clubs}Clubs'
                 }
             },
             bunc_dark_suits_exotic = {
-                ['name'] = 'Dark suits',
+                ['name'] = '다크 수트',
                 ['text'] = {
                     [1] = '{C:spades}Spades{}, {C:clubs}Clubs,',
                     [2] = 'and {C:bunc_halberds}Halberds'
                 }
             },
             bunc_exotic_cards = {
-                ['name'] = 'Exotic cards',
+                ['name'] = '엑조틱 카드',
                 ['text'] = {
-                    [1] = 'Cards with',
-                    [2] = '{C:bunc_fleurons}Fleuron{} or {C:bunc_halberds}Halberd{} suit'
+                    [1] = '{C:bunc_fleurons}꽃무니나{} {C:bunc_halberds}할버드{} 수트의 카드',
+                    [2] = ''
                 }
             },
             bunc_consumable_edition_foil = {
                 ['name'] = '포일',
                 ['text'] = {
-                    [1] = 'Create a {C:attention}Chips Tag'
+                    [1] = '{C:attention}칩 태그를 만듭니다'
                 }
             },
             bunc_consumable_edition_holo = {
                 ['name'] = '홀로그래픽',
                 ['text'] = {
-                    [1] = 'Create a {C:attention}Mult Tag'
+                    [1] = '{C:attention}배수 태그를 만듭니다'
                 }
             },
             bunc_consumable_edition_polychrome = {
                 ['name'] = '폴리크롬',
                 ['text'] = {
-                    [1] = 'Create a {C:attention}Megamult Tag'
+                    [1] = '{C:attention}메가배수 태그를 만듭니다'
                 }
             },
             bunc_consumable_edition_bunc_glitter = {
-                ['name'] = 'Glitter',
+                ['name'] = '반짝반짝',
                 ['text'] = {
-                    [1] = 'Create a {C:attention}Ultrachips Tag'
+                    [1] = '{C:attention}메가칩 태그를 만듭니다'
                 }
             },
 
