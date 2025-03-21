@@ -297,27 +297,27 @@ return {
             -- Stake stickers
 
             bunc_cyan_sticker = {
-                ['name'] = 'Cyan Sticker',
+                ['name'] = '시안 스티커',
                 ['text'] = {
-                    [1] = 'Used this Joker',
-                    [2] = 'to win on {C:attention}Cyan',
-                    [3] = '{C:attention}Stake{} difficulty'
+                    [1] = '이 조커를',
+                    [2] = '{C:attention}시안{} {C:attention}스테이크{}',
+                    [3] = '난이도에서 사용했습니다'
                 }
             },
             bunc_pink_sticker = {
-                ['name'] = 'Pink Sticker',
+                ['name'] = '핑크 스티커',
                 ['text'] = {
-                    [1] = 'Used this Joker',
-                    [2] = 'to win on {C:attention}Pink',
-                    [3] = '{C:attention}Stake{} difficulty'
+                    [1] = '이 조커를',
+                    [2] = '{C:attention}핑크{} {C:attention}스테이크{}',
+                    [3] = '난이도에서 사용했습니다'
                 }
             },
             bunc_magenta_sticker = {
-                ['name'] = 'Magenta Sticker',
+                ['name'] = '마젠타 스티커',
                 ['text'] = {
-                    [1] = 'Used this Joker',
-                    [2] = 'to win on {C:attention}Magenta',
-                    [3] = '{C:attention}Stake{} difficulty'
+                    [1] = '이 조커를',
+                    [2] = '{C:attention}마젠타{} {C:attention}스테이크{}',
+                    [3] = '난이도에서 사용했습니다'
                 }
             }
         },
@@ -341,88 +341,84 @@ return {
             -- Main Tarots
 
             c_bunc_adjustment = {
-                ['name'] = 'Adjustment',
+                ['name'] = '조정',
                 ['text'] = {
-                    [1] = 'Enhances up to {C:attention}#1#{}',
-                    [2] = 'selected cards to',
-                    [3] = '{C:attention}#2#s'
+                    [1] = '최대 {C:attention}#1#{}장의',
+                    [2] = '선택된 카드를',
+                    [3] = '{C:attention}#2#로 강화'
                 },
                 ['unlock'] = {
-                    [1] = 'Discover at least',
-                    [2] = '{C:attention}#1#{} items from',
-                    [3] = 'your collection'
+                    [1] = '최소 {C:attention}#1#{} 아이템을',
+                    [2] = '컬렉션에서 발견하기'
                 }
             },
             c_bunc_art = {
-                ['name'] = 'The Art',
+                ['name'] = '예술',
                 ['text'] = {
                     [1] = 'Enhances up to {C:attention}#1#{}',
                     [2] = 'selected cards to',
                     [3] = '{C:attention}#2#s'
                 },
                 ['unlock'] = {
-                    [1] = 'Discover at least',
-                    [2] = '{C:attention}#1#{} items from',
-                    [3] = 'your collection'
+                    [1] = '최소 {C:attention}#1#{} 아이템을',
+                    [2] = '컬렉션에서 발견하기'
                 }
             },
             c_bunc_universe = {
-                ['name'] = 'The Universe',
+                ['name'] = '우주',
                 ['text'] = {
-                    [1] = '{C:attention}Randomizes{} the suit,',
-                    [2] = 'rank, enhancement, edition,',
+                    [1] = '수트, 랭크, 강화, 에디션을',
+                    [2] = '{C:attention}랜덤하게{} 섞습니다',
                     [3] = 'and seal of up to {C:attention}#1#{}',
                     [4] = 'selected cards'
                 },
                 ['unlock'] = {
-                    [1] = 'Discover at least',
-                    [2] = '{C:attention}#1#{} items from',
-                    [3] = 'your collection'
+                    [1] = '최소 {C:attention}#1#{} 아이템을',
+                    [2] = '컬렉션에서 발견하기'
                 }
             },
             c_bunc_lust = {
-                ['name'] = 'Lust',
+                ['name'] = '색욕',
                 ['text'] = {
-                    [1] = 'Gives {C:money}$#1#{} per every',
-                    [2] = 'playing card held',
-                    [3] = 'in hand {C:inactive}(Max of {C:money}$#2#{C:inactive})',
-                    [4] = '{C:inactive}(Currently {C:money}$#3#{C:inactive})'
+                    [1] = '현재 핸드에 있는 모든 카드마다',
+                    [2] = '{C:money}$#1#{} 를 지급합니다',
+                    [3] = '(최대 {C:money}$#2#{C:inactive})',
+                    [4] = '{C:inactive}(현재 {C:money}$#3#{C:inactive})'
                 },
                 ['unlock'] = {
-                    [1] = 'Discover at least',
-                    [2] = '{C:attention}#1#{} items from',
-                    [3] = 'your collection'
+                    [1] = '최소 {C:attention}#1#{} 아이템을',
+                    [2] = '컬렉션에서 발견하기'
                 }
             },
             c_bunc_sky = {
-                ['name'] = 'The Sky',
+                ['name'] = '창공',
                 ['text'] = {
-                    [1] = 'Converts up to',
-                    [2] = '{C:attention}#1#{} selected cards',
-                    [3] = 'to {C:bunc_fleurons}Fleurons{}'
+                    [1] = '최대 {C:attention}#1#{} 장의',
+                    [2] = '선택된 카드를',
+                    [3] = '{C:bunc_halberds}꽃무늬{} 카드로 바꿉니다'
                 }
             },
             c_bunc_abyss = {
-                ['name'] = 'The Abyss',
+                ['name'] = '심연',
                 ['text'] = {
-                    [1] = 'Converts up to',
-                    [2] = '{C:attention}#1#{} selected cards',
-                    [3] = 'to {C:bunc_halberds}Halberds{}'
+                    [1] = '최대 {C:attention}#1#{} 장의',
+                    [2] = '선택된 카드를',
+                    [3] = '{C:bunc_halberds}할버드{} 카드로 바꿉니다'
                 }
             },
         },
         Planet = {
             c_bunc_quaoar = {
-                ['name'] = 'Quaoar'
+                ['name'] = '콰오아'
             },
             c_bunc_haumea = {
-                ['name'] = 'Haumea'
+                ['name'] = '하우메아'
             },
             c_bunc_sedna = {
-                ['name'] = 'Sedna'
+                ['name'] = '세드나'
             },
             c_bunc_makemake = {
-                ['name'] = 'Makemake'
+                ['name'] = '마케마케'
             },
         },
         Spectral = {
@@ -430,7 +426,7 @@ return {
             -- Reworked Spectrals
 
             c_bunc_aura = {
-                ['name'] = '오라',
+                ['name'] = '오오라',
                 ['text'] = {
                     [1] = '{C:dark_edition}포일{}, {C:dark_edition}홀로그래픽{},',
                     [2] = '{C:dark_edition}폴리크롬{}, {C:dark_edition}반짝반짝{} 중 하나를',
@@ -450,10 +446,9 @@ return {
             c_bunc_the_8 = {
                 ['name'] = '여덟',
                 ['text'] = {
-                    [1] = '{C:attention}Link together{} any',
-                    [2] = 'amount of selected',
-                    [3] = 'unlinked cards in hand',
-                    [4] = '{C:inactive,s:0.6}(Unlimited selection while The 8 is selected)'
+                    [1] = '핸드에 연결되지 않은 카드들을',
+                    [2] = '원하는 만큼 {C:attention}연결합니다{}',
+                    [3] = '{C:inactive,s:0.6}(8이 선택될 때 까지 무제한으로 선택 가능)'
                 }
             }
         },
@@ -461,8 +456,8 @@ return {
             c_bunc_the_i = {
                 ['name'] = 'The I',
                 ['text'] = {
-                    [1] = '{C:attention}Link together{} 4 selected cards',
-                    [2] = 'that share the {C:attention}same rank or suit'
+                    [1] = '4개의 선택된 카드를 {C:attention}연결합니다{}',
+                    [2] = '각 카드는 {C:attention}랭크나 수트가 같아야 합니다'
                 }
             },
             c_bunc_the_o = {
