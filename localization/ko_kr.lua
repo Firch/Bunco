@@ -1759,51 +1759,50 @@ return {
         },
         Voucher = {
             v_bunc_lamination = {
-                ['name'] = 'Lamination',
+                ['name'] = '라미네이션',
                 ['text'] = {
-                    [1] = 'Consumables in',
-                    [2] = '{C:attention}Booster Packs{} may',
-                    [3] = 'appear with {C:dark_edition}Edition'
+                    [1] = '{C:attention}부스터 팩의 소모품들이{}',
+                    [2] = '{C:dark_edition}에디션으로 나타날 수 있습니다',
+                    [3] = ''
                 }
             },
             v_bunc_supercoating = {
-                ['name'] = 'Supercoating',
+                ['name'] = '슈퍼코팅',
                 ['text'] = {
-                    [1] = 'All consumables in',
-                    [2] = '{C:attention}Booster Packs{} will',
-                    [3] = 'appear with {C:dark_edition}Edition'
+                    [1] = '{C:attention}부스터 팩의 모든 소모품들이{}',
+                    [2] = '{C:dark_edition}에디션으로 나타납니다',
+                    [3] = ''
                 },
                 ['unlock'] = {
-                    [1] = 'Use {C:attention,E:1}#1#{} consumables',
-                    [2] = 'with {C:attention,E:1}Editions',
+                    [1] = '{C:attention,E:1}#1#{}개의 소비 아이템 사용',
+                    [2] = '{C:attention,E:1}에디션과 함께',
                     [3] = '{C:inactive}(#2#)'
                 }
             },
             v_bunc_hedge_trimmer = {
-                ['name'] = 'Hedge Trimmer',
+                ['name'] = '점수 절단기',
                 ['text'] = {
-                    [1] = "Reduce blind's score",
-                    [2] = 'by {C:attention}#1#%{} every hand played'
+                    [1] = '매번 핸드를 플레이 할 때 마다',
+                    [2] = '블라인드의 점수를 {C:attention}#1#%{} 씩 감소시킵니다'
                 }
             },
             v_bunc_chainsaw = {
-                ['name'] = 'Chainsaw',
+                ['name'] = '전기톱',
                 ['text'] = {
-                    [1] = 'All required scores',
-                    [2] = 'reduced by {C:attention}#1#%{}'
+                    [1] = '모든 블라인드 필요 점수가',
+                    [2] = '{C:attention}#1#%{} 만큼 감소합니다'
                 },
                 ['unlock'] = {
-                    [1] = "Reduce blind's score using",
-                    [2] = 'Hedge Trimmer',
-                    [3] = 'a total of {C:attention,E:1}#1#{} times',
-                    [4] = '{C:inactive}(#2#)'
+                    [1] = "블라인드의 점수를 점수 절단기로 감소",
+                    [2] = '총 {C:attention,E:1}#1#{} 회 달성',
+                    [3] = '{C:inactive}(#2#)'
                 }
             },
             v_bunc_cups_n_balls = {
-                ['name'] = "Cups 'n' Balls",
+                ['name'] = '컵과 공',
                 ['text'] = {
-                    [1] = '{C:attention}+1{} Booster Pack',
-                    [2] = 'slot available in shop'
+                    [1] = '상점에 {C:attention}+1{}개의 부스터 팩 슬롯이 추가됩니다',
+                    [2] = ''
                 }
             },
             v_bunc_shell_game = {
