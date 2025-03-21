@@ -1381,86 +1381,86 @@ return {
         },
         Blind = {
             bl_bunc_paling = {
-                ['name'] = 'The Paling',
+                ['name'] = '말뚝',
                 ['text'] = {
-                    [1] = 'Lose $1 per',
-                    [2] = 'card discarded'
+                    [1] = '카드를 버릴 때 마다',
+                    [2] = '$1를 잃습니다'
                 }
             },
             bl_bunc_umbrella = {
-                ['name'] = 'The Umbrella',
+                ['name'] = '우산',
                 ['text'] = {
-                    [1] = 'After Play, flip all',
-                    [2] = 'cards in hand face down'
+                    [1] = '핸드를 플레이 하고 나면',
+                    [2] = '핸드의 모든 카드가 뒤집힙니다'
                 }
             },
             bl_bunc_tine = {
-                ['name'] = 'The Tine',
+                ['name'] = '갈퀴',
                 ['text'] = {
-                    [1] = 'Each #1# is debuffed'
+                    [1] = '각 #1#이 디버프됩니다'
                 }
             },
             bl_bunc_swing = {
-                ['name'] = 'The Swing',
+                ['name'] = '스윙',
                 ['text'] = {
-                    [1] = 'After Play or Discard,',
-                    [2] = 'flip all cards'
+                    [1] = '카드를 플레이하거나 버리면',
+                    [2] = '모든 카드를 뒤집습니다'
                 }
             },
             bl_bunc_miser = {
-                ['name'] = 'The Miser',
+                ['name'] = '구두쇠',
                 ['text'] = {
-                    [1] = 'Skip the shop after',
-                    [2] = 'defeating this blind'
+                    [1] = '이 블라인드를 승리하고 나면',
+                    [2] = '상점이 열리지 않습니다'
                 }
             },
             bl_bunc_gate = {
-                ['name'] = 'The Gate',
+                ['name'] = '성문',
                 ['text'] = {
-                    [1] = 'Cards cannot',
-                    [2] = 'be deselected'
+                    [1] = '카드가',
+                    [2] = '선택 해제 될 수 없습니다'
                 }
             },
             bl_bunc_flame = {
-                ['name'] = 'The Flame',
+                ['name'] = '화염',
                 ['text'] = {
-                    [1] = 'All Enhanced cards',
-                    [2] = 'are debuffed'
+                    [1] = '모든 강화된 카드는',
+                    [2] = '디버프됩니다'
                 }
             },
             bl_bunc_mask = {
-                ['name'] = 'The Mask',
+                ['name'] = '가면',
                 ['text'] = {
-                    [1] = '#1# has the base',
-                    [2] = 'Chips and Mult of #2#'
+                    [1] = '#1# 은 기본적으로',
+                    [2] = '#2#칩과 배수를 가집니다'
                 }
             },
             bl_bunc_bulwark = {
-                ['name'] = 'The Bulwark',
+                ['name'] = '성채',
                 ['text'] = {
-                    [1] = 'Playing a #1# discards',
-                    [2] = 'all cards in hand'
+                    [1] = '#1#을 플레이하면',
+                    [2] = '핸드의 모든 카드를 버립니다'
                 }
             },
             bl_bunc_knoll = {
-                ['name'] = 'The Knoll',
+                ['name'] = '둔덕',
                 ['text'] = {
-                    [1] = 'Having more than $5',
-                    [2] = 'debuffs first hand drawn'
+                    [1] = '$5 보다 더 많은 돈을 보유하면',
+                    [2] = '첫 번째의 핸드 플레이가 디버프됩니다'
                 }
             },
             bl_bunc_stone = {
-                ['name'] = 'The Stone',
+                ['name'] = '암석',
                 ['text'] = {
-                    [1] = '+1X Base score for',
-                    [2] = 'every $10 held'
+                    [1] = '10$ 보유마다',
+                    [2] = '요구 점수가 +1X 증가합니다'
                 }
             },
             bl_bunc_sand = {
-                ['name'] = 'The Sand',
+                ['name'] = '모래',
                 ['text'] = {
-                    [1] = '+1X Base score for',
-                    [2] = 'every tag held'
+                    [1] = '모든 태그 갯수마다',
+                    [2] = '요구 점수가 +1X 증가합니다'
                 }
             },
             bl_bunc_blade = {
@@ -1523,44 +1523,44 @@ return {
             -- Final
 
             bl_bunc_final_crown = {
-                ['name'] = 'Chartreuse Crown',
+                ['name'] = '샤르트뢰즈 크라운',
                 ['text'] = {
-                    [1] = 'All Spade, Heart, Club, and Diamond',
-                    [2] = 'base suit cards are debuffed'
+                    [1] = '모든 스페이드, 클럽, 다이아몬드, 하트',
+                    [2] = '기본 수트 카드들은 디버프됩니다'
                 }
             },
             bl_bunc_final_trident = {
-                ['name'] = 'Vermilion Trident',
+                ['name'] = '주홍색 삼지창',
                 ['text'] = {
-                    [1] = '+1X Base score for',
-                    [2] = 'every purchase this Ante'
+                    [1] = '이번 엔티의 모든 구매마다',
+                    [2] = '+1X 요구 점수를 추가합니다'
                 }
             },
             bl_bunc_final_tower = {
-                ['name'] = 'Indigo Tower',
+                ['name'] = '쪽빛 탑',
                 ['text'] = {
-                    [1] = 'Cards not played previously',
-                    [2] = 'this Ante are debuffed'
+                    [1] = '이번 앤티에 플레이 되지 않은',
+                    [2] = '카드는 디버프됩니다'
                 }
             },
             bl_bunc_final_dagger = {
-                ['name'] = 'Magenta Dagger',
+                ['name'] = '자홍색 단검',
                 ['text'] = {
-                    [1] = 'Discarding cards plays them',
-                    [2] = 'and subtracts scored value'
+                    [1] = '카드를 버리는 경우도 플레이됩니다',
+                    [2] = '그리고 이 때의 점수를 감점합니다'
                 }
             },
             bl_bunc_final_shield = {
-                ['name'] = 'Turquoise Shield',
+                ['name'] = '터키석 방패',
                 ['text'] = {
-                    [1] = 'Excess score this Ante adds',
-                    [2] = "to this blind's required score"
+                    [1] = '이번 앤티에서의 초과 점수는',
+                    [2] = '이 블라인드의 요구 점수에 합산됩니다'
                 }
             }
         },
         Back = {
             b_bunc_fairy = {
-                ['name'] = 'Fairy Deck',
+                ['name'] = '요정 덱',
                 ['text'] = {
                     [1] = 'After defeating each',
                     [2] = '{C:attention}Boss Blind{}, add #1#',
@@ -1573,7 +1573,7 @@ return {
                 }
             },
             b_bunc_digital = {
-                ['name'] = 'Digital Deck',
+                ['name'] = '디지털 덱',
                 ['text'] = {
                     [1] = '{C:bunco_virtual_dark}Polymino{} cards may',
                     [2] = 'appear in the shop,',
