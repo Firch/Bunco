@@ -116,7 +116,7 @@ return {
 
             -- Editions
 
-            bunc_glitter = '반짝반짝',
+            bunc_glitter = '글리터',
             bunc_fluorescent = '형광',
 
             -- Stickers
@@ -217,7 +217,7 @@ return {
                 }
             },
             bunc_consumable_edition_bunc_glitter = {
-                ['name'] = 'Glitter',
+                ['name'] = '글리터',
                 ['text'] = {
                     [1] = 'Create a {C:attention}Ultrachips Tag'
                 }
@@ -334,12 +334,12 @@ return {
             -- Reworked Tarots
 
             c_bunc_wheel_of_fortune = {
-                ['name'] = 'The Wheel of Fortune',
+                ['name'] = '운명의 수레바퀴',
                 ['text'] = {
-                    [1] = '{C:green}#1# in #2#{} chance to add',
-                    [2] = '{C:dark_edition}Foil{}, {C:dark_edition}Holographic{},',
-                    [3] = '{C:dark_edition}Polychrome{}, or {C:dark_edition}Glitter{} edition',
-                    [4] = 'to a random {C:attention}Joker'
+                    [1] = '{C:green}#1# / #2#{} 의 확률로',
+                    [2] = '{C:dark_edition}포일{}, {C:dark_edition}홀로그래픽{},',
+                    [3] = '{C:dark_edition}폴리크롬{}, or {C:dark_edition}글리터{} 에디션을',
+                    [4] = '무작위 {C:attention}Joker{}에 추가합니다'
                 }
             },
 
@@ -1647,11 +1647,11 @@ return {
             -- Edition tags
 
             tag_bunc_glitter = {
-                ['name'] = 'Glitter Tag',
+                ['name'] = '글리터 태그',
                 ['text'] = {
-                    [1] = 'Next base edition shop',
-                    [2] = 'Joker is free and',
-                    [3] = 'becomes {C:dark_edition}Glitter'
+                    [1] = '다음 기본 에디션 상점',
+                    [2] = '조커가 무료이며',
+                    [3] = '{C:dark_edition}글리터{}가 됩니다.'
                 }
             },
             tag_bunc_fluorescent = {
@@ -1747,9 +1747,9 @@ return {
         },
         Edition = {
             e_bunc_glitter = {
-                ['name'] = 'Glitter',
+                ['name'] = '글리터',
                 ['text'] = {
-                    [1] = '{X:chips,C:white}X#1#{} Chips'
+                    [1] = '{X:chips,C:white}X#1#{} 개의 칩'
                 }
             },
             e_bunc_fluorescent = {
