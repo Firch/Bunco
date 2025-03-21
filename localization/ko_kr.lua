@@ -19,12 +19,12 @@ return {
             bunc_gameplay_reworks_desc_2 = '바닐라 발라트로의 일부 동작을 재설계했습니다',
 
             bunc_fixed_badges = '뱃지 시스템 개선',
-            bunc_fixed_badges_desc = 'Changes the badges on consumables by replacing confusing',
-            bunc_fixed_badges_desc_2 = 'flavor text with indication of their way of obtaining',
+            bunc_fixed_badges_desc = '소모품의 뱃지를 얻는 방법을 덜 혼란스럽게 표기하였습니다.',
+            bunc_fixed_badges_desc_2 = '',
 
-            bunc_jokerlike_consumable_editions = 'Editions in Consumables Slot',
-            bunc_jokerlike_consumable_editions_desc = 'Reverts the vanilla behavior of consumables with',
-            bunc_jokerlike_consumable_editions_desc_2 = 'editions acting like Jokers (for other conflicting mods)',
+            bunc_jokerlike_consumable_editions = '소모품 슬롯의 모드 충돌 개선',
+            bunc_jokerlike_consumable_editions_desc = '다른 모드에서 소모품이 조커처럼 동작하는 경우',
+            bunc_jokerlike_consumable_editions_desc_2 = '동작을 바닐라로 되돌립니다 (모드 충돌 방지)',
 
             bunc_default_true = '기본으로 활성화됨',
             bunc_default_false = '기본으로 비활성화됨',
@@ -37,7 +37,7 @@ return {
             bunc_copied = '복사됨!',
             bunc_nothing = '없습니다',
             bunc_chips = '칩',
-            bunc_loop = 'Loop!',
+            bunc_loop = '반복됨!',
             bunc_chance = '기회',
             bunc_word_and = ',',
             bunc_debuffed = '디버프됨!',
@@ -100,16 +100,16 @@ return {
                 [2] = '각각의 카드는 다른 수트여야 합니다.'
             },
             ['bunc_Spectrum House'] = {
-                [1] = 'A Three of a Kind and a Pair with',
-                [2] = 'each card having a different suit'
+                [1] = '각각 다른 수트의 카드로 구성된 트리플과 페어',
+                [2] = ''
             },
             ['bunc_Spectrum Five'] = {
-                [1] = '5 cards with the same rank,',
-                [2] = 'each with a different suit'
+                [1] = '같은 랭크를 가진 5장의 카드',
+                [2] = '각각의 카드는 다른 수트여야 합니다.'
             },
             ['bunc_Deal'] = {
-                [1] = '5 ranks picked',
-                [2] = 'by Registration Plate'
+                [1] = '번호판 조커에 의해 선택된 5개의 랭크',
+                [2] = ''
             }
         },
         labels = {
