@@ -165,77 +165,76 @@ return {
             bunc_light_suits = {
                 ['name'] = '라이트 수트',
                 ['text'] = {
-                    [1] = '{C:hearts}Hearts{} and {C:diamonds}Diamonds'
+                    [1] = '{C:hearts}하트{} 그리고 {C:diamonds}다이아몬드{} 카드'
                 }
             },
             bunc_light_suits_exotic = {
-                ['name'] = '라이트 수트',
+                ['name'] = '라이트 수트(엑조틱)',
                 ['text'] = {
-                    [1] = '{C:hearts}Hearts{}, {C:diamonds}Diamonds,',
-                    [2] = 'and {C:bunc_fleurons}Fleurons'
+                    [1] = '{C:hearts}하트{}, {C:diamonds}다이아몬드,',
+                    [2] = '그리고 {C:bunc_fleurons}꽃무늬{} 카드'
                 }
             },
             bunc_dark_suits = {
                 ['name'] = '다크 수트',
                 ['text'] = {
-                    [1] = '{C:spades}Spades{} and {C:clubs}Clubs'
+                    [1] = '{C:spades}스페이드{} 나 {C:clubs}클럽 카드'
                 }
             },
             bunc_dark_suits_exotic = {
-                ['name'] = '다크 수트',
+                ['name'] = '다크 수트(엑조틱)',
                 ['text'] = {
-                    [1] = '{C:spades}Spades{}, {C:clubs}Clubs,',
-                    [2] = 'and {C:bunc_halberds}Halberds'
+                    [1] = '{C:spades}스페이드{}, {C:clubs}클럽',
+                    [2] = '그리고 {C:bunc_halberds}할버드{} 카드'
                 }
             },
             bunc_exotic_cards = {
                 ['name'] = '엑조틱 카드',
                 ['text'] = {
-                    [1] = '{C:bunc_fleurons}꽃무니나{} {C:bunc_halberds}할버드{} 수트의 카드',
+                    [1] = '{C:bunc_fleurons}꽃무늬{}나 {C:bunc_halberds}할버드{} 수트의 카드',
                     [2] = ''
                 }
             },
             bunc_consumable_edition_foil = {
                 ['name'] = '포일',
                 ['text'] = {
-                    [1] = '{C:attention}칩 태그를 만듭니다'
+                    [1] = '{C:attention}칩{} 태그를 만듭니다'
                 }
             },
             bunc_consumable_edition_holo = {
                 ['name'] = '홀로그래픽',
                 ['text'] = {
-                    [1] = '{C:attention}배수 태그를 만듭니다'
+                    [1] = '{C:attention}배수{} 태그를 만듭니다'
                 }
             },
             bunc_consumable_edition_polychrome = {
                 ['name'] = '폴리크롬',
                 ['text'] = {
-                    [1] = '{C:attention}메가배수 태그를 만듭니다'
+                    [1] = '{C:attention}메가배수{} 태그를 만듭니다'
                 }
             },
             bunc_consumable_edition_bunc_glitter = {
                 ['name'] = '반짝반짝',
                 ['text'] = {
-                    [1] = '{C:attention}울트라칩 태그를 만듭니다'
+                    [1] = '{C:attention}울트라칩{} 태그를 만듭니다'
                 }
             },
 
             -- Undiscovered
 
             undiscovered_polymino = {
-                ['name'] = 'Not Discovered',
+                ['name'] = '발견되지 않음',
                 ['text'] = {
-                    [1] = 'Purchase or use',
-                    [2] = 'this card in an',
-                    [3] = 'unseeded run to',
-                    [4] = 'learn what it does'
+                    [1] = '시드를 사용하지 않은 런에서',
+                    [2] = '이 카드를 사거나 사용해 보세요',
+                    [3] = '무슨 일이 생길까요?'
                 }
             },
 
             -- Booster Packs
 
             p_bunc_blind = {
-                ['name'] = 'Blind Pack',
+                ['name'] = '블라인드 팩',
                 ['text'] = {
                     [1] = 'Choose one of up to',
                     [2] = '{C:attention}#1# Boss Blinds{} to',
@@ -243,7 +242,7 @@ return {
                 }
             },
             p_bunc_virtual_normal = {
-                ['name'] = 'Virtual Pack',
+                ['name'] = '버츄얼 팩',
                 ['text'] = {
                     [1] = 'Draw the whole deck and',
                     [2] = 'choose {C:attention}#1#{} of up to',
@@ -252,7 +251,7 @@ return {
                 }
             },
             p_bunc_virtual_jumbo = {
-                ['name'] = 'Jumbo Virtual Pack',
+                ['name'] = '점보 버츄얼 팩',
                 ['text'] = {
                     [1] = 'Draw the whole deck and',
                     [2] = 'choose {C:attention}#1#{} of up to',
@@ -261,7 +260,7 @@ return {
                 }
             },
             p_bunc_virtual_mega = {
-                ['name'] = 'Mega Virtual Pack',
+                ['name'] = '메가 버츄얼 팩',
                 ['text'] = {
                     [1] = 'Draw the whole deck and',
                     [2] = 'choose {C:attention}#1#{} of up to',
@@ -431,25 +430,25 @@ return {
             -- Reworked Spectrals
 
             c_bunc_aura = {
-                ['name'] = 'Aura',
+                ['name'] = '오라',
                 ['text'] = {
-                    [1] = 'Add {C:dark_edition}Foil{}, {C:dark_edition}Holographic{},',
-                    [2] = '{C:dark_edition}Polychrome{}, or {C:dark_edition}Glitter{} edition',
-                    [3] = 'to {C:attention}1{} selected card in hand'
+                    [1] = '{C:dark_edition}포일{}, {C:dark_edition}홀로그래픽{},',
+                    [2] = '{C:dark_edition}폴리크롬{}, {C:dark_edition}반짝반짝{} 중 하나를',
+                    [3] = '핸드에 있는 {C:attention}1{}개의 선택된 카드에 적용합니다'
                 }
             },
 
             -- Main Spectrals
 
             c_bunc_cleanse = {
-                ['name'] = 'Cleanse',
+                ['name'] = '정화',
                 ['text'] = {
-                    [1] = 'Add {C:dark_edition}Fluorescent{} to',
-                    [2] = '{C:attention}#1#{} selected cards in hand'
+                    [1] = '{C:dark_edition}형광{}을',
+                    [2] = '핸드에 있는 선택된 카드{C:attention}#1#{}에 적용합니다'
                 }
             },
             c_bunc_the_8 = {
-                ['name'] = 'The 8',
+                ['name'] = '여덟',
                 ['text'] = {
                     [1] = '{C:attention}Link together{} any',
                     [2] = 'amount of selected',
@@ -537,72 +536,67 @@ return {
             -- Reworked Jokers
 
             j_bunc_luchador = {
-                ['name'] = 'Luchador',
+                ['name'] = '루차도르',
                 ['text'] = {
-                    [1] = 'Sell this card to',
-                    [2] = 'create a free',
-                    [3] = '{C:attention}Breaking Tag'
+                    [1] = '이 카드를 팔아서',
+                    [2] = '무료 {C:attention}브레이킹 태그{}를 얻습니다'
                 }
             },
             j_bunc_red_card = {
-                ['name'] = 'Red Card',
+                ['name'] = '레드 카드',
                 ['text'] = {
-                    [1] = 'This Joker gains {C:red}+#1#{} Mult',
-                    [2] = 'per skipped choice',
-                    [3] = 'in {C:attention}Booster Pack{}',
-                    [4] = '{C:inactive}(Currently {C:red}+#2#{C:inactive} Mult)'
+                    [1] = '이 조커는 부스터 팩을 건너뛸 때 마다',
+                    [2] = '{C:red}+#1#{} 배수를 얻습니다',
+                    [3] = '{C:inactive}(현재 {C:red}+#2#{C:inactive} 배수)'
                 }
             },
 
             -- Main Jokers
 
             j_bunc_cassette_a = {
-                ['name'] = 'Cassette (A Side)',
+                ['name'] = '카세트 (A사이드)',
                 ['text'] = {
-                    [1] = 'Cards with {C:attention}light suit',
-                    [2] = 'give {C:chips}+#1#{} Chips when scored'
+                    [1] = '{C:attention}라이트 수트{}카드는',
+                    [2] = '점수를 얻을 때 {C:chips}+#1#{}칩을 얻습니다'
                 }
             },
             j_bunc_cassette_b = {
-                ['name'] = 'Cassette (B Side)',
+                ['name'] = '카세트 (B사이드)',
                 ['text'] = {
-                    [1] = 'Cards with {C:attention}dark suit',
-                    [2] = 'give {C:mult}+#2#{} Mult when scored'
+                    [1] = '{C:attention}다크 수트{}카드는',
+                    [2] = '점수를 얻을 때 {C:mult}+#2#{}배수를 얻습니다'
                 }
             },
             j_bunc_cassette_extra = {
                 ['text'] = {
-                    [1] = '{C:inactive}On discard, flip this Joker'
+                    [1] = '{C:inactive}카드를 버릴 때, 이 조커를 뒤집습니다'
                 }
             },
             j_bunc_mosaic = {
-                ['name'] = 'Mosaic Joker',
+                ['name'] = '모자이크 조커',
                 ['text'] = {
-                    [1] = 'Played {C:attention}Stone Cards',
-                    [2] = 'give {C:mult}+#1#{} Mult',
-                    [3] = 'when scored'
+                    [1] = '{C:attention}스톤 카드{}를 플레이하면',
+                    [2] = '{C:mult}+#1#{} 배수를 얻습니다'
                 },
                 ['unlock'] = {
-                    [1] = 'Play a 5 card hand',
-                    [2] = 'that contains only',
-                    [3] = '{C:attention,E:1}Stone{} cards'
+                    [1] = '{C:attention,E:1}스톤 카드{}만 있는',
+                    [2] = '5개의 카드를 플레이'
                 }
             },
             j_bunc_voxel = {
-                ['name'] = 'Voxel Joker',
+                ['name'] = '복셀 조커',
                 ['text'] = {
-                    [1] = '{X:mult,C:white}X#1#{} Mult, {X:mult,C:white}-X#2#{} Mult for each',
-                    [2] = '{C:attention}Enhanced card{} in your {C:attention}full deck{}',
-                    [3] = '{C:inactive}(Currently {X:mult,C:white}X#3#{C:inactive} Mult)'
+                    [1] = '{C:attention}full deck{}의 {C:attention}강화 카드{} 마다',
+                    [2] = '{X:mult,C:white}X#1#{} 배수, {X:mult,C:white}-X#2#{} 배수를 얻습니다',
+                    [3] = '{C:inactive}(Currently {X:mult,C:white}X#3#{C:inactive} 배수)'
                 },
                 ['unlock'] = {
-                    [1] = 'Have at least {C:attention}#1#',
-                    [2] = '{E:1,C:attention}Enhanced{} cards in',
-                    [3] = 'your deck'
+                    [1] = '최소한 {C:attention}#1#',
+                    [2] = '{E:1,C:attention}강화 카드{}가 덱에 있을 것'
                 }
             },
             j_bunc_crop_circles = {
-                ['name'] = 'Crop Circles',
+                ['name'] = '크롭 서클',
                 ['text'] = {
                     [1] = 'Base suit {C:clubs}Clubs{} give {C:mult}+3{} Mult,',
                     [2] = '{C:attention}8s{} give {C:mult}+2{} Mult,',
@@ -1562,22 +1556,21 @@ return {
             b_bunc_fairy = {
                 ['name'] = '요정 덱',
                 ['text'] = {
-                    [1] = 'After defeating each',
-                    [2] = '{C:attention}Boss Blind{}, add #1#',
-                    [3] = 'random {C:bunco_exotic,T:bunc_exotic_cards}#2#',
-                    [4] = 'to your deck'
+                    [1] = '{C:attention}보스 블라인드{} 이후에 #1#',
+                    [2] = '랜덤한 {C:bunco_exotic,T:bunc_exotic_cards}#2#',
+                    [3] = '을 덱에 추가합니다'
                 },
                 ['unlock'] = {
-                    [1] = 'Play {E:1,C:attention}5 different suits',
-                    [2] = 'in a single hand'
+                    [1] = '{E:1,C:attention}5개의 다른 수트{} 를',
+                    [2] = '한번의 핸드로 플레이한 경우'
                 }
             },
             b_bunc_digital = {
                 ['name'] = '디지털 덱',
                 ['text'] = {
-                    [1] = '{C:bunco_virtual_dark}Polymino{} cards may',
-                    [2] = 'appear in the shop,',
-                    [3] = "start with {C:bunco_virtual_dark,T:c_bunc_the_i}The I{}"
+                    [1] = '{C:bunco_virtual_dark}폴리미노{} 카드가',
+                    [2] = '상점에 나타날 수 있으며',
+                    [3] = "{C:bunco_virtual_dark,T:c_bunc_the_i}The I{} 부터 시작합니다"
                 }
             }
         },
@@ -1594,9 +1587,9 @@ return {
             tag_bunc_double = {
                 ['name'] = '더블 태그',
                 ['text'] = {
-                    [1] = 'Gives a copy of the',
-                    [2] = 'next selected {C:attention}Tag{}',
-                    [3] = '{s:0.6,C:attention}Double and Triple Tags{s:0.8} excluded'
+                    [1] = '다음에 선택된 {C:attention}태그{}의',
+                    [2] = '복사본을 얻습니다',
+                    [3] = '{s:0.6,C:attention}더블, 트리플 태그{s:0.8} 는 제외됩니다'
                 }
             },
             tag_bunc_d_six = {
