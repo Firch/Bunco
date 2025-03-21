@@ -1888,8 +1888,8 @@ return {
             m_bunc_copper = {
                 ['name'] = '쿠퍼 카드',
                 ['text'] = {
-                    [1] = '{C:attention}인접한{} 쿠퍼 카드가',
-                    [2] = '득점 하면',
+                    [1] = '{C:attention}인접한{} 다른 쿠퍼',
+                    [2] = '카드가 득점 하면',
                     [3] = '다시 득점합니다'
                 },
             },
@@ -1903,27 +1903,27 @@ return {
         },
         Stake = {
             stake_bunc_cyan = {
-                ['name'] = 'Cyan Stake',
+                ['name'] = '시안 스테이크',
                 ['text'] = {
-                    [1] = 'Shop can have {C:attention}Scattering{} Jokers',
-                    [2] = '{C:inactive,s:0.8}(Destroys random adjacent Joker when removed)',
-                    [3] = '{s:0.8}Applies all previous Stakes'
+                    [1] = '상점에 {C:attention}Scattering{} 조커가 있습니다',
+                    [2] = '{C:inactive,s:0.8}(제거될 때 무작위 인접 조커를 파괴합니다)',
+                    [3] = '{s:0.8}이전 스테이크를 모두 적용합니다'
                 }
             },
             stake_bunc_pink = {
-                ['name'] = 'Pink Stake',
+                ['name'] = '핑크 스테이크',
                 ['text'] = {
-                    [1] = 'Shop can have {C:attention}Hindered{} Jokers',
-                    [2] = '{C:inactive,s:0.8}(Stays in place until the end of the round after being sold)',
-                    [3] = '{s:0.8}Applies all previous Stakes'
+                    [1] = '상점에 {C:attention}Hindered{} 조커가 있습니다',
+                    [2] = '{C:inactive,s:0.8}(판매된 후 라운드 종료 시까지 제자리에 남아있습니다)',
+                    [3] = '{s:0.8}이전 스테이크를 모두 적용합니다'
                 }
             },
             stake_bunc_magenta = {
-                ['name'] = 'Magenta Stake',
+                ['name'] = '마젠다 스테이크',
                 ['text'] = {
-                    [1] = 'Shop can have {C:attention}Reactive{} Jokers',
-                    [2] = '{C:inactive,s:0.8}(Debuffed if no blinds are skipped this Ante)',
-                    [3] = '{s:0.8}Applies all previous Stakes'
+                    [1] = '상점에 {C:attention}Reactive{} 조커가 있습니다',
+                    [2] = '{C:inactive,s:0.8}(이번 앤트에서 블라인드를 하나도 건너뛰지 않으면 디버프됩니다)',
+                    [3] = '{s:0.8}이전 스테이크를 모두 적용합니다'
                 }
             }
         }
