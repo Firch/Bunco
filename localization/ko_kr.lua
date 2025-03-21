@@ -114,7 +114,7 @@ return {
         },
         labels = {
             -- Editions
-            bunc_glitter = '글리터',
+            bunc_glitter = '반짝반짝',
             bunc_fluorescent = '형광',
 
             -- Stickers
@@ -214,7 +214,7 @@ return {
                 }
             },
             bunc_consumable_edition_bunc_glitter = {
-                ['name'] = '글리터',
+                ['name'] = '반짝반짝',
                 ['text'] = {
                     [1] = '{C:attention}메가칩 태그를 만듭니다'
                 }
@@ -335,7 +335,7 @@ return {
                 ['text'] = {
                     [1] = '{C:green}#1# / #2#{} 의 확률로',
                     [2] = '{C:dark_edition}포일{}, {C:dark_edition}홀로그래픽{},',
-                    [3] = '{C:dark_edition}폴리크롬{}, or {C:dark_edition}글리터{} 에디션을',
+                    [3] = '{C:dark_edition}폴리크롬{}, or {C:dark_edition}반짝반짝{} 에디션을',
                     [4] = '무작위 {C:attention}Joker{}에 추가합니다'
                 }
             },
@@ -1644,11 +1644,11 @@ return {
             -- Edition tags
 
             tag_bunc_glitter = {
-                ['name'] = '글리터 태그',
+                ['name'] = '반짝반짝 태그',
                 ['text'] = {
                     [1] = '다음 기본 에디션 상점',
                     [2] = '조커가 무료이며',
-                    [3] = '{C:dark_edition}글리터{}가 됩니다.'
+                    [3] = '{C:dark_edition}반짝반짝{}가 됩니다.'
                 }
             },
             tag_bunc_fluorescent = {
@@ -1744,7 +1744,7 @@ return {
         },
         Edition = {
             e_bunc_glitter = {
-                ['name'] = '글리터',
+                ['name'] = '반짝반짝',
                 ['text'] = {
                     [1] = '{X:chips,C:white}X#1#{} 개의 칩'
                 }
