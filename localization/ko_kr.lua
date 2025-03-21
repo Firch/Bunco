@@ -118,9 +118,9 @@ return {
             bunc_fluorescent = '형광',
 
             -- Stickers
-            bunc_scattering = '흩어진',
-            bunc_hindered = '방해받는',
-            bunc_reactive = '반응하는'
+            bunc_scattering = '산산조각',
+            bunc_hindered = '방해',
+            bunc_reactive = '리액티브'
         },
         collab_palettes = {
             default_Spades = {
@@ -273,26 +273,25 @@ return {
             -- Stickers
 
             bunc_scattering = {
-                ['name'] = 'Scattering',
+                ['name'] = '산산조각',
                 ['text'] = {
-                    [1] = 'Destroys random',
-                    [2] = 'adjacent Joker',
-                    [3] = 'when removed'
+                    [1] = '조커가 제거될 때',
+                    [2] = '인접한 임의의 조커가',
+                    [3] = '파괴됩니다'
                 }
             },
             bunc_hindered = {
-                ['name'] = 'Hindered',
+                ['name'] = '방해',
                 ['text'] = {
-                    [1] = 'Stays in place until',
-                    [2] = 'the end of the round',
-                    [3] = 'after being sold'
+                    [1] = '판매 된 후',
+                    [2] = '라운드가 끝날 때까지',
+                    [3] = '원래 자리에 유지 됩니다'
                 }
             },
             bunc_reactive = {
-                ['name'] = 'Reactive',
+                ['name'] = '리액티브',
                 ['text'] = {
-                    [1] = 'Debuffed if no blinds',
-                    [2] = 'are skipped this Ante'
+                    [1] = '이번 앤티에서 블라인드가 스킵되지 않았다면 디버프됩니다'
                 }
             },
 
@@ -1465,59 +1464,59 @@ return {
                 }
             },
             bl_bunc_blade = {
-                ['name'] = 'The Blade',
+                ['name'] = '칼날',
                 ['text'] = {
-                    [1] = 'First time score exceeds #1#',
-                    [2] = 'makes played hand score 0'
+                    [1] = '처음으로 #1#점을 초과한 경우',
+                    [2] = '플레이한 핸드의 점수가 0이 됩니다'
                 }
             },
             bl_bunc_claw = {
-                ['name'] = 'The Claw',
+                ['name'] = '발톱',
                 ['text'] = {
-                    [1] = 'Discarded cards',
-                    [2] = 'go back into the deck'
+                    [1] = '버린 카드들이',
+                    [2] = '덱으로 다시 들어갑니다'
                 }
             },
             bl_bunc_veil = {
-                ['name'] = 'The Veil',
+                ['name'] = '베일',
                 ['text'] = {
-                    [1] = 'Selected cards are',
-                    [2] = 'flipped face down'
+                    [1] = '선택한 카드가',
+                    [2] = '뒤집혀서 드러납니다'
                 }
             },
             bl_bunc_cadaver = {
-                ['name'] = 'The Cadaver',
+                ['name'] = '사체',
                 ['text'] = {
-                    [1] = 'Hand must contain',
-                    [2] = 'a face card'
+                    [1] = '핸드에 반드시',
+                    [2] = '페이스 카드가 있어야 합니다'
                 }
             },
             bl_bunc_wind = {
-                ['name'] = 'The Wind',
+                ['name'] = '바람',
                 ['text'] = {
-                    [1] = 'Leftmost Joker',
-                    [2] = 'is debuffed'
+                    [1] = '맨 왼쪽에 위치한 조커가',
+                    [2] = '디버프됩니다'
                 }
             },
             bl_bunc_prince = {
-                ['name'] = 'The Prince',
+                ['name'] = '왕자',
                 ['text'] = {
-                    [1] = 'All Jokers are debuffed',
-                    [2] = 'until first hand is played'
+                    [1] = '첫 번째 핸드가 플레이 될 때 까지',
+                    [2] = '모든 조커가 디버프됩니다'
                 }
             },
             bl_bunc_depths = {
-                ['name'] = 'The Depths',
+                ['name'] = '해저',
                 ['text'] = {
-                    [1] = 'After Play, gain Eternal,',
-                    [2] = 'Perishable, or Scattering tag'
+                    [1] = '플레이 이후',
+                    [2] = '이터널, 부패, 산산조각 태그를 얻습니다'
                 }
             },
             bl_bunc_chasm = {
-                ['name'] = 'The Chasm',
+                ['name'] = '균열',
                 ['text'] = {
-                    [1] = 'After Play, gain Hindered,',
-                    [2] = 'Reactive, or Rental tag'
+                    [1] = '플레이 이후',
+                    [2] = '리액티브, 대여, 방해 태그를 얻습니다'
                 }
             },
 
@@ -1714,31 +1713,31 @@ return {
                 }
             },
             tag_bunc_scattering = {
-                ['name'] = 'Scattering Tag',
+                ['name'] = '산산조각 태그',
                 ['text'] = {
-                    [1] = 'Next shop Joker',
-                    [2] = 'will gain {C:attention}Scattering{} sticker'
+                    [1] = '다음에 구매하는 조커가',
+                    [2] = '{C:attention}산산조각{} 스티커를 가집니다'
                 }
             },
             tag_bunc_hindered = {
-                ['name'] = 'Hindered Tag',
+                ['name'] = '방해 태그',
                 ['text'] = {
-                    [1] = 'Next shop Joker',
-                    [2] = 'will gain {C:attention}Hindered{} sticker'
+                    [1] = '다음에 구매하는 조커가',
+                    [2] = '{C:attention}방해{} 스티커를 가집니다'
                 }
             },
             tag_bunc_reactive = {
-                ['name'] = 'Reactive Tag',
+                ['name'] = '리액티브 태그',
                 ['text'] = {
-                    [1] = 'Next shop Joker',
-                    [2] = 'will gain {C:attention}Reactive{} sticker'
+                    [1] = '다음에 구매하는 조커가',
+                    [2] = '{C:attention}리액티브{} 스티커를 가집니다'
                 }
             },
             tag_bunc_rental = {
-                ['name'] = 'Rental Tag',
+                ['name'] = '대여 태그',
                 ['text'] = {
-                    [1] = 'Next shop Joker',
-                    [2] = 'will gain {C:attention}Rental{} sticker'
+                    [1] = '다음에 구매하는 조커가',
+                    [2] = '{C:attention}대여{} 스티커를 가집니다'
                 }
             }
         },
@@ -1750,10 +1749,10 @@ return {
                 }
             },
             e_bunc_fluorescent = {
-                ['name'] = 'Fluorescent',
+                ['name'] = '형광',
                 ['text'] = {
-                    [1] = 'Cannot be flipped, debuffed',
-                    [2] = 'or forced to be selected'
+                    [1] = '뒤집히거나 디버프당하거나',
+                    [2] = '강제로 선택될 수 없습니다'
                 }
             }
         },
@@ -1901,7 +1900,7 @@ return {
             stake_bunc_cyan = {
                 ['name'] = '시안 스테이크',
                 ['text'] = {
-                    [1] = '상점에 {C:attention}Scattering{} 조커가 있습니다',
+                    [1] = '상점에 {C:attention}산산조각{} 조커가 있습니다',
                     [2] = '{C:inactive,s:0.8}(제거될 때 무작위 인접 조커를 파괴합니다)',
                     [3] = '{s:0.8}이전 스테이크를 모두 적용합니다'
                 }
@@ -1909,7 +1908,7 @@ return {
             stake_bunc_pink = {
                 ['name'] = '핑크 스테이크',
                 ['text'] = {
-                    [1] = '상점에 {C:attention}Hindered{} 조커가 있습니다',
+                    [1] = '상점에 {C:attention}방해{} 조커가 있습니다',
                     [2] = '{C:inactive,s:0.8}(판매된 후 라운드 종료 시까지 제자리에 남아있습니다)',
                     [3] = '{s:0.8}이전 스테이크를 모두 적용합니다'
                 }
@@ -1917,7 +1916,7 @@ return {
             stake_bunc_magenta = {
                 ['name'] = '마젠다 스테이크',
                 ['text'] = {
-                    [1] = '상점에 {C:attention}Reactive{} 조커가 있습니다',
+                    [1] = '상점에 {C:attention}리액티브{} 조커가 있습니다',
                     [2] = '{C:inactive,s:0.8}(이번 앤트에서 블라인드를 하나도 건너뛰지 않으면 디버프됩니다)',
                     [3] = '{s:0.8}이전 스테이크를 모두 적용합니다'
                 }
