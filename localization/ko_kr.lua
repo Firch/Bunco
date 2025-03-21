@@ -331,12 +331,12 @@ return {
             -- Reworked Tarots
 
             c_bunc_wheel_of_fortune = {
-                ['name'] = 'The Wheel of Fortune',
+                ['name'] = '운명의 수레바퀴',
                 ['text'] = {
-                    [1] = '{C:green}#1# in #2#{} chance to add',
-                    [2] = '{C:dark_edition}Foil{}, {C:dark_edition}Holographic{},',
-                    [3] = '{C:dark_edition}Polychrome{}, or {C:dark_edition}Glitter{} edition',
-                    [4] = 'to a random {C:attention}Joker'
+                    [1] = '{C:green}#1# / #2#{} 의 확률로',
+                    [2] = '{C:dark_edition}포일{}, {C:dark_edition}홀로그래픽{},',
+                    [3] = '{C:dark_edition}폴리크롬{}, or {C:dark_edition}반짝반짝{} 에디션을',
+                    [4] = '무작위 {C:attention}Joker{}에 추가합니다'
                 }
             },
 
@@ -1646,9 +1646,9 @@ return {
             tag_bunc_glitter = {
                 ['name'] = '반짝반짝 태그',
                 ['text'] = {
-                    [1] = 'Next base edition shop',
-                    [2] = 'Joker is free and',
-                    [3] = 'becomes {C:dark_edition}Glitter'
+                    [1] = '다음 기본 에디션 상점',
+                    [2] = '조커가 무료이며',
+                    [3] = '{C:dark_edition}반짝반짝{}가 됩니다.'
                 }
             },
             tag_bunc_fluorescent = {
@@ -1744,9 +1744,9 @@ return {
         },
         Edition = {
             e_bunc_glitter = {
-                ['name'] = 'Glitter',
+                ['name'] = '반짝반짝',
                 ['text'] = {
-                    [1] = '{X:chips,C:white}X#1#{} Chips'
+                    [1] = '{X:chips,C:white}X#1#{} 개의 칩'
                 }
             },
             e_bunc_fluorescent = {
@@ -1883,44 +1883,44 @@ return {
         },
         Enhanced = {
             m_bunc_copper = {
-                ['name'] = 'Copper Card',
+                ['name'] = '쿠퍼 카드',
                 ['text'] = {
-                    [1] = 'Rescores if played',
-                    [2] = '{C:attention}adjacent{} to other',
-                    [3] = 'scored Copper Card'
+                    [1] = '{C:attention}인접한{} 다른 쿠퍼',
+                    [2] = '카드가 득점 하면',
+                    [3] = '다시 득점합니다'
                 },
             },
             m_bunc_cracker = {
-                ['name'] = 'Cracker Card',
+                ['name'] = '크래커 카드',
                 ['text'] = {
-                    [1] = '{C:attention}On discard{} the card is',
-                    [2] = 'played and then destroyed',
+                    [1] = '{C:attention}버리기{} 시 카드가',
+                    [2] = '플레이되고 그 후 파괴됩니다',
                 },
             },
         },
         Stake = {
             stake_bunc_cyan = {
-                ['name'] = 'Cyan Stake',
+                ['name'] = '시안 스테이크',
                 ['text'] = {
-                    [1] = 'Shop can have {C:attention}Scattering{} Jokers',
-                    [2] = '{C:inactive,s:0.8}(Destroys random adjacent Joker when removed)',
-                    [3] = '{s:0.8}Applies all previous Stakes'
+                    [1] = '상점에 {C:attention}Scattering{} 조커가 있습니다',
+                    [2] = '{C:inactive,s:0.8}(제거될 때 무작위 인접 조커를 파괴합니다)',
+                    [3] = '{s:0.8}이전 스테이크를 모두 적용합니다'
                 }
             },
             stake_bunc_pink = {
-                ['name'] = 'Pink Stake',
+                ['name'] = '핑크 스테이크',
                 ['text'] = {
-                    [1] = 'Shop can have {C:attention}Hindered{} Jokers',
-                    [2] = '{C:inactive,s:0.8}(Stays in place until the end of the round after being sold)',
-                    [3] = '{s:0.8}Applies all previous Stakes'
+                    [1] = '상점에 {C:attention}Hindered{} 조커가 있습니다',
+                    [2] = '{C:inactive,s:0.8}(판매된 후 라운드 종료 시까지 제자리에 남아있습니다)',
+                    [3] = '{s:0.8}이전 스테이크를 모두 적용합니다'
                 }
             },
             stake_bunc_magenta = {
-                ['name'] = 'Magenta Stake',
+                ['name'] = '마젠다 스테이크',
                 ['text'] = {
-                    [1] = 'Shop can have {C:attention}Reactive{} Jokers',
-                    [2] = '{C:inactive,s:0.8}(Debuffed if no blinds are skipped this Ante)',
-                    [3] = '{s:0.8}Applies all previous Stakes'
+                    [1] = '상점에 {C:attention}Reactive{} 조커가 있습니다',
+                    [2] = '{C:inactive,s:0.8}(이번 앤트에서 블라인드를 하나도 건너뛰지 않으면 디버프됩니다)',
+                    [3] = '{s:0.8}이전 스테이크를 모두 적용합니다'
                 }
             }
         }
