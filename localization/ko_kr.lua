@@ -216,7 +216,7 @@ return {
             bunc_consumable_edition_bunc_glitter = {
                 ['name'] = '반짝반짝',
                 ['text'] = {
-                    [1] = '{C:attention}메가칩 태그를 만듭니다'
+                    [1] = '{C:attention}울트라칩 태그를 만듭니다'
                 }
             },
 
@@ -1663,27 +1663,27 @@ return {
             -- Consumable edition tags
 
             tag_bunc_chips = {
-                ['name'] = 'Chips Tag',
+                ['name'] = '칩 태그',
                 ['text'] = {
-                    [1] = '{C:chips}+#1#{} Chips next hand'
+                    [1] = '다음 핸드에서 칩 {C:chips}+#1#{}개'
                 }
             },
             tag_bunc_mult = {
-                ['name'] = 'Mult Tag',
+                ['name'] = '배수 태그',
                 ['text'] = {
-                    [1] = '{C:mult}+#1#{} Mult next hand',
+                    [1] = '다음 핸드에서 {C:mult}+#1#{}배수',
                 }
             },
             tag_bunc_xmult = {
-                ['name'] = 'Megamult Tag',
+                ['name'] = '메가배수 태그',
                 ['text'] = {
-                    [1] = '{X:mult,C:white}X#1#{} Mult next hand',
+                    [1] = '다음 핸드에서 {X:mult,C:white}X#1#{}배수',
                 }
             },
             tag_bunc_xchips = {
-                ['name'] = 'Ultrachips Tag',
+                ['name'] = '울트라칩 태그',
                 ['text'] = {
-                    [1] = '{X:chips,C:white}X#1#{} Chips next hand'
+                    [1] = '다음 핸드에서 칩 {X:chips,C:white}X#1#{}개'
                 }
             },
 
