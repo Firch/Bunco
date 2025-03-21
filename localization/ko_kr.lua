@@ -1586,14 +1586,13 @@ return {
             -- Reworked
 
             tag_bunc_boss = {
-                ['name'] = 'Boss Tag',
+                ['name'] = '보스 태그',
                 ['text'] = {
-                    [1] = 'Gives a free',
-                    [2] = '{C:attention}Blind Pack'
+                    [1] = '무료 {C:attention}블라인드 팩{}을 제공합니다'
                 }
             },
             tag_bunc_double = {
-                ['name'] = 'Double Tag',
+                ['name'] = '더블 태그',
                 ['text'] = {
                     [1] = 'Gives a copy of the',
                     [2] = 'next selected {C:attention}Tag{}',
@@ -1601,42 +1600,41 @@ return {
                 }
             },
             tag_bunc_d_six = {
-                ['name'] = 'D6 Tag',
+                ['name'] = 'D6 태그',
                 ['text'] = {
-                    [1] = 'Adds a free {C:green}Reroll',
-                    [2] = 'to the next shop'
+                    [1] = '다음 상점에',
+                    [2] = '무료 {C:green}리롤{}을 제공합니다'
                 }
             },
 
             -- Main Tags
 
             tag_bunc_breaking = {
-                ['name'] = 'Breaking Tag',
+                ['name'] = '브레이킹 태그',
                 ['text'] = {
-                    [1] = 'Disables the',
-                    [2] = '{C:attention}Boss Blind{}'
+                    [1] = '{C:attention}보스 블라인드{}를',
+                    [2] = '비활성화 합니다'
                 }
             },
             tag_bunc_arcade = {
-                ['name'] = 'Arcade Tag',
+                ['name'] = '아케이드 태그',
                 ['text'] = {
-                    [1] = 'Gives a free',
-                    [2] = '{C:bunco_virtual_dark}Mega Virtual Pack'
+                    [1] = '무료 {C:bunco_virtual_dark}메가 버츄얼 팩{}을 제공합니다'
                 }
             },
             tag_bunc_triple = {
-                ['name'] = 'Triple Tag',
+                ['name'] = '트리플 태그',
                 ['text'] = {
-                    [1] = 'Gives two copies of the',
-                    [2] = 'next selected {C:attention}Tag{}',
-                    [3] = '{s:0.8,C:attention}Triple Tag{s:0.8} excluded'
+                    [1] = '다음에 선택된 {C:attention}태그{}',
+                    [2] = '의 복사본 두 개를 제공합니다',
+                    [3] = '{s:0.8,C:attention}트리플 태그{s:0.8}는 제외됩니다'
                 }
             },
             tag_bunc_shopping = {
-                ['name'] = 'Shopping Tag',
+                ['name'] = '쇼핑 태그',
                 ['text'] = {
-                    [1] = 'Gives {C:attention}1{} free',
-                    [2] = 'shop {C:green}Reroll'
+                    [1] = '{C:attention}1{} 개의 무료',
+                    [2] = '{C:green}상점{}리롤을 제공합니다'
                 }
             },
 
@@ -1647,15 +1645,14 @@ return {
                 ['text'] = {
                     [1] = '다음 기본 에디션 상점',
                     [2] = '조커가 무료이며',
-                    [3] = '{C:dark_edition}반짝반짝{}가 됩니다.'
+                    [3] = '{C:dark_edition}반짝반짝{}이 됩니다'
                 }
             },
             tag_bunc_fluorescent = {
                 ['name'] = '형광 태그',
                 ['text'] = {
-                    [1] = 'Next base edition shop',
-                    [2] = 'Joker is free and',
-                    [3] = 'becomes {C:dark_edition}Fluorescent'
+                    [1] = '다음 기본 에디션 상점의 조커가 무료이고',
+                    [2] = '{C:dark_edition}형광 이 됩니다'
                 }
             },
 
