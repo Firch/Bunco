@@ -739,24 +739,6 @@ end
 
 '''
 
-# Linked cards saving (experimental)
-[[patches]]
-[patches.pattern]
-target = 'functions/common_events.lua'
-pattern = '''play_sound('card1', 0.85 + percent*0.2/100, 0.6*(vol or 1))'''
-position = 'after'
-match_indent = true
-payload = '''
-
-G.E_MANAGER:add_event(Event({blocking = false, trigger = 'after', func = function()
-    if card and card.ability and card.ability.group then
-        save_run()
-    end
-    return true
-end}))
-
-'''
-
 # function Card:flip() (Cassette)
 [[patches]]
 [patches.pattern]
