@@ -604,8 +604,8 @@ if (_c.set == 'Default' or _c.set == 'Enhanced') and card and card.ability and t
         local all_cards_from_group = {}
         if card and card.area then
             if card.area.config.type == 'title' then
-                for i = 1, #G.deck.cards do
-                    local check_card = G.deck.cards[i]
+                for i = 1, #G.playing_cards do
+                    local check_card = G.playing_cards[i]
                     if check_card.ability and type(check_card.ability) == 'table' and check_card.ability.group then
                         if check_card.ability.group.id == card.ability.group.id then
                             table.insert(all_cards_from_group, check_card)
@@ -613,6 +613,7 @@ if (_c.set == 'Default' or _c.set == 'Enhanced') and card and card.ability and t
                     end
                 end
             else
+                -- Kept for efficiency
                 for i = 1, #card.area.cards do
                     local check_card = card.area.cards[i]
                     if check_card.ability and type(check_card.ability) == 'table' and check_card.ability.group then
@@ -638,7 +639,7 @@ if (_c.set == 'Default' or _c.set == 'Enhanced') and card and card.ability and t
             if k == 1 then play_sound('paper1', 0.95 + math.random() * 0.1, 0.3) end
             ease_value(group_card.T, 'scale', 0.25, nil, 'REAL', true, 0.2)
             cardarea:emplace(group_card)
-            if (v.facing == 'back') and v.area ~= G.deck then
+            if not card.area.config.view_deck and (v.facing == 'back') and v.area ~= G.deck then
                 group_card.sprite_facing = 'back'
             end
         end
