@@ -255,7 +255,8 @@ function BUNCOMOD.content.config_tab()
                                 G.localization.misc.dictionary.bunc_default_false,
                                 '',
                                 G.localization.misc.dictionary.bunc_jokerlike_consumable_editions_desc,
-                                G.localization.misc.dictionary.bunc_jokerlike_consumable_editions_desc_2
+                                G.localization.misc.dictionary.bunc_jokerlike_consumable_editions_desc_2,
+                                G.localization.misc.dictionary.bunc_jokerlike_consumable_editions_desc_3
                             },
                             ref_table = BUNCOMOD.content.config,
                             ref_value = 'jokerlike_consumable_editions',
@@ -8005,7 +8006,7 @@ for i = 1, 4 do -- Blind
         loc_vars = function(self, info_queue, card)
             return {key = 'p_bunc_blind', vars = {self.config.extra}}
         end,
-        config = {extra = 3, choose = 1},
+        config = {extra = 3},
 
         cost = 8,
         weight = 1,
