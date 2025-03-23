@@ -100,16 +100,16 @@ return {
                 [2] = '각각의 카드는 다른 수트여야 합니다.'
             },
             ['bunc_Spectrum House'] = {
-                [1] = '각각 다른 수트의 카드로 구성된 트리플과 페어',
-                [2] = ''
+                [1] = '각각 다른 수트의 카드로',
+                [2] = '구성된 트리플과 페어'
             },
             ['bunc_Spectrum Five'] = {
                 [1] = '같은 랭크를 가진 5장의 카드',
                 [2] = '각각의 카드는 다른 수트여야 합니다.'
             },
             ['bunc_Deal'] = {
-                [1] = '번호판 조커에 의해 선택된 5개의 랭크',
-                [2] = ''
+                [1] = '번호판 조커에 의해',
+                [2] = '선택된 5개의 랭크'
             }
         },
         labels = {
@@ -151,7 +151,7 @@ return {
     },
     descriptions = {
         Other = {
-            bunc_temporary_extra_chips = {['text'] = {[1] = '{C:chips}이번 라운드에서 +#1#{}개의 칩을 얻습니다.'}},
+            bunc_temporary_extra_chips = {['text'] = {[1] = '이번 라운드에서 {C:chips}+#1#{}개의 칩을 얻습니다.'}},
             bunc_linked_cards = {['text'] = {[1] = '{C:attention}연결됨{} 그룹:'}},
             bunc_linked_group = {
                 ['name'] = '연결된 그룹',
@@ -255,7 +255,7 @@ return {
                 ['text'] = {
                     [1] = '전체 덱에서',
                     [2] = '{C:attention}#1#{}개 이상의 즉시 사용할',
-                    [3] = '{C:attention}#2#{C:bunco_virtual_dark} 폴리미노{} 카드를',
+                    [3] = '{C:attention}#2# {C:bunco_virtual_dark}폴리미노{} 카드를',
                     [4] = '선택합니다'
                 }
             },
@@ -264,7 +264,7 @@ return {
                 ['text'] = {
                     [1] = '전체 덱에서',
                     [2] = '{C:attention}#1#{}개 이상의 즉시 사용할',
-                    [3] = '{C:attention}#2#{C:bunco_virtual_dark} 폴리미노{} 카드를',
+                    [3] = '{C:attention}#2#{} {C:bunco_virtual_dark}폴리미노{} 카드를',
                     [4] = '선택합니다'
                 }
             },
@@ -1300,7 +1300,7 @@ return {
             j_bunc_dynasty = {
                 ['name'] = '왕조',
                 ['text'] = {
-                    [1] = '플레이한 핸드에 {C:attention}스펙트럼{} 수트가',
+                    [1] = '플레이한 핸드에 {C:attention}스펙트럼{}이',
                     [2] = '포함되어 있다면',
                     [3] = '{X:mult,C:white}X#1#{} 배수를 얻습니다'
                 }
@@ -1309,7 +1309,7 @@ return {
                 ['name'] = '마술봉',
                 ['text'] = {
                     [1] = '이 조커는 {C:attention}연속으로{} 플레이한 핸드에',
-                    [2] = '{C:attention}스펙트럼{} 수트가 포함되어 있다면',
+                    [2] = '{C:attention}스펙트럼{}이 포함되어 있다면',
                     [3] = '{C:mult}+#1#{} 배수를 얻습니다',
                     [4] = '{C:inactive}(현재 {C:mult}+#2#{C:inactive} 배수)'
                 }
@@ -1318,7 +1318,7 @@ return {
                 ['name'] = '카람볼라',
                 ['text'] = {
                     [1] = '플레이한 포커 핸드에',
-                    [2] = '{C:attention}스펙트럼{} 수트가 있다면',
+                    [2] = '{C:attention}스펙트럼{}이 있다면',
                     [3] = '{C:green}#2#분의 #1#{} 확률로 해당 카드가',
                     [4] = '라운드의 끝에서 파괴됩니다'
                 }
@@ -1349,7 +1349,7 @@ return {
             j_bunc_roygbiv = {
                 ['name'] = '무지개',
                 ['text'] = {
-                    [1] = '핸드에 {C:attention}스펙트럼{} 수트가 있다면',
+                    [1] = '핸드에 {C:attention}스펙트럼{}이 있다면',
                     [2] = '{C:dark_edition}폴리크롬{} 에디션이',
                     [3] = '{C:green}#2#분의 #1#{} 확률로',
                     [4] = '모든 득점한 카드에 추가됩니다'
@@ -1640,7 +1640,7 @@ return {
                 ['name'] = '형광 태그',
                 ['text'] = {
                     [1] = '다음 기본 에디션 상점의 조커가 무료이고',
-                    [2] = '{C:dark_edition}형광 이 됩니다'
+                    [2] = '{C:dark_edition}형광{} 이 됩니다'
                 }
             },
 
