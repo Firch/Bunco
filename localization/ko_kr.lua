@@ -157,8 +157,8 @@ return {
                 ['name'] = '연결된 그룹',
                 ['text'] = {
                     [1] = '그룹 내 연결된 카드들은',
-                    [2] = '같이 드로 되고, 선택되어 같이 {C:attention}파괴됩니다.',
-                    [3] = ''
+                    [2] = '같이 드로 되고, 선택되며',
+                    [3] = '같이 {C:attention}파괴{}됩니다.'
                 }
             },
             bunc_drawn_linked_cards = {['text'] = {[1] = '{C:attention}Linked{} in drawn group'}},
@@ -172,7 +172,7 @@ return {
                 ['name'] = '라이트 수트(엑조틱)',
                 ['text'] = {
                     [1] = '{C:hearts}하트{}, {C:diamonds}다이아몬드,',
-                    [2] = '그리고 {C:bunc_fleurons}꽃무늬{} 카드'
+                    [2] = '그리고 {C:bunc_fleurons}꽃무늬{} 수트의 카드'
                 }
             },
             bunc_dark_suits = {
@@ -185,14 +185,14 @@ return {
                 ['name'] = '다크 수트(엑조틱)',
                 ['text'] = {
                     [1] = '{C:spades}스페이드{}, {C:clubs}클럽',
-                    [2] = '그리고 {C:bunc_halberds}할버드{} 카드'
+                    [2] = '그리고 {C:bunc_halberds}할버드{} 수트의 카드'
                 }
             },
             bunc_exotic_cards = {
                 ['name'] = '엑조틱 카드',
                 ['text'] = {
-                    [1] = '{C:bunc_fleurons}꽃무늬{}나 {C:bunc_halberds}할버드{} 수트의 카드',
-                    [2] = ''
+                    [1] = '{C:bunc_fleurons}꽃무늬{}나 ',
+                    [2] = '{C:bunc_halberds}할버드{} 수트의 카드'
                 }
             },
             bunc_consumable_edition_foil = {
@@ -599,7 +599,7 @@ return {
                 }
             },
             j_bunc_crop_circles_exotic = {
-                ['name'] = 'Crop Circles',
+                ['name'] = '크롭 서클(엑조틱)',
                 ['text'] = {
                     [1] = 'Base suit {C:bunc_fleurons}Fleurons{} give {C:mult}+4{} Mult,',
                     [2] = 'Base suit {C:clubs}Clubs{} give {C:mult}+3{} Mult,',
@@ -1274,94 +1274,94 @@ return {
                 }
             },
             j_bunc_proud = {
-                ['name'] = 'Proud Joker',
+                ['name'] = '자랑스런 조커',
                 ['text'] = {
-                    [1] = 'Played cards with',
-                    [2] = '{C:bunc_halberds}Halberd{} suit give',
-                    [3] = '{C:mult}+#1#{} Mult when scored'
+                    [1] = '{C:bunc_halberds}할버드{} 수트로 플레이한',
+                    [2] = '카드가 득점시',
+                    [3] = '{C:mult}+#1#{} 배수를 얻습니다'
                 }
             },
             j_bunc_wishalloy = {
-                ['name'] = 'Wishalloy',
+                ['name'] = '소원의 돌',
                 ['text'] = {
-                    [1] = '{C:green}#1# in #2#{} chance for',
-                    [2] = 'played {C:bunc_fleurons}Fleurons{} to',
-                    [3] = 'earn {C:money}${} equal to',
-                    [4] = "card's scored Chips"
+                    [1] = '플레이한 {C:bunc_fleurons}꽃무늬{} 수트의 카드가',
+                    [2] = '{C:green}#2#분의 #1#{} 확률로',
+                    [3] = '카드가 득점한 칩 만큼 {C:money}${} 를 얻습니다'
                 }
             },
             j_bunc_unobtanium = {
-                ['name'] = 'Unobtanium',
+                ['name'] = '언옵타니윰',
                 ['text'] = {
-                    [1] = 'Played cards with',
-                    [2] = '{C:bunc_halberds}Halberd{} suit give',
-                    [3] = '{C:chips}+#1#{} Chips and {C:mult}+#2#{} Mult',
-                    [4] = "when scored"
+                    [1] = '{C:bunc_halberds}할버드{} 수트로',
+                    [2] = '플레이한 카드는 득점시',
+                    [3] = '{C:chips}+#1#{}개 칩과 {C:mult}+#2#{} 배수를 얻습니다'
                 }
             },
             j_bunc_dynasty = {
-                ['name'] = 'The Dynasty',
+                ['name'] = '왕조',
                 ['text'] = {
-                    [1] = '{X:mult,C:white}X#1#{} Mult if played',
-                    [2] = 'hand contains',
-                    [3] = 'a {C:attention}Spectrum'
+                    [1] = '플레이한 핸드에 {C:attention}스펙트럼{} 수트가',
+                    [2] = '포함되어 있다면',
+                    [3] = '{X:mult,C:white}X#1#{} 배수를 얻습니다'
                 }
             },
             j_bunc_magic_wand = {
-                ['name'] = 'Magic Wand',
+                ['name'] = '마술봉',
                 ['text'] = {
-                    [1] = 'This Joker gains {C:mult}+#1#{} Mult',
-                    [2] = 'per {C:attention}consecutive{} played hand',
-                    [3] = 'containing a {C:attention}Spectrum{}',
-                    [4] = '{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)'
+                    [1] = '이 조커는 {C:attention}연속으로{} 플레이한 핸드에',
+                    [2] = '{C:attention}스펙트럼{} 수트가 포함되어 있다면',
+                    [3] = '{C:mult}+#1#{} 배수를 얻습니다',
+                    [4] = '{C:inactive}(현재 {C:mult}+#2#{C:inactive} 배수)'
                 }
             },
             j_bunc_starfruit = {
-                ['name'] = 'Starfruit',
+                ['name'] = '카람볼라',
                 ['text'] = {
-                    [1] = 'Level up played poker hand',
-                    [2] = 'if it contains a {C:attention}Spectrum',
-                    [3] = '{C:green}#1# in #2#{} chance this card is',
-                    [4] = 'destroyed at the end of round'
+                    [1] = '플레이한 포커 핸드에',
+                    [2] = '{C:attention}스펙트럼{} 수트가 있다면',
+                    [3] = '{C:green}#2#분의 #1#{} 확률로 해당 카드가',
+                    [4] = '라운드의 끝에서 파괴됩니다'
                 }
             },
             j_bunc_fondue = {
-                ['name'] = 'Fondue',
+                ['name'] = '퐁듀',
                 ['text'] = {
-                    [1] = 'Scored cards in the',
-                    [2] = '{C:attention}first hand{} of round are',
-                    [3] = 'converted to {C:bunc_fleurons}Fleurons'
+                    [1] = '라운드의 {C:attention}첫 핸드{}에서',
+                    [2] = '득점한 카드들은',
+                    [3] = '{C:bunc_fleurons}꽃무늬{} 수트의 카드로 바뀝니다'
                 }
             },
             j_bunc_myopia = {
-                ['name'] = 'Myopia',
+                ['name'] = '근시',
                 ['text'] = {
-                    [1] = '{C:spades}Spades{} and {C:clubs}Clubs{}',
-                    [2] = 'count as {C:bunc_halberds}Halberds'
+                    [1] = '{C:spades}스페이드{}와 {C:clubs}클럽{}이',
+                    [2] = '{C:bunc_halberds}할버드{}',
+                    [3] = '수트의 카드 로 계산됩니다'
                 }
             },
             j_bunc_astigmatism = {
-                ['name'] = 'Astigmatism',
+                ['name'] = '난시',
                 ['text'] = {
-                    [1] = '{C:hearts}Hearts{} and {C:diamonds}Diamonds{}',
-                    [2] = 'count as {C:bunc_fleurons}Fleurons'
+                    [1] = '{C:hearts}하트{} 와 {C:diamonds}다이아몬드{} 가',
+                    [2] = '{C:bunc_fleurons}꽃무늬{}로 계산됩니다'
                 }
             },
             j_bunc_roygbiv = {
-                ['name'] = 'Roy G. Biv',
+                ['name'] = '무지개',
                 ['text'] = {
-                    [1] = '{C:green}#1# in #2#{} chance to add',
-                    [2] = '{C:dark_edition}Polychrome{} edition',
-                    [3] = 'to all scored cards if',
-                    [4] = 'hand contains a {C:attention}Spectrum'
+                    [1] = '핸드에 {C:attention}스펙트럼{} 수트가 있다면',
+                    [2] = '{C:dark_edition}폴리크롬{} 에디션이',
+                    [3] = '{C:green}#2#분의 #1#{} 확률로',
+                    [4] = '모든 득점한 카드에 추가됩니다'
                 }
             },
             j_bunc_rigoletto = {
-                ['name'] = 'Rigoletto',
+                ['name'] = '리골레토',
                 ['text'] = {
-                    [1] = '{X:mult,C:white}X#1#{} Mult per {C:bunco_exotic}Exotic card{}',
-                    [2] = 'in your {C:attention}full deck',
-                    [3] = '{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)'
+                    [1] = '{X:mult,C:white}X#1#{} 배수가',
+                    [2] = '{C:attention}전체 덱{}의 {C:bunco_exotic}엑조틱 카드{}',
+                    [3] = '갯수만큼 추가됩니다',
+                    [4] = '{C:inactive}(현재 {X:mult,C:white}X#2#{C:inactive} 배수)'
                 },
                 ['unlock'] = {
                     [1] = '{E:1,s:1.3}?????'
@@ -1825,7 +1825,7 @@ return {
             v_bunc_fanny_pack = {
                 ['name'] = '힙색',
                 ['text'] = {
-                    [1] = '#2#{}분의 {C:green}#1#의 확률로',
+                    [1] = '{C:green}#2#분의 #1#{}의 확률로',
                     [2] = '매 블라인드가 {C:attention}스킵{}될 때 마다',
                     [3] = '{C:attention}더블 태그{} 를 얻습니다'
                 }
