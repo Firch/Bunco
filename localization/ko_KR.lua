@@ -1,3 +1,4 @@
+-- Korean Translated By: JayJayDee, namssy
 return {
     misc = {
         dictionary = {
