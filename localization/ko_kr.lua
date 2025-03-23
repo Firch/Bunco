@@ -581,9 +581,9 @@ return {
             j_bunc_voxel = {
                 ['name'] = '복셀 조커',
                 ['text'] = {
-                    [1] = '{C:attention}full deck{}의 {C:attention}강화 카드{} 마다',
+                    [1] = '{C:attention}전체 덱{}의 {C:attention}강화 카드{} 마다',
                     [2] = '{X:mult,C:white}X#1#{} 배수, {X:mult,C:white}-X#2#{} 배수를 얻습니다',
-                    [3] = '{C:inactive}(Currently {X:mult,C:white}X#3#{C:inactive} 배수)'
+                    [3] = '{C:inactive}(현재 {X:mult,C:white}X#3#{C:inactive} 배수)'
                 },
                 ['unlock'] = {
                     [1] = '최소한 {C:attention}#1#',
@@ -1250,34 +1250,34 @@ return {
             -- Exotic Jokers
 
             j_bunc_zealous = {
-                ['name'] = 'Zealous Joker',
+                ['name'] = '질투하는 조커',
                 ['text'] = {
-                    [1] = '{C:mult}+#1#{} Mult if played',
-                    [2] = 'hand contains',
-                    [3] = 'a {C:attention}Spectrum'
+                    [1] = '플레이한 핸드에',
+                    [2] = '{C:attention}스펙트럼{}이 포함되면',
+                    [3] = '{C:mult}+#1#{} 배수를 얻습니다'
                 }
             },
             j_bunc_lurid = {
-                ['name'] = 'Lurid Joker',
+                ['name'] = '기분나쁜 조커',
                 ['text'] = {
-                    [1] = '{C:chips}+#1#{} Chips if played',
-                    [2] = 'hand contains',
-                    [3] = 'a {C:attention}Spectrum'
+                    [1] = '플레이한 핸드에',
+                    [2] = '{C:attention}스펙트럼{}이 포함되면',
+                    [3] = '{C:chips}+#1#{} 칩을 얻습니다'
                 }
             },
             j_bunc_envious = {
-                ['name'] = 'Envious Joker',
+                ['name'] = '부러워하는 조커',
                 ['text'] = {
-                    [1] = 'Played cards with',
-                    [2] = '{C:bunc_fleurons}Fleuron{} suit give',
-                    [3] = '{C:mult}+#1#{} Mult when scored'
+                    [1] = '{C:bunc_fleurons}꽃무늬{} 수트로',
+                    [2] = '플레이한 카드가 득점시',
+                    [3] = '{C:mult}+#1#{} 배수를 얻습니다'
                 }
             },
             j_bunc_proud = {
-                ['name'] = '자랑스런 조커',
+                ['name'] = '자랑하는 조커',
                 ['text'] = {
-                    [1] = '{C:bunc_halberds}할버드{} 수트로 플레이한',
-                    [2] = '카드가 득점시',
+                    [1] = '{C:bunc_halberds}할버드{} 수트로',
+                    [2] = '플레이한 카드가 득점시',
                     [3] = '{C:mult}+#1#{} 배수를 얻습니다'
                 }
             },
