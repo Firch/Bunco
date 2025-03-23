@@ -5,23 +5,23 @@ return {
             -- Config values
             bunc_colorful_finishers = '컬러풀한 마지막 보스 블라인드',
             bunc_colorful_finishers_desc = '마지막 보스 블라인드에서 멋진 배경 색상을 추가했습니다.',
-            bunc_colorful_finishers_desc_2 = '그리고 무한 모드에서 회색 배경을 제거했습니다.',
+            bunc_colorful_finishers_desc_2 = '그리고 무한 모드에서 회색 배경을 제거했습니다',
 
             bunc_high_quality_shaders = '고퀄리티 쉐이더',
             bunc_high_quality_shaders_desc = '바닐라 쉐이더들을 더욱 고퀄리티로',
-            bunc_high_quality_shaders_desc_2 = '렌더링합니다 (랙이 발생할 수 있습니다.)',
+            bunc_high_quality_shaders_desc_2 = '렌더링합니다 (랙이 발생할 수 있습니다)',
 
             bunc_fixed_sprites = '스프라이트 개선',
-            bunc_fixed_sprites_desc = '불필요한 픽셀들을 제거하여 일관성과 가시성을 향상시켰습니다.',
-            bunc_fixed_sprites_desc_2 = '',
+            bunc_fixed_sprites_desc = '불필요한 픽셀들을 제거하여',
+            bunc_fixed_sprites_desc_2 = '일관성과 가시성을 향상시켰습니다',
 
             bunc_gameplay_reworks = '게임플레이 리워크',
             bunc_gameplay_reworks_desc = '게임 플레이가 더욱 즐거워 지도록',
             bunc_gameplay_reworks_desc_2 = '바닐라 발라트로의 일부 동작을 재설계했습니다',
 
             bunc_fixed_badges = '뱃지 시스템 개선',
-            bunc_fixed_badges_desc = '소모품의 뱃지를 얻는 방법을 덜 혼란스럽게 표기하였습니다.',
-            bunc_fixed_badges_desc_2 = '',
+            bunc_fixed_badges_desc = '소모품의 뱃지를 얻는 방법을',
+            bunc_fixed_badges_desc_2 = '덜 혼란스럽게 표기하였습니다.',
 
             bunc_jokerlike_consumable_editions = '소모품 슬롯의 모드 충돌 개선',
             bunc_jokerlike_consumable_editions_desc = '다른 모드에서 소모품이 조커처럼 동작하는 경우',
@@ -1189,7 +1189,7 @@ return {
                 }
             },
             j_bunc_games_collector = {
-                ['name'] = 'Games Collector',
+                ['name'] = '게임 수집가',
                 ['text'] = {
                     [1] = 'Gains {C:chips}+#1#{} Chips',
                     [2] = 'when a linked group',
@@ -1198,53 +1198,52 @@ return {
                 }
             },
             j_bunc_jumper = {
-                ['name'] = 'Jumper',
+                ['name'] = '점퍼',
                 ['text'] = {
-                    [1] = 'Gains {C:chips}+#1#{} Chips',
-                    [2] = 'if played hand',
-                    [3] = 'contains a {C:attention}Flush{}',
-                    [4] = '{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)'
+                    [1] = '이 조커는 플레이한 핸드에',
+                    [2] = '{C:attention}플러시{}가 포함되면',
+                    [3] = '{C:chips}+#1#{}칩을 얻습니다',
+                    [4] = '{C:inactive}(현재 {C:chips}+#2#{C:inactive} 칩)'
                 }
             },
             j_bunc_stylophone = {
-                ['name'] = 'Stylophone',
+                ['name'] = '스타일로폰',
                 ['text'] = {
-                    [1] = 'Cards give {C:attention}X#1#{} Mult',
-                    [2] = 'of the {C:attention}rank{}',
-                    [3] = 'when scored'
+                    [1] = '카드의 점수를 계산할 때',
+                    [2] = '+({C:attention}랭크{} x {C:attention}X#1#{}배수)로 계산합니다'
                 }
             },
             j_bunc_kite_experiment = {
-                ['name'] = 'Kite Experiment',
+                ['name'] = '연날리기 실험',
                 ['text'] = {
-                    [1] = '{C:green}#1# in #2#{} chance to {C:attention}rescore',
-                    [2] = 'rescored {C:attention}Copper Cards',
-                    [3] = 'one additional time'
+                    [1] = '{C:green}#2# 분의 #1#{} 확률로',
+                    [2] = '점수를 재획득한 {C:attention}쿠퍼 카드{}가',
+                    [3] = '한번 더 점수를 재획득합니다'
                 }
             },
             j_bunc_robot = {
-                ['name'] = 'Robot',
+                ['name'] = '로봇',
                 ['text'] = {
-                    [1] = 'This Joker gains {C:mult}+#1#{} Mult',
-                    [2] = 'every time a {C:attention}Copper Card',
-                    [3] = 'is rescored',
-                    [4] = '{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)'
+                    [1] = '이 조커는 {C:attention}쿠퍼 카드{}가',
+                    [2] = '점수를 재획득 할 때 마다',
+                    [3] = '{C:mult}+#1#{} 배수를 획득합니다',
+                    [4] = '{C:inactive}(현재 {C:mult}+#2#{C:inactive} 배수)'
                 }
             },
             j_bunc_hardtack = {
-                ['name'] = 'Hardtack',
+                ['name'] = '건빵',
                 ['text'] = {
-                    [1] = '{C:attention}Cracker Cards{} are',
-                    [2] = 'no longer destroyed',
-                    [3] = 'when discarded'
+                    [1] = '{C:attention}크래커 카드{}가',
+                    [2] = '버릴 때 더이상',
+                    [3] = '파괴되지 않습니다'
                 }
             },
             j_bunc_pica = {
-                ['name'] = 'Pica Joker',
+                ['name'] = '피카 조커',
                 ['text'] = {
-                    [1] = 'When a {C:attention}Cracker Card{}',
-                    [2] = 'is discarded, play',
-                    [3] = 'all discarded cards'
+                    [1] = '{C:attention}크래커 카드{}를 버리면',
+                    [2] = '모든 버린 카드를',
+                    [3] = '핸드로 플레이합니다'
                 }
             },
 
