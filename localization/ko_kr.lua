@@ -124,16 +124,16 @@ return {
         },
         collab_palettes = {
             default_Spades = {
-                ['3'] = 'Recast Contrast'
+                ['3'] = '재조정된 고대비'
             },
             default_Hearts = {
-                ['3'] = 'Recast Contrast'
+                ['3'] = '재조정된 고대비'
             },
             default_Clubs = {
-                ['3'] = 'Recast Contrast'
+                ['3'] = '재조정된 고대비'
             },
             default_Diamonds = {
-                ['3'] = 'Recast Contrast'
+                ['3'] = '재조정된 고대비'
             }
         },
         collabs = {
@@ -236,36 +236,36 @@ return {
             p_bunc_blind = {
                 ['name'] = '블라인드 팩',
                 ['text'] = {
-                    [1] = 'Choose one of up to',
-                    [2] = '{C:attention}#1# Boss Blinds{} to',
-                    [3] = 'replace on this Ante'
+                    [1] = '이번 앤티에서 교체할',
+                    [2] = '{C:attention}#1# 보스 블라인드{} 를',
+                    [3] = '선택합니다'
                 }
             },
             p_bunc_virtual_normal = {
                 ['name'] = '버츄얼 팩',
                 ['text'] = {
-                    [1] = 'Draw the whole deck and',
-                    [2] = 'choose {C:attention}#1#{} of up to',
-                    [3] = '{C:attention}#2#{C:bunco_virtual_dark} Polymino{} cards to',
-                    [4] = 'be used immediately'
+                    [1] = '전체 덱에서',
+                    [2] = '{C:attention}#1#{}개 이상의 즉시 사용할',
+                    [3] = '{C:attention}#2#{C:bunco_virtual_dark} 폴리미노{} 카드를',
+                    [4] = '선택합니다'
                 }
             },
             p_bunc_virtual_jumbo = {
                 ['name'] = '점보 버츄얼 팩',
                 ['text'] = {
-                    [1] = 'Draw the whole deck and',
-                    [2] = 'choose {C:attention}#1#{} of up to',
-                    [3] = '{C:attention}#2#{C:bunco_virtual_dark} Polymino{} cards to',
-                    [4] = 'be used immediately'
+                    [1] = '전체 덱에서',
+                    [2] = '{C:attention}#1#{}개 이상의 즉시 사용할',
+                    [3] = '{C:attention}#2#{C:bunco_virtual_dark} 폴리미노{} 카드를',
+                    [4] = '선택합니다'
                 }
             },
             p_bunc_virtual_mega = {
                 ['name'] = '메가 버츄얼 팩',
                 ['text'] = {
-                    [1] = 'Draw the whole deck and',
-                    [2] = 'choose {C:attention}#1#{} of up to',
-                    [3] = '{C:attention}#2#{C:bunco_virtual_dark} Polymino{} cards to',
-                    [4] = 'be used immediately'
+                    [1] = '전체 덱에서',
+                    [2] = '{C:attention}#1#{}개 이상의 즉시 사용할',
+                    [3] = '{C:attention}#2#{C:bunco_virtual_dark} 폴리미노{} 카드를',
+                    [4] = '선택합니다'
                 }
             },
 
@@ -1760,7 +1760,7 @@ return {
                 ['unlock'] = {
                     [1] = '{C:attention,E:1}#1#{}개의 소비 아이템 사용',
                     [2] = '{C:attention,E:1}에디션과 함께',
-                    [3] = '{C:inactive}(#2#)'
+                    [3] = '{C:inactive}(현재 #2#)'
                 }
             },
             v_bunc_hedge_trimmer = {
@@ -1779,7 +1779,7 @@ return {
                 ['unlock'] = {
                     [1] = "블라인드의 점수를 점수 절단기로 감소",
                     [2] = '총 {C:attention,E:1}#1#{} 회 달성',
-                    [3] = '{C:inactive}(#2#)'
+                    [3] = '{C:inactive}(현재 #2#)'
                 }
             },
             v_bunc_cups_n_balls = {
@@ -1790,77 +1790,76 @@ return {
                 }
             },
             v_bunc_shell_game = {
-                ['name'] = 'Shell Game',
+                ['name'] = '야바위',
                 ['text'] = {
-                    [1] = 'Reroll {C:attention}contents',
-                    [2] = 'of Booster Packs',
-                    [3] = '{C:attention}1{} time per pack'
+                    [1] = '부스터 팩의 {C:attention}카드들{}을 ',
+                    [2] = '리롤 합니다',
+                    [3] = '팩당 {C:attention}1{}회만 가능합니다'
                 },
                 ['unlock'] = {
-                    [1] = 'Open {E:1,C:attention}#1#',
-                    [2] = 'Booster Packs',
-                    [3] = '{C:inactive}(#2#)'
+                    [1] = '{E:1,C:attention}#1#개{}의',
+                    [2] = '부스터 팩을 오픈합니다',
+                    [3] = '{C:inactive}(현재 #2#)'
                 }
             },
             v_bunc_disguise = {
-                ['name'] = 'Disguise',
+                ['name'] = '위장',
                 ['text'] = {
-                    [1] = '{C:attention}Blind Packs{} may',
-                    [2] = 'appear in the shop'
+                    [1] = '{C:attention}블라인드 팩{}이',
+                    [2] = '상점에 나타납니다'
                 }
             },
             v_bunc_masquerade = {
-                ['name'] = 'Masquerade',
+                ['name'] = '가면무도회',
                 ['text'] = {
-                    [1] = 'All {C:attention}Blind Packs{} in',
-                    [2] = 'the shop are free'
+                    [1] = '모든 상점의 {C:attention}블라인드 팩{} 이',
+                    [2] = '무료가 됩니다'
                 },
                 ['unlock'] = {
-                    [1] = 'Replace {E:1,C:attention}#1#{}',
-                    [2] = 'Blinds with Blinds',
-                    [3] = 'from Blind Pack',
-                    [4] = '{C:inactive}(#2#)'
+                    [1] = '{E:1,C:attention}#1#{}개의 ',
+                    [2] = '블라인드를 블라인드 팩의 블라인드로',
+                    [3] = '교체하기',
+                    [4] = '{C:inactive}(현재 #2#)'
                 }
             },
             v_bunc_fanny_pack = {
-                ['name'] = 'Fanny Pack',
+                ['name'] = '힙색',
                 ['text'] = {
-                    [1] = '{C:green}#1# in #2#{} chance to',
-                    [2] = 'gain a {C:attention}Double Tag',
-                    [3] = 'each time a blind',
-                    [4] = 'is {C:attention}skipped'
+                    [1] = '#2#{}분의 {C:green}#1#의 확률로',
+                    [2] = '매 블라인드가 {C:attention}스킵{}될 때 마다',
+                    [3] = '{C:attention}더블 태그{} 를 얻습니다'
                 }
             },
             v_bunc_pin_collector = {
-                ['name'] = 'Pin Collector',
+                ['name'] = '핀 수집가',
                 ['text'] = {
-                    [1] = 'All new {C:attention}Double Tags',
-                    [2] = 'appear as {C:attention}Triple Tags'
+                    [1] = '모든 새로운 {C:attention}더블 태그{} 가',
+                    [2] = '{C:attention}트리플 태그{}로 나타납니다'
                 },
                 ['unlock'] = {
-                    [1] = 'Skip a total of',
-                    [2] = '{E:1,C:attention}#1#{} blinds',
-                    [3] = '{C:inactive}(#2#)'
+                    [1] = '총 {E:1,C:attention}#1#{} 번의 블라인드를',
+                    [2] = '스킵합니다',
+                    [3] = '{C:inactive}(현재 #2#)'
                 }
             },
             v_bunc_arcade_machine = {
-                ['name'] = 'Arcade Machine',
+                ['name'] = '오락기',
                 ['text'] = {
-                    [1] = '{C:bunco_virtual_dark}Virtual Packs',
-                    [2] = 'appear {C:attention}4X{} more often'
+                    [1] = '{C:bunco_virtual_dark}버츄얼 팩{} 이',
+                    [2] = '{C:attention}4배{} 더 자주 나타납니다'
                 }
             },
             v_bunc_polybius = {
-                ['name'] = 'Polybius',
+                ['name'] = '폴리비우스',
                 ['text'] = {
-                    [1] = '{C:bunco_virtual_dark}Polymino{} cards allow to',
-                    [2] = 'link {C:attention}one more{} card',
-                    [3] = '{s:0.6,C:inactive}Extra card can be of any property'
+                    [1] = '{C:bunco_virtual_dark}폴리미노{} 카드가',
+                    [2] = '추가로 {C:attention}한 장{}의 카드를 더 가질 수 있습니다',
+                    [3] = '{s:0.6,C:inactive}추가되는 카드는 어떠한 카드도 될 수 있습니다'
                 },
                 ['unlock'] = {
-                    [1] = 'Create a total of',
-                    [2] = '{E:1,C:attention}#1#{} linked groups',
-                    [3] = '{C:inactive}(#2#)'
+                    [1] = '총 {E:1,C:attention}#1#{} 개의',
+                    [2] = '연결된 그룹을 만듭니다',
+                    [3] = '{C:inactive}(현재 #2#)'
                 }
             }
         },
