@@ -611,7 +611,7 @@ return {
             j_bunc_xray = {
                 ['name'] = 'X-ray',
                 ['text'] = {
-                    [1] = '이 조커는 카드가 뒷면으로 뽑힐 때 마다'
+                    [1] = '이 조커는 카드가 뒷면으로 뽑힐 때 마다',
                     [2] = '{X:mult,C:white}X#1#{} 배수를 얻습니다',
                     [3] = '{C:inactive}(현재 {X:mult,C:white}X#2#{C:inactive} 배수)'
                 },
@@ -1023,56 +1023,57 @@ return {
                 }
             },
             j_bunc_protester = {
-                ['name'] = 'Protester',
+                ['name'] = '시위자',
                 ['text'] = {
-                    [1] = 'Adds {C:attention}#1#X{} the highest rank',
-                    [2] = 'discarded this round to Chips',
-                    [3] = '{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)'
+                    [1] = '이 조커는 이번 라운드에서 버려진',
+                    [2] = '카드 중 가장 높은 랭크를',
+                    [3] = '{C:attention}#1#X{}칩으로 추가합니다',
+                    [4] = '{C:inactive}(현재 {C:chips}+#2#{C:inactive} 칩)'
                 }
             },
             j_bunc_doodle = {
-                ['name'] = 'Doodle',
+                ['name'] = '낙서',
                 ['text'] = {
-                    [1] = '{C:attention}Copy{} first {C:tarot}Tarot{} or {C:planet}Planet{}',
-                    [2] = 'card used this round',
-                    [3] = '{C:inactive}(Must have room)'
+                    [1] = '이번 라운드에서 처음 사용한',
+                    [2] = '{C:tarot}타로{}나 {C:planet}행성{} 카드가 복사됩니다',
+                    [3] = '{C:inactive}(공간이 있어야 합니다)'
                 },
                 ['unlock'] = {
-                    [1] = 'Win {C:attention,E:1}#1#{} runs',
-                    [2] = '{C:inactive}(#2#)'
+                    [1] = '{C:attention,E:1}#1#{}번의 런을 승리하세요',
+                    [2] = '{C:inactive}(현재 #2#)'
                 }
             },
             j_bunc_disproportionality = {
                 ['name'] = 'Disproportionality',
                 ['text'] = {
-                    [1] = ''
+                    [1] = '' -- TODO: TO BE TRANSLATED WHEN IT'S DONE
                 }
             },
             j_bunc_running_joke = {
-                ['name'] = 'Running Joke',
+                ['name'] = '달리는 조커',
                 ['text'] = {
-                    [1] = 'Create a {C:dark_edition}Negative',
-                    [2] = '"{C:attention}Joker{}" at the',
-                    [3] = 'start of every shop'
+                    [1] = '상점이 열릴 때 마다',
+                    [2] = '{C:dark_edition}네거티브{} {C:attention}조커{}가',
+                    [3] = '있습니다'
                 }
             },
             j_bunc_on_broadway = {
                 ['name'] = '브로드웨이',
                 ['text'] = {
-                    [1] = '{C:chips}+#1#{} Chips and {C:mult}+#2#{} Mult if',
-                    [2] = 'played hand contains a {C:attention}Straight{}',
-                    [3] = 'with a scoring {C:attention}face card'
+                    [1] = '플레이한 핸드에 페이스 카드가 포함된',
+                    [2] = '스트레이트가 있으면',
+                    [3] = '{C:chips}+#1#{} 칩과{C:mult}+#2#{} 배수를 얻습니다'
                 }
             },
             j_bunc_rasta = {
                 ['name'] = '라스타',
                 ['text'] = {
-                    [1] = '플레이한 핸드의 점수 획득에'
-                    [2] = '{C:attention}강화된 카드{}가 없으면'
+                    [1] = '플레이한 핸드의 점수 획득에',
+                    [2] = '{C:attention}강화된 카드{}가 없으면',
                     [3] = '{C:mult}+#1#{} 배수를 얻습니다'
                 },
                 ['unlock'] = {
-                    [1] = '{C:attention,E:1}강화된 카드{}를'
+                    [1] = '{C:attention,E:1}강화된 카드{}를',
                     [2] = '보유하지 않은 상태로',
                     [3] = '런을 승리합니다'
                 }
@@ -1180,7 +1181,7 @@ return {
                 ['name'] = '두통',
                 ['text'] = {
                     [1] = '각각의 {C:attention}#1#{} 카드가',
-                    [2] = '파괴 될 때 마다'
+                    [2] = '파괴 될 때 마다',
                     [3] = '{C:bunco_virtual_dark}아케이드 태그{}를 만듭니다',
                     [4] = '{C:inactive}({C:attention}#2#{C:inactive}/#1# 카드 파괴됨)'
                 }
