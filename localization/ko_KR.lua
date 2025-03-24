@@ -1,4 +1,6 @@
--- Korean Translated By: JayJayDee, namssy
+-- Korean Translated By
+-- JayJayDee - https://github.com/JayJayDee
+-- Namssy - https://github.com/namssy
 return {
     misc = {
         dictionary = {
@@ -1007,17 +1009,15 @@ return {
                 }
             },
             j_bunc_vandalism = {
-                ['name'] = 'Vandalism',
+                ['name'] = '반달리즘',
                 ['text'] = {
-                    [1] = '{C:green}#1# in #2#{} chance for',
-                    [2] = 'cards to be drawn face down',
-                    [3] = 'Face down cards give',
-                    [4] = '{X:mult,C:white}X#3#{} Mult when scored'
+                    [1] = '뒤집혀서 뽑힌 페이스 카드가',
+                    [2] = '득점시 {C:green}#2#분의 #1#{}확률로',
+                    [3] = '{X:mult,C:white}X#3#{} 배수를 줍니다'
                 },
                 ['unlock'] = {
-                    [1] = 'Play a 5 card hand',
-                    [2] = 'that contains only',
-                    [3] = '{C:attention,E:1}Flipped{} cards'
+                    [1] = '{C:attention,E:1}뒤집힌{} 카드만 있는',
+                    [2] = '포커 핸드를 득점합니다'
                 }
             },
             j_bunc_protester = {
