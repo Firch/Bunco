@@ -464,66 +464,66 @@ return {
             c_bunc_the_o = {
                 ['name'] = 'The O',
                 ['text'] = {
-                    [1] = '{C:attention}Link together{} 4 selected cards',
-                    [2] = 'where 2 cards share the {C:attention}same property',
-                    [3] = '{C:inactive}(rank or suit){} and the other 2 cards',
-                    [4] = 'share {C:attention}different type{} of the {C:attention}same property'
+                    [1] = '4개의 선택된 카드를 {C:attention}연결합니다{}',
+                    [2] = '이중 두 장은 {C:attention}같은 속성{}{C:inactive}(랭크나 수트){}을',
+                    [3] = '공유해야 하고, 다른 두장은 {C:attention}다른 타입{}의',
+                    [4] = '{C:attention}같은 속성{}을 공유합니다'
                 }
             },
             c_bunc_the_t = {
                 ['name'] = 'The T',
                 ['text'] = {
-                    [1] = '{C:attention}Link together{} 4 selected cards',
-                    [2] = 'where 3 cards share the {C:attention}same property',
-                    [3] = '{C:inactive}(rank or suit){} and the other card that',
-                    [4] = '{C:attention}does not share{} the {C:attention}same property{}',
-                    [5] = 'with the other cards'
+                    [1] = '4개의 선택된 카드를 {C:attention}연결합니다{}',
+                    [2] = '이중 세 장은 {C:attention}같은 속성{}{C:inactive}(랭크나 수트){}을',
+                    [3] = '공유해야 하고, 다른 한 장은',
+                    [4] = '다른 카드들과 {C:attention}같은 속성{}을',
+                    [5] = '{C:attention}공유하면 안 됩니다{}'
                 }
             },
             c_bunc_the_s = {
                 ['name'] = 'The S',
                 ['text'] = {
-                    [1] = '{C:attention}Link together{} 4 selected cards',
-                    [2] = 'where {C:attention}2 groups{} of 2 cards share',
-                    [3] = 'the {C:attention}same rank{} within each group, with one',
-                    [4] = 'card from each group sharing a {C:attention}common suit'
+                    [1] = '4개의 선택된 카드를 {C:attention}연결합니다{}',
+                    [2] = '{C:attention}2개 그룹{}의 2장씩의 카드가',
+                    [3] = '각 그룹 내에서 {C:attention}같은 랭크{}를 공유하며, 각',
+                    [4] = '그룹에서 한 장의 카드가 {C:attention}공통 수트{}를 공유합니다''
                 }
             },
             c_bunc_the_z = {
                 ['name'] = 'The Z',
                 ['text'] = {
-                    [1] = '{C:attention}Link together{} 4 selected cards',
-                    [2] = 'where {C:attention}2 groups{} of 2 cards share',
-                    [3] = 'the {C:attention}same suit{} within each group, with one',
-                    [4] = 'card from each group sharing a {C:attention}common rank'
+                    [1] = '4개의 선택된 카드를 {C:attention}연결합니다{}',
+                    [2] = '{C:attention}2개 그룹{}의 2장씩 카드가',
+                    [3] = '각 그룹 내에서 {C:attention}같은 수트{}를 공유하며, 각',
+                    [4] = '그룹에서 한 장의 카드가 {C:attention}공통 랭크{}를 공유합니다'
                 }
             },
             c_bunc_the_j = {
                 ['name'] = 'The J',
                 ['text'] = {
-                    [1] = '{C:attention}Link together{} 4 selected cards',
-                    [2] = 'where 3 cards share the {C:attention}same rank',
-                    [3] = 'and the other card that shares',
-                    [4] = 'a {C:attention}common suit{} while',
-                    [5] = 'not sharing the same rank'
+                    [1] = '4개의 선택된 카드를 {C:attention}연결합니다{}',
+                    [2] = '3장의 카드가 {C:attention}같은 랭크{}를 공유하고',
+                    [3] = '나머지 1장의 카드는 이중',
+                    [4] = '{C:attention}공통 수트{}를 공유하지만',
+                    [5] = '같은 랭크는 공유하지 않습니다'
                 }
             },
             c_bunc_the_l = {
                 ['name'] = 'The L',
                 ['text'] = {
-                    [1] = '{C:attention}Link together{} 4 selected cards',
-                    [2] = 'where 3 cards share the {C:attention}same suit',
-                    [3] = 'and the other card that shares',
-                    [4] = 'a {C:attention}common rank{} while',
-                    [5] = 'not sharing the same suit'
+                    [1] = '4개의 선택된 카드를 {C:attention}연결합니다{}',
+                    [2] = '3장의 카드가 {C:attention}같은 수트{}를 공유하고',
+                    [3] = '나머지 1장의 카드는 이중',
+                    [4] = '{C:attention}공통 랭크{}를 공유하지만',
+                    [5] = '같은 수트는 공유하지 않습니다'
                 }
             },
             c_bunc_the_slash = {
                 ['name'] = 'The /',
                 ['text'] = {
-                    [1] = '{C:attention}Link together{} 4 selected cards',
-                    [2] = 'where all the cards have a',
-                    [3] = '{C:attention}different property{} {C:inactive}(rank and suit)'
+                    [1] = '4개의 선택된 카드를 {C:attention}연결합니다{}',
+                    [2] = '모든 카드가 {C:attention}서로 다른 속성{}{C:inactive}(랭크와 수트){}을',
+                    [3] = '가집니다'
                 }
             }
         },
