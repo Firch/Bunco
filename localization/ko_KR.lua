@@ -1102,71 +1102,69 @@ return {
                 }
             },
             j_bunc_bounty_hunter = {
-                ['name'] = 'Bounty Hunter',
+                ['name'] = '현상금 사냥꾼',
                 ['text'] = {
-                    [1] = 'All sources of money',
-                    [2] = 'give {C:money}1${} less and this Joker',
-                    [3] = 'gains {C:mult}+#1#{} Mult each time',
-                    [4] = 'you earn money',
-                    [5] = '{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)'
+                    [1] = '모든 $의 획득 시 마다',
+                    [2] = '{C:money}1${}로 바뀌고 이 조커는',
+                    [3] = '{C:mult}+#1#{} 배수를 얻습니다',
+                    [4] = '{C:inactive}(현재 {C:mult}+#2#{C:inactive} 배수)'
                 },
                 ['unlock'] = {
-                    [1] = 'Have less than {E:1,C:attention}$#1#',
-                    [2] = 'during a single run'
+                    [1] = '런에서 {E:1,C:attention}$#1#{}보다',
+                    [2] = '적은 돈을 가집니다'
                 }
             },
             j_bunc_mousetrap = {
-                ['name'] = 'Mousetrap',
+                ['name'] = '쥐덫',
                 ['text'] = {
-                    [1] = '{C:chips}+#1#{} Chips,',
-                    [2] = '{C:green}#2# in #3#{} chance to',
-                    [3] = '{C:attention}lose{} one hand instead'
+                    [1] = '{C:chips}+#1#{} 칩을 획득하고,',
+                    [2] = '{C:green}#3#분의 #2#{} 확률로',
+                    [3] = '핸드 하나를 {C:attention}잃습니다{}'
                 }
             },
             j_bunc_the_joker = {
-                ['name'] = 'The Joker',
+                ['name'] = '더 조커',
                 ['text'] = {
-                    [1] = 'After play, each scored',
-                    [2] = 'card without an enhancement has',
-                    [3] = '{C:green}#1# in #2#{} chance to be destroyed',
+                    [1] = '핸드를 플레이 하면,',
+                    [2] = '플레이한 핸드에서 강화가 없는 카드가',
+                    [3] = '{C:green}#2#분의 #1#{}확률로 파괴됩니다',
                 },
                 ['unlock'] = {
-                    [1] = 'Discover every',
-                    [2] = '{C:attention}Boss Blind'
+                    [1] = '모든 {C:attention}보스 블라인드{}',
+                    [2] = '를 발견합니다'
                 }
             },
             j_bunc_tangram = {
-                ['name'] = 'Tangram',
+                ['name'] = '탱그램',
                 ['text'] = {
-                    [1] = 'When a {C:attention}7{} is scored,',
-                    [2] = '{C:mult}+#1#{} Mult times the',
-                    [3] = 'amount of scored {C:attention}7s{}'
+                    [1] = '{C:attention}7{} 카드가 점수를 획득하면',
+                    [2] = '7카드의 갯수만큼',
+                    [3] = '{C:mult}+#1#{} 배수를 획득합니다'
                 }
             },
             j_bunc_domino = {
-                ['name'] = 'Domino',
+                ['name'] = '도미노',
                 ['text'] = {
-                    [1] = 'Upon {C:attention}acquiring{} or {C:attention}using',
-                    [2] = 'a card from shop or',
-                    [3] = 'Booster Pack, acquire {C:attention}2',
-                    [4] = 'adjacent cards if possible'
+                    [1] = '상점이나 부스터 팩에서',
+                    [2] = '카드를 얻으면',
+                    [3] = '가능한 경우 {C:attention}2{}개의',
+                    [4] = '인접한 카드도 같이 얻습니다'
                 }
             },
             j_bunc_glue_gun = {
-                ['name'] = 'Glue Gun',
+                ['name'] = '글루 건',
                 ['text'] = {
-                    [1] = 'Sell this card to',
-                    [2] = '{C:attention}link together{} up to #1#',
-                    [3] = 'selected playing cards'
+                    [1] = '이 조커를 팔아서',
+                    [2] = '최대 #1 장의 카드들을',
+                    [3] = '{C:attention}연결된 그룹{}을 만듭니다'
                 }
             },
             j_bunc_taped = {
-                ['name'] = 'Taped Jokers',
+                ['name'] = '테이핑된 조커',
                 ['text'] = {
-                    [1] = '{C:attention}Link together{} all',
-                    [2] = 'played cards in first',
-                    [3] = 'scored hand during',
-                    [4] = '{C:attention}Boss Blind{}'
+                    [1] = '{C:attention}보스 블라인드{}에서',
+                    [2] = '처음으로 득점한 카드들로',
+                    [3] = '{C:attention}연결된 그룹{}을 만듭니다'
                 }
             },
             j_bunc_rubber_band_ball = {
