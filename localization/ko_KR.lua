@@ -162,7 +162,7 @@ return {
                     [3] = '같이 {C:attention}파괴{}됩니다.'
                 }
             },
-            bunc_drawn_linked_cards = {['text'] = {[1] = '{C:attention}Linked{} in drawn group'}},
+            bunc_drawn_linked_cards = {['text'] = {[1] = '뽑힌 카드 그룹에서 {C:attention}연결됨{}'}},
             bunc_light_suits = {
                 ['name'] = '라이트 수트',
                 ['text'] = {
@@ -464,66 +464,66 @@ return {
             c_bunc_the_o = {
                 ['name'] = 'The O',
                 ['text'] = {
-                    [1] = '{C:attention}Link together{} 4 selected cards',
-                    [2] = 'where 2 cards share the {C:attention}same property',
-                    [3] = '{C:inactive}(rank or suit){} and the other 2 cards',
-                    [4] = 'share {C:attention}different type{} of the {C:attention}same property'
+                    [1] = '4개의 선택된 카드를 {C:attention}연결합니다{}',
+                    [2] = '이중 두 장은 {C:attention}같은 속성{}{C:inactive}(랭크나 수트){}을',
+                    [3] = '공유해야 하고, 다른 두장은 {C:attention}다른 타입{}의',
+                    [4] = '{C:attention}같은 속성{}을 공유합니다'
                 }
             },
             c_bunc_the_t = {
                 ['name'] = 'The T',
                 ['text'] = {
-                    [1] = '{C:attention}Link together{} 4 selected cards',
-                    [2] = 'where 3 cards share the {C:attention}same property',
-                    [3] = '{C:inactive}(rank or suit){} and the other card that',
-                    [4] = '{C:attention}does not share{} the {C:attention}same property{}',
-                    [5] = 'with the other cards'
+                    [1] = '4개의 선택된 카드를 {C:attention}연결합니다{}',
+                    [2] = '이중 세 장은 {C:attention}같은 속성{}{C:inactive}(랭크나 수트){}을',
+                    [3] = '공유해야 하고, 다른 한 장은',
+                    [4] = '다른 카드들과 {C:attention}같은 속성{}을',
+                    [5] = '{C:attention}공유하면 안 됩니다{}'
                 }
             },
             c_bunc_the_s = {
                 ['name'] = 'The S',
                 ['text'] = {
-                    [1] = '{C:attention}Link together{} 4 selected cards',
-                    [2] = 'where {C:attention}2 groups{} of 2 cards share',
-                    [3] = 'the {C:attention}same rank{} within each group, with one',
-                    [4] = 'card from each group sharing a {C:attention}common suit'
+                    [1] = '4개의 선택된 카드를 {C:attention}연결합니다{}',
+                    [2] = '{C:attention}2개 그룹{}의 2장씩의 카드가',
+                    [3] = '각 그룹 내에서 {C:attention}같은 랭크{}를 공유하며, 각',
+                    [4] = '그룹에서 한 장의 카드가 {C:attention}공통 수트{}를 공유합니다'
                 }
             },
             c_bunc_the_z = {
                 ['name'] = 'The Z',
                 ['text'] = {
-                    [1] = '{C:attention}Link together{} 4 selected cards',
-                    [2] = 'where {C:attention}2 groups{} of 2 cards share',
-                    [3] = 'the {C:attention}same suit{} within each group, with one',
-                    [4] = 'card from each group sharing a {C:attention}common rank'
+                    [1] = '4개의 선택된 카드를 {C:attention}연결합니다{}',
+                    [2] = '{C:attention}2개 그룹{}의 2장씩 카드가',
+                    [3] = '각 그룹 내에서 {C:attention}같은 수트{}를 공유하며, 각',
+                    [4] = '그룹에서 한 장의 카드가 {C:attention}공통 랭크{}를 공유합니다'
                 }
             },
             c_bunc_the_j = {
                 ['name'] = 'The J',
                 ['text'] = {
-                    [1] = '{C:attention}Link together{} 4 selected cards',
-                    [2] = 'where 3 cards share the {C:attention}same rank',
-                    [3] = 'and the other card that shares',
-                    [4] = 'a {C:attention}common suit{} while',
-                    [5] = 'not sharing the same rank'
+                    [1] = '4개의 선택된 카드를 {C:attention}연결합니다{}',
+                    [2] = '3장의 카드가 {C:attention}같은 랭크{}를 공유하고',
+                    [3] = '나머지 1장의 카드는 이중',
+                    [4] = '{C:attention}공통 수트{}를 공유하지만',
+                    [5] = '같은 랭크는 공유하지 않습니다'
                 }
             },
             c_bunc_the_l = {
                 ['name'] = 'The L',
                 ['text'] = {
-                    [1] = '{C:attention}Link together{} 4 selected cards',
-                    [2] = 'where 3 cards share the {C:attention}same suit',
-                    [3] = 'and the other card that shares',
-                    [4] = 'a {C:attention}common rank{} while',
-                    [5] = 'not sharing the same suit'
+                    [1] = '4개의 선택된 카드를 {C:attention}연결합니다{}',
+                    [2] = '3장의 카드가 {C:attention}같은 수트{}를 공유하고',
+                    [3] = '나머지 1장의 카드는 이중',
+                    [4] = '{C:attention}공통 랭크{}를 공유하지만',
+                    [5] = '같은 수트는 공유하지 않습니다'
                 }
             },
             c_bunc_the_slash = {
                 ['name'] = 'The /',
                 ['text'] = {
-                    [1] = '{C:attention}Link together{} 4 selected cards',
-                    [2] = 'where all the cards have a',
-                    [3] = '{C:attention}different property{} {C:inactive}(rank and suit)'
+                    [1] = '4개의 선택된 카드를 {C:attention}연결합니다{}',
+                    [2] = '모든 카드가 {C:attention}서로 다른 속성{}{C:inactive}(랭크와 수트){}을',
+                    [3] = '가집니다'
                 }
             }
         },
@@ -666,178 +666,176 @@ return {
                 }
             },
             j_bunc_loan_shark = {
-                ['name'] = 'Loan Shark',
+                ['name'] = '고리대금업자',
                 ['text'] = {
-                    [1] = 'Gain {C:money}$#1#',
-                    [2] = 'when acquired...'
+                    [1] = '획득 시 {C:money}$#1#을',
+                    [2] = '얻습니다 ...'
                 },
                 ['unlock'] = {
-                    [1] = 'Spend at least {E:1,C:attention}$100',
-                    [2] = 'during a single round'
+                    [1] = '한 라운드 동안',
+                    [2] = '{E:1,C:attention}$100{} 이상 사용하세요}'
                 }
             },
             j_bunc_loan_shark_full = {
-                ['name'] = 'Loan Shark',
+                ['name'] = '고리대금업자',
                 ['text'] = {
-                    [1] = 'Gain {C:money}$#1#{} when acquired,',
-                    [2] = 'set sell price to {C:money}$-100'
+                    [1] = '획득 시 {C:money}$#1#을 얻습니다',
+                    [2] = '판매 가격이{C:money}$-100{} 입니다'
                 }
             },
             j_bunc_basement = {
-                ['name'] = 'Basement Joker',
+                ['name'] = '지하 조커',
                 ['text'] = {
-                    [1] = 'When {C:attention}Boss Blind{} is defeated,',
-                    [2] = 'create a {C:spectral}Spectral{} card',
-                    [3] = '{C:inactive}(Must have room)'
+                    [1] = '{C:attention}보스 블라인드{} 처치 시,',
+                    [2] = '{C:spectral}유령{} 카드를 생성 합니다',
+                    [3] = '{C:inactive}(공간이 있어야 함)'
                 }
             },
             j_bunc_shepherd = {
-                ['name'] = 'Shepherd Joker',
+                ['name'] = '양치기 조커',
                 ['text'] = {
-                    [1] = 'Gains {C:chips}+#1#{} Chips',
-                    [2] = 'when played hand',
-                    [3] = 'contains a {C:attention}Pair',
-                    [4] = '{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)'
+                    [1] = '{C:attention}페어{}가 포함된 핸드를',
+                    [2] = '플레이 할 때 {C:chips}+#1#{} 칩을 얻습니다',
+                    [3] = '{C:inactive}(현재 {C:chips}+#2# {C:inactive}칩)'
                 }
             },
             j_bunc_knight = {
-                ['name'] = 'Joker Knight',
-                ['text'] = {
-                    [1] = 'When {C:attention}Blind{} is selected, {C:attention}shuffle{} all Jokers',
-                    [2] = 'and this Joker gains {C:mult}+#1#{} Mult,',
-                    [3] = '{C:red}resets{} when any Joker is rearranged',
-                    [4] = '{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)'
-                },
+                ['name'] = '조커 기사',
+                    ['text'] = {
+                        [1] = '{C:attention}블라인드{} 선택 시, 모든 조커를 {C:attention}셔플{}하고',
+                        [2] = '이 조커는 {C:mult}+#1#{} 배수를 얻습니다,',
+                        [3] = '조커가 {C:red}재배열{}되면 초기화됩니다',
+                        [4] = '{C:inactive}(현재 {C:mult}+#2#{C:inactive} 배수)'
+                    },
                 ['unlock'] = {
-                    [1] = 'Defeat {E:1,C:attention}Amber Acorn',
-                    [2] = 'without disabling it'
+                    [1] = '{E:1,C:attention}호박색 도토리{}를 비활성화 하지 않고',
+                    [2] = '처치하세요'
                 }
             },
             j_bunc_jmjb = {
-                ['name'] = 'Joker Man & Jester Boy Trading Card No. 54',
+                ['name'] = '조커맨 & 제스터 보이 트레이딩 카드 No. 54',
                 ['text'] = {
-                    [1] = '{C:attention}Standard Packs{} contain',
-                    [2] = 'only {C:attention}Enhanced cards{}'
+                    [1] = '{C:attention}스탠다드 팩{}에서',
+                    [2] = '{C:attention}강화 카드{}만 등장합니다'
                 },
                 ['unlock'] = {
-                    [1] = 'Open {E:1,C:attention}#1#',
-                    [2] = 'Booster Packs',
-                    [3] = '{C:inactive}(#2#)'
+                    [1] = '{E:1,C:attention}#1#개',
+                    [2] = '부스터 팩 열기',
+                    [3] = '{C:inactive}(현재 #2#개)'
                 }
             },
             j_bunc_dogs_playing_poker = {
-                ['name'] = 'Dogs Playing Poker',
+                ['name'] = '포커 게임을 하는 개들',
                 ['text'] = {
-                    [1] = '{X:mult,C:white}X#1#{} Mult if every scored',
-                    [2] = 'rank is {C:attention}2{}, {C:attention}3{}, {C:attention}4{}, or {C:attention}5'
+                    [1] = '득점된 랭크가 모두 {C:attention}2{}, {C:attention}3{}, {C:attention}4{}, 또는 {C:attention}5 일 경우',
+                    [2] = '{X:mult,C:white}X#1#{} 배수'
                 }
             },
             j_bunc_righthook = {
-                ['name'] = 'Righthook Joker',
+                ['name'] = '라이트훅 조커',
                 ['text'] = {
-                    [1] = 'Retrigger rightmost scored card',
-                    [2] = 'one time per remaining {C:blue}hand{}',
+                    [1] = '득점된 가장 오른쪽 카드를',
+                    [2] = '남은 {C:blue}핸드{}만큼 다시 발동',
                 },
                 ['unlock'] = {
-                    [1] = 'Retrigger played',
-                    [2] = 'card at least',
-                    [3] = '{E:1,C:attention}#1# times{}'
+                    [1] = '사용한 카드를',
+                    [2] = '총 {E:1,C:attention}#1# 회{}이상',
+                    [3] = '다시 발동시킵니다'
                 }
             },
             j_bunc_fiendish = {
-                ['name'] = 'Fiendish Joker',
+                ['name'] = '사악한 조커',
                 ['text'] = {
-                    [1] = 'Double all sources of money,',
-                    [2] = '{C:green}#1# in #2#{} chance to pay out',
-                    [3] = 'with {C:money}$1{} instead'
+                    [1] = '모든 수익을 두 배로 만듭니다,',
+                    [2] = '대신 {C:green}#1# / #2#{} 확률로',
+                    [3] = '{C:money}$1{}만 지급됩니다'
                 },
                 ['unlock'] = {
-                    [1] = 'Complete the {E:1,C:attention}Double or Nothing',
-                    [2] = 'challenge'
+                    [1] = '챌린지 {E:1,C:attention}두배 아니면 꽝',
+                    [2] = '을 완료하세요'
                 }
             },
             j_bunc_carnival = {
-                ['name'] = 'Carnival',
+                ['name'] = '카니발',
                 ['text'] = {
-                    [1] = 'After defeating {C:attention}Boss Blind{},',
-                    [2] = '{C:attention}destroy{} a random Joker to',
-                    [3] = 'go one Ante back, next time',
-                    [4] = 'works only on a greater Ante'
+                    [1] = '{C:attention}보스 블라인드{} 처치 후,',
+                    [2] = '무작위 조커를 {C:attention}파괴{}하고',
+                    [3] = '이전 앤티로 한 단계 되돌아갑니다',
+                    [4] = '다음 사용은 가장 앤티에서만 작동 합니다'
                 },
                 ['unlock'] = {
-                    [1] = 'Reach Ante',
-                    [2] = 'level {E:1,C:attention}0'
+                    [1] = '앤티 레벨',
+                    [2] = '{E:1,C:attention}0{} 도달하세요'
                 }
             },
             j_bunc_sledgehammer = {
-                ['name'] = 'Sledgehammer',
+                ['name'] = '슬레지해머',
                 ['text'] = {
-                    [1] = '{C:attention}Glass Cards{} give +{X:mult,C:white}X#1#{} Mult',
-                    [2] = 'but are guaranteed to break'
+                    [1] = '{C:attention}글래스 카드{}는 {X:mult,C:white}X#1#{}배수를 부여하지만,',
+                    [2] = '반드시 깨집니다'
                 },
                 ['unlock'] = {
-                    [1] = 'Play a 5 card hand',
-                    [2] = 'that contains only',
-                    [3] = '{C:attention,E:1}Glass{} cards'
+                    [1] = '{C:attention,E:1}글래스{} 카드만 포함된',
+                    [2] = '5장짜리 핸드로 플레이하세요'
                 }
             },
             j_bunc_doorhanger = {
-                ['name'] = 'Doorhanger',
+                ['name'] = '도어행거',
                 ['text'] = {
-                    [1] = '{C:blue}Common{} Jokers do not appear',
-                    [2] = '{s:0.8}Different rarities appear instead'
+                    [1] = '{C:blue}일반{} 조커가 등장하지 않으며',
+                    [2] = '{s:0.8}대신 다른 희귀도가 등장합니다'
                 },
                 ['unlock'] = {
-                    [1] = 'Win a run without',
-                    [2] = 'ever having',
-                    [3] = '{C:attention,E:1}Common{} Jokers'
+                    [1] = '게임 도중 단 한 번도',
+                    [2] = '{C:attention,E:1}일반{} 조커를 사용하지 않고',
+                    [3] = '런을 승리하세요'
                 }
             },
             j_bunc_fingerprints = {
-                ['name'] = 'Fingerprints',
+                ['name'] = '지문',
                 ['text'] = {
-                    [1] = 'Scored cards',
-                    [2] = 'in {C:attention}winning hand{}',
-                    [3] = 'gain {C:chips}+#1#{} Chips until',
-                    [4] = 'end of the next round',
+                    [1] = '{C:attention}승리 핸드{}에서',
+                    [2] = '득점된 카드들은',
+                    [3] = '다음 라운드 종료 시까지',
+                    [4] = '{C:chips}+#1#{} 칩을 얻습니다'
                 }
             },
             j_bunc_zero_shapiro = {
-                ['name'] = 'Zero Shapiro',
+                ['name'] = '제로 샤피로',
                 ['text'] = {
-                    [1] = 'Scored {C:attention}Ks{}, {C:attention}Qs{}, {C:attention}Js{},',
-                    [2] = 'or {C:attention}Rankless cards',
-                    [3] = 'have {C:green}#1# in #2#{} chance to',
-                    [4] = 'create a {C:attention}D6 Tag',
+                    [1] = '득점된 {C:attention}킹{}, {C:attention}퀀{}, {C:attention}잭{},',
+                    [2] = '혹은 {C:attention}랭크 없는 카드들은',
+                    [3] = '{C:green}#1# / #2#{}의 확률로',
+                    [4] = '{C:attention}D6 태그{}를 생성합니다',
                 }
             },
             j_bunc_nil_bill = {
                 ['name'] = 'Nil Bill',
                 ['text'] = {
-                    [1] = 'Earn {C:money}$#1#{}',
-                    [2] = 'when a playing card',
-                    [3] = 'is destroyed'
+                    [1] = '카드가 파괴될 때',
+                    [2] = '{C:money}$#1#{}을',
+                    [3] = '획득합니다'
                 }
             },
             j_bunc_bierdeckel = {
-                ['name'] = 'Bierdeckel',
+                ['name'] = '비어데켈',
                 ['text'] = {
-                    [1] = 'After play or discard,',
-                    [2] = 'cards held in hand gain',
-                    [3] = '{C:chips}+#1#{} Chips until end of round'
+                    [1] = '플레이 혹은 버리기 후에,',
+                    [2] = '라운드 종료까지 손에 있는',
+                    [3] = '카드들이 {C:chips}+#1#{} 칩을 얻습니다'
                 }
             },
             j_bunc_registration_plate = {
-                ['name'] = 'Registration Plate',
+                ['name'] = '번호판',
                 ['text'] = {
                     [1] = '#1#',
-                    [2] = 'has the Chips and Mult of all',
-                    [3] = '{C:attention}poker hands{} played this game',
-                    [4] = '{s:0.8}Combination changes every round'
+                    [2] = '이번 게임에서 플레이된 모든',
+                    [3] = '{C:attention}포커 핸드{}의 칩과 배수를 가집니다',
+                    [4] = '{s:0.8}조합은 매 라운드마다 변경됩니다'
                 },
                 ['unlock'] = {
-                    [1] = 'Complete the {E:1,C:attention}15 Minute City',
-                    [2] = 'challenge'
+                    [1] = '챌린지 {E:1,C:attention}15분 도시',
+                    [2] = '를 완료하세요'
                 }
             },
             j_bunc_slothful = {
@@ -1783,8 +1781,8 @@ return {
             v_bunc_cups_n_balls = {
                 ['name'] = '컵과 공',
                 ['text'] = {
-                    [1] = '상점에 {C:attention}+1{}개의 부스터 팩 슬롯이 추가됩니다',
-                    [2] = ''
+                    [1] = '상점에 {C:attention}+1{}개의',
+                    [2] = '부스터 팩 슬롯이 추가됩니다'
                 }
             },
             v_bunc_shell_game = {
