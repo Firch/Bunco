@@ -594,77 +594,75 @@ return {
             j_bunc_crop_circles = {
                 ['name'] = '크롭 서클',
                 ['text'] = {
-                    [1] = 'Base suit {C:clubs}Clubs{} give {C:mult}+3{} Mult,',
-                    [2] = '{C:attention}8s{} give {C:mult}+2{} Mult,',
-                    [3] = '{C:attention}Qs{}, {C:attention}10s{}, {C:attention}9s{}, {C:attention}6s{} give {C:mult}+1{} Mult'
+                    [1] = '기본 수트의 {C:clubs}클럽{}이 {C:mult}+3{} 배수,',
+                    [2] = '{C:attention}8{}이 {C:mult}+2{} 배수,',
+                    [3] = '{C:attention}Q{}, {C:attention}10{}, {C:attention}9{}, {C:attention}6{}이 {C:mult}+1{} 배수를 제공합니다'
                 }
             },
             j_bunc_crop_circles_exotic = {
                 ['name'] = '크롭 서클(엑조틱)',
                 ['text'] = {
-                    [1] = 'Base suit {C:bunc_fleurons}Fleurons{} give {C:mult}+4{} Mult,',
-                    [2] = 'Base suit {C:clubs}Clubs{} give {C:mult}+3{} Mult,',
-                    [3] = '{C:attention}8s{} give {C:mult}+2{} Mult,',
-                    [4] = '{C:attention}Qs{}, {C:attention}10s{}, {C:attention}9s{}, {C:attention}6s{} give {C:mult}+1{} Mult'
+                    [1] = '기본 수트의 {C:bunc_fleurons}꽃무늬{} 카드가 {C:mult}+4{} 배수,',
+                    [2] = '기본 수트의 {C:clubs}클럽{} {C:mult}+3{} 배수,',
+                    [3] = '{C:attention}8{}이 {C:mult}+2{} 배수,',
+                    [4] = '{C:attention}Q{}, {C:attention}10{}, {C:attention}9{}, {C:attention}6{}이 {C:mult}+1{} 배수를 제공합니다'
                 }
             },
             j_bunc_xray = {
-                ['name'] = 'X-Ray',
+                ['name'] = 'X-ray',
                 ['text'] = {
-                    [1] = 'This Joker gains {X:mult,C:white}X#1#{} Mult',
-                    [2] = 'per card drawn face down',
-                    [3] = '{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)'
+                    [1] = '이 조커는 카드가 뒷면으로 뽑힐 때 마다'
+                    [2] = '{X:mult,C:white}X#1#{} 배수를 얻습니다',
+                    [3] = '{C:inactive}(현재 {X:mult,C:white}X#2#{C:inactive} 배수)'
                 },
                 ['unlock'] = {
-                    [1] = 'Complete the {E:1,C:attention}X-ray Vision',
-                    [2] = 'challenge'
+                    [1] = '{E:1,C:attention}X-ray 비젼{} 챌린지를',
+                    [2] = '완료할 것'
                 }
             },
             j_bunc_dread = {
-                ['name'] = 'Dread',
+                ['name'] = '공포',
                 ['text'] = {
-                    [1] = 'After scoring your {C:attention}last{} hand,',
-                    [2] = 'upgrade it by {C:attention}#1# levels{}',
-                    [3] = 'and {C:attention}destroy{} scored cards',
-                    [4] = '{C:inactive,s:0.8}All levels gained by this Joker',
-                    [5] = '{C:inactive,s:0.8}are lost on its removal'
+                    [1] = '마지막으로 플레이한 포커 핸드가',
+                    [2] = '{C:attention}#1# 레벨{}이 올라가며,',
+                    [3] = '득점한 카드들이 {C:attention}파괴됩니다{}',
+                    [4] = '{C:inactive,s:0.8}이 조커로 한 레벨은',
+                    [5] = '{C:inactive,s:0.8}조커의 파괴시 사라집니다'
                 },
                 ['unlock'] = {
-                    [1] = 'Reduce your deck',
-                    [2] = 'by at least {E:1,C:attention}#1#{} cards',
-                    [3] = 'in one round'
+                    [1] = '한 라운드를 플레이하는 중',
+                    [2] = '덱에서 최소 {E:1,C:attention}#1#{}카드를',
+                    [3] = '제거합니다'
                 }
             },
             j_bunc_prehistoric = {
-                ['name'] = 'Prehistoric Joker',
+                ['name'] = '선사시대 조커',
                 ['text'] = {
-                    [1] = 'Played cards that share',
-                    [2] = 'both {C:attention}rank and suit{} with an',
-                    [3] = '{C:attention}already-scored card{} this round',
-                    [4] = 'give {C:mult}+#1#{} Mult'
+                    [1] = '이 라운드에서 이미 플레이하고 득점한',
+                    [2] = '카드들의 {C:attention}랭크와 수트{}가',
+                    [3] = '{C:mult}+#1#{} 배수를 얻습니다'
                 },
                 ['unlock'] = {
-                    [1] = 'Play a',
-                    [2] = '{E:1,C:attention}Flush Five'
+                    [1] = '{E:1,C:attention}플러쉬 파이브{}를',
+                    [2] = '플레이 합니다'
                 }
             },
             j_bunc_linocut = {
-                ['name'] = 'Linocut Joker',
+                ['name'] = '라이노컷 조커',
                 ['text'] = {
-                    [1] = 'When you play exactly {C:attention}2{} cards',
-                    [2] = 'that form a {C:attention}Pair{},',
-                    [3] = "convert the {C:attention}left{} card's suit",
-                    [4] = "into the {C:attention}right{} card's suit",
-                    [5] = '{C:inactive}(Drag to rearrange)'
+                    [1] = '딱 {C:attention}2{} 카드로 이루어진 {C:attention}페어의 경우',
+                    [2] = "{C:attention}왼쪽{} 카드의 수트를",
+                    [4] = "{C:attention}오른쪽{} 카드의 수트로 바꿉니다",
+                    [5] = '{C:inactive}(드래그하여 재배열)'
                     -- TODO this joker is a bit wordy
                 }
             },
             j_bunc_ghost_print = {
-                ['name'] = 'Ghost Print',
+                ['name'] = '열화 카피',
                 ['text'] = {
-                    [1] = 'Gives Chips and Mult',
-                    [2] = 'from last {C:attention}hand type{} played',
-                    [3] = '{C:inactive}(Last poker hand: #1#)'
+                    [1] = '마지막으로 플레이한 {C:attention}핸드 타입{}에 대해',
+                    [2] = '추가 칩과 배수를 얻습니다',
+                    [3] = '{C:inactive}(마지막 포커 핸드: #1#)'
                 }
             },
             j_bunc_loan_shark = {
