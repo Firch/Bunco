@@ -701,12 +701,12 @@ return {
             },
             j_bunc_knight = {
                 ['name'] = '조커 기사',
-                    ['text'] = {
-                        [1] = '{C:attention}블라인드{} 선택 시, 모든 조커를 {C:attention}셔플{}하고',
-                        [2] = '이 조커는 {C:mult}+#1#{} 배수를 얻습니다,',
-                        [3] = '조커가 {C:red}재배열{}되면 초기화됩니다',
-                        [4] = '{C:inactive}(현재 {C:mult}+#2#{C:inactive} 배수)'
-                    },
+                ['text'] = {
+                    [1] = '{C:attention}블라인드{} 선택 시, 모든 조커를 {C:attention}셔플{}하고',
+                    [2] = '이 조커는 {C:mult}+#1#{} 배수를 얻습니다,',
+                    [3] = '조커가 {C:red}재배열{}되면 초기화됩니다',
+                    [4] = '{C:inactive}(현재 {C:mult}+#2#{C:inactive} 배수)'
+                },
                 ['unlock'] = {
                     [1] = '{E:1,C:attention}호박색 도토리{}를 비활성화 하지 않고',
                     [2] = '처치하세요'
