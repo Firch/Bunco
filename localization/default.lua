@@ -5,28 +5,29 @@ return {
             -- Config values
 
             bunc_colorful_finishers = 'Colorful Final Blinds',
-            bunc_colorful_finishers_desc = 'Enables colorful backgrounds for the final blinds',
-            bunc_colorful_finishers_desc_2 = 'and removes gray background in the Endless Mode',
+            bunc_colorful_finishers_desc = 'Enables colorful backgrounds for final blinds',
+            bunc_colorful_finishers_desc_2 = 'and removes gray background in Endless Mode',
 
             bunc_high_quality_shaders = 'High Quality Shaders',
-            bunc_high_quality_shaders_desc = 'Makes some of the vanilla shaders',
-            bunc_high_quality_shaders_desc_2 = 'render in higher quality (might cause lag)',
+            bunc_high_quality_shaders_desc = 'Makes some vanilla shaders render',
+            bunc_high_quality_shaders_desc_2 = 'in higher quality (might cause lag)',
 
             bunc_fixed_sprites = 'Fixed Sprites',
-            bunc_fixed_sprites_desc = 'Tweaks some sprites in a minor way by removing',
-            bunc_fixed_sprites_desc_2 = 'stray pixels, improving consistency and high contrast',
+            bunc_fixed_sprites_desc = 'Tweaks some sprites by removing stray pixels,',
+            bunc_fixed_sprites_desc_2 = 'improving consistency and high contrast',
 
             bunc_gameplay_reworks = 'Gameplay Reworks',
-            bunc_gameplay_reworks_desc = 'Reworks some of the vanilla mechanics',
+            bunc_gameplay_reworks_desc = 'Reworks some vanilla mechanics',
             bunc_gameplay_reworks_desc_2 = 'to make the game more enjoyable',
 
             bunc_fixed_badges = 'Fixed Badges',
-            bunc_fixed_badges_desc = 'Changes the badges on consumables by replacing confusing',
-            bunc_fixed_badges_desc_2 = 'flavor text with indication of their way of obtaining',
+            bunc_fixed_badges_desc = 'Changes the badges on Planet cards: replaces confusing',
+            bunc_fixed_badges_desc_2 = 'flavor text with an indicator for secret hands',
 
-            bunc_jokerlike_consumable_editions = 'Editions in Consumables Slot',
-            bunc_jokerlike_consumable_editions_desc = 'Reverts the vanilla behavior of consumables with',
-            bunc_jokerlike_consumable_editions_desc_2 = 'editions acting like Jokers (for other conflicting mods)',
+            bunc_jokerlike_consumable_editions = 'Vanilla Editioned Consumables',
+            bunc_jokerlike_consumable_editions_desc = 'Keep the vanilla behavior of editioned consumables:',
+            bunc_jokerlike_consumable_editions_desc_2 = 'editions give Chips/Mult like Jokers',
+            bunc_jokerlike_consumable_editions_desc_3 = '(for other conflicting mods)',
 
             bunc_default_true = 'Enabled by default',
             bunc_default_false = 'Disabled by default',
@@ -221,7 +222,7 @@ return {
             bunc_consumable_edition_bunc_glitter = {
                 ['name'] = 'Glitter',
                 ['text'] = {
-                    [1] = 'Create a {C:attention}Ultrachips Tag'
+                    [1] = 'Create an {C:attention}Ultrachips Tag'
                 }
             },
 
@@ -242,9 +243,9 @@ return {
             p_bunc_blind = {
                 ['name'] = 'Blind Pack',
                 ['text'] = {
-                    [1] = 'Choose one of up to',
-                    [2] = '{C:attention}#1# Boss Blinds{} to',
-                    [3] = 'replace on this Ante'
+                    [1] = 'Choose {C:attention}1{} of up to {C:attention}#1#',
+                    [2] = '{C:attention}Boss Blinds{} to replace',
+                    [3] = 'this Ante\'s {C:attention}Boss Blind{}'
                 }
             },
             p_bunc_virtual_normal = {
@@ -289,15 +290,16 @@ return {
                 ['name'] = 'Hindered',
                 ['text'] = {
                     [1] = 'Stays in place until',
-                    [2] = 'the end of the round',
+                    [2] = 'end of round',
                     [3] = 'after being sold'
                 }
             },
             bunc_reactive = {
                 ['name'] = 'Reactive',
                 ['text'] = {
-                    [1] = 'Debuffed if no blinds',
-                    [2] = 'are skipped this Ante'
+                    [1] = 'Each Ante, debuffed',
+                    [2] = 'until you\'ve',
+                    [3] = 'skipped a blind'
                 }
             },
 
@@ -390,9 +392,9 @@ return {
             c_bunc_lust = {
                 ['name'] = 'Lust',
                 ['text'] = {
-                    [1] = 'Gives {C:money}$#1#{} per every',
-                    [2] = 'playing card held',
-                    [3] = 'in hand {C:inactive}(Max of {C:money}$#2#{C:inactive})',
+                    [1] = 'Gives {C:money}$#1#{} for every',
+                    [2] = 'playing card held in',
+                    [3] = 'hand {C:inactive}(Max of {C:money}$#2#{C:inactive})',
                     [4] = '{C:inactive}(Currently {C:money}$#3#{C:inactive})'
                 },
                 ['unlock'] = {
@@ -457,8 +459,8 @@ return {
             c_bunc_the_8 = {
                 ['name'] = 'The 8',
                 ['text'] = {
-                    [1] = '{C:attention}Link together{} any',
-                    [2] = 'amount of selected',
+                    [1] = '{C:attention}Link together{}',
+                    [2] = '{C:attention}any number{} of selected',
                     [3] = 'unlinked cards in hand',
                     [4] = '{C:inactive,s:0.6}(Unlimited selection while The 8 is selected)'
                 }
@@ -555,7 +557,7 @@ return {
                 ['text'] = {
                     [1] = 'This Joker gains {C:red}+#1#{} Mult',
                     [2] = 'per skipped choice',
-                    [3] = 'in {C:attention}Booster Pack{}',
+                    [3] = 'in a {C:attention}Booster Pack{}',
                     [4] = '{C:inactive}(Currently {C:red}+#2#{C:inactive} Mult)'
                 }
             },
@@ -646,7 +648,7 @@ return {
                     [5] = '{C:inactive,s:0.8}are lost on its removal'
                 },
                 ['unlock'] = {
-                    [1] = 'Reduce your deck',
+                    [1] = 'Reduce your deck\'s size',
                     [2] = 'by at least {E:1,C:attention}#1#{} cards',
                     [3] = 'in one round'
                 }
@@ -802,7 +804,7 @@ return {
             j_bunc_doorhanger = {
                 ['name'] = 'Doorhanger',
                 ['text'] = {
-                    [1] = '{C:blue}Common{} Jokers do not appear',
+                    [1] = '{C:blue}Common{} Jokers no longer appear',
                     [2] = '{s:0.8}Different rarities appear instead'
                 },
                 ['unlock'] = {
@@ -817,15 +819,15 @@ return {
                     [1] = 'Scored cards',
                     [2] = 'in {C:attention}winning hand{}',
                     [3] = 'gain {C:chips}+#1#{} Chips until',
-                    [4] = 'end of the next round',
+                    [4] = 'end of next round',
                 }
             },
             j_bunc_zero_shapiro = {
                 ['name'] = 'Zero Shapiro',
                 ['text'] = {
                     [1] = 'Scored {C:attention}Ks{}, {C:attention}Qs{}, {C:attention}Js{},',
-                    [2] = 'or {C:attention}Rankless cards',
-                    [3] = 'have {C:green}#1# in #2#{} chance to',
+                    [2] = 'or {C:attention}rankless cards',
+                    [3] = 'have a {C:green}#1# in #2#{} chance to',
                     [4] = 'create a {C:attention}D6 Tag',
                 }
             },
@@ -939,7 +941,7 @@ return {
                 ['unlock'] = {
                     [1] = 'Win a run without',
                     [2] = 'ever opening',
-                    [3] = '{C:attention,E:1}Booster Packs'
+                    [3] = 'a {C:attention,E:1}Booster Pack'
                 }
             },
             j_bunc_metallurgist = {
@@ -972,8 +974,8 @@ return {
                 },
                 ['unlock'] = {
                     [1] = 'Win a run with',
-                    [2] = '{C:attention,E:1}High Card{} being the',
-                    [3] = 'most leveled poker hand'
+                    [2] = '{C:attention,E:1}High Card{} as the',
+                    [3] = 'highest level poker hand'
                 }
             },
             j_bunc_headshot = {
@@ -1037,7 +1039,7 @@ return {
                 ['unlock'] = {
                     [1] = 'Play a 5 card hand',
                     [2] = 'that contains only',
-                    [3] = '{C:attention,E:1}Flipped{} cards'
+                    [3] = '{C:attention,E:1}flipped{} cards'
                 }
             },
             j_bunc_protester = {
@@ -1052,7 +1054,7 @@ return {
                 ['name'] = 'Doodle',
                 ['text'] = {
                     [1] = '{C:attention}Copy{} first {C:tarot}Tarot{} or {C:planet}Planet{}',
-                    [2] = 'card used this round',
+                    [2] = 'card used each round',
                     [3] = '{C:inactive}(Must have room)'
                 },
                 ['unlock'] = {
@@ -1122,11 +1124,10 @@ return {
             j_bunc_bounty_hunter = {
                 ['name'] = 'Bounty Hunter',
                 ['text'] = {
-                    [1] = 'All sources of money',
-                    [2] = 'give {C:money}1${} less and this Joker',
-                    [3] = 'gains {C:mult}+#1#{} Mult each time',
-                    [4] = 'you earn money',
-                    [5] = '{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)'
+                    [1] = 'When you earn money,',
+                    [2] = 'earn {C:money}$1{} less and',
+                    [3] = 'this Joker gains {C:mult}+#1#{} Mult',
+                    [4] = '{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)'
                 },
                 ['unlock'] = {
                     [1] = 'Have less than {E:1,C:attention}$#1#',
@@ -1145,7 +1146,7 @@ return {
                 ['name'] = 'The Joker',
                 ['text'] = {
                     [1] = 'After play, each scored',
-                    [2] = 'card without an enhancement has',
+                    [2] = 'card without an enhancement has a',
                     [3] = '{C:green}#1# in #2#{} chance to be destroyed',
                 },
                 ['unlock'] = {
@@ -1159,12 +1160,13 @@ return {
                     [1] = 'When a {C:attention}7{} is scored,',
                     [2] = '{C:mult}+#1#{} Mult times the',
                     [3] = 'amount of scored {C:attention}7s{}'
+                    -- TODO this wording needs work
                 }
             },
             j_bunc_domino = {
                 ['name'] = 'Domino',
                 ['text'] = {
-                    [1] = 'Upon {C:attention}acquiring{} or {C:attention}using',
+                    [1] = 'When you {C:attention}acquire{} or {C:attention}use',
                     [2] = 'a card from shop or',
                     [3] = 'Booster Pack, acquire {C:attention}2',
                     [4] = 'adjacent cards if possible'
@@ -1181,11 +1183,10 @@ return {
             j_bunc_taped = {
                 ['name'] = 'Taped Jokers',
                 ['text'] = {
-                    [1] = '{C:attention}Link together{} all',
-                    [2] = 'played cards in first',
-                    [3] = 'scored hand during',
-                    [4] = '{C:attention}Boss Blind{}'
+                    [1] = '{C:attention}Link together{} all played cards',
+                    [2] = 'in first hand of {C:attention}Boss Blind{}'
                 }
+                -- TODO a bit wordy, especially the second half
             },
             j_bunc_rubber_band_ball = {
                 ['name'] = 'Rubber Band Ball',
@@ -1199,7 +1200,7 @@ return {
                 ['name'] = 'Headache',
                 ['text'] = {
                     [1] = 'Create an {C:bunco_virtual_dark}Arcade Tag',
-                    [2] = 'for each {C:attention}#1#{} playing',
+                    [2] = 'for every {C:attention}#1#{} playing',
                     [3] = 'cards destroyed',
                     [4] = '{C:inactive}({C:attention}#2#{C:inactive}/#1# cards destroyed)'
                 }
@@ -1225,18 +1226,20 @@ return {
             j_bunc_stylophone = {
                 ['name'] = 'Stylophone',
                 ['text'] = {
-                    [1] = 'Cards give {C:attention}X#1#{} Mult',
-                    [2] = 'of the {C:attention}rank{}',
-                    [3] = 'when scored'
+                    [1] = 'Scored cards add',
+                    [2] = '{C:attention}#1#X{} their {C:attention}rank{}',
+                    [3] = 'to Mult'
                 }
             },
             j_bunc_kite_experiment = {
                 ['name'] = 'Kite Experiment',
                 ['text'] = {
-                    [1] = '{C:green}#1# in #2#{} chance to {C:attention}rescore',
-                    [2] = 'rescored {C:attention}Copper Cards',
+                    [1] = '{C:attention}Rescored{} {C:attention}Copper Cards{} have a',
+                    [2] = '{C:green}#1# in #2#{} chance to {C:attention}score',
                     [3] = 'one additional time'
                 }
+                -- hm, want to put "rescored Copper Cards" first, to not bury the lede
+                -- still not sure about this one
             },
             j_bunc_robot = {
                 ['name'] = 'Robot',
@@ -1339,7 +1342,7 @@ return {
                     [1] = 'Level up played poker hand',
                     [2] = 'if it contains a {C:attention}Spectrum',
                     [3] = '{C:green}#1# in #2#{} chance this card is',
-                    [4] = 'destroyed at the end of round'
+                    [4] = 'destroyed at end of round'
                 }
             },
             j_bunc_fondue = {
@@ -1638,13 +1641,6 @@ return {
                     [3] = '{s:0.8,C:attention}Triple Tag{s:0.8} excluded'
                 }
             },
-            tag_bunc_shopping = {
-                ['name'] = 'Shopping Tag',
-                ['text'] = {
-                    [1] = 'Gives {C:attention}1{} free',
-                    [2] = 'shop {C:green}Reroll'
-                }
-            },
 
             -- Edition tags
 
@@ -1768,7 +1764,7 @@ return {
                 ['text'] = {
                     [1] = 'Consumables in',
                     [2] = '{C:attention}Booster Packs{} may',
-                    [3] = 'appear with {C:dark_edition}Edition'
+                    [3] = 'have an {C:dark_edition}Edition'
                 }
             },
             v_bunc_supercoating = {
@@ -1776,7 +1772,7 @@ return {
                 ['text'] = {
                     [1] = 'All consumables in',
                     [2] = '{C:attention}Booster Packs{} will',
-                    [3] = 'appear with {C:dark_edition}Edition'
+                    [3] = 'have an {C:dark_edition}Edition'
                 },
                 ['unlock'] = {
                     [1] = 'Use {C:attention,E:1}#1#{} consumables',
@@ -1787,19 +1783,19 @@ return {
             v_bunc_hedge_trimmer = {
                 ['name'] = 'Hedge Trimmer',
                 ['text'] = {
-                    [1] = "Reduce blind's score",
+                    [1] = "Reduce blind's score requirement",
                     [2] = 'by {C:attention}#1#%{} every hand played'
                 }
             },
             v_bunc_chainsaw = {
                 ['name'] = 'Chainsaw',
                 ['text'] = {
-                    [1] = 'All required scores',
-                    [2] = 'reduced by {C:attention}#1#%{}'
+                    [1] = 'Reduce all score requirements',
+                    [2] = 'by {C:attention}#1#%{}'
                 },
                 ['unlock'] = {
-                    [1] = "Reduce blind's score using",
-                    [2] = 'Hedge Trimmer',
+                    [1] = "Reduce blind's score requirement",
+                    [2] = 'using Hedge Trimmer',
                     [3] = 'a total of {C:attention,E:1}#1#{} times',
                     [4] = '{C:inactive}(#2#)'
                 }
@@ -1856,7 +1852,7 @@ return {
             v_bunc_pin_collector = {
                 ['name'] = 'Pin Collector',
                 ['text'] = {
-                    [1] = 'All new {C:attention}Double Tags',
+                    [1] = 'All future {C:attention}Double Tags',
                     [2] = 'appear as {C:attention}Triple Tags'
                 },
                 ['unlock'] = {
@@ -1868,14 +1864,15 @@ return {
             v_bunc_arcade_machine = {
                 ['name'] = 'Arcade Machine',
                 ['text'] = {
-                    [1] = '{C:bunco_virtual_dark}Virtual Packs',
-                    [2] = 'appear {C:attention}4X{} more often'
+                    [1] = '{C:bunco_virtual_dark}Virtual Packs{} appear',
+                    [2] = '{C:attention}4X{} more often',
+                    [3] = 'in the shop'
                 }
             },
             v_bunc_polybius = {
                 ['name'] = 'Polybius',
                 ['text'] = {
-                    [1] = '{C:bunco_virtual_dark}Polymino{} cards allow to',
+                    [1] = '{C:bunco_virtual_dark}Polymino{} cards can',
                     [2] = 'link {C:attention}one more{} card',
                     [3] = '{s:0.6,C:inactive}Extra card can be of any property'
                 },
@@ -1890,15 +1887,15 @@ return {
             m_bunc_copper = {
                 ['name'] = 'Copper Card',
                 ['text'] = {
-                    [1] = 'Rescores if played',
-                    [2] = '{C:attention}adjacent{} to other',
-                    [3] = 'scored Copper Card'
+                    [1] = '{C:attention}Rescores{} if played',
+                    [2] = '{C:attention}adjacent{} to another',
+                    [3] = 'scoring Copper Card'
                 },
             },
             m_bunc_cracker = {
                 ['name'] = 'Cracker Card',
                 ['text'] = {
-                    [1] = '{C:attention}On discard{} the card is',
+                    [1] = 'On {C:attention}discard{}, this card is',
                     [2] = 'played and then destroyed',
                 },
             },
@@ -1916,7 +1913,7 @@ return {
                 ['name'] = 'Pink Stake',
                 ['text'] = {
                     [1] = 'Shop can have {C:attention}Hindered{} Jokers',
-                    [2] = '{C:inactive,s:0.8}(Stays in place until the end of the round after being sold)',
+                    [2] = '{C:inactive,s:0.8}(Stays in place until end of round after being sold)',
                     [3] = '{s:0.8}Applies all previous Stakes'
                 }
             },
@@ -1924,7 +1921,7 @@ return {
                 ['name'] = 'Magenta Stake',
                 ['text'] = {
                     [1] = 'Shop can have {C:attention}Reactive{} Jokers',
-                    [2] = '{C:inactive,s:0.8}(Debuffed if no blinds are skipped this Ante)',
+                    [2] = '{C:inactive,s:0.8}(Each Ante, debuffed until you\'ve skipped a blind)',
                     [3] = '{s:0.8}Applies all previous Stakes'
                 }
             }
