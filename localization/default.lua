@@ -1226,9 +1226,9 @@ return {
             j_bunc_stylophone = {
                 ['name'] = 'Stylophone',
                 ['text'] = {
-                    [1] = 'Cards give {C:mult}+Mult{} equal',
-                    [2] = 'to {C:attention}#1#X{} their {C:attention}rank{}',
-                    [3] = 'when scored'
+                    [1] = 'Scored cards add',
+                    [2] = '{C:attention}#1#X{} their {C:attention}rank{}',
+                    [3] = 'to Mult'
                 }
             },
             j_bunc_kite_experiment = {
