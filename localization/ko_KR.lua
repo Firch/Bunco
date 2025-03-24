@@ -841,41 +841,37 @@ return {
                 }
             },
             j_bunc_slothful = {
-                ['name'] = 'Slothful Joker',
+                ['name'] = '게으른 조커',
                 ['text'] = {
-                    [1] = 'Played {C:attention}Wild Cards',
-                    [2] = 'give {C:mult}+#1#{} Mult',
-                    [3] = 'when scored'
+                    [1] = '플레이 된 {C:attention}와일드{} 카드가',
+                    [2] = '득점시 {C:mult}+#1#{} 배수를 얻습니다'
                 },
                 ['unlock'] = {
-                    [1] = 'Play a 5 card hand',
-                    [2] = 'that contains only',
-                    [3] = '{C:attention,E:1}Wild{} cards'
+                    [1] = '5장의 {C:attention,E:1}와일드{} 카드로만',
+                    [2] = '이루어진 핸드를 플레이합니다'
                 }
             },
             j_bunc_neon = {
-                ['name'] = 'Neon Joker',
+                ['name'] = '네온 조커',
                 ['text'] = {
-                    [1] = 'Playing cards gain',
-                    [2] = '{C:dark_edition}Fluorescent{} edition',
-                    [3] = 'when {C:attention}enhanced'
+                    [1] = '강화된 카드가 득점하면',
+                    [2] = '{C:dark_edition}꽃무늬{} 에디션을 얻습니다'
                 },
                 ['unlock'] = {
-                    [1] = 'Play a 5 card hand',
-                    [2] = 'that contains only',
-                    [3] = '{C:attention,E:1}Debuffed{} cards'
+                    [1] = '{C:attention,E:1}디버프된{} 5 카드로만',
+                    [2] = '이루어진 핸드를 플레이합니다'
                 }
             },
             j_bunc_gameplan = {
-                ['name'] = 'Gameplan',
+                ['name'] = '전략가',
                 ['text'] = {
-                    [1] = '{C:attention}Jokers{} next to this Joker',
-                    [2] = 'are {C:red}debuffed{} and',
-                    [3] = 'give {C:mult}+#1#{} Mult'
+                    [1] = '이 {C:attention}조커{}의 옆에 있는 조커들은',
+                    [2] = '{C:red}디버프{} 되며,',
+                    [3] = '{C:mult}+#1#{} 배수를 얻습니다'
                 },
                 ['unlock'] = {
-                    [1] = 'Defeat {E:1,C:attention}Verdant Leaf',
-                    [2] = 'without disabling it'
+                    [1] = '{E:1,C:attention}신록색 잎사귀{} 보스 블라인드를',
+                    [2] = '비활성화 없이 처치합니다'
                 }
             },
             j_bunc_conquest = {
