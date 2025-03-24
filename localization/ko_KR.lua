@@ -486,7 +486,7 @@ return {
                     [1] = '4개의 선택된 카드를 {C:attention}연결합니다{}',
                     [2] = '{C:attention}2개 그룹{}의 2장씩의 카드가',
                     [3] = '각 그룹 내에서 {C:attention}같은 랭크{}를 공유하며, 각',
-                    [4] = '그룹에서 한 장의 카드가 {C:attention}공통 수트{}를 공유합니다''
+                    [4] = '그룹에서 한 장의 카드가 {C:attention}공통 수트{}를 공유합니다'
                 }
             },
             c_bunc_the_z = {
@@ -611,7 +611,7 @@ return {
             j_bunc_xray = {
                 ['name'] = 'X-ray',
                 ['text'] = {
-                    [1] = '이 조커는 카드가 뒷면으로 뽑힐 때 마다'
+                    [1] = '이 조커는 카드가 뒷면으로 뽑힐 때 마다',
                     [2] = '{X:mult,C:white}X#1#{} 배수를 얻습니다',
                     [3] = '{C:inactive}(현재 {X:mult,C:white}X#2#{C:inactive} 배수)'
                 },
@@ -666,82 +666,81 @@ return {
                 }
             },
             j_bunc_loan_shark = {
-                ['name'] = 'Loan Shark',
+                ['name'] = '고리대금업자',
                 ['text'] = {
-                    [1] = 'Gain {C:money}$#1#',
-                    [2] = 'when acquired...'
+                    [1] = '획득 시 {C:money}$#1#을',
+                    [2] = '얻습니다 ...'
                 },
                 ['unlock'] = {
-                    [1] = 'Spend at least {E:1,C:attention}$100',
-                    [2] = 'during a single round'
+                    [1] = '한 라운드 동안',
+                    [2] = '{E:1,C:attention}$100{} 이상 사용하세요}'
                 }
             },
             j_bunc_loan_shark_full = {
-                ['name'] = 'Loan Shark',
+                ['name'] = '고리대금업자',
                 ['text'] = {
-                    [1] = 'Gain {C:money}$#1#{} when acquired,',
-                    [2] = 'set sell price to {C:money}$-100'
+                    [1] = '획득 시 {C:money}$#1#을 얻습니다',
+                    [2] = '판매 가격이{C:money}$-100{} 입니다'
                 }
             },
             j_bunc_basement = {
-                ['name'] = 'Basement Joker',
+                ['name'] = '지하 조커',
                 ['text'] = {
-                    [1] = 'When {C:attention}Boss Blind{} is defeated,',
-                    [2] = 'create a {C:spectral}Spectral{} card',
-                    [3] = '{C:inactive}(Must have room)'
+                    [1] = '{C:attention}보스 블라인드{} 처치 시,',
+                    [2] = '{C:spectral}유령{} 카드를 생성 합니다',
+                    [3] = '{C:inactive}(공간이 있어야 함)'
                 }
             },
             j_bunc_shepherd = {
-                ['name'] = 'Shepherd Joker',
+                ['name'] = '양치기 조커',
                 ['text'] = {
-                    [1] = 'Gains {C:chips}+#1#{} Chips',
-                    [2] = 'when played hand',
-                    [3] = 'contains a {C:attention}Pair',
-                    [4] = '{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)'
+                    [1] = '{C:attention}페어{}가 포함된 핸드를',
+                    [2] = '플레이 할 때 {C:chips}+#1#{} 칩을 얻습니다',
+                    [3] = '{C:inactive}(현재 {C:chips}+#2# {C:inactive}칩)'
                 }
             },
             j_bunc_knight = {
-                ['name'] = 'Joker Knight',
-                ['text'] = {
-                    [1] = 'When {C:attention}Blind{} is selected, {C:attention}shuffle{} all Jokers',
-                    [2] = 'and this Joker gains {C:mult}+#1#{} Mult,',
-                    [3] = '{C:red}resets{} when any Joker is rearranged',
-                    [4] = '{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)'
-                },
+                ['name'] = '조커 기사',
+                    ['text'] = {
+                        [1] = '{C:attention}블라인드{} 선택 시, 모든 조커를 {C:attention}셔플{}하고',
+                        [2] = '이 조커는 {C:mult}+#1#{} 배수를 얻습니다,',
+                        [3] = '조커가 {C:red}재배열{}되면 초기화됩니다',
+                        [4] = '{C:inactive}(현재 {C:mult}+#2#{C:inactive} 배수)'
+                    },
                 ['unlock'] = {
-                    [1] = 'Defeat {E:1,C:attention}Amber Acorn',
-                    [2] = 'without disabling it'
+                    [1] = '{E:1,C:attention}호박색 도토리{}를 비활성화 하지 않고',
+                    [2] = '처치하세요'
                 }
             },
             j_bunc_jmjb = {
-                ['name'] = 'Joker Man & Jester Boy Trading Card No. 54',
+                ['name'] = '조커맨 & 제스터 보이 트레이딩 카드 No. 54',
                 ['text'] = {
-                    [1] = '{C:attention}Standard Packs{} contain',
-                    [2] = 'only {C:attention}Enhanced cards{}'
+                    [1] = '{C:attention}스탠다드 팩{}에서',
+                    [2] = '{C:attention}강화 카드{}만 등장합니다'
                 },
                 ['unlock'] = {
-                    [1] = 'Open {E:1,C:attention}#1#',
-                    [2] = 'Booster Packs',
-                    [3] = '{C:inactive}(#2#)'
+                    [1] = '{E:1,C:attention}#1#개',
+                    [2] = '부스터 팩 열기',
+                    [3] = '{C:inactive}(현재 #2#개)'
                 }
             },
             j_bunc_dogs_playing_poker = {
-                ['name'] = 'Dogs Playing Poker',
+                ['name'] = '포커 게임을 하는 개들',
                 ['text'] = {
-                    [1] = '{X:mult,C:white}X#1#{} Mult if every scored',
-                    [2] = 'rank is {C:attention}2{}, {C:attention}3{}, {C:attention}4{}, or {C:attention}5'
+                    [1] = '득점된 랭크가 모두 {C:attention}2{}, {C:attention}3{}, {C:attention}4{}, 또는 {C:attention}5 일 경우',
+                    [2] = '{X:mult,C:white}X#1#{} 배수'
                 }
             },
             j_bunc_righthook = {
-                ['name'] = 'Righthook Joker',
+                ['name'] = '라이트훅 조커',
                 ['text'] = {
-                    [1] = 'Retrigger rightmost scored card',
-                    [2] = 'one time per remaining {C:blue}hand{}',
+                    [1] = '득점된 가장 오른쪽 카드를',
+                    [2] = '남은 {C:blue}핸드{}만큼 다시 발동',
                 },
                 ['unlock'] = {
-                    [1] = 'Retrigger played',
-                    [2] = 'card at least',
-                    [3] = '{E:1,C:attention}#1# times{}'
+                    [1] = '사용한 카드를',
+                    [2] = '총 {E:1,C:attention}#1# 회{}이상',
+                    [3] = '다시 발동시킵니다'
                 }
             },
             j_bunc_fiendish = {
@@ -814,9 +813,9 @@ return {
             j_bunc_nil_bill = {
                 ['name'] = 'Nil Bill',
                 ['text'] = {
-                    [1] = 'Earn {C:money}$#1#{}',
-                    [2] = 'when a playing card',
-                    [3] = 'is destroyed'
+                    [1] = '카드가 파괴될 때',
+                    [2] = '{C:money}$#1#{}을',
+                    [3] = '획득합니다'
                 }
             },
             j_bunc_bierdeckel = {
@@ -1180,7 +1179,7 @@ return {
                 ['name'] = '두통',
                 ['text'] = {
                     [1] = '각각의 {C:attention}#1#{} 카드가',
-                    [2] = '파괴 될 때 마다'
+                    [2] = '파괴 될 때 마다',
                     [3] = '{C:bunco_virtual_dark}아케이드 태그{}를 만듭니다',
                     [4] = '{C:inactive}({C:attention}#2#{C:inactive}/#1# 카드 파괴됨)'
                 }
