@@ -879,95 +879,94 @@ return {
                 }
             },
             j_bunc_conquest = {
-                ['name'] = 'Conquest',
+                ['name'] = '정복',
                 ['text'] = {
-                    [1] = '{C:chips}+#1#{} Chips,',
-                    [2] = '{C:red}debuffs{} random Joker',
-                    [3] = 'when {C:attention}Blind{} is selected'
+                    [1] = '{C:attention}블라인드{}가 선택되면',
+                    [2] = '랜덤한 조커를 {C:red}디버프{}하고',
+                    [3] = '{C:chips}+#1#{} 칩을 얻습니다'
                 },
                 ['unlock'] = {
-                    [1] = 'Defeat {E:1,C:attention}Crimson Heart',
-                    [2] = 'without disabling it'
+                    [1] = '{E:1,C:attention}진홍색 하트{} 보스 블라인드를',
+                    [2] = '비활성화 없이 처치합니다'
                 }
             },
             j_bunc_hierarchy_of_needs = {
-                ['name'] = 'Hierarchy of Needs',
+                ['name'] = '욕망의 피라미드',
                 ['text'] = {
-                    [1] = '{C:mult}+#1#{} Mult per {C:attention}2 to Ace',
-                    [2] = 'sequence of the same suit',
-                    [3] = 'in your {C:attention}full deck',
-                    [4] = '{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)'
+                    [1] = '전체 덱에 같은 수트의',
+                    [2] = '{C:attention}2에서 Ace{} 까지의 세트마다',
+                    [3] = '{C:mult}+#1#{} 배수를 얻습니다',
+                    [4] = '{C:inactive}(현재 {C:mult}+#2#{C:inactive} 배수)'
                 }
             },
             j_bunc_dwarven = {
-                ['name'] = 'Dwarven Joker',
+                ['name'] = '드워프 조커',
                 ['text'] = {
-                    [1] = '{C:attention}Stone Cards{} held in hand',
-                    [2] = 'have the abilities of',
-                    [3] = '{C:attention}Steel{} and {C:attention}Gold Cards'
+                    [1] = '핸드에 있는 {C:attention}스톤 카드{}가',
+                    [2] = '{C:attention}스틸 카드{}와 {C:attention}골드 카드{}의',
+                    [3] = '능력을 가집니다'
                 },
                 ['unlock'] = {
-                    [1] = 'Play a hand that',
-                    [2] = 'contains {E:1,C:attention}Stone{}, {E:1,C:attention}Steel,',
-                    [3] = 'and {E:1,C:attention}Gold{} cards'
+                    [1] = '{E:1,C:attention}스톤 카드{}, {E:1,C:attention}스틸 카드',
+                    [2] = '{E:1,C:attention}골드 카드{}가 있는',
+                    [3] = '포커 핸드를 플레이합니다'
                 }
             },
             j_bunc_aristocrat = {
-                ['name'] = 'Aristocrat',
+                ['name'] = '아리스토크랫',
                 ['text'] = {
-                    [1] = 'Choose an extra card',
-                    [2] = 'from {C:attention}Booster Packs'
+                    [1] = '{C:attention}부스터 팩{}에서',
+                    [2] = '여분의 카드를 더 선택합니다'
                 },
                 ['unlock'] = {
-                    [1] = 'Win a run without',
-                    [2] = 'ever opening',
-                    [3] = '{C:attention,E:1}Booster Packs'
+                    [1] = '{C:attention}부스터 팩{}을 열지 않고',
+                    [2] = '런을 승리합니다'
                 }
             },
             j_bunc_metallurgist = {
-                ['name'] = 'Metallurgist',
+                ['name'] = '연금술사',
                 ['text'] = {
-                    [1] = '{C:attention}Gold Cards{} give {C:mult}+#1#{} Mult',
-                    [2] = 'while held in hand'
+                    [1] = '{C:attention}골드 카드{}가 핸드에 있을 때',
+                    [2] = '{C:mult}+#1#{} 배수를 가집니다'
                 }
             },
             j_bunc_juggalo = {
-                ['name'] = 'Juggalo',
+                ['name'] = '저글로',
                 ['text'] = {
-                    [1] = 'Adds {C:dark_edition}Foil{}, {C:dark_edition}Holographic{},',
-                    [2] = '{C:dark_edition}Polychrome{}, or {C:dark_edition}Glitter{} edition',
-                    [3] = 'to a random {C:attention}consumable{}',
-                    [4] = 'when {C:attention}Blind{} is selected'
+                    [1] = '{C:attention}블라인드{}가 선택되면',
+                    [2] = '{C:dark_edition}포일{}, {C:dark_edition}홀로그래픽{},',
+                    [3] = '{C:dark_edition}폴리크롬{}, or {C:dark_edition}반짝반짝{} 에디션을',
+                    [4] = '임의의 {C:attention}소모품{}에 적용합니다'
                 },
                 ['unlock'] = {
-                    [1] = 'Use {C:attention,E:1}#1#{} consumables',
-                    [2] = 'with {C:attention,E:1}Editions',
+                    [1] = '{C:attention,E:1}에디션{}이 적용된',
+                    [2] = '{C:attention,E:1}#1#{} 소모품을 사용합니다',
                     [3] = '{C:inactive}(#2#)'
                 }
             },
             j_bunc_head_in_the_clouds = {
-                ['name'] = 'Head in the Clouds',
+                ['name'] = '몽상가',
                 ['text'] = {
-                    [1] = '{C:green}#1# in #2#{} chance to upgrade',
-                    [2] = '{C:attention}High Card{} when you',
-                    [3] = 'upgrade any {C:attention}poker hand'
+                    [1] = '포커 핸드를 업그레이드 할 때',
+                    [2] = '{C:green}#2#분의 #1#{} 확률로',
+                    [3] = '{C:attention,E:1}하이 카드{}가 업그레이드 됩니다'
                 },
                 ['unlock'] = {
-                    [1] = 'Win a run with',
-                    [2] = '{C:attention,E:1}High Card{} being the',
-                    [3] = 'most leveled poker hand'
+                    [1] = '{C:attention,E:1}하이 카드{}가',
+                    [2] = '가장 높은 레벨의 포커 핸드인 상태로',
+                    [3] = '런을 승리합니다'
                 }
             },
             j_bunc_headshot = {
-                ['name'] = 'Headshot',
+                ['name'] = '헤드샷',
                 ['text'] = {
-                    [1] = '{X:mult,C:white}X#1#{} Mult if played hand',
-                    [2] = 'contains only a single',
-                    [3] = 'scoring {C:attention}face card{}'
+                    [1] = '플레이한 핸드가 하나의',
+                    [2] = '페이스 카드만을 가지고 있으면',
+                    [3] = '{X:mult,C:white}X#1#{} 배수를 얻습니다'
                 }
             },
             j_bunc_trigger_finger = {
-                ['name'] = 'Trigger Finger',
+                ['name'] = '약지',
                 ['text'] = {
                     [1] = '{X:mult,C:white}X#1#{} Mult,',
                     [2] = '{C:attention}selecting{} a card has',
@@ -975,37 +974,37 @@ return {
                     [4] = 'play selected cards'
                 },
                 ['unlock'] = {
-                    [1] = 'Defeat {E:1,C:attention}Cerulean Bell',
-                    [2] = 'without disabling it'
+                    [1] = '{E:1,C:attention}하늘색 종{} 보스 블라인드를',
+                    [2] = '비활성화 하지 않고 처치합니다'
                 }
             },
             j_bunc_hopscotch = {
-                ['name'] = 'Hopscotch',
+                ['name'] = '홉스쿼치',
                 ['text'] = {
-                    [1] = 'Gain {C:red}+#1#{} discard',
-                    [2] = 'if played hand',
-                    [3] = 'contains a {C:attention}Straight{}'
+                    [1] = '플레이한 핸드에',
+                    [2] = '{C:attention}스트레이트{}가 있으면',
+                    [3] = '{C:red}+#1#{} 버리기를 얻습니다'
                 }
             },
             j_bunc_pawn = {
-                ['name'] = 'Pawn',
+                ['name'] = '폰',
                 ['text'] = {
-                    [1] = 'Cards of the {C:attention}lowest{}',
-                    [2] = 'rank in your full deck',
-                    [3] = '{C:attention}increase in rank{} when scored',
-                    [4] = '{C:inactive}(Current lowest rank: #1#)'
+                    [1] = '현재 전체 덱에서 가장 낮은',
+                    [2] = '랭크의 카드가 득점 시',
+                    [3] = '{C:attention}랭크가 상승{}합니다',
+                    [4] = '{C:inactive}(현재 가장 낮은 랭크: #1#)'
                     -- TODO "when scored" is only accurate
                     -- if the card's rank changes during scoring
                 }
             },
             j_bunc_puzzle_board = {
-                ['name'] = 'Puzzle Board',
+                ['name'] = '퍼즐 보드',
                 ['text'] = {
-                    [1] = 'When {C:tarot}Tarot{} card is used,',
-                    [2] = '{C:green}#1# in #2#{} chance to add',
-                    [3] = '{C:dark_edition}Foil{}, {C:dark_edition}Holographic{},',
-                    [4] = '{C:dark_edition}Polychrome{}, or {C:dark_edition}Glitter{} edition',
-                    [5] = 'to a random selected playing card'
+                    [1] = '{C:tarot}타로{}카드가 사용되면',
+                    [2] = '{C:green}#2#분의 #1#{}확률로',
+                    [3] = '{C:dark_edition}포일{}, {C:dark_edition}홀로그래픽{},',
+                    [4] = '{C:dark_edition}폴리크롬{}, 혹은 {C:dark_edition}반짝반짝{} 에디션을',
+                    [5] = '랜덤하게 선택된 카드에 적용합니다'
                 }
             },
             j_bunc_vandalism = {
