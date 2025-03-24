@@ -818,24 +818,24 @@ return {
                 }
             },
             j_bunc_bierdeckel = {
-                ['name'] = 'Bierdeckel',
+                ['name'] = '비어데켈',
                 ['text'] = {
-                    [1] = 'After play or discard,',
-                    [2] = 'cards held in hand gain',
-                    [3] = '{C:chips}+#1#{} Chips until end of round'
+                    [1] = '플레이 혹은 버리기 후에,',
+                    [2] = '라운드 종료까지 손에 있는',
+                    [3] = '카드들이 {C:chips}+#1#{} 칩을 얻습니다'
                 }
             },
             j_bunc_registration_plate = {
-                ['name'] = 'Registration Plate',
+                ['name'] = '번호판',
                 ['text'] = {
                     [1] = '#1#',
-                    [2] = 'has the Chips and Mult of all',
-                    [3] = '{C:attention}poker hands{} played this game',
-                    [4] = '{s:0.8}Combination changes every round'
+                    [2] = '이번 게임에서 플레이된 모든',
+                    [3] = '{C:attention}포커 핸드{}의 칩과 배수를 가집니다',
+                    [4] = '{s:0.8}조합은 매 라운드마다 변경됩니다'
                 },
                 ['unlock'] = {
-                    [1] = 'Complete the {E:1,C:attention}15 Minute City',
-                    [2] = 'challenge'
+                    [1] = '챌린지 {E:1,C:attention}15분 도시',
+                    [2] = '를 완료하세요'
                 }
             },
             j_bunc_slothful = {
