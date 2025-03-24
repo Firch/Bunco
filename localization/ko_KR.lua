@@ -1057,7 +1057,7 @@ return {
                 }
             },
             j_bunc_on_broadway = {
-                ['name'] = 'On Broadway',
+                ['name'] = '브로드웨이',
                 ['text'] = {
                     [1] = '{C:chips}+#1#{} Chips and {C:mult}+#2#{} Mult if',
                     [2] = 'played hand contains a {C:attention}Straight{}',
@@ -1065,24 +1065,25 @@ return {
                 }
             },
             j_bunc_rasta = {
-                ['name'] = 'Rasta',
+                ['name'] = '라스타',
                 ['text'] = {
-                    [1] = '{C:mult}+#1#{} Mult if no',
-                    [2] = '{C:attention}Enhanced cards{}',
-                    [3] = 'are scored'
+                    [1] = '플레이한 핸드의 점수 획득에'
+                    [2] = '{C:attention}강화된 카드{}가 없으면'
+                    [3] = '{C:mult}+#1#{} 배수를 얻습니다'
                 },
                 ['unlock'] = {
-                    [1] = 'Win a run without ever',
-                    [2] = 'having {C:attention,E:1}Enhanced cards'
+                    [1] = '{C:attention,E:1}강화된 카드{}를'
+                    [2] = '보유하지 않은 상태로',
+                    [3] = '런을 승리합니다'
                 }
             },
             j_bunc_critic = {
-                ['name'] = 'Critic',
+                ['name'] = '비평가',
                 ['text'] = {
-                    [1] = "{X:mult,C:white}X#1#{} Mult if played hand's",
-                    [2] = 'current score is',
-                    [3] = '{C:attention}less than 1/#2#{} of',
-                    [4] = "blind's required score"
+                    [1] = '플레이한 핸드의 점수가',
+                    [2] = '블라인드의 요구 점수의',
+                    [3] = '{C:attention}#2#분의 1{}보다 작다면',
+                    [4] = '{X:mult,C:white}X#1#{} 배수를 얻습니다'
                 }
             },
             j_bunc_cellphone = {
