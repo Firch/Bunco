@@ -162,7 +162,7 @@ return {
                     [3] = '같이 {C:attention}파괴{}됩니다.'
                 }
             },
-            bunc_drawn_linked_cards = {['text'] = {[1] = '{C:attention}Linked{} in drawn group'}},
+            bunc_drawn_linked_cards = {['text'] = {[1] = '뽑힌 카드 그룹에서 {C:attention}연결됨{}'}},
             bunc_light_suits = {
                 ['name'] = '라이트 수트',
                 ['text'] = {
@@ -744,70 +744,69 @@ return {
                 }
             },
             j_bunc_fiendish = {
-                ['name'] = 'Fiendish Joker',
+                ['name'] = '사악한 조커',
                 ['text'] = {
-                    [1] = 'Double all sources of money,',
-                    [2] = '{C:green}#1# in #2#{} chance to pay out',
-                    [3] = 'with {C:money}$1{} instead'
+                    [1] = '모든 수익을 두 배로 만듭니다,',
+                    [2] = '대신 {C:green}#1# / #2#{} 확률로',
+                    [3] = '{C:money}$1{}만 지급됩니다'
                 },
                 ['unlock'] = {
-                    [1] = 'Complete the {E:1,C:attention}Double or Nothing',
-                    [2] = 'challenge'
+                    [1] = '챌린지 {E:1,C:attention}두배 아니면 꽝',
+                    [2] = '을 완료하세요'
                 }
             },
             j_bunc_carnival = {
-                ['name'] = 'Carnival',
+                ['name'] = '카니발',
                 ['text'] = {
-                    [1] = 'After defeating {C:attention}Boss Blind{},',
-                    [2] = '{C:attention}destroy{} a random Joker to',
-                    [3] = 'go one Ante back, next time',
-                    [4] = 'works only on a greater Ante'
+                    [1] = '{C:attention}보스 블라인드{} 처치 후,',
+                    [2] = '무작위 조커를 {C:attention}파괴{}하고',
+                    [3] = '이전 앤티로 한 단계 되돌아갑니다',
+                    [4] = '다음 사용은 가장 앤티에서만 작동 합니다'
                 },
                 ['unlock'] = {
-                    [1] = 'Reach Ante',
-                    [2] = 'level {E:1,C:attention}0'
+                    [1] = '앤티 레벨',
+                    [2] = '{E:1,C:attention}0{} 도달하세요'
                 }
             },
             j_bunc_sledgehammer = {
-                ['name'] = 'Sledgehammer',
+                ['name'] = '슬레지해머',
                 ['text'] = {
-                    [1] = '{C:attention}Glass Cards{} give +{X:mult,C:white}X#1#{} Mult',
-                    [2] = 'but are guaranteed to break'
+                    [1] = '{C:attention}글래스 카드{}는 {X:mult,C:white}X#1#{}배수를 부여하지만,',
+                    [2] = '반드시 깨집니다'
                 },
                 ['unlock'] = {
-                    [1] = 'Play a 5 card hand',
-                    [2] = 'that contains only',
-                    [3] = '{C:attention,E:1}Glass{} cards'
+                    [1] = '{C:attention,E:1}글래스{} 카드만 포함된',
+                    [2] = '5장짜리 핸드로 플레이하세요'
                 }
             },
             j_bunc_doorhanger = {
-                ['name'] = 'Doorhanger',
+                ['name'] = '도어행거',
                 ['text'] = {
-                    [1] = '{C:blue}Common{} Jokers do not appear',
-                    [2] = '{s:0.8}Different rarities appear instead'
+                    [1] = '{C:blue}일반{} 조커가 등장하지 않으며',
+                    [2] = '{s:0.8}대신 다른 희귀도가 등장합니다'
                 },
                 ['unlock'] = {
-                    [1] = 'Win a run without',
-                    [2] = 'ever having',
-                    [3] = '{C:attention,E:1}Common{} Jokers'
+                    [1] = '게임 도중 단 한 번도',
+                    [2] = '{C:attention,E:1}일반{} 조커를 사용하지 않고',
+                    [3] = '런을 승리하세요'
                 }
             },
             j_bunc_fingerprints = {
-                ['name'] = 'Fingerprints',
+                ['name'] = '지문',
                 ['text'] = {
-                    [1] = 'Scored cards',
-                    [2] = 'in {C:attention}winning hand{}',
-                    [3] = 'gain {C:chips}+#1#{} Chips until',
-                    [4] = 'end of the next round',
+                    [1] = '{C:attention}승리 핸드{}에서',
+                    [2] = '득점된 카드들은',
+                    [3] = '다음 라운드 종료 시까지',
+                    [4] = '{C:chips}+#1#{} 칩을 얻습니다'
                 }
             },
             j_bunc_zero_shapiro = {
-                ['name'] = 'Zero Shapiro',
+                ['name'] = '제로 샤피로',
                 ['text'] = {
-                    [1] = 'Scored {C:attention}Ks{}, {C:attention}Qs{}, {C:attention}Js{},',
-                    [2] = 'or {C:attention}Rankless cards',
-                    [3] = 'have {C:green}#1# in #2#{} chance to',
-                    [4] = 'create a {C:attention}D6 Tag',
+                    [1] = '득점된 {C:attention}킹{}, {C:attention}퀀{}, {C:attention}잭{},',
+                    [2] = '혹은 {C:attention}랭크 없는 카드들은',
+                    [3] = '{C:green}#1# / #2#{}의 확률로',
+                    [4] = '{C:attention}D6 태그{}를 생성합니다',
                 }
             },
             j_bunc_nil_bill = {
@@ -1781,8 +1780,8 @@ return {
             v_bunc_cups_n_balls = {
                 ['name'] = '컵과 공',
                 ['text'] = {
-                    [1] = '상점에 {C:attention}+1{}개의 부스터 팩 슬롯이 추가됩니다',
-                    [2] = ''
+                    [1] = '상점에 {C:attention}+1{}개의',
+                    [2] = '부스터 팩 슬롯이 추가됩니다'
                 }
             },
             v_bunc_shell_game = {
