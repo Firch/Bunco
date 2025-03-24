@@ -1086,19 +1086,19 @@ return {
                 }
             },
             j_bunc_cellphone = {
-                ['name'] = 'Cellphone',
+                ['name'] = '휴대폰',
                 ['text'] = {
-                    [1] = '{C:attention}Return{} scored cards to hand',
-                    [2] = 'after first play of round',
-                    [3] = 'if no discards were used'
+                    [1] = '라운드의 처음 핸드 플레이에서',
+                    [2] = '카드를 버리지 않으면',
+                    [3] = '플레이한 카드가 핸드로{C:attention}돌아옵니다{}'
                 }
             },
             j_bunc_wino = {
-                ['name'] = 'Wino',
+                ['name'] = '홈리스',
                 ['text'] = {
-                    [1] = 'Played cards with',
-                    [2] = '{C:hearts}Heart{} and {C:diamonds}Diamond{} suit',
-                    [3] = 'give {C:chips}+#1#{} Chips when scored'
+                    [1] = '{C:hearts}하트{}와 {C:diamonds}다이아몬드{} 수트',
+                    [2] = '로 플레이한 카드는',
+                    [3] = '득점시 {C:chips}+#1#{} 칩을 얻습니다'
                 }
             },
             j_bunc_bounty_hunter = {
@@ -1168,29 +1168,29 @@ return {
                 }
             },
             j_bunc_rubber_band_ball = {
-                ['name'] = 'Rubber Band Ball',
+                ['name'] = '고무줄공',
                 ['text'] = {
-                    [1] = '{X:mult,C:white}X#1#{} Mult per {C:attention}link{}',
-                    [2] = 'created this run',
-                    [3] = '{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)'
+                    [1] = '이 런에서의 {C:attention}연결된 그룹{}마다',
+                    [2] = '{X:mult,C:white}X#1#{} 배수를 얻습니다',
+                    [3] = '{C:inactive}(현재 {X:mult,C:white}X#2#{C:inactive} 배수)'
                 }
             },
             j_bunc_headache = {
-                ['name'] = 'Headache',
+                ['name'] = '두통',
                 ['text'] = {
-                    [1] = 'Create an {C:bunco_virtual_dark}Arcade Tag',
-                    [2] = 'for each {C:attention}#1#{} playing',
-                    [3] = 'cards destroyed',
-                    [4] = '{C:inactive}({C:attention}#2#{C:inactive}/#1# cards destroyed)'
+                    [1] = '각각의 {C:attention}#1#{} 카드가',
+                    [2] = '파괴 될 때 마다'
+                    [3] = '{C:bunco_virtual_dark}아케이드 태그{}를 만듭니다',
+                    [4] = '{C:inactive}({C:attention}#2#{C:inactive}/#1# 카드 파괴됨)'
                 }
             },
             j_bunc_games_collector = {
                 ['name'] = '게임 수집가',
                 ['text'] = {
-                    [1] = 'Gains {C:chips}+#1#{} Chips',
-                    [2] = 'when a linked group',
-                    [3] = 'is {C:attention}drawn{} to hand',
-                    [4] = '{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)'
+                    [1] = '이 조커는 연결된 그룹이',
+                    [2] = '패로 뽑힐 때 마다',
+                    [3] = '{C:chips}+#1#{} 추가 칩을 가집니다',
+                    [4] = '{C:inactive}(현재 {C:chips}+#2#{C:inactive} 칩)'
                 }
             },
             j_bunc_jumper = {
