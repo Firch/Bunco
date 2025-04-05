@@ -5823,6 +5823,7 @@ SMODS.Atlas({key = 'bunco_suits_hc', path = 'Exotic/ExoticSuitsHC.png', px = 18,
 SMODS.Suit{ -- Fleurons
     key = 'Fleurons',
     card_key = 'FLEURON',
+    exotic = true,
     hidden = true,
 
     lc_atlas = 'bunco_cards',
@@ -5848,6 +5849,7 @@ SMODS.Suit{ -- Fleurons
 SMODS.Suit{ -- Halberds
     key = 'Halberds',
     card_key = 'HALBERD',
+    exotic = true,
     hidden = true,
 
     lc_atlas = 'bunco_cards',
