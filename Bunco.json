@@ -9,6 +9,7 @@
 	"version": "5.1",
 	"conflicts": [
         "Lovely (<<0.7.1)",
-		"Talisman (<=2.0.3)"
+		"Talisman (<=2.0.3)",
+		"Steamodded (<<1.0.0~BETA-0404a)"
     ]
 }
