@@ -3914,7 +3914,9 @@ create_joker({ -- Stylophone
             local instrument = 'bunc_stone'
 
             local function calculate_pitch(pitch)
-                return 2^(pitch / 12)
+                if pitch < 1 then pitch = 1 end
+                local result = 2^(pitch / 12)                
+                return result
             end
 
             if other_card.config.center ~= G.P_CENTERS.m_stone then
