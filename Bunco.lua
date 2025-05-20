@@ -3902,6 +3902,7 @@ create_joker({ -- Jumper
     end
 })
 
+
 create_joker({ -- Stylophone
     name = 'Stylophone', position = 60,
     vars = {{x = 0.3}},
@@ -3914,7 +3915,9 @@ create_joker({ -- Stylophone
             local instrument = 'bunc_stone'
 
             local function calculate_pitch(pitch)
-                return 2^(pitch / 12)
+                if pitch < 1 then pitch = 1 end
+                local result = 2^(pitch / 12)                
+                return result
             end
 
             if other_card.config.center ~= G.P_CENTERS.m_stone then
@@ -3939,13 +3942,18 @@ create_joker({ -- Stylophone
 
         if context.individual and context.cardarea == G.play then
             play_stylophone(context.other_card)
+
             if context.other_card.config.center ~= G.P_CENTERS.m_stone then
+                local otherId = context.other_card:get_id()
+                if otherId < 1 then otherId = 1 end
+
                 return {
-                    mult = context.other_card:get_id() * card.ability.extra.x,
+                    mult = otherId * card.ability.extra.x,
                     card = card
                 }
             end
         end
+        
         if context.click and context.other_card.area == G.hand then
             extra_juice(card)
             play_stylophone(context.other_card)
