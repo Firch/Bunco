@@ -103,27 +103,26 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
     vec2 uv = (((texture_coords)*(image_details)) - texture_details.xy*texture_details.ba)/texture_details.ba;
 
     // Dummy, doesn't do anything but at least it makes the shader useable
-    if (uv.x > uv.x * 2){
+    if (uv.x > uv.x * 2.0){
         uv = fluorescent;
     }
 
-    vec3 targetColors[6] = vec3[6](
-        vec3(1.0, 0.0, 0.0), // Red
-        vec3(0.0, 1.0, 0.0), // Green
-        vec3(0.0, 0.0, 1.0), // Blue
-        vec3(1.0, 1.0, 0.0), // Yellow
-        vec3(0.0, 1.0, 1.0), // Cyan
-        vec3(1.0, 0.0, 1.0)  // Magenta
-    );
+    // this form of array declaration is less elegant, but it fixes GLES compatibility issues on android
+    vec3 targetColors[6];
+    targetColors[0] = vec3(1.0, 0.0, 0.0); // Red
+    targetColors[1] = vec3(0.0, 1.0, 0.0); // Green
+    targetColors[2] = vec3(0.0, 0.0, 1.0); // Blue
+    targetColors[3] = vec3(1.0, 1.0, 0.0); // Yellow
+    targetColors[4] = vec3(0.0, 1.0, 1.0); // Cyan
+    targetColors[5] = vec3(1.0, 0.0, 1.0); // Magenta
 
-    float sharpnessMultipliers[6] = float[6](
-        3.0, // Red
-        3.0, // Green
-        3.0, // Blue
-        3.0, // Yellow
-        3.0, // Cyan
-        3.0  // Magenta
-    );
+    float sharpnessMultipliers[6];
+    sharpnessMultipliers[0] = 3.0; // Red
+    sharpnessMultipliers[1] = 3.0; // Green
+    sharpnessMultipliers[2] = 3.0; // Blue
+    sharpnessMultipliers[3] = 3.0; // Yellow
+    sharpnessMultipliers[4] = 3.0; // Cyan
+    sharpnessMultipliers[5] = 3.0; // Magenta
 
     float effect = 0.7 + (0.3 * clamp(cos(sin(uv.y * 8.24 + fluorescent.x * 6.0) + sin(uv.x * 6.12 + fluorescent.x * 2.0) * fluorescent.x * uv.y * 3.15), 0.0, 1.0));
 
@@ -188,6 +187,6 @@ vec4 position( mat4 transform_projection, vec4 vertex_position )
     float scale = 0.2*(-0.03 - 0.3*max(0., 0.3-mid_dist))
                 *hovering*(length(mouse_offset)*length(mouse_offset))/(2. -mid_dist);
 
-    return transform_projection * vertex_position + vec4(0,0,0,scale);
+    return transform_projection * vertex_position + vec4(0.,0.,0.,scale);
 }
 #endif
