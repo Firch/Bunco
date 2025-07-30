@@ -25,16 +25,16 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
     }
 
     //Convert to UV coords (0-1) and floor for pixel effect
-    vec2 uv = (((texture_coords)*(image_details)) - texture_details.xy*texture_details.ba)/texture_details.ba - 0.5;
-    vec2 floored_uv = (floor((uv*PIXEL_SIZE_FAC)))/PIXEL_SIZE_FAC;
-    vec2 uv_scaled_centered = (floored_uv);
+    MY_HIGHP_OR_MEDIUMP vec2 uv = (((texture_coords)*(image_details)) - texture_details.xy*texture_details.ba)/texture_details.ba - 0.5;
+    MY_HIGHP_OR_MEDIUMP vec2 floored_uv = (floor((uv*PIXEL_SIZE_FAC)))/PIXEL_SIZE_FAC;
+    MY_HIGHP_OR_MEDIUMP vec2 uv_scaled_centered = (floored_uv);
     uv_scaled_centered += uv_scaled_centered*0.01*(sin(-1.123*floored_uv.x + 0.2*time)*cos(5.3332*floored_uv.y + time*0.931));
-    vec2 flame_up_vec = vec2(0., mod(4.*time, 10000.) - 5000. + mod(1.781*id, 1000.) );
+    MY_HIGHP_OR_MEDIUMP vec2 flame_up_vec = vec2(0., mod(4.*time, 10000.) - 5000. + mod(1.781*id, 1000.) );
 
-    float scale_fac = (7.5 + 3./(2. + 2.*intensity));
-    vec2 sv = uv_scaled_centered*scale_fac + flame_up_vec;
-    float speed = mod(20.781*id, 100.) + 1.*sin(time+id)*cos(time*0.151+id);
-	vec2 sv2 = vec2(0.,0.);
+    MY_HIGHP_OR_MEDIUMP float scale_fac = (7.5 + 3./(2. + 2.*intensity));
+    MY_HIGHP_OR_MEDIUMP vec2 sv = uv_scaled_centered*scale_fac + flame_up_vec;
+    MY_HIGHP_OR_MEDIUMP float speed = mod(20.781*id, 100.) + 1.*sin(time+id)*cos(time*0.151+id);
+	MY_HIGHP_OR_MEDIUMP vec2 sv2 = vec2(0.,0.);
 
     for(int i=0; i < 5; i++) {
 		sv2 += sv + 0.05*sv2.yx*(mod(float(i), 2.)>1.?-1.:1.) + 0.3*(cos(length(sv)*0.411) + 0.3344*sin(length(sv)) - 0.23*cos(length(sv)));
