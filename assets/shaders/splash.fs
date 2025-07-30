@@ -1,9 +1,15 @@
-extern number time;
-extern number vort_speed;
-extern vec4 colour_1;
-extern vec4 colour_2;
-extern number mid_flash;
-extern number vort_offset;
+#if defined(VERTEX) || __VERSION__ > 100 || defined(GL_FRAGMENT_PRECISION_HIGH)
+	#define MY_HIGHP_OR_MEDIUMP highp
+#else
+	#define MY_HIGHP_OR_MEDIUMP mediump
+#endif
+
+MY_HIGHP_OR_MEDIUMP extern number time;
+MY_HIGHP_OR_MEDIUMP extern number vort_speed;
+MY_HIGHP_OR_MEDIUMP extern vec4 colour_1;
+MY_HIGHP_OR_MEDIUMP extern vec4 colour_2;
+MY_HIGHP_OR_MEDIUMP extern number mid_flash;
+MY_HIGHP_OR_MEDIUMP extern number vort_offset;
 
 #define BLACK 0.6*vec4(79./255.,99./255., 103./255., 1./0.6)
 
@@ -11,20 +17,20 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
 {
     //Convert to UV coords (0-1) and floor for pixel effect
     number pixel_size = 1.0;
-    vec2 uv = (floor(screen_coords.xy*(1./pixel_size))*pixel_size - 0.5*love_ScreenSize.xy)/length(love_ScreenSize.xy);
-    number uv_len = length(uv);
+    MY_HIGHP_OR_MEDIUMP vec2 uv = (floor(screen_coords.xy*(1./pixel_size))*pixel_size - 0.5*love_ScreenSize.xy)/length(love_ScreenSize.xy);
+    MY_HIGHP_OR_MEDIUMP number uv_len = length(uv);
 
     //Adding in a center swirl, changes with time
-    number speed = time*vort_speed;
-    number new_pixel_angle = atan(uv.y, uv.x) + (2.2 + 0.4*min(6.,speed))*uv_len - 1. -  speed*0.05 - min(6.,speed)*speed*0.02 + vort_offset;
-    vec2 mid = (love_ScreenSize.xy/length(love_ScreenSize.xy))/2.;
-    vec2 sv = vec2((uv_len * cos(new_pixel_angle) + mid.x), (uv_len * sin(new_pixel_angle) + mid.y)) - mid;
+    MY_HIGHP_OR_MEDIUMP number speed = time*vort_speed;
+    MY_HIGHP_OR_MEDIUMP number new_pixel_angle = atan(uv.y, uv.x) + (2.2 + 0.4*min(6.,speed))*uv_len - 1. -  speed*0.05 - min(6.,speed)*speed*0.02 + vort_offset;
+    MY_HIGHP_OR_MEDIUMP vec2 mid = (love_ScreenSize.xy/length(love_ScreenSize.xy))/2.;
+    MY_HIGHP_OR_MEDIUMP vec2 sv = vec2((uv_len * cos(new_pixel_angle) + mid.x), (uv_len * sin(new_pixel_angle) + mid.y)) - mid;
 
 	//Now add the smoke effect to the swirled UV
 
     sv *= 30.;
     speed = time*(6.)*vort_speed + vort_offset + 1033.;
-	vec2 uv2 = vec2(sv.x+sv.y);
+	MY_HIGHP_OR_MEDIUMP vec2 uv2 = vec2(sv.x+sv.y);
 
     for(int i=0; i < 5; i++) {
 		uv2 += sin(max(sv.x, sv.y)) + sv;
