@@ -194,7 +194,7 @@ end
 # Text icons
 [[patches]]
 [patches.pattern]
-target = 'functions/misc_functions.lua'
+target = '=[SMODS _ "src/utils.lua"]'
 pattern = "local desc_scale = *"
 position = 'before'
 match_indent = true
@@ -943,7 +943,7 @@ G.C.HAND_LEVELS[0] = G.C.JOKER_GREY
 [[patches]]
 [patches.pattern]
 target = 'functions/common_events.lua'
-pattern = "function level_up_hand(card, hand, instant, amount)"
+pattern = "function level_up_hand(card, hand, instant, amount*"
 position = 'after'
 match_indent = true
 payload = '''
@@ -954,7 +954,7 @@ if hand == 'bunc_Deal' then return end
 [[patches]]
 [patches.pattern]
 target = 'functions/common_events.lua'
-pattern = "function level_up_hand(card, hand, instant, amount)"
+pattern = "function level_up_hand(card, hand, instant, amount*"
 position = 'after'
 match_indent = true
 payload = '''
@@ -2267,7 +2267,7 @@ end
 [[patches]]
 [patches.pattern]
 target = 'functions/UI_definitions.lua'
-pattern = '''badges[#badges + 1] = create_badge(localize(v, "labels"), get_badge_colour(v))'''
+pattern = '''badges[#badges + 1] = create_badge(localize(v, "labels"), get_badge_colour(v)*'''
 position = 'before'
 match_indent = true
 times = 1
