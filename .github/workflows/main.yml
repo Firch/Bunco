@@ -1,0 +1,22 @@
+name: Stylua
+
+on:
+  push:
+    branches:
+      - '*'
+
+jobs:
+  stylua:
+    runs-on: ubuntu-latest
+    steps:
+      - name: StyLua
+        # You may pin to the exact commit or the version.
+        # uses: JohnnyMorganz/stylua-action@76fd70c03e6340ceaf673366712db9b20560b402
+        uses: JohnnyMorganz/stylua-action@v5.0.0
+        with:
+          # The GITHUB_SECRET token
+          token: ${{ secrets.GITHUB_TOKEN }}
+          # CLI Arguments to pass to StyLua
+          args: --check 
+          # The version of StyLua to run. Use `latest` to pull the latest version
+          version: latest
