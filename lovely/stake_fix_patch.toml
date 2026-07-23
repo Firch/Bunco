@@ -1,0 +1,54 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = -11
+
+# [[patches]]
+# [patches.pattern]
+# target = '=[SMODS _ "src/utils.lua"]'
+# pattern = 'local first_pass = not v.wins_by_key and not v.losses_by_key'
+# position = 'after'
+# match_indent = true
+# payload = '''
+# sendDebugMessage(tprint(v), "Bunco")
+# first_pass = first_pass and not v.bunco_loaded
+# '''
+# times = 2
+
+# Fixes game reloading messing with win stats (will turn jokers/decks won with cyan stake into gold stake)
+# Shouldn't turn gold stake wins into cyan stake
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/utils.lua"]'
+pattern = 'local index = G.P_STAKES[kk] and G.P_STAKES[kk].order'
+position = 'after'
+match_indent = true
+payload = '''
+if index == 8 and v.bunco_loaded then break end
+v.bunco_loaded = true -- Bit hacky, but easiest way to set this after the check
+'''
+times = 4
+
+# Fixes changing game profile messing with win stats (as above)
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/game_object.lua"]'
+pattern = '''table.sort(G.P_CENTER_POOLS[self.set], function(a, b) return a.order < b.order end)'''
+position = 'before'
+match_indent = true
+payload = '''
+local reordered_stakes = {}
+for i = 1, #G.P_CENTER_POOLS[self.set] do
+    local new_order = i
+    for j = 1, #reordered_stakes do
+        if G.P_CENTER_POOLS[self.set][reordered_stakes[j]].key == G.P_CENTER_POOLS[self.set][i].above_stake then
+            new_order = j + 1
+            break
+        end
+    end
+    table.insert(reordered_stakes, new_order, i)
+end
+for index, value in ipairs(reordered_stakes) do
+    G.P_CENTER_POOLS[self.set][value].order = index
+end
+'''

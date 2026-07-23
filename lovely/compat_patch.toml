@@ -1,0 +1,15 @@
+[manifest]
+version = "1.0.0"
+priority = 0
+
+# dummy patch to prevent crash on blank toml file
+# yes this is jank but lovely cant handle a file with no patches
+# and deleting it outright is asking for people to
+# accidentally install it incorrectly
+[[patches]]
+[patches.pattern]
+target = 'none'
+pattern = ''
+position = 'after'
+match_indent = true
+payload = ''

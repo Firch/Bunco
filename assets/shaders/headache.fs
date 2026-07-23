@@ -62,12 +62,12 @@ vec4 layerTexel( Image texture, vec2 uv, int frame, vec2 displace, float paralla
     vec4 col = vec4(0.0);
     if (tile) {
         duv = mod(duv + vec2(headache.z * 10.0) / image_details, vec2(69.0 / image_details.x, 69.0 / image_details.y));
-        vec2 fuv = duv + (vec2((frame * 71.0) + 1.0, 1.0) / image_details);
+        vec2 fuv = duv + (vec2((float(frame) * 71.0) + 1.0, 1.0) / image_details);
         col = Texel(texture, fuv);
     }
     else {
         if ((duv.x >= 0.0) && (duv.x <= 71.0 / image_details.x) && (duv.y >= 0.0) && (duv.y <= 1.0)) {
-            vec2 fuv = duv + (vec2(frame * 71.0, 0.0) / image_details);
+            vec2 fuv = duv + (vec2(float(frame) * 71.0, 0.0) / image_details);
             col = Texel(texture, fuv);
         }
     }
@@ -93,7 +93,7 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
     float mult = 5.0;
     float steps = 0.25;
 
-    for (float i = 0; i <= 1; i += steps) {
+    for (float i = 0.0; i <= 1.0; i += steps) {
         vec4 layerTex = layerTexel(texture, texture_coords, 4, headache.xy, 14.0 + mult - i * mult, true);
         layerTex.a *= maskTex.a;
         layerTex.a *= i * 0.3;
@@ -101,7 +101,7 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
         blendedTex = alphaBlend(layerTex, blendedTex);
     }
 
-    for (float i = 0; i <= 1; i += steps) {
+    for (float i = 0.0; i <= 1.0; i += steps) {
         vec4 layerTex = layerTexel(texture, texture_coords, 3, headache.xy, 5.0 + mult - i * mult, false);
         layerTex.a *= maskTex.a;
         layerTex.a *= i;
@@ -109,7 +109,7 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
         blendedTex = alphaBlend(layerTex, blendedTex);
     }
 
-    for (float i = 0; i <= 1; i += steps) {
+    for (float i = 0.0; i <= 1.0; i += steps) {
         vec4 layerTex = layerTexel(texture, texture_coords, 2, headache.xy, 2.5 + mult - i * mult, false);
         layerTex.a *= maskTex.a;
         layerTex.a *= i;
@@ -119,7 +119,7 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
 
     vec2 uv = (((texture_coords) * (image_details)) - texture_details.xy * texture_details.ba) / texture_details.ba;
     // Dummy, doesn't do anything but at least it makes the shader useable
-    if (uv.x > uv.x * 2){
+    if (uv.x > uv.x * 2.0){
         uv = headache.xy;
     }
     return dissolve_mask(blendedTex, texture_coords, uv);

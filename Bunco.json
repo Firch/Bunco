@@ -2,13 +2,17 @@
 	"id": "Bunco",
 	"name": "Bunco",
 	"display_name": "Bunco",
-	"author": ["Firch, RENREN, Peas, minichibis, J.D., Guwahavel, Ciirulean, ejwu"],
+	"author": ["Firch", "RENREN", "Peas", "minichibis", "J.D.", "Guwahavel", "Ciirulean", "ejwu"],
 	"description": "A mod that aims to add more content in a way that'd seamlessly exist within the vanilla Balatro!",
 	"prefix": "bunc",
+    "priority": -1,
 	"main_file": "Bunco.lua",
-	"version": "5.1",
+	"version": "5.4.8c~JumboFork",
+	"dependencies": [
+		"Steamodded (>=1.0.0~BETA-1531zeebee)",
+		"Lovely (>=0.7.1)"
+	],
 	"conflicts": [
-        "Lovely (<<0.7.1)",
 		"Talisman (<=2.0.3)"
     ]
 }
