@@ -2605,15 +2605,12 @@ bunc_define_joker({ -- Dread
 					message = localize("k_level_up_ex"),
 					colour = G.C.RED,
 					func = function()
-						update_hand_text(
-							{ sound = "button", volume = 0.7, pitch = 0.8, delay = 0.3 },
-							{
-								handname = localize(context.scoring_name, "poker_hands"),
-								chips = G.GAME.hands[context.scoring_name].chips,
-								mult = G.GAME.hands[context.scoring_name].mult,
-								level = G.GAME.hands[context.scoring_name].level,
-							}
-						)
+						update_hand_text({ sound = "button", volume = 0.7, pitch = 0.8, delay = 0.3 }, {
+							handname = localize(context.scoring_name, "poker_hands"),
+							chips = G.GAME.hands[context.scoring_name].chips,
+							mult = G.GAME.hands[context.scoring_name].mult,
+							level = G.GAME.hands[context.scoring_name].level,
+						})
 						level_up_hand(card, context.scoring_name, false, card.ability.extra.levels)
 						card.ability.extra.level_up_list[context.scoring_name] = (
 							card.ability.extra.level_up_list[context.scoring_name] or 0
@@ -3808,18 +3805,11 @@ bunc_define_joker({ -- Conquest
 					delay = 0.7 * 1.25,
 					func = function()
 						if not card.debuffed then
-							card_eval_status_text(
-								card,
-								"extra",
-								nil,
-								percent,
-								nil,
-								{
-									message = G.localization.misc.dictionary["bunc_debuffed"],
-									colour = G.C.RED,
-									instant = true,
-								}
-							)
+							card_eval_status_text(card, "extra", nil, percent, nil, {
+								message = G.localization.misc.dictionary["bunc_debuffed"],
+								colour = G.C.RED,
+								instant = true,
+							})
 						end
 						return true
 					end,
@@ -4178,15 +4168,12 @@ bunc_define_joker({ -- Head in the Clouds
 							nil,
 							{ message = localize("k_upgrade_ex") }
 						)
-						update_hand_text(
-							{ sound = "button", volume = 0.7, pitch = 0.8, delay = 0.3 },
-							{
-								handname = localize(hand, "poker_hands"),
-								chips = G.GAME.hands[hand].chips,
-								mult = G.GAME.hands[hand].mult,
-								level = G.GAME.hands[hand].level,
-							}
-						)
+						update_hand_text({ sound = "button", volume = 0.7, pitch = 0.8, delay = 0.3 }, {
+							handname = localize(hand, "poker_hands"),
+							chips = G.GAME.hands[hand].chips,
+							mult = G.GAME.hands[hand].mult,
+							level = G.GAME.hands[hand].level,
+						})
 						level_up_hand(context.blueprint_card or card, self.name, nil, 1)
 						update_hand_text(
 							{ sound = "button", volume = 0.7, pitch = 1.1, delay = 0 },
@@ -4876,20 +4863,12 @@ bunc_define_joker({ -- Running Joke
 		if context.bunc_enter_shop then
 			big_juice(card)
 			local area = G.shop_jokers
-			local shop_card = Card(
-				area.T.x + area.T.w / 2,
-				area.T.y,
-				G.CARD_W,
-				G.CARD_H,
-				nil,
-				G.P_CENTERS["j_joker"],
-				{
-					bypass_discovery_center = area == G.shop_jokers,
-					bypass_discovery_ui = area == G.shop_jokers,
-					discover = area == G.shop_jokers,
-					bypass_back = G.GAME.selected_back.pos,
-				}
-			)
+			local shop_card = Card(area.T.x + area.T.w / 2, area.T.y, G.CARD_W, G.CARD_H, nil, G.P_CENTERS["j_joker"], {
+				bypass_discovery_center = area == G.shop_jokers,
+				bypass_discovery_ui = area == G.shop_jokers,
+				discover = area == G.shop_jokers,
+				bypass_back = G.GAME.selected_back.pos,
+			})
 			shop_card:set_edition({ negative = true })
 			create_shop_card_ui(shop_card)
 			G.shop_jokers:emplace(shop_card)
@@ -8222,7 +8201,12 @@ table.insert(SMODS.Suit.obj_buffer, 1, table.remove(SMODS.Suit.obj_buffer, 2))
 -- Skins and deck resprites
 
 SMODS.Atlas({ key = "bunco_resprites_enhanced_contrast", path = "Resprites/EnhancedContrast.png", px = 71, py = 95 })
-SMODS.Atlas({ key = "bunco_resprites_enhanced_contrast_ui", path = "Resprites/EnhancedUIContrast.png", px = 18, py = 18 })
+SMODS.Atlas({
+	key = "bunco_resprites_enhanced_contrast_ui",
+	path = "Resprites/EnhancedUIContrast.png",
+	px = 18,
+	py = 18,
+})
 SMODS.Atlas({
 	key = "bunco_paperback_enhanced_contrast",
 	path = "Resprites/EnhancedContrastPaperback.png",
@@ -9572,7 +9556,9 @@ SMODS.Back({ -- Fairy
 
 	config = { amount = 4 },
 	loc_vars = function(self)
-		return { vars = { self.config.amount, localize({ type = "name_text", set = "Other", key = "bunc_exotic_cards" }) } }
+		return {
+			vars = { self.config.amount, localize({ type = "name_text", set = "Other", key = "bunc_exotic_cards" }) },
+		}
 	end,
 
 	unlocked = false,
@@ -10309,18 +10295,11 @@ SMODS.Edition({
 					local xchips = G.P_CENTERS.e_bunc_glitter.config.Xchips
 					hand_chips = mod_chips(hand_chips * xchips)
 					update_hand_text({ delay = 0 }, { chips = hand_chips })
-					card_eval_status_text(
-						card,
-						"extra",
-						nil,
-						percent,
-						nil,
-						{
-							message = "X" .. xchips .. " " .. G.localization.misc.dictionary.bunc_chips,
-							edition = true,
-							x_chips = true,
-						}
-					)
+					card_eval_status_text(card, "extra", nil, percent, nil, {
+						message = "X" .. xchips .. " " .. G.localization.misc.dictionary.bunc_chips,
+						edition = true,
+						x_chips = true,
+					})
 				end,
 			}
 		end
