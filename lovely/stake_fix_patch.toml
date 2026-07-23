@@ -20,7 +20,7 @@ priority = -11
 [[patches]]
 [patches.pattern]
 target = '=[SMODS _ "src/utils.lua"]'
-pattern = 'if index > 8 and not first_pass then break end'
+pattern = 'local index = G.P_STAKES[kk] and G.P_STAKES[kk].order'
 position = 'after'
 match_indent = true
 payload = '''
