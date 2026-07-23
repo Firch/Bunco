@@ -7,9 +7,9 @@
 	"prefix": "bunc",
     "priority": -1,
 	"main_file": "Bunco.lua",
-	"version": "5.4.8b~JumboFork",
+	"version": "5.4.8c~JumboFork",
 	"dependencies": [
-		"Steamodded (>=1.0.0~BETA-1501a)",
+		"Steamodded (>=1.0.0~BETA-1531zeebee)",
 		"Lovely (>=0.7.1)"
 	],
 	"conflicts": [
